@@ -7,8 +7,6 @@ use Ubirimi\Repository\General\UbirimiLog;
 
 class DbMonologHandler extends AbstractProcessingHandler
 {
-    private $statement;
-
     public function __construct($level = Logger::DEBUG, $bubble = true)
     {
         parent::__construct($level, $bubble);
@@ -16,6 +14,10 @@ class DbMonologHandler extends AbstractProcessingHandler
 
     protected function write(array $record)
     {
-        UbirimiContainer::get()['repository']->get(UbirimiLog::class)->add($record['context']['client_id'], $record['context']['user_id'], $record['message']);
+        UbirimiContainer::get()['repository']->get(UbirimiLog::class)->add(
+            $record['context']['client_id'],
+            $record['context']['user_id'],
+            $record['message']
+        );
     }
 }
