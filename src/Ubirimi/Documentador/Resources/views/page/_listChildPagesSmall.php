@@ -1,5 +1,5 @@
 <?php
-    use Ubirimi\LinkHelper;
+use Ubirimi\LinkHelper;
 
 ?>
 <div style="display: block; clear: both;">

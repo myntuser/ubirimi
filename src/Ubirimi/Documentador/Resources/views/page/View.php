@@ -1,12 +1,12 @@
 <?php
 
 use Ubirimi\Container\UbirimiContainer;
+use Ubirimi\Documentador\Repository\Entity\Entity;
 use Ubirimi\Documentador\Repository\Entity\EntityComment;
 use Ubirimi\Documentador\Repository\Entity\EntityType;
 use Ubirimi\LinkHelper;
 use Ubirimi\SystemProduct;
 use Ubirimi\Util;
-use Ubirimi\Documentador\Repository\Entity\Entity;
 
 require_once __DIR__ . '/../_header.php';
 ?>

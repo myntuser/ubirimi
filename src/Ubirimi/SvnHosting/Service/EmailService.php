@@ -22,7 +22,6 @@ namespace Ubirimi\SvnHosting\Service;
 use Ubirimi\Container\UbirimiContainer;
 use Ubirimi\Repository\Email\Email;
 use Ubirimi\Service\UbirimiService;
-use Ubirimi\Util;
 
 class EmailService extends UbirimiService
 {

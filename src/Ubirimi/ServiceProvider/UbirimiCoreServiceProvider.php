@@ -31,6 +31,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHa
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Ubirimi\Api\Service\BasicAuthenticationService;
 use Ubirimi\Container\ServiceProviderInterface;
+use Ubirimi\Container\UbirimiContainer;
 use Ubirimi\LoginTimeService\LoginTimeService;
 use Ubirimi\Service\ClientService;
 use Ubirimi\Service\DatabaseConnectorService;
@@ -39,7 +40,6 @@ use Ubirimi\Service\PasswordService;
 use Ubirimi\Service\RepositoryService;
 use Ubirimi\Service\UserService;
 use Ubirimi\Service\WarmUpService;
-use Ubirimi\Container\UbirimiContainer;
 
 class UbirimiCoreServiceProvider implements ServiceProviderInterface
 {

@@ -22,8 +22,8 @@ namespace Ubirimi\Agile\Repository\Board;
 use Ubirimi\Agile\Repository\Sprint\Sprint;
 use Ubirimi\Container\UbirimiContainer;
 use Ubirimi\Util;
-use Ubirimi\Yongo\Repository\Issue\IssueFilter;
 use Ubirimi\Yongo\Repository\Issue\Issue;
+use Ubirimi\Yongo\Repository\Issue\IssueFilter;
 use Ubirimi\Yongo\Repository\Issue\IssueSettings;
 
 class Board

@@ -21,9 +21,9 @@ namespace Ubirimi\QuickNotes\Controller\Note;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Ubirimi\QuickNotes\Repository\Tag;
 use Ubirimi\UbirimiController;
 use Ubirimi\Util;
-use Ubirimi\QuickNotes\Repository\Tag;
 
 class RefreshTagsController extends UbirimiController
 {

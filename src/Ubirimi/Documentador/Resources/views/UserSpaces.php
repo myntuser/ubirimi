@@ -2,13 +2,12 @@
 use Ubirimi\Container\UbirimiContainer;
 use Ubirimi\Documentador\Repository\Space\Space;
 use Ubirimi\LinkHelper;
+use Ubirimi\Repository\User\UbirimiUser;
+use Ubirimi\SystemProduct;
+use Ubirimi\Util;
+use Ubirimi\Yongo\Repository\Permission\GlobalPermission;
 
-    use Ubirimi\Repository\User\UbirimiUser;
-    use Ubirimi\SystemProduct;
-    use Ubirimi\Util;
-    use Ubirimi\Yongo\Repository\Permission\GlobalPermission;
-
-    require_once __DIR__ . '/../../Resources/views/_header.php';
+require_once __DIR__ . '/../../Resources/views/_header.php';
 ?>
 <body>
     <?php require_once __DIR__ . '/../../Resources/views/_menu.php'; ?>

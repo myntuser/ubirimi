@@ -22,7 +22,6 @@ namespace Ubirimi\Yongo\Controller\Administration\NotificationScheme;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Ubirimi\Repository\General\UbirimiLog;
 use Ubirimi\Repository\User\UbirimiGroup;
 use Ubirimi\Repository\User\UbirimiUser;
 use Ubirimi\SystemProduct;

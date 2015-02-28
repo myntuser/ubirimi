@@ -24,12 +24,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Ubirimi\Container\UbirimiContainer;
 use Ubirimi\Event\LogEvent;
-use Ubirimi\Event\UbirimiEvents;
 use Ubirimi\Repository\User\UbirimiUser;
 use Ubirimi\SvnHosting\Event\SvnHostingEvent;
 use Ubirimi\SvnHosting\Event\SvnHostingEvents;
 use Ubirimi\SvnHosting\Repository\SvnRepository;
-use Ubirimi\SystemProduct;
 use Ubirimi\UbirimiController;
 use Ubirimi\Util;
 

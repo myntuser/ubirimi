@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Ubirimi\Container\UbirimiContainer;
 use Ubirimi\Event\LogEvent;
-use Ubirimi\Event\UbirimiEvents;
 use Ubirimi\LinkHelper;
 use Ubirimi\Repository\User\UbirimiUser;
 use Ubirimi\SystemProduct;

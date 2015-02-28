@@ -2,7 +2,6 @@
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Ubirimi\General\Repository\UserProfileCategory\UserProfileCategory;
-use Ubirimi\Repository\General\UbirimiLog;
 use Ubirimi\SystemProduct;
 use Ubirimi\Util;
 

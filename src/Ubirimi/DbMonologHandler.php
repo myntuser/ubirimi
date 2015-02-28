@@ -1,7 +1,7 @@
 <?php
 
-use Monolog\Logger;
 use Monolog\Handler\AbstractProcessingHandler;
+use Monolog\Logger;
 use Ubirimi\Container\UbirimiContainer;
 use Ubirimi\Repository\General\UbirimiLog;
 

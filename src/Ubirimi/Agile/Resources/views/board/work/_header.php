@@ -19,6 +19,7 @@
 
 use Ubirimi\Agile\Repository\Board\Board;
 use Ubirimi\Container\UbirimiContainer;
+
 ?>
 <tr>
     <?php for ($i = 0; $i < count($columns); $i++): ?>

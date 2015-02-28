@@ -22,9 +22,9 @@ namespace Ubirimi\QuickNotes\Controller\Notebook;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Ubirimi\QuickNotes\Repository\Notebook;
+use Ubirimi\SystemProduct;
 use Ubirimi\UbirimiController;
 use Ubirimi\Util;
-use Ubirimi\SystemProduct;
 
 class ListController extends UbirimiController
 {

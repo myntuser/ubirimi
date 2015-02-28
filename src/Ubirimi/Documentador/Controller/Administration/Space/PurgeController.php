@@ -24,8 +24,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Ubirimi\Documentador\Repository\Entity\Entity;
 use Ubirimi\Documentador\Repository\Entity\EntityAttachment;
 use Ubirimi\Documentador\Repository\Entity\EntityComment;
-use Ubirimi\Repository\General\UbirimiLog;
-use Ubirimi\SystemProduct;
 use Ubirimi\UbirimiController;
 use Ubirimi\Util;
 

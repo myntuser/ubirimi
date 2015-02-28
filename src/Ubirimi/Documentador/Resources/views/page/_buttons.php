@@ -1,5 +1,5 @@
 <?php
-    use Ubirimi\Util;
+use Ubirimi\Util;
 
 ?>
 <table cellspacing="0" border="0" cellpadding="0" class="tableButtons">

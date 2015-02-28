@@ -26,7 +26,6 @@ use Ubirimi\Calendar\Repository\Calendar\UbirimiCalendar;
 use Ubirimi\Calendar\Repository\Event\CalendarEvent;
 use Ubirimi\Calendar\Repository\Reminder\RepeatCycle;
 use Ubirimi\Repository\General\UbirimiClient;
-use Ubirimi\Repository\General\UbirimiLog;
 use Ubirimi\SystemProduct;
 use Ubirimi\UbirimiController;
 use Ubirimi\Util;

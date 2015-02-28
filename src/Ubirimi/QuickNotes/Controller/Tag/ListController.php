@@ -21,10 +21,10 @@ namespace Ubirimi\QuickNotes\Controller\Tag;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Ubirimi\UbirimiController;
-use Ubirimi\Util;
 use Ubirimi\QuickNotes\Repository\Tag;
 use Ubirimi\SystemProduct;
+use Ubirimi\UbirimiController;
+use Ubirimi\Util;
 
 class ListController extends UbirimiController
 {

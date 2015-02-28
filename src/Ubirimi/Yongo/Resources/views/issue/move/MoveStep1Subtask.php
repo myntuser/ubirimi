@@ -1,7 +1,7 @@
 <?php
+use Ubirimi\Container\UbirimiContainer;
 use Ubirimi\LinkHelper;
 use Ubirimi\Yongo\Repository\Issue\IssueType;
-use Ubirimi\Container\UbirimiContainer;
 
 require_once __DIR__ . '/../../_header.php';
 ?>

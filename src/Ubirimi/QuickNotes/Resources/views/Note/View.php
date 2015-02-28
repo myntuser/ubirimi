@@ -1,7 +1,7 @@
 <?php
-use Ubirimi\Util;
 use Ubirimi\Container\UbirimiContainer;
 use Ubirimi\QuickNotes\Repository\Note;
+use Ubirimi\Util;
 
 require_once __DIR__ . '/../../../../QuickNotes/Resources/views/_header.php';
 ?>

@@ -25,8 +25,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Ubirimi\Calendar\Repository\Calendar\UbirimiCalendar;
 use Ubirimi\Calendar\Repository\Reminder\ReminderPeriod;
 use Ubirimi\Calendar\Repository\Reminder\ReminderType;
-use Ubirimi\Container\UbirimiContainer;
-use Ubirimi\Repository\General\UbirimiLog;
 use Ubirimi\SystemProduct;
 use Ubirimi\UbirimiController;
 use Ubirimi\Util;

@@ -24,8 +24,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Ubirimi\Calendar\Repository\Calendar;
 use Ubirimi\Calendar\Repository\Calendar\UbirimiCalendar;
-use Ubirimi\Repository\General\UbirimiLog;
-use Ubirimi\SystemProduct;
 use Ubirimi\UbirimiController;
 use Ubirimi\Util;
 

@@ -1,8 +1,8 @@
 <?php
-    use Ubirimi\Container\UbirimiContainer;
-    use Ubirimi\Util;
+use Ubirimi\Container\UbirimiContainer;
+use Ubirimi\Util;
 
-    require_once __DIR__ . '/_header.php';
+require_once __DIR__ . '/_header.php';
 ?>
 
 <div style="font: Trebuchet MS, sans-serif; white-space: nowrap; padding-top: 5px;text-align: left;padding-left: 2px;">

@@ -1,6 +1,7 @@
 <?php
 use Ubirimi\Container\UbirimiContainer;
 use Ubirimi\QuickNotes\Repository\Note;
+
 ?>
 <?php while ($allTags && $tagInList = $allTags->fetch_array(MYSQLI_ASSOC)): ?>
     <?php $noteInTag = UbirimiContainer::get()['repository']->get(Note::class)->getFirstNoteByTagId($loggedInUserId, $tagInList['id']); ?>

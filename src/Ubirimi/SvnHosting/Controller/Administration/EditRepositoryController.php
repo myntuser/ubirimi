@@ -22,7 +22,6 @@ namespace Ubirimi\SvnHosting\Controller\Administration;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Ubirimi\Repository\General\UbirimiLog;
 use Ubirimi\SvnHosting\Repository\SvnRepository;
 use Ubirimi\SystemProduct;
 use Ubirimi\UbirimiController;

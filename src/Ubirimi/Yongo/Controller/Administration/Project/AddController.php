@@ -25,7 +25,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Ubirimi\Container\UbirimiContainer;
 use Ubirimi\Entity\Yongo\Project as ProjectEntity;
 use Ubirimi\Repository\General\UbirimiClient;
-use Ubirimi\Repository\General\UbirimiLog;
 use Ubirimi\SystemProduct;
 use Ubirimi\UbirimiController;
 use Ubirimi\Util;

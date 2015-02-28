@@ -22,11 +22,9 @@ namespace Ubirimi\QuickNotes\Controller\Tag;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Ubirimi\Repository\General\UbirimiLog;
-use Ubirimi\UbirimiController;
 use Ubirimi\QuickNotes\Repository\Tag;
-
 use Ubirimi\SystemProduct;
+use Ubirimi\UbirimiController;
 use Ubirimi\Util;
 
 class EditController extends UbirimiController

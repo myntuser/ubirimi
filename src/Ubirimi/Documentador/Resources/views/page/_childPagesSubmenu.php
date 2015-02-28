@@ -1,5 +1,5 @@
 <?php
-    use Ubirimi\LinkHelper;
+use Ubirimi\LinkHelper;
 
 ?>
 <div id="menu_child_pages" style="border: 1px solid #BBBBBB; z-index: 500; position: absolute; background-color: #ffffff; display: none; padding: 4px; padding-right: 10px;  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);">
