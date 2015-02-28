@@ -30,35 +30,35 @@ if ($session->has('client/products')) {
             <?php ($session->get('selected_product_id') == SystemProduct::SYS_PRODUCT_YONGO) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
 
             <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="100px" class="product-menu" align="center" valign="middle">
-                <div><a href="/yongo/my-dashboard">Yongo</a></div>
+                <div><a href="/yongo/my-dashboard"><?php echo SystemProduct::SYS_PRODUCT_YONGO_NAME ?></a></div>
             </td>
         <?php endif ?>
 
         <?php if (Util::checkKeyAndValueInArray('sys_product_id', SystemProduct::SYS_PRODUCT_SVN_HOSTING, $productsArray)): ?>
             <?php ($session->get('selected_product_id') == SystemProduct::SYS_PRODUCT_SVN_HOSTING) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
             <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="140px" class="product-menu" align="center">
-                <div><a href="/svn-hosting/repositories">SVN Hosting</a></div>
+                <div><a href="/svn-hosting/repositories"><?php echo SystemProduct::SYS_PRODUCT_SVN_HOSTING_NAME ?></a></div>
             </td>
         <?php endif ?>
 
         <?php if (Util::checkKeyAndValueInArray('sys_product_id', SystemProduct::SYS_PRODUCT_DOCUMENTADOR, $productsArray)): ?>
             <?php ($session->get('selected_product_id') == SystemProduct::SYS_PRODUCT_DOCUMENTADOR) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
             <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="180px" class="product-menu" align="center">
-                <div><a href="/documentador/dashboard/spaces">Documentador</a></div>
+                <div><a href="/documentador/dashboard/spaces"><?php echo SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME ?></a></div>
             </td>
         <?php endif ?>
 
         <?php if (Util::checkKeyAndValueInArray('sys_product_id', SystemProduct::SYS_PRODUCT_CALENDAR, $productsArray)): ?>
             <?php ($session->get('selected_product_id') == SystemProduct::SYS_PRODUCT_CALENDAR) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
             <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="110px" class="product-menu" align="center">
-                <div><a href="/calendar/calendars">Events</a></div>
+                <div><a href="/calendar/calendars"><?php echo SystemProduct::SYS_PRODUCT_CALENDAR_NAME ?></a></div>
             </td>
         <?php endif ?>
 
         <?php if (Util::checkKeyAndValueInArray('sys_product_id', SystemProduct::SYS_PRODUCT_QUICK_NOTES, $productsArray)): ?>
             <?php ($session->get('selected_product_id') == SystemProduct::SYS_PRODUCT_QUICK_NOTES) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
             <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="130px" class="product-menu" align="center">
-                <div><a href="/quick-notes/note/snippets/all">Quick Notes</a></div>
+                <div><a href="/quick-notes/note/snippets/all"><?php echo SystemProduct::SYS_PRODUCT_QUICK_NOTES_NAME ?></a></div>
             </td>
         <?php endif ?>
     </tr>
