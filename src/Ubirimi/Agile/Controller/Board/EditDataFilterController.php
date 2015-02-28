@@ -47,7 +47,7 @@ class EditDataFilterController extends UbirimiController
         $filter = $this->getRepository(IssueFilter::class)->getById($board['filter_id']);
 
         $sectionPageTitle = $session->get('client/settings/title_name') . ' / '
-            . SystemProduct::SYS_PRODUCT_CHEETAH_NAME
+            . SystemProduct::SYS_PRODUCT_AGILE_NAME
             . ' / Board / Filter';
 
         return $this->render(__DIR__ . '/../../Resources/views/board/EditDataFilter.php', get_defined_vars());

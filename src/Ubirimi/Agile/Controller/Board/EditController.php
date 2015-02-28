@@ -69,7 +69,7 @@ class EditController extends UbirimiController
             }
         }
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_CHEETAH_NAME. ' / Update Board';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_AGILE_NAME. ' / Update Board';
 
         return $this->render(__DIR__ . '/../../Resources/views/board/Edit.php', get_defined_vars());
     }

@@ -32,7 +32,7 @@ class SystemProduct {
 
     const SYS_PRODUCT_YONGO_NAME = 'Yongo';
     const SYS_PRODUCT_SVN_HOSTING_NAME = 'SVN Hosting';
-    const SYS_PRODUCT_CHEETAH_NAME = 'Cheetah';
+    const SYS_PRODUCT_AGILE_NAME = 'Agile';
     const SYS_PRODUCT_DOCUMENTADOR_NAME = 'Documentador';
     const SYS_PRODUCT_CALENDAR_NAME = 'Events';
     const SYS_PRODUCT_HELP_DESK_NAME = 'Help Desk';
