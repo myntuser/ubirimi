@@ -370,6 +370,7 @@ $('document').ready(function () {
         $('#btnCopyScreen').attr('class', classCSS);
         $('#btnEditScreenMetaData').attr('class', classCSS);
         $('#btnEditBoard').attr('class', classCSS);
+        $('#btnEditDomain').attr('class', classCSS);
         $('#btnConfigureBoard').attr('class', classCSS);
         $('#btnEditIssueTypeScheme').attr('class', classCSS);
         $('#btnCopyIssueTypeScheme').attr('class', classCSS);

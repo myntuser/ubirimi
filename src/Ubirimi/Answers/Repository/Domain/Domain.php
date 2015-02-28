@@ -98,4 +98,20 @@ class Domain
             return null;
         }
     }
+
+    public function getById($domainId) {
+        $query = "select * " .
+            "from ans_domain " .
+            "where ans_domain.id = ? " .
+            "limit 1";
+
+        $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
+        $stmt->bind_param("i", $domainId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows) {
+            return $result->fetch_array(MYSQLI_ASSOC);
+        } else
+            return null;
+    }
 }

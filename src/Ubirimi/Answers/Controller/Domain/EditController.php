@@ -46,6 +46,7 @@ class EditController extends UbirimiController
         }
 
         $emptyName = false;
+        $domainExists = false;
         $domainName = $domain['name'];
         $domainDescription = $domain['description'];
 
@@ -53,16 +54,14 @@ class EditController extends UbirimiController
             $domainName = Util::cleanRegularInputField($request->request->get('name'));
             $domainDescription = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($boardName)) {
+            if (empty($domainName)) {
                 $emptyName = true;
             }
 
             if (!$emptyName) {
 
                 $date = Util::getServerCurrentDateTime();
-
                 $this->getRepository(Domain::class)->updateMetadata($session->get('client/id'), $domainId, $domainName, $domainDescription, $date);
-
                 $this->getLogger()->addInfo('UPDATE Answers Domain ' . $domainName, $this->getLoggerContext());
 
                 return new RedirectResponse('/answers/domains');

@@ -19,11 +19,11 @@
 
 use Ubirimi\Util;
 
-require_once __DIR__ . '/../../../../Answers/Resources/views/_header.php';
+require_once __DIR__ . '/../_header.php';
 ?>
 <body>
 
-<?php require_once __DIR__ . '/../../../../Answers/Resources/views/_menu.php'; ?>
+<?php require_once __DIR__ . '/../_menu.php'; ?>
 
 <?php Util::renderBreadCrumb('<a class="linkNoUnderline" href="/answers/domains">Domains</a> > Create Domain') ?>
 <div class="pageContent">
@@ -62,5 +62,5 @@ require_once __DIR__ . '/../../../../Answers/Resources/views/_header.php';
         </table>
     </form>
 </div>
-<?php require_once __DIR__ . '/../../../../Answers/Resources/views/_footer.php' ?>
+<?php require_once __DIR__ . '/../_footer.php' ?>
 </body>
