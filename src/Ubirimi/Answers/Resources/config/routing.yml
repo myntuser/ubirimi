@@ -1,0 +1,7 @@
+ansDomainAdd:
+  path: /answers/domain/add
+  defaults: { _controller: '\Ubirimi\Answers\Controller\Domain\AddController' }
+
+ansDomainList:
+  path: /answers/domains
+  defaults: { _controller: '\Ubirimi\Answers\Controller\Domain\ListController' }

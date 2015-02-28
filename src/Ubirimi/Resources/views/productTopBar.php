@@ -61,5 +61,12 @@ if ($session->has('client/products')) {
                 <div><a href="/quick-notes/note/snippets/all">Quick Notes</a></div>
             </td>
         <?php endif ?>
+
+        <?php if (Util::checkKeyAndValueInArray('sys_product_id', SystemProduct::SYS_PRODUCT_ANSWERS, $productsArray)): ?>
+            <?php ($session->get('selected_product_id') == SystemProduct::SYS_PRODUCT_ANSWERS) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
+            <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="130px" class="product-menu" align="center">
+                <div><a href="/answers/domains">Answers</a></div>
+            </td>
+        <?php endif ?>
     </tr>
 </table>

@@ -94,6 +94,7 @@ class RouteBootstrapService
             __DIR__ . '/../Calendar/Resources/config',
             __DIR__ . '/../GeneralSettings/Resources/config',
             __DIR__ . '/../QuickNotes/Resources/config',
+            __DIR__ . '/../Answers/Resources/config',
             __DIR__ . '/../Api/Resources/config'
         );
 

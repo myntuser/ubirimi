@@ -1,4 +1,5 @@
 <?php
+
 use Ubirimi\Container\UbirimiContainer;
 use Ubirimi\LinkHelper;
 use Ubirimi\Repository\General\UbirimiClient;

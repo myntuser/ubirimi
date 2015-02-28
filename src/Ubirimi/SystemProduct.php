@@ -29,6 +29,7 @@ class SystemProduct {
     const SYS_PRODUCT_CALENDAR = 5;
     const SYS_PRODUCT_HELP_DESK = 6;
     const SYS_PRODUCT_QUICK_NOTES = 7;
+    const SYS_PRODUCT_ANSWERS = 8;
 
     const SYS_PRODUCT_YONGO_NAME = 'Yongo';
     const SYS_PRODUCT_SVN_HOSTING_NAME = 'SVN Hosting';
@@ -37,4 +38,5 @@ class SystemProduct {
     const SYS_PRODUCT_CALENDAR_NAME = 'Events';
     const SYS_PRODUCT_HELP_DESK_NAME = 'Help Desk';
     const SYS_PRODUCT_QUICK_NOTES_NAME = 'Quick Notes';
+    const SYS_PRODUCT_ANSWERS_NAME = 'Answers';
 }
