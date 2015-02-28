@@ -49,7 +49,7 @@ class EditController extends UbirimiController
         $boardName = $board['name'];
         $boardDescription = $board['description'];
 
-        if ($request->request->has('confirm_new_board')) {
+        if ($request->request->has('confirm_edit_board')) {
             $boardName = Util::cleanRegularInputField($request->request->get('name'));
             $boardDescription = Util::cleanRegularInputField($request->request->get('description'));
 
