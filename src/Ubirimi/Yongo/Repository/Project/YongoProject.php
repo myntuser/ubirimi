@@ -28,7 +28,7 @@ use Ubirimi\LinkHelper;
 use Ubirimi\SystemProduct;
 use Ubirimi\Util;
 use Ubirimi\Yongo\Repository\Field\Field;
-use Ubirimi\Yongo\Repository\Issue\CustomField;
+use Ubirimi\Yongo\Repository\Field\CustomField;
 use Ubirimi\Yongo\Repository\Issue\Issue;
 use Ubirimi\Yongo\Repository\Issue\IssueSettings;
 use Ubirimi\Yongo\Repository\Issue\IssueTypeScreenScheme;
