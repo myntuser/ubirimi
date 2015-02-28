@@ -61,7 +61,7 @@ class EditController extends UbirimiController
 
                 $date = Util::getServerCurrentDateTime();
 
-                $this->getRepository(Domain::class)->updateMetadata($session->get('client/id'), $domainI, $domainName, $domainDescription, $date);
+                $this->getRepository(Domain::class)->updateMetadata($session->get('client/id'), $domainId, $domainName, $domainDescription, $date);
 
                 $this->getLogger()->addInfo('UPDATE Answers Domain ' . $domainName, $this->getLoggerContext());
 
