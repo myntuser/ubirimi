@@ -5,3 +5,15 @@ ansDomainAdd:
 ansDomainList:
   path: /answers/domains
   defaults: { _controller: '\Ubirimi\Answers\Controller\Domain\ListController' }
+
+ansDomainView:
+  path: /answers/domain/{id}
+  defaults: { _controller: '\Ubirimi\Answers\Controller\Domain\ViewController' }
+  requirements:
+    id:  \d+
+
+ansDomainEdit:
+  path: /answers/domain/edit/{id}
+  defaults: { _controller: '\Ubirimi\Answers\Controller\Domain\EditController' }
+  requirements:
+    id:  \d+

@@ -3,7 +3,7 @@
 
 ?>
 <div style="margin: 10px;" align="center">
-    Keep track of everyting
+    Extract knowledge and find answers with internal Q&A
     <span> &middot; </span>
     <a target="_blank" href="https://support.ubirimi.net/">Support</a>
     <span> &middot; </span>
