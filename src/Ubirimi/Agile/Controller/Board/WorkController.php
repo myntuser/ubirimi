@@ -61,7 +61,7 @@ class WorkController extends UbirimiController
         $lastCompletedSprint = $this->getRepository(Sprint::class)->getLastCompleted($boardId);
 
         $sectionPageTitle = $session->get('client/settings/title_name') . ' / '
-            . SystemProduct::SYS_PRODUCT_CHEETAH_NAME
+            . SystemProduct::SYS_PRODUCT_AGILE_NAME
             . ' / Board: '
             . $board['name']
             . ' / Work View';

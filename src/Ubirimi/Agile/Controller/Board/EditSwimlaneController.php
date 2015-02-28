@@ -43,7 +43,7 @@ class EditSwimlaneController extends UbirimiController
         }
 
         $sectionPageTitle = $session->get('client/settings/title_name') . ' / '
-            . SystemProduct::SYS_PRODUCT_CHEETAH_NAME
+            . SystemProduct::SYS_PRODUCT_AGILE_NAME
             . ' / Board / Swimlanes';
 
         return $this->render(__DIR__ . '/../../Resources/views/board/EditDataSwimlane.php', get_defined_vars());

@@ -49,7 +49,7 @@ class EditController extends UbirimiController
         $boardName = $board['name'];
         $boardDescription = $board['description'];
 
-        if ($request->request->has('confirm_new_board')) {
+        if ($request->request->has('confirm_edit_board')) {
             $boardName = Util::cleanRegularInputField($request->request->get('name'));
             $boardDescription = Util::cleanRegularInputField($request->request->get('description'));
 
@@ -69,7 +69,7 @@ class EditController extends UbirimiController
             }
         }
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_CHEETAH_NAME. ' / Update Board';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_AGILE_NAME. ' / Update Board';
 
         return $this->render(__DIR__ . '/../../Resources/views/board/Edit.php', get_defined_vars());
     }

@@ -53,7 +53,7 @@ require_once __DIR__ . '/../../../../Yongo/Resources/views/_header.php';
                     <td></td>
                     <td align="left">
                         <div align="left">
-                            <button type="submit" name="confirm_new_board" class="btn ubirimi-btn"><i class="icon-edit"></i> Update Board</button>
+                            <button type="submit" name="confirm_edit_board" class="btn ubirimi-btn"><i class="icon-edit"></i> Update Board</button>
                             <a class="btn ubirimi-btn" href="/agile/boards">Cancel</a>
                         </div>
                     </td>

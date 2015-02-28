@@ -60,7 +60,7 @@ class PlanController extends UbirimiController
         $columns = array('type', 'code', 'summary', 'priority');
 
         $sectionPageTitle = $session->get('client/settings/title_name') . ' / '
-            . SystemProduct::SYS_PRODUCT_CHEETAH_NAME
+            . SystemProduct::SYS_PRODUCT_AGILE_NAME
             . ' / Board: '
             . $board['name']
             . ' / Plan View';

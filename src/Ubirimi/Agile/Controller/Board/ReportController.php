@@ -58,7 +58,7 @@ class ReportController extends UbirimiController
         $availableCharts = array('sprint_report' => 'Sprint Report', 'velocity_chart' => 'Velocity Chart');
 
         $sectionPageTitle = $session->get('client/settings/title_name') . ' / '
-            . SystemProduct::SYS_PRODUCT_CHEETAH_NAME
+            . SystemProduct::SYS_PRODUCT_AGILE_NAME
             . ' / Board: '
             . $board['name']
             . ' / Report View';
