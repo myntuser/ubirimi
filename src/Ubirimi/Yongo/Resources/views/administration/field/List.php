@@ -108,7 +108,9 @@ require_once __DIR__ . '/../_header.php';
                             <?php endif ?>
                         </td>
                         <td>
-                            <a href="/yongo/administration/custom-fields/define/<?php echo $field['id'] ?>">Options</a>
+                            <?php if ($field['type_id'] == Field::CUSTOM_FIELD_TYPE_SELECT_LIST_SINGLE_CODE_ID): ?>
+                                <a href="/yongo/administration/custom-fields/define/<?php echo $field['id'] ?>">Options</a>
+                            <?php endif ?>
                         </td>
                     </tr>
                 <?php endwhile ?>
