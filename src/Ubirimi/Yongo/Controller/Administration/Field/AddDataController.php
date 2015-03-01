@@ -26,7 +26,8 @@ use Ubirimi\SystemProduct;
 use Ubirimi\UbirimiController;
 use Ubirimi\Util;
 use Ubirimi\Yongo\Repository\Field\FieldType;
-use Ubirimi\Yongo\Repository\Issue\CustomField;
+use Ubirimi\Yongo\Repository\Field\CustomField;
+use Ubirimi\Yongo\Repository\Issue\IssueType;
 use Ubirimi\Yongo\Repository\Project\YongoProject;
 
 class AddDataController extends UbirimiController
@@ -35,7 +36,7 @@ class AddDataController extends UbirimiController
     {
         Util::checkUserIsLoggedInAndRedirect();
 
-        $issueTypes = FieldType::getAll($session->get('client/id'));
+        $issueTypes = $this->getRepository(IssueType::class)->getAll($session->get('client/id'));
         $projects = $this->getRepository(YongoProject::class)->getByClientId($session->get('client/id'));
 
         $fieldTypeCode = $request->get('type');
@@ -64,7 +65,7 @@ class AddDataController extends UbirimiController
             if (!$emptyName && !$duplicateName) {
                 $date = Util::getServerCurrentDateTime();
 
-                $fieldId = CustomField::create(
+                $fieldId = $this->getRepository(CustomField::class)->create(
                     $session->get('client/id'),
                     $fieldTypeCode,
                     $name,

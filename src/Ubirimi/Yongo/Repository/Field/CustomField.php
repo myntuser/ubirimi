@@ -73,7 +73,7 @@ class CustomField {
         $query = "INSERT INTO field(client_id, sys_field_type_id, name, description, system_flag, all_issue_type_flag, all_project_flag, date_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         $systemFlag = 0;
-        $fieldTypeResult = IssueType::getByCode($fieldType);
+        $fieldTypeResult = UbirimiContainer::get()['repository']->get(FieldType::class)->getByCode($fieldType);
         $fieldTypeId = $fieldTypeResult['id'];
 
         $allIssueTypeFlag = (count($issueType) == 1 && $issueType[0] == -1) ? 1 : 0;
@@ -89,7 +89,7 @@ class CustomField {
         // add data if necessary
 
         if ($allIssueTypeFlag) {
-            $issueTypeResult = $this->getRepository(IssueType::class)->getAll($clientId);
+            $issueTypeResult = UbirimiContainer::get()['repository']->get(IssueType::class)->getAll($clientId);
             $issueType = array();
             while ($type = $issueTypeResult->fetch_array(MYSQLI_ASSOC)) {
                 $issueType[] = $type['id'];
