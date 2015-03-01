@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Ubirimi\UbirimiController;
 use Ubirimi\Util;
-use Ubirimi\Yongo\Repository\Issue\CustomField;
+use Ubirimi\Yongo\Repository\Field\CustomField;
 
 class DeleteController extends UbirimiController
 {
@@ -36,8 +36,6 @@ class DeleteController extends UbirimiController
         $customField = $this->getRepository(CustomField::class)->getById($Id);
 
         $this->getRepository(CustomField::class)->deleteById($Id);
-
-        $date = Util::getServerCurrentDateTime();
 
         $this->getLogger()->addInfo('DELETE Yongo Custom Field ' . $customField['name'], $this->getLoggerContext());
 
