@@ -1,5 +1,9 @@
 v 2.20
   - fix delete yongo projeect
+  - fix adding custom fields
+  - fix image logo in the email sent by Yongo notifications
+  - remove some deprecated images
+  - add missing image files (email templates)
 
 v 2.19
   - introduce monolog for logging
