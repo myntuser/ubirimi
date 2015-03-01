@@ -40,8 +40,8 @@ class CustomField {
     }
 
     public function getAllByClient($clientId) {
-        $query = "SELECT field.id, field.name, field.description, sys_field_type.name as type_name, sys_field_type.description as type_description, " .
-                 "field.all_issue_type_flag, field.all_project_flag " .
+        $query = "SELECT field.id, field.name, field.description, sys_field_type.id as type_id, sys_field_type.name as type_name, " .
+                 "field.all_issue_type_flag, field.all_project_flag, sys_field_type.description as type_description " .
             "FROM field " .
             "left join sys_field_type on sys_field_type.id = field.sys_field_type_id " .
             "where system_flag = 0 and client_id = ?";
