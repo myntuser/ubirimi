@@ -31,7 +31,6 @@ require_once __DIR__ . '/../../_header.php';
     <?php endif ?>
     <div class="pageContent">
         <?php if (Util::userHasYongoAdministrativePermission()): ?>
-            <?php Util::renderBreadCrumb('Issue Type Screen Schemes') ?>
 
             <ul class="nav nav-tabs" style="padding: 0px;">
                 <li><a href="/yongo/administration/screens">Screens</a></li>
