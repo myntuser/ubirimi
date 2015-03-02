@@ -57,10 +57,7 @@ class EditController extends UbirimiController
             $attachIdsToBeKept = array();
         }
 
-        $oldIssueData = $this->getRepository(Issue::class)->getByParameters(
-            array('issue_id' => $issueId),
-            $loggedInUserId
-        );
+        $oldIssueData = $this->getRepository(Issue::class)->getByParameters(array('issue_id' => $issueId), $loggedInUserId);
 
         $newIssueData = array();
         $newIssueData['issue_project_id'] = $oldIssueData['issue_project_id'];
@@ -105,59 +102,31 @@ class EditController extends UbirimiController
         foreach ($newIssueCustomFieldsData as $key => $value) {
             $keyData = explode("_", $key);
 
-            $oldIssueCustomFieldsData[$keyData[0]] = $this->getRepository(
-                CustomField::class
-            )->getCustomFieldsDataByFieldId($issueId, $key);
+            $oldIssueCustomFieldsData[$keyData[0]] = $this->getRepository(CustomField::class)->getCustomFieldsDataByFieldId($issueId, $key);
             unset($newIssueCustomFieldsData[$key]);
             $newIssueCustomFieldsData[$keyData[0]] = $value;
         }
 
-        $fieldChanges = $this->getRepository(Issue::class)->computeDifference(
-            $oldIssueData,
-            $newIssueData,
-            $oldIssueCustomFieldsData,
-            $newIssueCustomFieldsData
-        );
+        $fieldChanges = $this->getRepository(Issue::class)->computeDifference($oldIssueData, $newIssueData, $oldIssueCustomFieldsData, $newIssueCustomFieldsData);
 
         $this->getRepository(Issue::class)->updateHistory($issueId, $loggedInUserId, $fieldChanges, $currentDate);
 
         // check if on the modal there is a comment field
-        if (array_key_exists(
-                Field::FIELD_COMMENT_CODE,
-                $newIssueData
-            ) && !empty($newIssueData[Field::FIELD_COMMENT_CODE])
-        ) {
-            $this->getRepository(IssueComment::class)->add(
-                $issueId,
-                $loggedInUserId,
-                $newIssueData[Field::FIELD_COMMENT_CODE],
-                $currentDate
-            );
+        if (array_key_exists(Field::FIELD_COMMENT_CODE, $newIssueData) && !empty($newIssueData[Field::FIELD_COMMENT_CODE])) {
+            $this->getRepository(IssueComment::class)->add($issueId, $loggedInUserId, $newIssueData[Field::FIELD_COMMENT_CODE], $currentDate);
         }
 
         // update the custom fields value
         if ($fieldTypesCustom) {
-            $this->getRepository(CustomField::class)->updateCustomFieldsData(
-                $issueId,
-                $newIssueCustomFieldsData,
-                $currentDate
-            );
+            $this->getRepository(CustomField::class)->updateCustomFieldsData($issueId, $newIssueCustomFieldsData, $currentDate);
         }
 
         Util::manageModalAttachments($issueId, $loggedInUserId, $attachIdsToBeKept);
 
         UbirimiContainer::get()['session']->remove('added_attachments_in_screen');
 
-        $issueEvent = new IssueEvent(
-            null,
-            null,
-            IssueEvent::STATUS_UPDATE,
-            array('oldIssueData' => $oldIssueData, 'fieldChanges' => $fieldChanges)
-        );
-        $this->getLogger()->addInfo(
-            'UPDATE Yongo issue ' . $oldIssueData['project_code'] . '-' . $oldIssueData['nr'],
-            $this->getLoggerContext()
-        );
+        $issueEvent = new IssueEvent(null, null, IssueEvent::STATUS_UPDATE, array('oldIssueData' => $oldIssueData, 'fieldChanges' => $fieldChanges));
+        $this->getLogger()->addInfo('UPDATE Yongo issue ' . $oldIssueData['project_code'] . '-' . $oldIssueData['nr'], $this->getLoggerContext());
 
         UbirimiContainer::get()['dispatcher']->dispatch(YongoEvents::YONGO_ISSUE_EMAIL, $issueEvent);
 

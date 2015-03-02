@@ -45,11 +45,7 @@ class EditDataColumnController extends UbirimiController
         $columns = $this->getRepository(Board::class)->getColumns($boardId, 'array');
 
         $columnWidth = 100 / (count($columns) + 1);
-        $unmappedStatuses = $this->getRepository(Board::class)->getUnmappedStatuses(
-            $session->get('client/id'),
-            $boardId,
-            'array'
-        );
+        $unmappedStatuses = $this->getRepository(Board::class)->getUnmappedStatuses($session->get('client/id'), $boardId, 'array');
 
         $sectionPageTitle = $session->get('client/settings/title_name') . ' / '
             . SystemProduct::SYS_PRODUCT_AGILE_NAME

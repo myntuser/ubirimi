@@ -1,5 +1,5 @@
 <span>Permission role <?php echo $role['name'] ?></span>
-<hr/>
+<hr />
 <table align="center">
     <tr>
         <td>Available Groups</td>
@@ -18,14 +18,9 @@
             </select>
         </td>
         <td align="center">
-            <a id="assign_group_btn" href="#" class="btn ubirimi-btn">&nbsp;<img border="0" height="10"
-                                                                                 src="/img/br_next.png" alt=""/>&nbsp;
-            </a>
-
+            <a id="assign_group_btn" href="#" class="btn ubirimi-btn">&nbsp;<img border="0" height="10" src="/img/br_next.png" alt=""/>&nbsp;</a>
             <div></div>
-            <a id="remove_group_btn" href="#" class="btn ubirimi-btn">&nbsp;<img border="0" height="10"
-                                                                                 src="/img/br_prev.png" alt=""/>&nbsp;
-            </a>
+            <a id="remove_group_btn" href="#" class="btn ubirimi-btn">&nbsp;<img border="0" height="10" src="/img/br_prev.png" alt=""/>&nbsp;</a>
         </td>
         <td valign="top">
             <select name="assigned_groups" size="10" id="assigned_groups" class="inputTextCombo">
@@ -36,4 +31,4 @@
         </td>
     </tr>
 </table>
-<input type="hidden" value="<?php echo $permissionRoleId; ?>" id="role_id"/>
+<input type="hidden" value="<?php echo $permissionRoleId; ?>" id="role_id" />

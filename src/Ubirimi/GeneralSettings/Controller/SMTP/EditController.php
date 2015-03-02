@@ -80,9 +80,7 @@ class EditController extends UbirimiController
             return new RedirectResponse('/general-settings/smtp-settings');
         }
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / GeneralSettings Settings / Update SMTP Server Settings';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / GeneralSettings Settings / Update SMTP Server Settings';
 
         return $this->render(__DIR__ . '/../../Resources/views/smtp/Edit.php', get_defined_vars());
     }

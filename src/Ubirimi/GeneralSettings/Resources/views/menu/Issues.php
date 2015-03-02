@@ -16,8 +16,7 @@
     <?php if (isset($recentIssues)): ?>
         <tr>
             <td>
-                <span
-                    style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
+                <span style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
             </td>
         </tr>
         <tr>
@@ -29,12 +28,7 @@
             <tr>
                 <td>
                     <div>
-                        <a class="linkSubMenu"
-                           href="<?php echo $recentIssues[$i]['link'] ?>"><?php echo $recentIssues[$i]['project_code'] . '-' . $recentIssues[$i]['nr'] . ' ' . mb_substr(
-                                    $recentIssues[$i]['summary'],
-                                    0,
-                                    17
-                                ) ?></a>
+                        <a class="linkSubMenu" href="<?php echo $recentIssues[$i]['link'] ?>"><?php echo $recentIssues[$i]['project_code'] . '-' . $recentIssues[$i]['nr'] . ' ' . mb_substr($recentIssues[$i]['summary'], 0, 17) ?></a>
                     </div>
                 </td>
             </tr>

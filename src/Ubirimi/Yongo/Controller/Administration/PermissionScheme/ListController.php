@@ -35,13 +35,8 @@ class ListController extends UbirimiController
         $permissionSchemes = $this->getRepository(PermissionScheme::class)->getByClientId($session->get('client/id'));
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Issue Permission Schemes';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Issue Permission Schemes';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/permission_scheme/List.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/permission_scheme/List.php', get_defined_vars());
     }
 }

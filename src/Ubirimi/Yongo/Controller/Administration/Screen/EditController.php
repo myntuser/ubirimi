@@ -48,20 +48,14 @@ class EditController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name)) {
+            if (empty($name))
                 $emptyScreenName = true;
-            }
 
             // check for duplication
-            $screen_row_exists = $this->getRepository(Screen::class)->getByNameAndId(
-                $session->get('client/id'),
-                mb_strtolower($name),
-                $screenId
-            );
+            $screen_row_exists = $this->getRepository(Screen::class)->getByNameAndId($session->get('client/id'), mb_strtolower($name), $screenId);
 
-            if ($screen_row_exists) {
+            if ($screen_row_exists)
                 $screenExists = true;
-            }
 
             if (!$screenExists && !$emptyScreenName) {
                 $currentDate = Util::getServerCurrentDateTime();
@@ -74,9 +68,7 @@ class EditController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Screen';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Screen';
 
         return $this->render(__DIR__ . '/../../../Resources/views/administration/screen/Edit.php', get_defined_vars());
     }

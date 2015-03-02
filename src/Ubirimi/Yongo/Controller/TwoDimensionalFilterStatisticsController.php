@@ -78,9 +78,8 @@ class TwoDimensionalFilterStatisticsController extends UbirimiController
         );
 
         $twoDimensionalData = null;
-        if (count($projectIdsArray)) {
+        if (count($projectIdsArray))
             $twoDimensionalData = $this->getRepository(Issue::class)->get2DimensionalFilter(-1, 'array');
-        }
 
         $issueStatuses = $this->getRepository(IssueSettings::class)->getAllIssueSettings('status', $clientId, 'array');
         $usersAsAssignee = $this->getRepository(UbirimiUser::class)->getByClientId($clientId);

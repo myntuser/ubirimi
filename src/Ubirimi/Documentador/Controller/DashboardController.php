@@ -44,7 +44,7 @@ class DashboardController extends UbirimiController
         } else {
             $httpHOST = Util::getHttpHost();
             $clientId = $this->getRepository(UbirimiClient::class)->getByBaseURL($httpHOST, 'array', 'id');
-            $sectionPageTitle = SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME . ' / Dashboard';
+            $sectionPageTitle = SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME. ' / Dashboard';
         }
 
         $type = $request->get('type');
@@ -57,13 +57,8 @@ class DashboardController extends UbirimiController
             } else {
                 $spaces = $this->getRepository(Space::class)->getByClientIdAndAnonymous($session->get('client/id'));
             }
-        } else {
-            if ($type == 'pages') {
-                $pages = $this->getRepository(Entity::class)->getFavouritePagesByClientIdAndUserId(
-                    $session->get('client/id'),
-                    $loggedInUserId
-                );
-            }
+        } else if ($type == 'pages') {
+            $pages = $this->getRepository(Entity::class)->getFavouritePagesByClientIdAndUserId($session->get('client/id'), $loggedInUserId);
         }
 
         return $this->render(__DIR__ . '/../Resources/views/Dashboard.php', get_defined_vars());

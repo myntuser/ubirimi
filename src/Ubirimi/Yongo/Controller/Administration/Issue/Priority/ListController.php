@@ -32,20 +32,12 @@ class ListController extends UbirimiController
     {
         Util::checkUserIsLoggedInAndRedirect();
 
-        $priorities = $this->getRepository(IssueSettings::class)->getAllIssueSettings(
-            'priority',
-            $session->get('client/id')
-        );
+        $priorities = $this->getRepository(IssueSettings::class)->getAllIssueSettings('priority', $session->get('client/id'));
 
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Issue Priorities';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Issue Priorities';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/issue/priority/List.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/priority/List.php', get_defined_vars());
     }
 }

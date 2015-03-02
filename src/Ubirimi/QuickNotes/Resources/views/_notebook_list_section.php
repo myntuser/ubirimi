@@ -21,17 +21,12 @@ use Ubirimi\QuickNotes\Repository\Note;
     </div>
 
     <?php if (!empty($notebooks)): ?>
-        <?php foreach ($notebooks as $notebookInList): ?>
-            <?php $firstNote = UbirimiContainer::get()['repository']->get(Note::class)->getFirstByNotebookId(
-                $notebookInList['id']
-            ) ?>
-            <div
-                style="padding-left: 4px;<?php if ($notebookInList['id'] == $notebookId) echo 'background-color: #EEEEEE;' ?>">
-                <a href="/quick-notes/note/<?php echo $viewType ?>/<?php echo $notebookInList['id'] ?>/<?php if ($firstNote) {
-                    echo $firstNote['id'];
-                } else echo '-1' ?>"><?php echo $notebookInList['name'] ?></a>
-            </div>
-        <?php endforeach ?>
+    <?php foreach ($notebooks as $notebookInList): ?>
+        <?php $firstNote = UbirimiContainer::get()['repository']->get(Note::class)->getFirstByNotebookId($notebookInList['id']) ?>
+        <div style="padding-left: 4px;<?php if ($notebookInList['id'] == $notebookId) echo 'background-color: #EEEEEE;' ?>">
+            <a href="/quick-notes/note/<?php echo $viewType ?>/<?php echo $notebookInList['id'] ?>/<?php if ($firstNote) echo $firstNote['id']; else echo '-1' ?>"><?php echo $notebookInList['name'] ?></a>
+        </div>
+    <?php endforeach ?>
     <?php endif ?>
 </div>
 <div>

@@ -32,19 +32,11 @@ class ListController extends UbirimiController
     {
         Util::checkUserIsLoggedInAndRedirect();
         $type = 'project';
-        $issueTypeSchemes = $this->getRepository(IssueTypeScheme::class)->getByClientId(
-            $session->get('client/id'),
-            $type
-        );
+        $issueTypeSchemes = $this->getRepository(IssueTypeScheme::class)->getByClientId($session->get('client/id'), $type);
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Issue Type Schemes';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Issue Type Schemes';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/issue/issue_type_scheme/List.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/issue/issue_type_scheme/List.php', get_defined_vars());
     }
 }

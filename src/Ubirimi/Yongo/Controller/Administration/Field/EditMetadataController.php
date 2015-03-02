@@ -50,9 +50,8 @@ class EditMetadataController extends UbirimiController
 
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name)) {
+            if (empty($name))
                 $emptyName = true;
-            }
 
             if (!$emptyName) {
                 $date = Util::getServerCurrentDateTime();
@@ -66,13 +65,8 @@ class EditMetadataController extends UbirimiController
         }
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Custom Field';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Custom Field';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/field/EditMetadata.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/field/EditMetadata.php', get_defined_vars());
     }
 }

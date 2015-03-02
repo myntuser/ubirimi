@@ -43,13 +43,8 @@ class ListController extends UbirimiController
 
         $menuSelectedCategory = 'project';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Project Categories';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Project Categories';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/project/component/List.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/project/component/List.php', get_defined_vars());
     }
 }

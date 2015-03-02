@@ -21,13 +21,11 @@ use Exception;
  *
  * $Id: DirectoryUtils.php 1345 2007-11-17 08:53:56Z dolean_j $
  */
-class DirectoryUtils
-{
+class DirectoryUtils {
     /**
      * Remove a directory even if it is not empty.
      */
-    static public function removeDirectory($remove_path)
-    {
+    static public function removeDirectory($remove_path) {
         if (!file_exists($remove_path)) {
             return;
         }
@@ -70,8 +68,7 @@ class DirectoryUtils
      * @todo add option to this method (level to scan, exclude file or not, juste directory, get more infomations...
      * @return array
      */
-    static public function listDirectory($path)
-    {
+    static public function listDirectory($path) {
         $res = array();
         $dh = opendir($path);
         if (!$dh) {
@@ -91,8 +88,7 @@ class DirectoryUtils
      *
      * @return string Path to tmp directory
      */
-    static public function getTmpDirectory()
-    {
+    static public function getTmpDirectory() {
         $path = tempnam("", "USVN_");
         unlink($path);
         mkdir($path);
@@ -105,8 +101,7 @@ class DirectoryUtils
      * @param Path
      * @return boolean
      */
-    static public function isRootDirectory($path)
-    {
+    static public function isRootDirectory($path) {
         if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
             if (!preg_match('#[A-Z]:([\\\\/]+).+#', $path)) {
                 return true;
@@ -125,8 +120,7 @@ class DirectoryUtils
      * @param string $path2
      * @return boolean
      */
-    static public function firstDirectoryIsInclude($path1, $path2)
-    {
+    static public function firstDirectoryIsInclude($path1, $path2) {
         $tmp1 = realpath($path1);
         $tmp2 = realpath($path2);
         $tmp1 = str_replace('\\', '/', $tmp1);
@@ -143,12 +137,11 @@ class DirectoryUtils
      * @author      Aidan Lister <aidan@php.net>
      * @version     1.0.1
      * @link        http://aidanlister.com/repos/v/function.copyr.php
-     * @param       string $source Source path
-     * @param       string $dest Destination path
+     * @param       string $source    Source path
+     * @param       string $dest      Destination path
      * @return      bool     Returns TRUE on success, FALSE on failure
      */
-    static public function copyr($source, $dest)
-    {
+    static public function copyr($source, $dest) {
         // Check for symlinks
         if (is_link($source)) {
             return symlink(readlink($source), $dest);

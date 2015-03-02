@@ -34,9 +34,6 @@ class DeleteConfirmController extends UbirimiController
         $permissionRoleId = $request->get('perm_role_id');
         $role = $this->getRepository(Role::class)->getPermissionRoleById($permissionRoleId);
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/role/DeleteConfirm.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/role/DeleteConfirm.php', get_defined_vars());
     }
 }

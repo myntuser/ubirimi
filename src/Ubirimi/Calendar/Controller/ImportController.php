@@ -62,23 +62,14 @@ class ImportController extends UbirimiController
                     break;
                 }
             }
-            $calendarExists = $this->getRepository(UbirimiCalendar::class)->getByName(
-                $session->get('user/id'),
-                $calendarName
-            );
+            $calendarExists = $this->getRepository(UbirimiCalendar::class)->getByName($session->get('user/id'), $calendarName);
             if ($calendarExists) {
                 $calendarName .= '_' . time();
             }
 
             // deal with the events
             $date = Util::getServerCurrentDateTime();
-            $calendarId = $this->getRepository(UbirimiCalendar::class)->save(
-                $session->get('user/id'),
-                $calendarName,
-                null,
-                '#A1FF9E',
-                $date
-            );
+            $calendarId = $this->getRepository(UbirimiCalendar::class)->save($session->get('user/id'), $calendarName, null, '#A1FF9E', $date);
 
             $defaultColor = 'A1FF9E';
             $events = $calendar->VEvent;
@@ -116,9 +107,7 @@ class ImportController extends UbirimiController
         }
 
         $menuSelectedCategory = 'calendars';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_CALENDAR_NAME . ' / Import';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_CALENDAR_NAME . ' / Import';
 
         return $this->render(__DIR__ . '/../Resources/views/Import.php', get_defined_vars());
     }

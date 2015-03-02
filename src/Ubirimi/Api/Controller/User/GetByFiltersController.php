@@ -33,16 +33,11 @@ class GetByFiltersController extends UbirimiController
         $result = array();
 
         if ($filters['email_address'] && $filters['is_administrator']) {
-            $result = $this->getRepository(UbirimiUser::class)->getByEmailAddressAndIsClientAdministrator(
-                mb_strtolower($filters['email_address'])
-            );
+            $result = $this->getRepository(UbirimiUser::class)->getByEmailAddressAndIsClientAdministrator(mb_strtolower($filters['email_address']));
         }
 
         if ($filters['username'] && $filters['domain']) {
-            $result = $this->getRepository(UbirimiUser::class)->getByUsernameAndClientDomain(
-                mb_strtolower($filters['username']),
-                mb_strtolower($filters['domain'])
-            );
+            $result = $this->getRepository(UbirimiUser::class)->getByUsernameAndClientDomain(mb_strtolower($filters['username']), mb_strtolower($filters['domain']));
         }
 
         return new JsonResponse($result);

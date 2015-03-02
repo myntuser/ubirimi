@@ -46,10 +46,8 @@ class DeleteController extends UbirimiController
 
         if ($notePrevious) {
             return new Response($notebookSelectedId . '/' . $notePrevious['id']);
-        } else {
-            if ($noteFollowing) {
-                return new Response($notebookSelectedId . '/' . $noteFollowing['id']);
-            }
+        } else if ($noteFollowing) {
+            return new Response($notebookSelectedId . '/' . $noteFollowing['id']);
         }
 
         return new Response($note['qn_notebook_id'] . '/' . "-1");

@@ -23,21 +23,20 @@ require_once __DIR__ . '/_header.php';
 ?>
 <body>
 
-<?php require_once __DIR__ . '/_menu.php'; ?>
+    <?php require_once __DIR__ . '/_menu.php'; ?>
 
-<?php Util::renderBreadCrumb('Administration') ?>
+    <?php Util::renderBreadCrumb('Administration') ?>
 
-<div class="pageContent">
-    <?php if ($hasYongoGlobalAdministrationPermission || $hasYongoGlobalSystemAdministrationPermission || $hasYongoAdministerProjectsPermission): ?>
-        <table width="100%">
-            <tr>
-                <td width="40%">
-                    <table width="100%">
-                        <tr>
-                            <td colspan="2" class="sectionDetail"><span class="sectionDetailSimple headerPageText">Projects (<?php echo $countProjects ?>
-                                    )</span></td>
-                        </tr>
-                        <?php if ($last5Projects): ?>
+    <div class="pageContent">
+        <?php if ($hasYongoGlobalAdministrationPermission || $hasYongoGlobalSystemAdministrationPermission || $hasYongoAdministerProjectsPermission): ?>
+            <table width="100%">
+                <tr>
+                    <td width="40%">
+                        <table width="100%">
+                            <tr>
+                                <td colspan="2" class="sectionDetail"><span class="sectionDetailSimple headerPageText">Projects (<?php echo $countProjects ?>)</span></td>
+                            </tr>
+                            <?php if ($last5Projects): ?>
                             <tr>
                                 <td>
                                     <div>Last 5 Projects</div>
@@ -60,56 +59,54 @@ require_once __DIR__ . '/_header.php';
                                 </table>
 
                             </tr>
-                        <?php endif ?>
-                        <tr>
-                            <td>
-                                <?php if ($hasYongoGlobalAdministrationPermission || $hasYongoGlobalSystemAdministrationPermission || $hasYongoAdministerProjectsPermission): ?>
-                                    <a href="/yongo/administration/projects">All Projects</a>
-                                <?php endif ?>
-                                <?php if ($hasYongoGlobalAdministrationPermission || $hasYongoGlobalSystemAdministrationPermission): ?>
-                                    <b>&middot;</b>
-                                    <a href="/yongo/administration/project/categories">Project Categories</a>
-                                <?php endif ?>
-                                <?php if ($hasYongoGlobalAdministrationPermission || $hasYongoGlobalSystemAdministrationPermission): ?>
-                                    <b>&middot;</b>
-                                    <a href="/yongo/administration/project/add">Add Project</a>
-                                <?php endif ?>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-
-            <?php if ($hasYongoGlobalAdministrationPermission || $hasYongoGlobalSystemAdministrationPermission): ?>
-                <tr>
-                    <td valign="top" align="left" colspan="2">
-                        <table width="100%">
-                            <tr>
-                                <td colspan="2" class="sectionDetail"><span class="sectionDetailSimple headerPageText">Users</span>
-                                </td>
-                            </tr>
+                            <?php endif ?>
                             <tr>
                                 <td>
-                                    <a href="/yongo/administration/users">Users</a>
-                                    <b>&middot;</b>
-                                    <a href="/yongo/administration/groups">Groups</a>
-                                    <b>&middot;</b>
-                                    <a href="/yongo/administration/roles">Roles</a>
+                                    <?php if ($hasYongoGlobalAdministrationPermission || $hasYongoGlobalSystemAdministrationPermission || $hasYongoAdministerProjectsPermission): ?>
+                                        <a href="/yongo/administration/projects">All Projects</a>
+                                    <?php endif ?>
+                                    <?php if ($hasYongoGlobalAdministrationPermission || $hasYongoGlobalSystemAdministrationPermission): ?>
+                                        <b>&middot;</b>
+                                        <a href="/yongo/administration/project/categories">Project Categories</a>
+                                    <?php endif ?>
+                                    <?php if ($hasYongoGlobalAdministrationPermission || $hasYongoGlobalSystemAdministrationPermission): ?>
+                                        <b>&middot;</b>
+                                        <a href="/yongo/administration/project/add">Add Project</a>
+                                    <?php endif ?>
                                 </td>
                             </tr>
                         </table>
                     </td>
                 </tr>
-            <?php endif ?>
-        </table>
-        <?php if ($hasYongoGlobalAdministrationPermission || $hasYongoGlobalSystemAdministrationPermission): ?>
-            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+
+                <?php if ($hasYongoGlobalAdministrationPermission || $hasYongoGlobalSystemAdministrationPermission): ?>
+                    <tr>
+                        <td valign="top" align="left" colspan="2">
+                            <table width="100%">
+                                <tr>
+                                    <td colspan="2" class="sectionDetail"><span class="sectionDetailSimple headerPageText">Users</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="/yongo/administration/users">Users</a>
+                                        <b>&middot;</b>
+                                        <a href="/yongo/administration/groups">Groups</a>
+                                        <b>&middot;</b>
+                                        <a href="/yongo/administration/roles">Roles</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                <?php endif ?>
+            </table>
+            <?php if ($hasYongoGlobalAdministrationPermission || $hasYongoGlobalSystemAdministrationPermission): ?>
+                <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                     <td valign="top" align="left" width="50%">
                         <table width="100%">
                             <tr>
-                                <td colspan="2" class="sectionDetail"><span class="sectionDetailSimple headerPageText">Issues</span>
-                                </td>
+                                <td colspan="2" class="sectionDetail"><span class="sectionDetailSimple headerPageText">Issues</span></td>
                             </tr>
                             <tr>
                                 <td>Issue Types...</td>
@@ -180,8 +177,7 @@ require_once __DIR__ . '/_header.php';
                     <td valign="top" align="left" width="50%">
                         <table width="100%">
                             <tr>
-                                <td colspan="2" class="sectionDetail"><span class="sectionDetailSimple headerPageText">System</span>
-                                </td>
+                                <td colspan="2" class="sectionDetail"><span class="sectionDetailSimple headerPageText">System</span></td>
                             </tr>
                             <tr>
                                 <td>
@@ -212,11 +208,11 @@ require_once __DIR__ . '/_header.php';
                     </td>
                 </tr>
             </table>
+            <?php endif ?>
+        <?php else: ?>
+            <div class="infoBox">Unauthorized access. Please contact the system administrator.</div>
         <?php endif ?>
-    <?php else: ?>
-        <div class="infoBox">Unauthorized access. Please contact the system administrator.</div>
-    <?php endif ?>
 
-</div>
-<?php require_once __DIR__ . '/_footer.php' ?>
+    </div>
+    <?php require_once __DIR__ . '/_footer.php' ?>
 </body>

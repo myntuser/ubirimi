@@ -40,10 +40,7 @@ class AssignDefaultUsersController extends UbirimiController
         $this->getRepository(Role::class)->deleteDefaultUsersByPermissionRoleId($permissionRoleId);
         $this->getRepository(Role::class)->addDefaultUsers($permissionRoleId, $userArray, $currentDate);
 
-        $this->getLogger()->addInfo(
-            'UPDATE Yongo Project Role ' . $permissionRole['name'] . ' Definition',
-            $this->getLoggerContext()
-        );
+        $this->getLogger()->addInfo('UPDATE Yongo Project Role ' . $permissionRole['name'] . ' Definition', $this->getLoggerContext());
 
         return new Response('');
     }

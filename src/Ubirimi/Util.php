@@ -29,50 +29,35 @@ use Ubirimi\Yongo\Repository\Issue\Issue;
 use Ubirimi\Yongo\Repository\Issue\IssueAttachment;
 use ZipArchive;
 
-class Util
-{
+class Util {
 
-    public static function renderContactSystemAdministrator()
-    {
+    public static function renderContactSystemAdministrator() {
         echo '<div class="infoBox">Unauthorized access. Please contact the system administrator.</div>';
     }
 
-    public static function userHasClientAdministrationPermission()
-    {
+    public static function userHasClientAdministrationPermission() {
         return UbirimiContainer::get()['session']->get('user/client_administrator_flag');
     }
 
-    public static function userHasYongoAdministrativePermission()
-    {
-        $hasYongoGlobalAdministrationPermission = UbirimiContainer::get()['session']->get(
-            'user/yongo/is_global_administrator'
-        );
-        $hasYongoGlobalSystemAdministrationPermission = UbirimiContainer::get()['session']->get(
-            'user/yongo/is_global_system_administrator'
-        );
+    public static function userHasYongoAdministrativePermission() {
+        $hasYongoGlobalAdministrationPermission = UbirimiContainer::get()['session']->get('user/yongo/is_global_administrator');
+        $hasYongoGlobalSystemAdministrationPermission = UbirimiContainer::get()['session']->get('user/yongo/is_global_system_administrator');
 
         return ($hasYongoGlobalAdministrationPermission || $hasYongoGlobalSystemAdministrationPermission);
     }
 
-    public static function userHasDocumentadorAdministrativePermission()
-    {
-        $hasDocumentadorGlobalAdministrationPermission = UbirimiContainer::get()['session']->get(
-            'user/documentator/is_global_administrator'
-        );
-        $hasDocumentadorGlobalSystemAdministrationPermission = UbirimiContainer::get()['session']->get(
-            'user/documentator/is_global_system_administrator'
-        );
+    public static function userHasDocumentadorAdministrativePermission() {
+        $hasDocumentadorGlobalAdministrationPermission = UbirimiContainer::get()['session']->get('user/documentator/is_global_administrator');
+        $hasDocumentadorGlobalSystemAdministrationPermission = UbirimiContainer::get()['session']->get('user/documentator/is_global_system_administrator');
 
         return ($hasDocumentadorGlobalAdministrationPermission || $hasDocumentadorGlobalSystemAdministrationPermission);
     }
 
-    public static function checkUserIsLoggedIn()
-    {
+    public static function checkUserIsLoggedIn() {
         return null !== UbirimiContainer::get()['session']->get('user/id');
     }
 
-    public static function signOutAndRedirect($context = null)
-    {
+    public static function signOutAndRedirect($context = null) {
         UbirimiContainer::get()['session']->invalidate();
 
         $location = '/';
@@ -83,30 +68,25 @@ class Util
         exit;
     }
 
-    public static function checkUserIsLoggedInAndRedirect($context = null)
-    {
+    public static function checkUserIsLoggedInAndRedirect($context = null) {
 
         if (!Util::checkUserIsLoggedIn()) {
             Util::signOutAndRedirect($context);
         }
     }
 
-    public static function checkSuperUserIsLoggedIn()
-    {
+    public static function checkSuperUserIsLoggedIn() {
 
         if (!UbirimiContainer::get()['session']->get('user/id')) {
             header('Location: /');
             exit;
-        } else {
-            if (!UbirimiContainer::get()['session']->get('user/super_user_flag')) {
-                header('Location: /');
-                exit;
-            }
+        } else if (!UbirimiContainer::get()['session']->get('user/super_user_flag')) {
+            header('Location: /');
+            exit;
         }
     }
 
-    public static function getAsArray($mysqliResult, $fieldArray)
-    {
+    public static function getAsArray($mysqliResult, $fieldArray) {
         $resultArray = array();
         while ($result = $mysqliResult->fetch_array(MYSQLI_ASSOC)) {
             if (count($fieldArray) > 1) {
@@ -123,19 +103,11 @@ class Util
         return $resultArray;
     }
 
-    public static function getServerCurrentDateTime()
-    {
+    public static function getServerCurrentDateTime() {
         return date("Y-m-d H:i:s");
     }
 
-    public static function renderPaginator(
-        $issuesCount,
-        $issuesPerPage,
-        $currentSearchPage,
-        $params,
-        $returnType = null
-    )
-    {
+    public static function renderPaginator($issuesCount, $issuesPerPage, $currentSearchPage, $params, $returnType = null) {
         $upLimit = $issuesPerPage * ($currentSearchPage - 1) + $issuesPerPage;
         if ($upLimit > $issuesCount) {
             $upLimit = $issuesCount;
@@ -163,23 +135,13 @@ class Util
             $pageEnd = 10;
         }
 
-        if ($pageStart >= 2) {
-            $showLeft = true;
-        }
-        if ($pageStart >= 3) {
-            $showLeftLeft = true;
-        }
+        if ($pageStart >= 2) $showLeft = true;
+        if ($pageStart >= 3) $showLeftLeft = true;
 
-        if ($pageEnd <= ($params['count_pages'] - 1)) {
-            $showRight = true;
-        }
-        if ($pageEnd <= ($params['count_pages'] - 2)) {
-            $showRightRight = true;
-        }
+        if ($pageEnd <= ($params['count_pages'] - 1)) $showRight = true;
+        if ($pageEnd <= ($params['count_pages'] - 2)) $showRightRight = true;
 
-        if ($pageEnd > $params['count_pages']) {
-            $pageEnd = $params['count_pages'];
-        }
+        if ($pageEnd > $params['count_pages']) $pageEnd = $params['count_pages'];
 
         if ($showLeftLeft) {
             $params['page'] = 1;
@@ -211,25 +173,20 @@ class Util
         $htmlOutput .= '</table>';
 
         if (isset($returnType)) {
-            if ($returnType == 'echo') {
+            if ($returnType == 'echo')
                 echo $htmlOutput;
-            } else {
-                if ($returnType == 'return') {
-                    return $htmlOutput;
-                }
-            }
+            else if ($returnType == 'return')
+                return $htmlOutput;
         } else {
             echo $htmlOutput;
         }
     }
 
-    public static function isValidEmail($email)
-    {
+    public static function isValidEmail($email) {
         return preg_match("/^[_\.0-9a-zA-Z-]+@([0-9a-zA-Z][0-9a-zA-Z-]+\.)+[a-zA-Z]{2,6}$/i", $email);
     }
 
-    public static function getFormattedDate($date, $timezone = null)
-    {
+    public static function getFormattedDate($date, $timezone = null) {
         $dateObject = new \DateTime($date, new \DateTimeZone(date_default_timezone_get()));
 
         if ($timezone) {
@@ -239,8 +196,7 @@ class Util
         return $dateObject->format('j M Y H:i:s');
     }
 
-    public static function cleanRegularInputField($value)
-    {
+    public static function cleanRegularInputField($value) {
         if (isset($value)) {
             return strip_tags(trim($value));
         } else {
@@ -248,30 +204,20 @@ class Util
         }
     }
 
-    public static function deepInArray($value, $array)
-    {
+    public static function deepInArray($value, $array) {
         foreach ($array as $item) {
             if (!is_array($item)) {
-                if ($item == $value) {
-                    return true;
-                } else {
-                    continue;
-                }
+                if ($item == $value) return true;
+                else continue;
             }
 
-            if (in_array($value, $item)) {
-                return true;
-            } else {
-                if (Util::deepInArray($value, $item)) {
-                    return true;
-                }
-            }
+            if (in_array($value, $item)) return true;
+            else if (Util::deepInArray($value, $item)) return true;
         }
         return false;
     }
 
-    public static function deleteDir($dirPath)
-    {
+    public static function deleteDir($dirPath) {
         if (is_dir($dirPath)) {
             if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
                 $dirPath .= '/';
@@ -288,8 +234,7 @@ class Util
         }
     }
 
-    public static function manageModalAttachments($issueId, $loggedInUserId, $attachIdsToBeKept)
-    {
+    public static function manageModalAttachments($issueId, $loggedInUserId, $attachIdsToBeKept) {
 
         if (null != UbirimiContainer::get()['session']->has('added_attachments_in_screen')) {
             $attIdsSession = UbirimiContainer::get()['session']->get('added_attachments_in_screen');
@@ -297,123 +242,53 @@ class Util
 
             for ($i = 0; $i < count($attIdsSession); $i++) {
                 $attachmentId = $attIdsSession[$i];
-                $attachment = UbirimiContainer::get()['repository']->get(IssueAttachment::class)->getById(
-                    $attachmentId
-                );
+                $attachment = UbirimiContainer::get()['repository']->get(IssueAttachment::class)->getById($attachmentId);
 
                 if (!in_array($attachmentId, $attachIdsToBeKept)) {
 
                     // the attachment must be deleted
                     UbirimiContainer::get()['repository']->get(IssueAttachment::class)->deleteById($attachmentId);
 
-                    if (file_exists(
-                        Util::getAssetsFolder(
-                            SystemProduct::SYS_PRODUCT_YONGO
-                        ) . $attachment['issue_id'] . '/' . $attachment['id'] . '/' . $attachment['name']
-                    )) {
-                        unlink(
-                            Util::getAssetsFolder(
-                                SystemProduct::SYS_PRODUCT_YONGO
-                            ) . $attachment['issue_id'] . '/' . $attachment['id'] . '/' . $attachment['name']
-                        );
+                    if (file_exists(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . $attachment['issue_id'] . '/' . $attachment['id'] . '/' . $attachment['name'])) {
+                        unlink(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . $attachment['issue_id'] . '/' . $attachment['id'] . '/' . $attachment['name']);
                         if (Util::isImage(Util::getExtension($attachment['name']))) {
-                            if (file_exists(
-                                Util::getAssetsFolder(
-                                    SystemProduct::SYS_PRODUCT_YONGO
-                                ) . $attachment['issue_id'] . '/' . $attachment['id'] . '/thumbs/' . $attachment['name']
-                            )) {
-                                unlink(
-                                    Util::getAssetsFolder(
-                                        SystemProduct::SYS_PRODUCT_YONGO
-                                    ) . $attachment['issue_id'] . '/' . $attachment['id'] . '/thumbs/' . $attachment['name']
-                                );
-                                Util::deleteDir(
-                                    Util::getAssetsFolder(
-                                        SystemProduct::SYS_PRODUCT_YONGO
-                                    ) . $attachment['issue_id'] . '/' . $attachment['id'] . '/thumbs'
-                                );
+                            if (file_exists(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . $attachment['issue_id'] . '/' . $attachment['id'] . '/thumbs/' . $attachment['name'])) {
+                                unlink(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . $attachment['issue_id'] . '/' . $attachment['id'] . '/thumbs/' . $attachment['name']);
+                                Util::deleteDir(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . $attachment['issue_id'] . '/' . $attachment['id'] . '/thumbs');
                             }
                         }
                     }
 
-                    if (file_exists(
-                        Util::getAssetsFolder(
-                            SystemProduct::SYS_PRODUCT_YONGO
-                        ) . $attachment['issue_id'] . '/' . $attachment['id']
-                    )) {
-                        Util::deleteDir(
-                            Util::getAssetsFolder(
-                                SystemProduct::SYS_PRODUCT_YONGO
-                            ) . $attachment['issue_id'] . '/' . $attachment['id']
-                        );
+                    if (file_exists(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . $attachment['issue_id'] . '/' . $attachment['id'])) {
+                        Util::deleteDir(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . $attachment['issue_id'] . '/' . $attachment['id']);
                     }
 
                     // deal with the user_ folders
-                    if (file_exists(
-                        Util::getAssetsFolder(
-                            SystemProduct::SYS_PRODUCT_YONGO
-                        ) . 'user_' . $loggedInUserId . '/' . $attachment['id'] . '/' . $attachment['name']
-                    )) {
-                        unlink(
-                            Util::getAssetsFolder(
-                                SystemProduct::SYS_PRODUCT_YONGO
-                            ) . 'user_' . $loggedInUserId . '/' . $attachment['id'] . '/' . $attachment['name']
-                        );
+                    if (file_exists(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . 'user_' . $loggedInUserId . '/' . $attachment['id'] . '/' . $attachment['name'])) {
+                        unlink(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . 'user_' . $loggedInUserId . '/' . $attachment['id'] . '/' . $attachment['name']);
                         if (Util::isImage(Util::getExtension($attachment['name']))) {
-                            if (file_exists(
-                                Util::getAssetsFolder(
-                                    SystemProduct::SYS_PRODUCT_YONGO
-                                ) . 'user_' . $loggedInUserId . '/' . $attachment['id'] . '/thumbs/' . $attachment['name']
-                            )) {
-                                unlink(
-                                    Util::getAssetsFolder(
-                                        SystemProduct::SYS_PRODUCT_YONGO
-                                    ) . 'user_' . $loggedInUserId . '/' . $attachment['id'] . '/thumbs/' . $attachment['name']
-                                );
-                                Util::deleteDir(
-                                    Util::getAssetsFolder(
-                                        SystemProduct::SYS_PRODUCT_YONGO
-                                    ) . 'user_' . $loggedInUserId . '/' . $attachment['id'] . '/thumbs'
-                                );
+                            if (file_exists(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . 'user_' . $loggedInUserId . '/' . $attachment['id'] . '/thumbs/' . $attachment['name'])) {
+                                unlink(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . 'user_' . $loggedInUserId . '/' . $attachment['id'] . '/thumbs/' . $attachment['name']);
+                                Util::deleteDir(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . 'user_' . $loggedInUserId . '/' . $attachment['id'] . '/thumbs');
                             }
                         }
                     }
 
-                    if (file_exists(
-                        Util::getAssetsFolder(
-                            SystemProduct::SYS_PRODUCT_YONGO
-                        ) . 'user_' . $loggedInUserId . '/' . $attachment['id']
-                    )) {
-                        Util::deleteDir(
-                            Util::getAssetsFolder(
-                                SystemProduct::SYS_PRODUCT_YONGO
-                            ) . 'user_' . $loggedInUserId . '/' . $attachment['id']
-                        );
+                    if (file_exists(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . 'user_' . $loggedInUserId . '/' . $attachment['id'])) {
+                        Util::deleteDir(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . 'user_' . $loggedInUserId . '/' . $attachment['id']);
                     }
 
                 } else {
-                    if (file_exists(
-                        Util::getAssetsFolder(
-                            SystemProduct::SYS_PRODUCT_YONGO
-                        ) . 'user_' . $loggedInUserId . '/' . $attachment['id'] . '/' . $attachment['name']
-                    )) {
+                    if (file_exists(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . 'user_' . $loggedInUserId . '/' . $attachment['id'] . '/' . $attachment['name'])) {
                         if (!file_exists(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . $issueId)) {
                             // create the moder
                             mkdir(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . $issueId);
                         }
                         // move the attachment
-                        rename(
-                            Util::getAssetsFolder(
-                                SystemProduct::SYS_PRODUCT_YONGO
-                            ) . 'user_' . $loggedInUserId . '/' . $attachment['id'],
-                            Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . $issueId . '/' . $attachment['id']
-                        );
+                        rename(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . 'user_' . $loggedInUserId . '/' . $attachment['id'], Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . $issueId . '/' . $attachment['id']);
 
                         // update the attachment
-                        UbirimiContainer::get()['repository']->get(IssueAttachment::class)->updateByIdAndIssueId(
-                            $attachmentId,
-                            $issueId
-                        );
+                        UbirimiContainer::get()['repository']->get(IssueAttachment::class)->updateByIdAndIssueId($attachmentId, $issueId);
                     }
                 }
             }
@@ -428,24 +303,14 @@ class Util
         }
     }
 
-    public static function checkKeyAndValueInArray($key, $value, $fieldDataArray)
-    {
-        foreach ($fieldDataArray as $item) {
-            if (isset($item[$key]) && $item[$key] == $value) {
+    public static function checkKeyAndValueInArray($key, $value, $fieldDataArray) {
+        foreach ($fieldDataArray as $item)
+            if (isset($item[$key]) && $item[$key] == $value)
                 return $item;
-            }
-        }
         return false;
     }
 
-    public static function getProjectHistory(
-        $projectIds,
-        $helpdeskFlag = 0,
-        $userId = null,
-        $startDate = null,
-        $endDate = null
-    )
-    {
+    public static function getProjectHistory($projectIds, $helpdeskFlag = 0, $userId = null, $startDate = null, $endDate = null) {
 
         $queryWherePart = ' ';
         $queryWherePartDateIssueCreated = '';
@@ -538,15 +403,13 @@ class Util
 
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public static function createZip($files = array(), $destination, $overwrite = false)
-    {
+    public static function createZip($files = array(), $destination, $overwrite = false) {
         //if the zip file already exists and overwrite is false, return false
         if (file_exists($destination) && !$overwrite) {
 
@@ -586,8 +449,7 @@ class Util
         }
     }
 
-    public static function getCountries()
-    {
+    public static function getCountries() {
         $query = 'select id, name from sys_country';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -595,15 +457,13 @@ class Util
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return false;
-        }
     }
 
-    public static function updatePasswordForUserId($userId)
-    {
+    public static function updatePasswordForUserId($userId) {
         $query = 'update general_user set password = ? where id = ? limit 1';
 
         $pass = Util::randomPassword(8);
@@ -617,18 +477,16 @@ class Util
         return $pass;
     }
 
-    public static function randomPassword($numchar)
-    {
+    public static function randomPassword($numchar) {
         $word = "a,b,c,d,e,f,g,h,i,j,k,l,m,1,2,3,4,5,6,7,8,9,0,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z";
-        $array = explode(",", $word);
+        $array = explode(",",$word);
         shuffle($array);
         $newstring = implode($array, "");
 
         return substr($newstring, 0, $numchar);
     }
 
-    public static function updatePasswordForClientAdministrator($userId)
-    {
+    public static function updatePasswordForClientAdministrator($userId) {
         $query = 'update general_user set password = ? where id = ? and client_administrator_flag = 1 limit 1';
 
         $pass = Util::randomPassword(8);
@@ -642,8 +500,7 @@ class Util
         return $pass;
     }
 
-    public static function checkEmailAddressExistenceWithinClient($address, $userId, $clientId)
-    {
+    public static function checkEmailAddressExistenceWithinClient($address, $userId, $clientId) {
         $query = 'select id, email from general_user where LOWER(email) = LOWER(?) and id != ? and client_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -657,75 +514,57 @@ class Util
         }
     }
 
-    public static function checkEmailAddressExistence($address, $userId = null, $clientId = null)
-    {
+    public static function checkEmailAddressExistence($address, $userId = null, $clientId = null) {
         $query = 'select id, email from general_user where LOWER(email) = LOWER(?)';
-        if ($userId) {
-            $query .= ' and id != ?';
-        }
+        if ($userId) $query .= ' and id != ?';
 
-        if ($clientId) {
-            $query .= ' and client_id != ' . $clientId;
-        }
+        if ($clientId) $query .= ' and client_id != ' . $clientId;
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
-        if ($userId) {
+        if ($userId)
             $stmt->bind_param("si", $address, $userId);
-        } else {
+        else
             $stmt->bind_param("s", $address);
-        }
 
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array();
-        }
 
         $query = 'select id, contact_email from client where LOWER(contact_email) = LOWER(?) ';
-        if ($clientId) {
-            $query .= ' and id != ?';
-        }
+        if ($clientId) $query .= ' and id != ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
-        if ($clientId) {
-            $stmt->bind_param("si", $address, $clientId);
-        } else {
+        if ($clientId) $stmt->bind_param("si", $address, $clientId);
+        else
             $stmt->bind_param("s", $address);
-        }
 
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array();
-        }
 
         return false;
     }
 
-    public static function hasNoErrors($errors)
-    {
-        foreach ($errors as $key => $value) {
-            if ($value) {
+    public static function hasNoErrors($errors) {
+        foreach ($errors as $key => $value)
+            if ($value)
                 return false;
-            }
-        }
 
         return true;
     }
 
-    public static function renderTableHeader($parameters, $columns)
-    {
+    public static function renderTableHeader($parameters, $columns) {
 
         // prepare the data
         foreach ($parameters as $key => $value) {
-            if (is_array($value)) {
+            if (is_array($value))
                 $parameters[$key] = implode('|', $value);
-            } else {
-                if ($value === null) {
-                    unset($parameters[$key]);
-                }
+            else if ($value === null) {
+                unset($parameters[$key]);
             }
         }
 
@@ -759,9 +598,7 @@ class Util
                 continue;
             }
 
-            if (isset($parameters['sort']) && $parameters['sort'] == $column) {
-                $class = 'cellHeaderSelected';
-            }
+            if (isset($parameters['sort']) && $parameters['sort'] == $column) $class = 'cellHeaderSelected';
             $URLParameters = '';
             if (isset($parameters['page'])) {
                 $URLParameters .= '?page=' . $parameters['page'];
@@ -771,51 +608,21 @@ class Util
                 }
             }
 
-            if (isset($parameters['filter'])) {
-                $URLParameters .= '&filter=' . $parameters['filter'];
-            }
-            if (isset($parameters['component'])) {
-                $URLParameters .= '&component=' . $parameters['component'];
-            }
-            if (isset($parameters['version'])) {
-                $URLParameters .= '&version=' . $parameters['version'];
-            }
-            if (isset($parameters['project'])) {
-                $URLParameters .= '&project=' . $parameters['project'];
-            }
-            if (isset($parameters['priority'])) {
-                $URLParameters .= '&priority=' . $parameters['priority'];
-            }
-            if (isset($parameters['type'])) {
-                $URLParameters .= '&type=' . $parameters['type'];
-            }
-            if (isset($parameters['status'])) {
-                $URLParameters .= '&status=' . $parameters['status'];
-            }
-            if (isset($parameters['resolution'])) {
-                $URLParameters .= '&resolution=' . $parameters['resolution'];
-            }
-            if (isset($parameters['assignee'])) {
-                $URLParameters .= '&assignee=' . $parameters['assignee'];
-            }
-            if (isset($parameters['reporter'])) {
-                $URLParameters .= '&reporter=' . $parameters['reporter'];
-            }
-            if (isset($parameters['search_query'])) {
-                $URLParameters .= '&search_query=' . $parameters['search_query'];
-            }
-            if (isset($parameters['summary_flag'])) {
-                $URLParameters .= '&summary_flag=' . $parameters['summary_flag'];
-            }
-            if (isset($parameters['description_flag'])) {
-                $URLParameters .= '&description_flag=' . $parameters['description_flag'];
-            }
-            if (isset($parameters['comments_flag'])) {
-                $URLParameters .= '&comments_flag=' . $parameters['comments_flag'];
-            }
-            if (isset($parameters['for_queue'])) {
-                $URLParameters .= '&for_queue=' . $parameters['for_queue'];
-            }
+            if (isset($parameters['filter'])) $URLParameters .= '&filter=' . $parameters['filter'];
+            if (isset($parameters['component'])) $URLParameters .= '&component=' . $parameters['component'];
+            if (isset($parameters['version'])) $URLParameters .= '&version=' . $parameters['version'];
+            if (isset($parameters['project'])) $URLParameters .= '&project=' . $parameters['project'];
+            if (isset($parameters['priority'])) $URLParameters .= '&priority=' . $parameters['priority'];
+            if (isset($parameters['type'])) $URLParameters .= '&type=' . $parameters['type'];
+            if (isset($parameters['status'])) $URLParameters .= '&status=' . $parameters['status'];
+            if (isset($parameters['resolution'])) $URLParameters .= '&resolution=' . $parameters['resolution'];
+            if (isset($parameters['assignee'])) $URLParameters .= '&assignee=' . $parameters['assignee'];
+            if (isset($parameters['reporter'])) $URLParameters .= '&reporter=' . $parameters['reporter'];
+            if (isset($parameters['search_query'])) $URLParameters .= '&search_query=' . $parameters['search_query'];
+            if (isset($parameters['summary_flag'])) $URLParameters .= '&summary_flag=' . $parameters['summary_flag'];
+            if (isset($parameters['description_flag'])) $URLParameters .= '&description_flag=' . $parameters['description_flag'];
+            if (isset($parameters['comments_flag'])) $URLParameters .= '&comments_flag=' . $parameters['comments_flag'];
+            if (isset($parameters['for_queue'])) $URLParameters .= '&for_queue=' . $parameters['for_queue'];
 
             $columnWidth = null;
             $align = null;
@@ -835,20 +642,18 @@ class Util
             if (isset($parameters['sort']) && $parameters['sort']) {
 
                 $linkHeader = '<a class="linkInHeader" href="' . $parameters['link_to_page'] . $URLParameters . '">' . $columnName . '</a>';
-            } else {
+            } else
                 $linkHeader = '<span class="linkInHeader">' . $columnName . '</span>';
-            }
 
             $columnWidthHTML = '';
-            if ($columnWidth) {
+            if ($columnWidth)
                 $columnWidthHTML = ' width="' . $columnWidth . '" ';
-            }
 
             $content .= '<th ' . $align;
             if ($class) {
                 $content .= ' class="' . $class . '"';
             }
-            $content .= $columnWidthHTML . '>';
+            $content .=  $columnWidthHTML . '>';
             $content .= $linkHeader;
             $content .= '</th>';
         }
@@ -858,8 +663,7 @@ class Util
         return $content;
     }
 
-    public static function renderIssueTables($params, $columns, $clientSettings)
-    {
+    public static function renderIssueTables($params, $columns, $clientSettings) {
         $htmlOutput = '';
         $htmlOutput .= '<div>';
         $issues = $params['issues'];
@@ -889,11 +693,10 @@ class Util
                     $checkId = 'el_check_' . $issue['id'];
 
                     $htmlOutput .= '<input ' . $disabledText . ' type="checkbox" value="1" id="' . $checkId . '"/>';
-                    if (array_key_exists('in_backlog', $params)) {
+                    if (array_key_exists('in_backlog', $params))
                         $htmlOutput .= '<input type="hidden" value="1" id="backlog_' . $checkId . '"/>';
-                    } else {
+                    else
                         $htmlOutput .= '<input type="hidden" value="0" id="backlog_' . $checkId . '"/>';
-                    }
 
                     $htmlOutput .= '</td>';
                 }
@@ -906,11 +709,8 @@ class Util
                         $htmlOutput .= "</td>\n";
                     }
 
-                    if ($columns[$indexColumn] == 'summary') {
-                        $htmlOutput .= '<td class="issueSummary"><a href="/yongo/issue/' . $issue['id'] . '">' . htmlentities(
-                                $issue['summary']
-                            ) . "</a></td>\n";
-                    }
+                    if ($columns[$indexColumn] == 'summary')
+                        $htmlOutput .= '<td class="issueSummary"><a href="/yongo/issue/' . $issue['id'] . '">' . htmlentities($issue['summary']) . "</a></td>\n";
 
                     if ($columns[$indexColumn] == 'priority') {
                         $htmlOutput .= '<td class="issuePriority">' . "\n";
@@ -918,38 +718,21 @@ class Util
                         $htmlOutput .= "</td>\n";
                     }
 
-                    if ($columns[$indexColumn] == 'status') {
+                    if ($columns[$indexColumn] == 'status')
                         $htmlOutput .= '<td class=" issueStatus">' . $issue['status_name'] . '</td>';
-                    }
-                    if ($columns[$indexColumn] == 'date_created') {
-                        $htmlOutput .= '<td class="issueDC">' . Util::getFormattedDate(
-                                $issue['date_created'],
-                                $clientSettings['timezone']
-                            ) . "</td>\n";
-                    }
+                    if ($columns[$indexColumn] == 'date_created')
+                        $htmlOutput .= '<td class="issueDC">' . Util::getFormattedDate($issue['date_created'], $clientSettings['timezone']) . "</td>\n";
                     if ($columns[$indexColumn] == 'date_updated') {
                         $htmlOutput .= '<td class="issueDU">';
-                        if ($issue['date_updated']) {
+                        if ($issue['date_updated'])
                             $htmlOutput .= Util::getFormattedDate($issue['date_updated'], $clientSettings['timezone']);
-                        }
                         $htmlOutput .= '</td>';
                     }
-                    if ($columns[$indexColumn] == 'reporter') {
-                        $htmlOutput .= '<td class="issueUR">' . LinkHelper::getUserProfileLink(
-                                $issue[Field::FIELD_REPORTER_CODE],
-                                SystemProduct::SYS_PRODUCT_YONGO,
-                                $issue['ur_first_name'],
-                                $issue['ur_last_name']
-                            ) . '</td>';
-                    }
+                    if ($columns[$indexColumn] == 'reporter')
+                        $htmlOutput .= '<td class="issueUR">' . LinkHelper::getUserProfileLink($issue[Field::FIELD_REPORTER_CODE], SystemProduct::SYS_PRODUCT_YONGO, $issue['ur_first_name'], $issue['ur_last_name']) . '</td>';
 
                     if ($columns[$indexColumn] == 'assignee') {
-                        $htmlOutput .= '<td class="issueUA">' . LinkHelper::getUserProfileLink(
-                                $issue[Field::FIELD_ASSIGNEE_CODE],
-                                SystemProduct::SYS_PRODUCT_YONGO,
-                                $issue['ua_first_name'],
-                                $issue['ua_last_name']
-                            ) . '</td>';
+                        $htmlOutput .= '<td class="issueUA">' . LinkHelper::getUserProfileLink($issue[Field::FIELD_ASSIGNEE_CODE], SystemProduct::SYS_PRODUCT_YONGO, $issue['ua_first_name'], $issue['ua_last_name']) . '</td>';
                     }
                     if ($columns[$indexColumn] == 'resolution') {
                         $htmlOutput .= '<td>' . $issue['resolution_name'] . '</td>';
@@ -971,22 +754,11 @@ class Util
         return $atLeastOneIssueRendered;
     }
 
-    public static function renderComponentStatSection(
-        $statsSection,
-        $count,
-        $title,
-        $type = null,
-        $projectId = null,
-        $componentId = null,
-        $versionId = null,
-        $urlPrefix
-    )
-    {
+    public static function renderComponentStatSection($statsSection, $count, $title, $type = null, $projectId = null, $componentId = null, $versionId = null, $urlPrefix) {
         ?>
         <table width="100%" cellpadding="2">
             <tr>
-                <td colspan="3" class="sectionDetail"><span
-                        class="sectionDetailSimple headerPageText"><?php echo $title ?></span></td>
+                <td colspan="3" class="sectionDetail"><span class="sectionDetailSimple headerPageText"><?php echo $title ?></span></td>
             </tr>
             <?php if (!$count): ?>
                 <tr>
@@ -998,79 +770,26 @@ class Util
                 <tr>
                     <td width="180px">
                         <?php
-                        switch ($type) {
-                            case 'assignee':
-                                echo LinkHelper::getYongoIssueListPageLink(
-                                    key($value),
-                                    array(
-                                        'page' => 1,
-                                        'assignee' => $key,
-                                        'link_to_page' => $urlPrefix,
-                                        'sort' => 'created',
-                                        'sort_order' => 'desc',
-                                        'resolution' => '-2',
-                                        'project' => $projectId,
-                                        'component' => $componentId,
-                                        'fix_version' => $versionId
-                                    )
-                                );
-                                break;
-                            case 'type':
-                                echo LinkHelper::getYongoIssueListPageLink(
-                                    key($value),
-                                    array(
-                                        'page' => 1,
-                                        'link_to_page' => $urlPrefix,
-                                        'sort' => 'created',
-                                        'resolution' => '-2',
-                                        'project' => $projectId,
-                                        'sort_order' => 'desc',
-                                        'type' => $key,
-                                        'component' => $componentId,
-                                        'fix_version' => $versionId
-                                    )
-                                );
-                                break;
-                            case 'priority':
-                                echo LinkHelper::getYongoIssueListPageLink(
-                                    key($value),
-                                    array(
-                                        'page' => 1,
-                                        'link_to_page' => $urlPrefix,
-                                        'sort' => 'created',
-                                        'resolution' => '-2',
-                                        'project' => $projectId,
-                                        'sort_order' => 'desc',
-                                        'priority' => $key,
-                                        'component' => $componentId,
-                                        'fix_version' => $versionId
-                                    )
-                                );
-                                break;
-                            case 'status':
-                                echo LinkHelper::getYongoIssueListPageLink(
-                                    key($value),
-                                    array(
-                                        'page' => 1,
-                                        'link_to_page' => $urlPrefix,
-                                        'sort' => 'created',
-                                        'resolution' => -2,
-                                        'status' => $key,
-                                        'project' => $projectId,
-                                        'sort_order' => 'desc',
-                                        'component' => $componentId,
-                                        'fix_version' => $versionId
-                                    )
-                                );
-                                break;
-                        }
+                            switch ($type) {
+                                case 'assignee':
+                                    echo LinkHelper::getYongoIssueListPageLink(key($value), array('page' => 1, 'assignee' => $key, 'link_to_page' => $urlPrefix, 'sort' => 'created', 'sort_order' => 'desc', 'resolution' => '-2', 'project' => $projectId, 'component' => $componentId, 'fix_version' => $versionId));
+                                    break;
+                                case 'type':
+                                    echo LinkHelper::getYongoIssueListPageLink(key($value), array('page' => 1, 'link_to_page' => $urlPrefix, 'sort' => 'created', 'resolution' => '-2', 'project' => $projectId, 'sort_order' => 'desc', 'type' => $key, 'component' => $componentId, 'fix_version' => $versionId));
+                                    break;
+                                case 'priority':
+                                    echo LinkHelper::getYongoIssueListPageLink(key($value), array('page' => 1, 'link_to_page' => $urlPrefix, 'sort' => 'created', 'resolution' => '-2', 'project' => $projectId, 'sort_order' => 'desc', 'priority' => $key, 'component' => $componentId, 'fix_version' => $versionId));
+                                    break;
+                                case 'status':
+                                    echo LinkHelper::getYongoIssueListPageLink(key($value), array('page' => 1, 'link_to_page' => $urlPrefix, 'sort' => 'created', 'resolution' => -2, 'status' => $key, 'project' => $projectId, 'sort_order' => 'desc', 'component' => $componentId, 'fix_version' => $versionId));
+                                    break;
+                            }
                         ?>
                     </td>
                     <td width="30" align="right"><?php echo $value[key($value)] ?></td>
                     <?php $perc = round($value[key($value)] / $count * 100) ?>
                     <td valign="bottom">
-                        <div
-                            style="margin-top: 5px; margin-right: 4px; float:left; background-color: #56A5EC; height: 18px; width: <?php echo($perc * 3) ?>px"></div>
+                        <div style="margin-top: 5px; margin-right: 4px; float:left; background-color: #56A5EC; height: 18px; width: <?php echo($perc * 3) ?>px"></div>
                         <div style="float: left"><?php echo $perc ?>%</div>
                     </td>
                 </tr>
@@ -1079,16 +798,14 @@ class Util
     <?php
     }
 
-    public static function getSubdomain()
-    {
+    public static function getSubdomain() {
         $httpHost = $_SERVER['SERVER_NAME'];
         $parameters = explode(".", $httpHost);
 
         return array_shift($parameters);
     }
 
-    public static function runsOnLocalhost()
-    {
+    public static function runsOnLocalhost() {
 
         return in_array('lan', explode('.', $_SERVER['HTTP_HOST']));
     }
@@ -1097,8 +814,7 @@ class Util
      * Modifies a string to remove all non ASCII characters and spaces.
      */
 
-    public static function slugify($text)
-    {
+    public static function slugify($text) {
         // replace non letter or digits by -
         $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
 
@@ -1123,75 +839,51 @@ class Util
         return $text;
     }
 
-    public static function array_column($array, $column)
-    {
+    public static function array_column($array, $column) {
         $ret = array();
-        foreach ($array as $row) {
+        foreach ($array as $row)
             $ret[] = $row[$column];
-        }
 
         return $ret;
     }
 
-    public static function searchQueryNotEmpty($getSearchParameters)
-    {
-        $paramsToSearch = array(
-            'search_query',
-            'summary_flag',
-            'description_flag',
-            'comments_flag',
-            'project',
-            'assignee',
-            'reporter',
-            'type',
-            'status',
-            'priority',
-            'component',
-            'fix_version',
-            'affects_version',
-            'resolution'
-        );
+    public static function searchQueryNotEmpty($getSearchParameters) {
+        $paramsToSearch = array('search_query', 'summary_flag', 'description_flag', 'comments_flag', 'project',
+            'assignee', 'reporter', 'type', 'status', 'priority', 'component',
+            'fix_version', 'affects_version', 'resolution');
 
         for ($i = 0; $i < count($paramsToSearch); $i++) {
-            if (isset($getSearchParameters[$paramsToSearch[$i]]) && $getSearchParameters[$paramsToSearch[$i]] != null) {
+            if (isset($getSearchParameters[$paramsToSearch[$i]]) && $getSearchParameters[$paramsToSearch[$i]] != null)
                 return true;
-            }
         }
 
         return false;
     }
 
-    public static function validateUsername($username)
-    {
-        return preg_match('/^[A-Za-z0-9_]{1,35}$/', $username) || false !== filter_var(
-            $username,
-            FILTER_VALIDATE_EMAIL
-        );
+    public static function validateUsername($username) {
+        return preg_match('/^[A-Za-z0-9_]{1,35}$/', $username) || false !== filter_var($username, FILTER_VALIDATE_EMAIL);
     }
 
-    public static function renderBreadCrumb($htmlBreadCrumb, $iconRight = null, $link = null)
-    {
+    public static function renderBreadCrumb($htmlBreadCrumb, $iconRight = null, $link = null) {
         $html = '<div class="headerPageBackground">';
-        $html .= '<table width="100%">';
-        $html .= '<tr>';
-        $html .= '<td>';
-        $html .= '<div class="headerPageText">' . $htmlBreadCrumb . '</div>';
-        $html .= '</td>';
-        if ($iconRight) {
-            $html .= '<td align="right">';
-            if ($iconRight == 'help') {
-                $html .= '<a target="_blank" href="' . $link . '"><img src="/img/help_browser.png" /></a>';
-            }
-            $html .= '</td>';
-        }
-        $html .= '</tr>';
-        $html .= '</table>';
+            $html .= '<table width="100%">';
+                $html .= '<tr>';
+                    $html .= '<td>';
+                        $html .= '<div class="headerPageText">' . $htmlBreadCrumb . '</div>';
+                    $html .= '</td>';
+                    if ($iconRight) {
+                        $html .= '<td align="right">';
+                            if ($iconRight == 'help')
+                                $html .= '<a target="_blank" href="' . $link . '"><img src="/img/help_browser.png" /></a>';
+                        $html .= '</td>';
+                    }
+                $html .= '</tr>';
+            $html .= '</table>';
         $html .= '</div>';
         echo $html;
     }
 
-    public static function transformLogTimeToMinutes($timeString, $hoursPerDay, $daysPerWeek)
-    {
+    public static function transformLogTimeToMinutes($timeString, $hoursPerDay, $daysPerWeek) {
 
         if (is_numeric($timeString)) {
             return $timeString;
@@ -1230,8 +922,7 @@ class Util
         return $totalMinutes;
     }
 
-    public static function transformTimeToString($minutes, $hoursPerDay, $daysPerWeek, $format = 'long')
-    {
+    public static function transformTimeToString($minutes, $hoursPerDay, $daysPerWeek, $format = 'long') {
         if (0 == $minutes) {
             return $minutes;
         }
@@ -1246,32 +937,28 @@ class Util
 
         $timeStringData = array();
         if ($weeks > 0) {
-            if ($weeks > 1) {
+            if ($weeks > 1)
                 $timeStringData[] = $weeks . ' weeks';
-            } else {
+            else
                 $timeStringData[] = $weeks . ' week';
-            }
         }
         if ($days > 0) {
-            if ($days > 1) {
+            if ($days > 1)
                 $timeStringData[] = $days . ' days';
-            } else {
+            else
                 $timeStringData[] = $days . ' day';
-            }
         }
         if ($hours > 0) {
-            if ($hours > 1) {
+            if ($hours > 1)
                 $timeStringData[] = $hours . ' hours';
-            } else {
+            else
                 $timeStringData[] = $hours . ' hour';
-            }
         }
         if ($minutes > 0) {
-            if ($minutes > 1) {
+            if ($minutes > 1)
                 $timeStringData[] = $minutes . ' minutes';
-            } else {
+            else
                 $timeStringData[] = $minutes . ' minute';
-            }
         }
 
         if ($format == 'short') {
@@ -1287,29 +974,24 @@ class Util
         return implode(', ', $timeStringData);
     }
 
-    public static function getHttpHost()
-    {
+    public static function getHttpHost() {
         $httpHOST = $_SERVER['HTTP_HOST'];
         if (Util::runsOnLocalhost()) {
             $urlPrefix = 'http://';
+        } else if (!empty($_SERVER['HTTPS'])) {
+            $urlPrefix = 'https://';
         } else {
-            if (!empty($_SERVER['HTTPS'])) {
-                $urlPrefix = 'https://';
-            } else {
-                $urlPrefix = 'http://';
-            }
+            $urlPrefix = 'http://';
         }
-
-        if (isset($urlData['scheme'])) {
+        
+        if (isset($urlData['scheme']))
             $urlPrefix = '';
-        }
         $httpHOST = $urlPrefix . $httpHOST;
 
         return $httpHOST;
     }
 
-    public static function removeDirectory($path)
-    {
+    public static function removeDirectory($path) {
         if (is_dir($path)) {
             $objects = scandir($path);
             foreach ($objects as $object) {
@@ -1326,8 +1008,7 @@ class Util
         }
     }
 
-    public static function getExtension($str)
-    {
+    public static function getExtension($str) {
         $i = strrpos($str, ".");
         if (!$i) {
             return "";
@@ -1338,14 +1019,12 @@ class Util
         return strtolower(substr($str, $i + 1, $l));
     }
 
-    public static function isImage($extension)
-    {
+    public static function isImage($extension) {
 
         return in_array($extension, array('png', 'gif', 'jpg', 'jpeg', 'bmp'));
     }
 
-    public static function get_include_contents($filename)
-    {
+    public static function get_include_contents($filename) {
         global $clientId;
         global $session;
         if (is_file($filename)) {
@@ -1356,8 +1035,7 @@ class Util
         return false;
     }
 
-    public static function renderMaintenanceMessage()
-    {
+    public static function renderMaintenanceMessage() {
         // get the server settings
         $serverSettings = UbirimiContainer::get()['repository']->get(ServerSettings::class)->get();
 
@@ -1366,57 +1044,48 @@ class Util
         }
     }
 
-    public static function getUbirimiSMTPSettings($type = 'accounts')
-    {
+    public static function getUbirimiSMTPSettings($type = 'accounts') {
         switch ($type) {
             case 'accounts':
-                return array(
-                    'smtp_protocol' => SMTPServer::PROTOCOL_SECURE_SMTP,
-                    'email_prefix' => '',
-                    'username' => 'accounts@ubirimi.com',
-                    'from_address' => 'accounts@ubirimi.com',
-                    'password' => 'scumpamea',
-                    'hostname' => 'smtp.gmail.com',
-                    'tls_flag' => true,
-                    'port' => 587
-                );
+                return array('smtp_protocol' => SMTPServer::PROTOCOL_SECURE_SMTP,
+                             'email_prefix' => '',
+                             'username' => 'accounts@ubirimi.com',
+                             'from_address' => 'accounts@ubirimi.com',
+                             'password' => 'scumpamea',
+                             'hostname' => 'smtp.gmail.com',
+                             'tls_flag' => true,
+                             'port' => 587);
                 break;
 
             case 'contact':
-                return array(
-                    'smtp_protocol' => SMTPServer::PROTOCOL_SECURE_SMTP,
-                    'email_prefix' => '',
-                    'username' => 'contact@ubirimi.com',
-                    'from_address' => 'contact@ubirimi.com',
-                    'password' => 'scumpamea',
-                    'hostname' => 'smtp.gmail.com',
-                    'tls_flag' => true,
-                    'port' => 587
-                );
+                return array('smtp_protocol' => SMTPServer::PROTOCOL_SECURE_SMTP,
+                             'email_prefix' => '',
+                             'username' => 'contact@ubirimi.com',
+                             'from_address' => 'contact@ubirimi.com',
+                             'password' => 'scumpamea',
+                             'hostname' => 'smtp.gmail.com',
+                             'tls_flag' => true,
+                             'port' => 587);
                 break;
 
             case 'notification':
-                return array(
-                    'smtp_protocol' => SMTPServer::PROTOCOL_SECURE_SMTP,
+                return array('smtp_protocol' => SMTPServer::PROTOCOL_SECURE_SMTP,
                     'email_prefix' => '',
                     'username' => 'notification@ubirimi.com',
                     'from_address' => 'notification@ubirimi.com',
                     'password' => 'scumpamea',
                     'hostname' => 'smtp.gmail.com',
                     'tls_flag' => true,
-                    'port' => 587
-                );
+                    'port' => 587);
                 break;
         }
     }
 
-    public static function getUbirmiMailer($type = 'accounts')
-    {
+    public static function getUbirmiMailer($type = 'accounts') {
         return UbirimiContainer::get()['repository']->get(Email::class)->getMailer(self::getUbirimiSMTPSettings($type));
     }
 
-    public static function getAssetsFolder($productId, $context = null)
-    {
+    public static function getAssetsFolder($productId, $context = null) {
         switch ($productId) {
             case SystemProduct::SYS_PRODUCT_GENERAL_SETTINGS:
                 if ($context == 'user_avatars') {
@@ -1425,26 +1094,20 @@ class Util
                 break;
 
             case SystemProduct::SYS_PRODUCT_YONGO:
-                return UbirimiContainer::get()['asset.root_folder'] . UbirimiContainer::get(
-                )['asset.yongo_issue_attachments'];
+                return UbirimiContainer::get()['asset.root_folder'] . UbirimiContainer::get()['asset.yongo_issue_attachments'];
                 break;
 
             case SystemProduct::SYS_PRODUCT_DOCUMENTADOR:
                 if ($context == 'attachments') {
-                    return UbirimiContainer::get()['asset.root_folder'] . UbirimiContainer::get(
-                    )['asset.documentador_entity_attachments'];
-                } else {
-                    if ($context == 'filelists') {
-                        return UbirimiContainer::get()['asset.root_folder'] . UbirimiContainer::get(
-                        )['asset.documentador_filelists_attachments'];
-                    }
+                    return UbirimiContainer::get()['asset.root_folder'] . UbirimiContainer::get()['asset.documentador_entity_attachments'];
+                } else if ($context == 'filelists') {
+                    return UbirimiContainer::get()['asset.root_folder'] . UbirimiContainer::get()['asset.documentador_filelists_attachments'];
                 }
                 break;
         }
     }
 
-    public static function drawYongoProjectCalendar($projectId, $month, $year, $userId)
-    {
+    public static function drawYongoProjectCalendar($projectId, $month, $year, $userId) {
 
         /* draw table */
         $calendar = '<table cellpadding="0" cellspacing="0" class="calendar">';
@@ -1452,10 +1115,7 @@ class Util
         /* table headings */
         $headings = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
         $calendar .= '<tr>';
-        $calendar .= '<td class="calendar-day-head">' . implode(
-                '</td><td class="calendar-day-head">',
-                $headings
-            ) . '</td>';
+            $calendar .= '<td class="calendar-day-head">' . implode('</td><td class="calendar-day-head">', $headings) . '</td>';
         $calendar .= '</tr>';
 
         /* days and weeks vars now ... */
@@ -1480,30 +1140,24 @@ class Util
             /* add in the day number */
             $calendar .= '<div class="day-number">' . $list_day . '</div>';
             $dayNr = $list_day;
-            if ($list_day < 10) {
+            if ($list_day < 10)
                 $dayNr = '0' . $list_day;
-            }
             $date = $year . '-' . $month . '-' . $dayNr;
 
             /** QUERY THE DATABASE FOR AN ENTRY FOR THIS DAY !!  IF MATCHES FOUND, PRINT THEM !! **/
             $issueQueryParameters = array('date_due' => $date, 'project' => $projectId);
 
-            $issues = UbirimiContainer::get()['repository']->get(Issue::class)->getByParameters(
-                $issueQueryParameters,
-                $userId
-            );
+            $issues = UbirimiContainer::get()['repository']->get(Issue::class)->getByParameters($issueQueryParameters, $userId);
             if ($issues) {
                 $calendar .= '<div>Issues: <a href="/yongo/issue/search?project=' . $projectId . '&date_due_after=' . $date . '&date_due_before=' . $date . '">' . $issues->num_rows . '</a></div>';
 
                 while ($issue = $issues->fetch_array(MYSQLI_ASSOC)) {
-                    $calendar .= '<a class="calendar-issue-box" href="' . LinkHelper::getYongoIssueViewLinkJustHref(
-                            $issue['id']
-                        ) . '">';
-                    $calendar .= '<span style="width: 19px; margin-right: 4px; margin-bottom: 4px; display: inline-block; background-color: ' . $issue['priority_color'] . '">&nbsp;</span>';
-                    $calendar .= '<div style="display: none" class="calendar-issue-box-content">';
-                    $calendar .= '<a href="/yongo/issue/' . $issue['id'] . '">' . $issue['project_code'] . '-' . $issue['nr'] . '</a> ' . $issue['summary'];
-                    $calendar .= '<div>' . str_replace("\n", "<br />", $issue['description']) . '</div>';
-                    $calendar .= '</div>';
+                    $calendar .= '<a class="calendar-issue-box" href="' . LinkHelper::getYongoIssueViewLinkJustHref($issue['id']) . '">';
+                        $calendar .= '<span style="width: 19px; margin-right: 4px; margin-bottom: 4px; display: inline-block; background-color: ' . $issue['priority_color'] . '">&nbsp;</span>';
+                        $calendar .= '<div style="display: none" class="calendar-issue-box-content">';
+                            $calendar .= '<a href="/yongo/issue/' . $issue['id'] . '">' . $issue['project_code'] . '-' . $issue['nr'] . '</a> ' . $issue['summary'];
+                            $calendar .= '<div>' . str_replace("\n", "<br />", $issue['description']) . '</div>';
+                        $calendar .= '</div>';
                     $calendar .= '</a>';
                 }
             }
@@ -1542,16 +1196,14 @@ class Util
         return $calendar;
     }
 
-    public static function getTemplate($templatePath, $data)
-    {
+    public static function getTemplate($templatePath, $data) {
         $tpl = UbirimiContainer::get()['savant'];
         $tpl->assign($data);
 
         return $tpl->fetch($templatePath, 'text/html');
     }
 
-    public static function includePartial($partialPath, array $variables)
-    {
+    public static function includePartial($partialPath, array $variables) {
         ob_start();
 
         extract($variables);
@@ -1561,8 +1213,7 @@ class Util
         ob_end_flush();
     }
 
-    public static function getClientIP()
-    {
+    public static function getClientIP() {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
         } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -1574,13 +1225,11 @@ class Util
         return $ip;
     }
 
-    public static function array_equal($a, $b)
-    {
+    public static function array_equal($a, $b) {
         return (is_array($a) && is_array($b) && array_diff($a, $b) === array_diff($b, $a));
     }
 
-    public static function getSiteURL()
-    {
+    public static function getSiteURL() {
         $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
         $domainName = $_SERVER['HTTP_HOST'];
 

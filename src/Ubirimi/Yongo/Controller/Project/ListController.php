@@ -42,12 +42,7 @@ class ListController extends UbirimiController
             $clientSettings = $this->getRepository(UbirimiClient::class)->getSettings($clientId);
         }
 
-        $projects = $this->getRepository(UbirimiClient::class)->getProjectsByPermission(
-            $clientId,
-            $loggedInUserId,
-            Permission::PERM_BROWSE_PROJECTS,
-            'array'
-        );
+        $projects = $this->getRepository(UbirimiClient::class)->getProjectsByPermission($clientId, $loggedInUserId, Permission::PERM_BROWSE_PROJECTS, 'array');
 
         $menuSelectedCategory = 'project';
 

@@ -44,14 +44,12 @@ class AddController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name)) {
+            if (empty($name))
                 $emptyName = true;
-            }
 
             $releasesDuplicate = $this->getRepository(YongoProject::class)->getVersionByName($projectId, $name);
-            if ($releasesDuplicate) {
+            if ($releasesDuplicate)
                 $alreadyExists = true;
-            }
 
             if (!$emptyName && !$alreadyExists) {
                 $currentDate = Util::getServerCurrentDateTime();
@@ -64,13 +62,8 @@ class AddController extends UbirimiController
         }
 
         $menuSelectedCategory = 'project';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Project Version';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Project Version';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/project/version/Add.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/project/version/Add.php', get_defined_vars());
     }
 }

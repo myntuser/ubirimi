@@ -37,9 +37,8 @@ class UpdateColumnController extends UbirimiController
         $newColumnId = $request->request->get('new_column_id');
 
         $this->getRepository(Board::class)->deleteStatusFromColumn($boardId, $StatusId);
-        if ($newColumnId) {
+        if ($newColumnId)
             $this->getRepository(Board::class)->addStatusToColumn($newColumnId, $StatusId);
-        }
 
         return new Response('');
     }

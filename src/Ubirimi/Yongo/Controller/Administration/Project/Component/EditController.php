@@ -52,29 +52,17 @@ class EditController extends UbirimiController
             $description = Util::cleanRegularInputField($request->request->get('description'));
             $leader = Util::cleanRegularInputField($request->request->get('leader'));
 
-            if (empty($name)) {
+            if (empty($name))
                 $emptyName = true;
-            }
 
-            $components_duplicate = $this->getRepository(YongoProject::class)->getComponentByName(
-                $projectId,
-                $name,
-                $componentId
-            );
-            if ($components_duplicate) {
+            $components_duplicate = $this->getRepository(YongoProject::class)->getComponentByName($projectId, $name, $componentId);
+            if ($components_duplicate)
                 $alreadyExists = true;
-            }
 
             if (!$emptyName && !$alreadyExists) {
                 $currentDate = Util::getServerCurrentDateTime();
 
-                $this->getRepository(YongoProject::class)->updateComponentById(
-                    $componentId,
-                    $name,
-                    $description,
-                    $leader,
-                    $currentDate
-                );
+                $this->getRepository(YongoProject::class)->updateComponentById($componentId, $name, $description, $leader, $currentDate);
                 $this->getLogger()->addInfo('UPDATE Project Component ' . $name, $this->getLoggerContext());
 
                 return new RedirectResponse('/yongo/administration/project/components/' . $projectId);
@@ -83,13 +71,8 @@ class EditController extends UbirimiController
 
         $users = $this->getRepository(UbirimiClient::class)->getUsers($session->get('client/id'));
         $menuSelectedCategory = 'project';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Project Component';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Project Component';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/project/component/Edit.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/project/component/Edit.php', get_defined_vars());
     }
 }

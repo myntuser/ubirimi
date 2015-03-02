@@ -23,11 +23,9 @@ use Ubirimi\Container\UbirimiContainer;
 use Ubirimi\Yongo\Repository\Issue\IssueType;
 use Ubirimi\Yongo\Repository\Project\YongoProject;
 
-class CustomField
-{
+class CustomField {
 
-    public function getById($Id)
-    {
+    public function getById($Id) {
         $query = "SELECT * FROM field where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -35,17 +33,15 @@ class CustomField
         $stmt->bind_param("i", $Id);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getAllByClient($clientId)
-    {
+    public function getAllByClient($clientId) {
         $query = "SELECT field.id, field.name, field.description, sys_field_type.id as type_id, sys_field_type.name as type_name, " .
-            "field.all_issue_type_flag, field.all_project_flag, sys_field_type.description as type_description " .
+                 "field.all_issue_type_flag, field.all_project_flag, sys_field_type.description as type_description " .
             "FROM field " .
             "left join sys_field_type on sys_field_type.id = field.sys_field_type_id " .
             "where system_flag = 0 and client_id = ?";
@@ -54,30 +50,26 @@ class CustomField
         $stmt->bind_param("i", $clientId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getTypes()
-    {
+    public function getTypes() {
         $query = "SELECT * FROM sys_field_type";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function create($clientId, $fieldType, $name, $description, $issueType, $project, $date)
-    {
+    public function create($clientId, $fieldType, $name, $description, $issueType, $project, $date) {
         $query = "INSERT INTO field(client_id, sys_field_type_id, name, description, system_flag, all_issue_type_flag, all_project_flag, date_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         $systemFlag = 0;
@@ -89,17 +81,7 @@ class CustomField
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
-        $stmt->bind_param(
-            "iissiiis",
-            $clientId,
-            $fieldTypeId,
-            $name,
-            $description,
-            $systemFlag,
-            $allIssueTypeFlag,
-            $allProjectFlag,
-            $date
-        );
+        $stmt->bind_param("iissiiis", $clientId, $fieldTypeId, $name, $description, $systemFlag, $allIssueTypeFlag, $allProjectFlag, $date);
         $stmt->execute();
 
         $fieldId = UbirimiContainer::get()['db.connection']->insert_id;
@@ -142,8 +124,7 @@ class CustomField
         return $fieldId;
     }
 
-    public function updateMetaDataById($Id, $name, $description, $date)
-    {
+    public function updateMetaDataById($Id, $name, $description, $date) {
         $query = "update field set name = ?, description = ?, date_updated = ? where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -151,16 +132,14 @@ class CustomField
         $stmt->execute();
     }
 
-    public function deleteDataByProjectId($projectId)
-    {
+    public function deleteDataByProjectId($projectId) {
         $query = "delete from field_project_data where project_id = ?";
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $projectId);
         $stmt->execute();
     }
 
-    public function deleteById($customFieldId)
-    {
+    public function deleteById($customFieldId) {
         $query = "delete from field where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -193,18 +172,16 @@ class CustomField
         $stmt->execute();
     }
 
-    public function getByNameAndType($clientId, $name, $fieldType)
-    {
+    public function getByNameAndType($clientId, $name, $fieldType) {
         $query = "SELECT * FROM field where client_id = ? and sys_field_type_id = ? and name = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iis", $clientId, $fieldType, $name);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 }

@@ -39,11 +39,7 @@ class DeleteController extends UbirimiController
         $newId = $request->request->get('new_id');
 
         if ($newId) {
-            $projects = $this->getRepository(UbirimiClient::class)->getProjects(
-                $session->get('client/id'),
-                'array',
-                'id'
-            );
+            $projects = $this->getRepository(UbirimiClient::class)->getProjects($session->get('client/id'), 'array', 'id');
             $this->getRepository(Issue::class)->updateType($projects, $oldId, $newId);
         }
 

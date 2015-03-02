@@ -45,10 +45,7 @@ class AddDataController extends UbirimiController
         $permissions = $this->getRepository(Permission::class)->getAll();
 
         $users = $this->getRepository(UbirimiUser::class)->getByClientId($session->get('client/id'));
-        $groups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId(
-            $session->get('client/id'),
-            SystemProduct::SYS_PRODUCT_YONGO
-        );
+        $groups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId($session->get('client/id'), SystemProduct::SYS_PRODUCT_YONGO);
         $roles = $this->getRepository(Role::class)->getByClient($session->get('client/id'));
 
         if ($request->request->has('confirm_new_data')) {
@@ -63,12 +60,10 @@ class AddDataController extends UbirimiController
             $currentDate = Util::getServerCurrentDateTime();
 
             if ($permissionType) {
-                for ($i = 0; $i < count($sysPermissionIds); $i++) {
+                for ($i = 0; $i < count($sysPermissionIds); $i++){
                     // check for duplicate information
                     $duplication = false;
-                    $dataPermission = $this->getRepository(
-                        PermissionScheme::class
-                    )->getDataByPermissionSchemeIdAndPermissionId(
+                    $dataPermission = $this->getRepository(PermissionScheme::class)->getDataByPermissionSchemeIdAndPermissionId(
                         $permissionSchemeId,
                         $sysPermissionIds[$i]
                     );
@@ -76,31 +71,23 @@ class AddDataController extends UbirimiController
                     if ($dataPermission) {
                         while ($data = $dataPermission->fetch_array(MYSQLI_ASSOC)) {
 
-                            if (isset($data['group_id']) && $group && $data['group_id'] == $group) {
+                            if (isset($data['group_id']) && $group && $data['group_id'] == $group)
                                 $duplication = true;
-                            }
-                            if ($data['user_id'] && $data['user_id'] == $user) {
+                            if ($data['user_id'] && $data['user_id'] == $user)
                                 $duplication = true;
-                            }
                             if ($data['permission_role_id'] && $data['permission_role_id'] == $role) {
                                 $duplication = true;
                             }
 
-                            if ($permissionType == Permission::PERMISSION_TYPE_PROJECT_LEAD) {
-                                if ($data['project_lead']) {
+                            if ($permissionType == Permission::PERMISSION_TYPE_PROJECT_LEAD)
+                                if ($data['project_lead'])
                                     $duplication = true;
-                                }
-                            }
-                            if ($permissionType == Permission::PERMISSION_TYPE_CURRENT_ASSIGNEE) {
-                                if ($data['current_assignee']) {
+                            if ($permissionType == Permission::PERMISSION_TYPE_CURRENT_ASSIGNEE)
+                                if ($data['current_assignee'])
                                     $duplication = true;
-                                }
-                            }
-                            if ($permissionType == Permission::PERMISSION_TYPE_REPORTER) {
-                                if ($data['reporter']) {
+                            if ($permissionType == Permission::PERMISSION_TYPE_REPORTER)
+                                if ($data['reporter'])
                                     $duplication = true;
-                                }
-                            }
                         }
                     }
 
@@ -124,13 +111,8 @@ class AddDataController extends UbirimiController
             return new RedirectResponse('/yongo/administration/permission-scheme/edit/' . $permissionSchemeId);
         }
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Permission Data';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Permission Data';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/permission_scheme/AddData.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/permission_scheme/AddData.php', get_defined_vars());
     }
 }

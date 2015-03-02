@@ -47,13 +47,7 @@ class EditController extends UbirimiController
             $description = Util::cleanRegularInputField($request->request->get('transition_description'));
             $step = $request->request->get('step');
             $screen = $request->request->get('screen');
-            $this->getRepository(Workflow::class)->updateDataById(
-                $workflowData['id'],
-                $name,
-                $description,
-                $screen,
-                $step
-            );
+            $this->getRepository(Workflow::class)->updateDataById($workflowData['id'], $name, $description, $screen, $step);
 
             $currentDate = Util::getServerCurrentDateTime();
             $this->getLogger()->addInfo('UPDATE Yongo Workflow Transition ' . $name, $this->getLoggerContext());
@@ -62,13 +56,8 @@ class EditController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Workflow Transition';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Workflow Transition';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/workflow/transition/Edit.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/workflow/transition/Edit.php', get_defined_vars());
     }
 }

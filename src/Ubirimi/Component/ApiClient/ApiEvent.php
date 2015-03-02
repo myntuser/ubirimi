@@ -19,8 +19,7 @@
 
 namespace Ubirimi\Component\ApiClient;
 
-class ApiEvent
-{
+class ApiEvent {
 
     const API_RESPONSE = 'api.client.response';
 }

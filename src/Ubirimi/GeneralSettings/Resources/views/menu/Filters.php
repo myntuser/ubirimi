@@ -2,29 +2,20 @@
     <tr>
         <td>
             <div>
-                <a class="linkSubMenu" href="/yongo/issue/search?project=<?php if (count($projectsForBrowsing)) {
-                    echo implode('|', $projectsForBrowsing);
-                } else {
-                    echo '-1';
-                } ?>&resolution=-2&assignee=<?php echo $loggedInUserId ?>">My Open Issues</a>
+                <a class="linkSubMenu" href="/yongo/issue/search?project=<?php if (count($projectsForBrowsing)) echo implode('|', $projectsForBrowsing); else echo '-1'; ?>&resolution=-2&assignee=<?php echo $loggedInUserId ?>">My Open Issues</a>
             </div>
         </td>
     </tr>
     <tr>
         <td>
             <div>
-                <a class="linkSubMenu" href="/yongo/issue/search?project=<?php if (count($projectsForBrowsing)) {
-                    echo implode('|', $projectsForBrowsing);
-                } else {
-                    echo '-1';
-                } ?>&reporter=<?php echo $loggedInUserId ?>">Reported By Me</a>
+                <a class="linkSubMenu" href="/yongo/issue/search?project=<?php if (count($projectsForBrowsing)) echo implode('|', $projectsForBrowsing); else echo '-1'; ?>&reporter=<?php echo $loggedInUserId ?>">Reported By Me</a>
             </div>
         </td>
     </tr>
     <tr>
         <td>
-            <span
-                style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
+            <span style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
         </td>
     </tr>
     <?php if ($customFilters): ?>
@@ -32,16 +23,14 @@
             <tr>
                 <td>
                     <div>
-                        <a class="linksubmenu"
-                           href="/yongo/issue/search?filter=<?php echo $filter['id'] ?>&<?php echo $filter['definition'] ?>"><?php echo $filter['name'] ?></a>
+                        <a class="linksubmenu" href="/yongo/issue/search?filter=<?php echo $filter['id'] ?>&<?php echo $filter['definition'] ?>"><?php echo $filter['name'] ?></a>
                     </div>
                 </td>
             </tr>
         <?php endwhile ?>
         <tr>
             <td>
-                <span
-                    style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
+                <span style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
             </td>
         </tr>
     <?php endif ?>

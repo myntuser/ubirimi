@@ -34,25 +34,16 @@ class ConfigureController extends UbirimiController
         Util::checkUserIsLoggedInAndRedirect();
 
         $issueTypeScreenSchemeId = $request->get('id');
-        $issueTypeScreenScheme = $this->getRepository(IssueTypeScreenScheme::class)->getMetaDataById(
-            $issueTypeScreenSchemeId
-        );
+        $issueTypeScreenScheme = $this->getRepository(IssueTypeScreenScheme::class)->getMetaDataById($issueTypeScreenSchemeId);
 
         if ($issueTypeScreenScheme['client_id'] != $session->get('client/id')) {
             return new RedirectResponse('/general-settings/bad-link-access-denied');
         }
 
-        $issueTypeScreenSchemeData = $this->getRepository(
-            IssueTypeScreenScheme::class
-        )->getDataByIssueTypeScreenSchemeId($issueTypeScreenSchemeId);
+        $issueTypeScreenSchemeData = $this->getRepository(IssueTypeScreenScheme::class)->getDataByIssueTypeScreenSchemeId($issueTypeScreenSchemeId);
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Type Screen Scheme';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Type Screen Scheme';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/screen/issue_type_scheme/Configure.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/screen/issue_type_scheme/Configure.php', get_defined_vars());
     }
 }

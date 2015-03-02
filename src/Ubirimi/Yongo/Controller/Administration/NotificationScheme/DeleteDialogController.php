@@ -35,8 +35,6 @@ class DeleteDialogController extends UbirimiController
             return new Response('Are you sure you want to delete this notification scheme?');
         }
 
-        return new Response(
-            'This notification scheme can no be deleted as it is associated with one or more projects.'
-        );
+        return new Response('This notification scheme can no be deleted as it is associated with one or more projects.');
     }
 }

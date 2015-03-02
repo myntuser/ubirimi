@@ -25,8 +25,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Ubirimi\SystemProduct;
 use Ubirimi\UbirimiController;
 use Ubirimi\Util;
-use Ubirimi\Yongo\Repository\Field\CustomField;
 use Ubirimi\Yongo\Repository\Field\FieldType;
+use Ubirimi\Yongo\Repository\Field\CustomField;
 use Ubirimi\Yongo\Repository\Issue\IssueType;
 use Ubirimi\Yongo\Repository\Project\YongoProject;
 
@@ -58,14 +58,9 @@ class AddDataController extends UbirimiController
             } else {
                 // check for duplicate name
 
-                $duplicateField = $this->getRepository(CustomField::class)->getByNameAndType(
-                    $session->get('client/id'),
-                    $name,
-                    $fieldTypeId
-                );
-                if ($duplicateField) {
+                $duplicateField = $this->getRepository(CustomField::class)->getByNameAndType($session->get('client/id'), $name, $fieldTypeId);
+                if ($duplicateField)
                     $duplicateName = true;
-                }
             }
             if (!$emptyName && !$duplicateName) {
                 $date = Util::getServerCurrentDateTime();
@@ -88,13 +83,8 @@ class AddDataController extends UbirimiController
 
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Custom Field Data';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Custom Field Data';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/field/AddData.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/field/AddData.php', get_defined_vars());
     }
 }

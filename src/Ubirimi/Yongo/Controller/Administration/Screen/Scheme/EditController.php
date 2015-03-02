@@ -47,18 +47,12 @@ class EditController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name)) {
+            if (empty($name))
                 $emptyName = true;
-            }
 
             if (!$emptyName) {
                 $currentDate = Util::getServerCurrentDateTime();
-                $this->getRepository(ScreenScheme::class)->updateMetaDataById(
-                    $screenSchemeId,
-                    $name,
-                    $description,
-                    $currentDate
-                );
+                $this->getRepository(ScreenScheme::class)->updateMetaDataById($screenSchemeId, $name, $description, $currentDate);
 
                 $this->getLogger()->addInfo('UPDATE Yongo Screen Scheme ' . $name, $this->getLoggerContext());
 
@@ -67,13 +61,8 @@ class EditController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Screen';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Screen';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/screen/scheme/Edit.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/screen/scheme/Edit.php', get_defined_vars());
     }
 }

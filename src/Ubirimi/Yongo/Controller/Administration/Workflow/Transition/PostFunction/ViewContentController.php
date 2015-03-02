@@ -38,10 +38,7 @@ class ViewContentController extends UbirimiController
         $function = $this->getRepository(WorkflowFunction::class)->getById($functionId);
         $issueResolutions = $this->getRepository(IssueSettings::class)->getAllIssueSettings('resolution', $clientId);
 
-        return $this->render(
-            __DIR__ . '/../../../../../Resources/views/administration/workflow/transition/post_function/ViewContent.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../../Resources/views/administration/workflow/transition/post_function/ViewContent.php', get_defined_vars());
     }
 }
 

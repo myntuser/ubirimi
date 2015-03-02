@@ -46,13 +46,8 @@ class AddController extends UbirimiController
         $conditions = $this->getRepository(WorkflowCondition::class)->getAll();
         $menuSelectedCategory = 'issue';
         $checkedHTML = 'checked="checked"';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Workflow Condition';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Workflow Condition';
 
-        return $this->render(
-            __DIR__ . '/../../../../../Resources/views/administration/workflow/transition/condition/Add.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../../Resources/views/administration/workflow/transition/condition/Add.php', get_defined_vars());
     }
 }

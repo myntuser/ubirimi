@@ -46,10 +46,7 @@ class DeleteController extends UbirimiController
 
         $this->getRepository(EntityAttachment::class)->deleteById($spaceId, $entityId, $attachmentId);
 
-        $this->getLogger()->addInfo(
-            'DELETE Documentador entity attachment ' . $attachment['name'],
-            $this->getLoggerContext()
-        );
+        $this->getLogger()->addInfo('DELETE Documentador entity attachment ' . $attachment['name'], $this->getLoggerContext());
 
         $attachments = $this->getRepository(EntityAttachment::class)->getByEntityId($entityId);
         if (!$attachments) {

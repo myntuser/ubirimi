@@ -49,9 +49,6 @@ class PermissionController extends UbirimiController
         $usersWithPermissionForSpace = $this->getRepository(Space::class)->getUsersWithPermissions($spaceId);
         $groupsWithPermissionForSpace = $this->getRepository(Space::class)->getGroupsWithPermissions($spaceId);
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/spacetools/Permission.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/spacetools/Permission.php', get_defined_vars());
     }
 }

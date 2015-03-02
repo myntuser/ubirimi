@@ -1,7 +1,5 @@
 <?php if ($issues): ?>
-    <div>There are issues currently set with this Issue Security Level. Confirm what new level should be set for these
-        issues.
-    </div>
+    <div>There are issues currently set with this Issue Security Level. Confirm what new level should be set for these issues.</div>
     <div>Issues with this level of security: <?php echo $issues->num_rows ?></div>
     <div>
         <span>Swap security of issues to security level: </span>

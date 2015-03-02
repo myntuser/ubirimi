@@ -38,9 +38,6 @@ class ViewUserProfileController extends UbirimiController
         $userId = $request->get('id');
         $user = $this->getRepository(UbirimiUser::class)->getById($userId);
 
-        return $this->render(
-            __DIR__ . '/../../Resources/views/customer_portal/ViewUserProfile.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../Resources/views/customer_portal/ViewUserProfile.php', get_defined_vars());
     }
 }

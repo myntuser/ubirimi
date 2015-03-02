@@ -56,12 +56,7 @@ class LinkController extends UbirimiController
         if ($comment != '') {
             $this->getRepository(IssueComment::class)->add($issueId, $loggedInUserId, $comment, $date);
 
-            $issueEvent = new IssueEvent(
-                $issue,
-                $project,
-                IssueEvent::STATUS_UPDATE,
-                array('issueId' => $issueId, 'comment' => $comment)
-            );
+            $issueEvent = new IssueEvent($issue, $project, IssueEvent::STATUS_UPDATE, array('issueId' => $issueId, 'comment' => $comment));
             UbirimiContainer::get()['dispatcher']->dispatch(YongoEvents::YONGO_ISSUE_LINK_EMAIL, $issueEvent);
         }
 

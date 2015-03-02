@@ -44,23 +44,11 @@ class SaveController extends UbirimiController
         $date = Util::getServerCurrentDateTime();
 
         if ($Id != -1) {
-            $this->getRepository(IssueFilter::class)->updateById(
-                $Id,
-                $filterName,
-                $filterDescription,
-                $filterData,
-                $date
-            );
+            $this->getRepository(IssueFilter::class)->updateById($Id, $filterName, $filterDescription, $filterData, $date);
             $Id = -1;
             $this->getLogger()->addInfo('UPDATE Yongo filter' . $filterName, $this->getLoggerContext());
         } else {
-            $Id = $this->getRepository(IssueFilter::class)->save(
-                $loggedInUserId,
-                $filterName,
-                $filterDescription,
-                $filterData,
-                $date
-            );
+            $Id = $this->getRepository(IssueFilter::class)->save($loggedInUserId, $filterName, $filterDescription, $filterData, $date);
             $this->getLogger()->addInfo('ADD Yongo filter' . $filterName, $this->getLoggerContext());
         }
 

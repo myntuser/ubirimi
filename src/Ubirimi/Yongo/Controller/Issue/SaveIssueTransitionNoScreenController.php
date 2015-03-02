@@ -48,18 +48,10 @@ class SaveIssueTransitionNoScreenController extends UbirimiController
 
         $clientSettings = $this->getRepository(UbirimiClient::class)->getSettings($clientId);
 
-        $workflowData = $this->getRepository(Workflow::class)->getDataByStepIdFromAndStepIdTo(
-            $workflowId,
-            $workflowStepIdFrom,
-            $workflowStepIdTo
-        );
+        $workflowData = $this->getRepository(Workflow::class)->getDataByStepIdFromAndStepIdTo($workflowId, $workflowStepIdFrom, $workflowStepIdTo);
         $issue = $this->getRepository(Issue::class)->getByParameters(array('issue_id' => $issueId), $loggedInUserId);
 
-        $canBeExecuted = $this->getRepository(Workflow::class)->checkConditionsByTransitionId(
-            $workflowData['id'],
-            $loggedInUserId,
-            $issue
-        );
+        $canBeExecuted = $this->getRepository(Workflow::class)->checkConditionsByTransitionId($workflowData['id'], $loggedInUserId, $issue);
 
         if ($canBeExecuted) {
 
@@ -69,14 +61,7 @@ class SaveIssueTransitionNoScreenController extends UbirimiController
             }
 
             $date = Util::getServerCurrentDateTime();
-            $this->getRepository(WorkflowFunction::class)->triggerPostFunctions(
-                $clientId,
-                $issue,
-                $workflowData,
-                array(),
-                $loggedInUserId,
-                $date
-            );
+            $this->getRepository(WorkflowFunction::class)->triggerPostFunctions($clientId, $issue, $workflowData, array(), $loggedInUserId, $date);
 
             // update the date_updated field
             $this->getRepository(Issue::class)->updateById($issueId, array('date_updated' => $date), $date);

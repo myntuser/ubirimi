@@ -47,31 +47,11 @@ class ViewController extends UbirimiController
         $projectData = $this->getRepository(YongoProject::class)->getByIssueId($Id);
         $comments = $this->getRepository(IssueComment::class)->getByIssueId($Id);
 
-        $hasAddCommentsPermission = $this->getRepository(YongoProject::class)->userHasPermission(
-            $projectData['id'],
-            Permission::PERM_ADD_COMMENTS,
-            $loggedInUserId
-        );
-        $hasDeleteAllComments = $this->getRepository(YongoProject::class)->userHasPermission(
-            $projectData['id'],
-            Permission::PERM_DELETE_ALL_COMMENTS,
-            $loggedInUserId
-        );
-        $hasDeleteOwnComments = $this->getRepository(YongoProject::class)->userHasPermission(
-            $projectData['id'],
-            Permission::PERM_DELETE_OWN_COMMENTS,
-            $loggedInUserId
-        );
-        $hasEditAllComments = $this->getRepository(YongoProject::class)->userHasPermission(
-            $projectData['id'],
-            Permission::PERM_EDIT_ALL_COMMENTS,
-            $loggedInUserId
-        );
-        $hasEditOwnComments = $this->getRepository(YongoProject::class)->userHasPermission(
-            $projectData['id'],
-            Permission::PERM_EDIT_OWN_COMMENTS,
-            $loggedInUserId
-        );
+        $hasAddCommentsPermission = $this->getRepository(YongoProject::class)->userHasPermission($projectData['id'], Permission::PERM_ADD_COMMENTS, $loggedInUserId);
+        $hasDeleteAllComments = $this->getRepository(YongoProject::class)->userHasPermission($projectData['id'], Permission::PERM_DELETE_ALL_COMMENTS, $loggedInUserId);
+        $hasDeleteOwnComments = $this->getRepository(YongoProject::class)->userHasPermission($projectData['id'], Permission::PERM_DELETE_OWN_COMMENTS, $loggedInUserId);
+        $hasEditAllComments = $this->getRepository(YongoProject::class)->userHasPermission($projectData['id'], Permission::PERM_EDIT_ALL_COMMENTS, $loggedInUserId);
+        $hasEditOwnComments = $this->getRepository(YongoProject::class)->userHasPermission($projectData['id'], Permission::PERM_EDIT_OWN_COMMENTS, $loggedInUserId);
 
         $actionButtonsFlag = true;
 

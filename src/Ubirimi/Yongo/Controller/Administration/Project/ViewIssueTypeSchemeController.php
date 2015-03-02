@@ -43,12 +43,8 @@ class ViewIssueTypeSchemeController extends UbirimiController
             return new RedirectResponse('/general-settings/bad-link-access-denied');
         }
 
-        $issueTypeDefaultScheme = $this->getRepository(IssueTypeScheme::class)->getMetaDataById(
-            $project['issue_type_scheme_id']
-        );
-        $issueTypeDefaultSchemeData = $this->getRepository(IssueTypeScheme::class)->getDataById(
-            $issueTypeDefaultScheme['id']
-        );
+        $issueTypeDefaultScheme = $this->getRepository(IssueTypeScheme::class)->getMetaDataById($project['issue_type_scheme_id']);
+        $issueTypeDefaultSchemeData = $this->getRepository(IssueTypeScheme::class)->getDataById($issueTypeDefaultScheme['id']);
 
         $hasGlobalAdministrationPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission(
             $session->get('client/id'),
@@ -64,13 +60,8 @@ class ViewIssueTypeSchemeController extends UbirimiController
 
         $menuSelectedCategory = 'project';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Issue Type Scheme';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Issue Type Scheme';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/project/ViewIssueTypeScheme.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/project/ViewIssueTypeScheme.php', get_defined_vars());
     }
 }

@@ -48,11 +48,7 @@ class IssueDataController extends UbirimiController
         $projectId = $issue['issue_project_id'];
         $issueProject = $this->getRepository(YongoProject::class)->getById($projectId);
 
-        $projectSubTaskIssueTypes = $this->getRepository(YongoProject::class)->getSubTasksIssueTypes(
-            $projectId,
-            'array',
-            'id'
-        );
+        $projectSubTaskIssueTypes = $this->getRepository(YongoProject::class)->getSubTasksIssueTypes($projectId, 'array', 'id');
 
         $comments = $this->getRepository(IssueComment::class)->getByIssueId($issueId, 'desc');
         $components = $this->getRepository(IssueComponent::class)->getByIssueIdAndProjectId($issueId, $projectId);
@@ -113,10 +109,7 @@ class IssueDataController extends UbirimiController
                 $session->get('user/id')
             );
         }
-        $childrenIssues = $this->getRepository(Issue::class)->getByParameters(
-            array('parent_id' => $issueId),
-            $session->get('user/id')
-        );
+        $childrenIssues = $this->getRepository(Issue::class)->getByParameters(array('parent_id' => $issueId), $session->get('user/id'));
 
         return $this->render(__DIR__ . '/../Resources/views/IssueData.php', get_defined_vars());
     }

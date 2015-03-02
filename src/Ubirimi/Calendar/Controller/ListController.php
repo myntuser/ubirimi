@@ -39,9 +39,7 @@ class ListController extends UbirimiController
         $month = date('n');
         $year = date('Y');
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_CALENDAR_NAME . ' / My Calendar';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_CALENDAR_NAME . ' / My Calendar';
 
         return $this->render(__DIR__ . '/../Resources/views/List.php', get_defined_vars());
     }

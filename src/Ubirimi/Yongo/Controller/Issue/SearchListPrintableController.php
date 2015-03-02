@@ -62,10 +62,7 @@ class SearchListPrintableController extends UbirimiController
                         return new RedirectResponse('/general-settings/bad-link-access-denied');
                     }
                 } else {
-                    $hasBrowsingPermission = $this->getRepository(YongoProject::class)->userHasPermission(
-                        array($data['id']),
-                        Permission::PERM_BROWSE_PROJECTS
-                    );
+                    $hasBrowsingPermission = $this->getRepository(YongoProject::class)->userHasPermission(array($data['id']), Permission::PERM_BROWSE_PROJECTS);
                     if (!$hasBrowsingPermission) {
                         return new RedirectResponse('/general-settings/bad-link-access-denied');
                     }
@@ -82,8 +79,7 @@ class SearchListPrintableController extends UbirimiController
         $getProjectVersionIds = $request->get('version') ? explode('|', $request->get('version')) : null;
         $getIssueResolutionIds = $request->get('resolution') ? explode('|', $request->get('resolution')) : null;
 
-        $getSearchParameters = array(
-            'search_query' => $getSearchQuery,
+        $getSearchParameters = array('search_query' => $getSearchQuery,
             'summary_flag' => $getSummaryFlag,
             'description_flag' => $getDescriptionFlag,
             'comments_flag' => $getCommentsFlag,
@@ -98,8 +94,7 @@ class SearchListPrintableController extends UbirimiController
             'version' => $getProjectVersionIds,
             'resolution' => $getIssueResolutionIds,
             'sort' => $getSortColumn,
-            'sort_order' => $getSortOrder
-        );
+            'sort_order' => $getSortOrder);
 
         $parseURLData = parse_url($_SERVER['REQUEST_URI']);
 
@@ -109,35 +104,23 @@ class SearchListPrintableController extends UbirimiController
 
         if (Util::searchQueryNotEmpty($getSearchParameters)) {
 
-            $issues = $this->getRepository(Issue::class)->getByParameters(
-                $getSearchParameters,
-                $loggedInUserId,
-                null,
-                $loggedInUserId
-            );
+            $issues = $this->getRepository(Issue::class)->getByParameters($getSearchParameters, $loggedInUserId, null, $loggedInUserId);
             $issuesCount = $issues->num_rows;
             $getSearchParameters['link_to_page'] = '/yongo/issue/printable-list';
         }
 
-        $columns = array(
-            'code',
+        $columns = array('code',
             'summary',
             'priority',
             'status',
             'created',
             'updated',
             'reporter',
-            'assignee'
-        );
+            'assignee');
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Print List';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Print List';
         $menuSelectedCategory = null;
 
-        return $this->render(
-            __DIR__ . '/../../Resources/views/issue/search/SearchListPrintable.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../Resources/views/issue/search/SearchListPrintable.php', get_defined_vars());
     }
 }

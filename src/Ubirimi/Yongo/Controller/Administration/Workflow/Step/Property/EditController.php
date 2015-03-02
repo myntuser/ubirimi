@@ -60,21 +60,12 @@ class EditController extends UbirimiController
 
             if (!$emptyValue) {
 
-                $duplicateKey = $this->getRepository(Workflow::class)->getStepKeyByStepIdAndKeyId(
-                    $stepId,
-                    $keyId,
-                    $stepProperty['id']
-                );
+                $duplicateKey = $this->getRepository(Workflow::class)->getStepKeyByStepIdAndKeyId($stepId, $keyId, $stepProperty['id']);
 
                 if (!$duplicateKey) {
 
                     $currentDate = Util::getServerCurrentDateTime();
-                    $this->getRepository(Workflow::class)->updateStepPropertyById(
-                        $stepPropertyId,
-                        $keyId,
-                        $value,
-                        $currentDate
-                    );
+                    $this->getRepository(Workflow::class)->updateStepPropertyById($stepPropertyId, $keyId, $value, $currentDate);
 
                     $this->getLogger()->addInfo('UPDATE Yongo Workflow Step Property', $this->getLoggerContext());
 
@@ -84,13 +75,8 @@ class EditController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Workflow Step Property';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Workflow Step Property';
 
-        return $this->render(
-            __DIR__ . '/../../../../../Resources/views/administration/workflow/step/property/Edit.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../../Resources/views/administration/workflow/step/property/Edit.php', get_defined_vars());
     }
 }

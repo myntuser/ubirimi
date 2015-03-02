@@ -51,9 +51,8 @@ class EditController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name)) {
+            if (empty($name))
                 $emptyName = true;
-            }
 
             if (!$emptyName) {
                 $groupAlreadyExists = $this->getRepository(UbirimiGroup::class)->getByNameAndProductId(
@@ -63,9 +62,8 @@ class EditController extends UbirimiController
                     $Id
                 );
 
-                if ($groupAlreadyExists) {
+                if ($groupAlreadyExists)
                     $duplicateName = true;
-                }
             }
 
             if (!$emptyName && !$duplicateName) {
@@ -80,9 +78,7 @@ class EditController extends UbirimiController
 
         $menuSelectedCategory = 'user';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Group';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Group';
 
         return $this->render(__DIR__ . '/../../../Resources/views/administration/group/Edit.php', get_defined_vars());
     }

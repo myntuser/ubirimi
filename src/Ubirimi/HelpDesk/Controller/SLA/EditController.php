@@ -59,10 +59,7 @@ class EditController extends UbirimiController
         $emptyName = false;
         $duplicateName = false;
 
-        $availableStatuses = $this->getRepository(IssueSettings::class)->getAllIssueSettings(
-            'status',
-            $session->get('client/id')
-        );
+        $availableStatuses = $this->getRepository(IssueSettings::class)->getAllIssueSettings('status', $session->get('client/id'));
 
         if ($request->request->has('confirm_update_sla')) {
 
@@ -102,14 +99,7 @@ class EditController extends UbirimiController
 
                 $currentDate = Util::getServerCurrentDateTime();
 
-                $this->getRepository(Sla::class)->updateById(
-                    $slaId,
-                    $name,
-                    $description,
-                    $startCondition,
-                    $stopCondition,
-                    $currentDate
-                );
+                $this->getRepository(Sla::class)->updateById($slaId, $name, $description, $startCondition, $stopCondition, $currentDate);
 
                 $this->getRepository(Sla::class)->deleteGoalsBySLAId($slaId);
                 // add the goals of the sla

@@ -36,14 +36,10 @@ class EditDataController extends UbirimiController
 
         $issueTypeScreenSchemeDataId = $request->get('id');
         $screenSchemes = $this->getRepository(ScreenScheme::class)->getMetaDataByClientId($session->get('client/id'));
-        $issueTypeScreenSchemeData = $this->getRepository(IssueTypeScreenScheme::class)->getDataById(
-            $issueTypeScreenSchemeDataId
-        );
+        $issueTypeScreenSchemeData = $this->getRepository(IssueTypeScreenScheme::class)->getDataById($issueTypeScreenSchemeDataId);
 
         $screenSchemeId = $issueTypeScreenSchemeData['issue_type_screen_scheme_id'];
-        $issueTypeScreenSchemeMetaData = $this->getRepository(IssueTypeScreenScheme::class)->getMetaDataById(
-            $screenSchemeId
-        );
+        $issueTypeScreenSchemeMetaData = $this->getRepository(IssueTypeScreenScheme::class)->getMetaDataById($screenSchemeId);
 
         if ($issueTypeScreenSchemeMetaData['client_id'] != $session->get('client/id')) {
             return new RedirectResponse('/general-settings/bad-link-access-denied');
@@ -55,29 +51,15 @@ class EditDataController extends UbirimiController
             $screenSchemeId = Util::cleanRegularInputField($request->request->get('screen_scheme'));
             $issueTypeId = Util::cleanRegularInputField($request->request->get('issue_type'));
 
-            $this->getRepository(IssueTypeScreenScheme::class)->updateDataById(
-                $screenSchemeId,
-                $issueTypeId,
-                $issueTypeScreenSchemeMetaData['id']
-            );
+            $this->getRepository(IssueTypeScreenScheme::class)->updateDataById($screenSchemeId, $issueTypeId, $issueTypeScreenSchemeMetaData['id']);
 
-            $this->getLogger()->addInfo(
-                'UPDATE Yongo Issue Type Screen Scheme Data ' . $issueTypeScreenSchemeMetaData['name'],
-                $this->getLoggerContext()
-            );
+            $this->getLogger()->addInfo('UPDATE Yongo Issue Type Screen Scheme Data ' . $issueTypeScreenSchemeMetaData['name'], $this->getLoggerContext());
 
-            return new RedirectResponse(
-                '/yongo/administration/screen/configure-scheme-issue-type/' . $issueTypeScreenSchemeMetaData['id']
-            );
+            return new RedirectResponse('/yongo/administration/screen/configure-scheme-issue-type/' . $issueTypeScreenSchemeMetaData['id']);
         }
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Type Screen Scheme Data';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Type Screen Scheme Data';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/screen/issue_type_scheme/EditData.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/screen/issue_type_scheme/EditData.php', get_defined_vars());
     }
 }

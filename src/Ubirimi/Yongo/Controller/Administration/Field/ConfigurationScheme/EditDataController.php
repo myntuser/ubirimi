@@ -35,17 +35,11 @@ class EditDataController extends UbirimiController
         Util::checkUserIsLoggedInAndRedirect();
 
         $fieldConfigurationSchemeDataId = $request->get('id');
-        $fieldConfigurations = $this->getRepository(FieldConfiguration::class)->getByClientId(
-            $session->get('client/id')
-        );
-        $fieldConfigurationSchemeData = $this->getRepository(FieldConfigurationScheme::class)->getDataById(
-            $fieldConfigurationSchemeDataId
-        );
+        $fieldConfigurations = $this->getRepository(FieldConfiguration::class)->getByClientId($session->get('client/id'));
+        $fieldConfigurationSchemeData = $this->getRepository(FieldConfigurationScheme::class)->getDataById($fieldConfigurationSchemeDataId);
 
         $fieldConfigurationSchemeId = $fieldConfigurationSchemeData['issue_type_field_configuration_id'];
-        $fieldConfigurationScheme = $this->getRepository(FieldConfigurationScheme::class)->getMetaDataById(
-            $fieldConfigurationSchemeId
-        );
+        $fieldConfigurationScheme = $this->getRepository(FieldConfigurationScheme::class)->getMetaDataById($fieldConfigurationSchemeId);
 
         if ($fieldConfigurationScheme['client_id'] != $session->get('client/id')) {
             return new RedirectResponse('/general-settings/bad-link-access-denied');
@@ -61,25 +55,15 @@ class EditDataController extends UbirimiController
                 $issueTypeId
             );
 
-            $this->getLogger()->addInfo(
-                'UPDATE Yongo Field Configuration Scheme ' . $fieldConfigurationScheme['name'],
-                $this->getLoggerContext()
-            );
+            $this->getLogger()->addInfo('UPDATE Yongo Field Configuration Scheme ' . $fieldConfigurationScheme['name'], $this->getLoggerContext());
 
-            return new RedirectResponse(
-                '/yongo/administration/field-configuration/scheme/edit/' . $fieldConfigurationSchemeId
-            );
+            return new RedirectResponse('/yongo/administration/field-configuration/scheme/edit/' . $fieldConfigurationSchemeId);
         }
 
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Field Configuration';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Field Configuration';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/field/configuration_scheme/EditData.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/field/configuration_scheme/EditData.php', get_defined_vars());
     }
 }

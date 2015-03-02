@@ -44,55 +44,37 @@ class OperationConfirmationController extends UbirimiController
         $menuSelectedCategory = 'issue';
         $clientSettings = $session->get('client/settings');
 
-        $issues = $this->getRepository(Issue::class)->getByParameters(
-            array('issue_id' => UbirimiContainer::get()['session']->get('bulk_change_issue_ids'), $loggedInUserId)
-        );
+        $issues = $this->getRepository(Issue::class)->getByParameters(array('issue_id' => UbirimiContainer::get()['session']->get('bulk_change_issue_ids'), $loggedInUserId));
         if ($request->request->has('confirm')) {
 
             if (UbirimiContainer::get()['session']->get('bulk_change_operation_type') == 'delete') {
                 $issueIds = UbirimiContainer::get()['session']->get('bulk_change_issue_ids');
                 for ($i = 0; $i < count($issueIds); $i++) {
                     if (UbirimiContainer::get()['session']->get('bulk_change_send_operation_email')) {
-                        $issue = $this->getRepository(Issue::class)->getByParameters(
-                            array('issue_id' => $issueIds[$i]),
-                            $loggedInUserId
-                        );
+                        $issue = $this->getRepository(Issue::class)->getByParameters(array('issue_id' => $issueIds[$i]), $loggedInUserId);
 
                         $issueEvent = new IssueEvent($issue, null, IssueEvent::STATUS_DELETE);
-                        $this->getLogger()->addInfo(
-                            'DELETE Yongo issue ' . $issue['project_code'] . '-' . $issue['nr'],
-                            $this->getLoggerContext()
-                        );
+                        $this->getLogger()->addInfo('DELETE Yongo issue ' . $issue['project_code'] . '-' . $issue['nr'], $this->getLoggerContext());
 
                         UbirimiContainer::get()['dispatcher']->dispatch(YongoEvents::YONGO_ISSUE_EMAIL, $issueEvent);
-                    }
+                                            }
 
                     $this->getRepository(Issue::class)->deleteById($issueIds[$i]);
                     $this->getRepository(IssueAttachment::class)->deleteByIssueId($issueIds[$i]);
 
                     // also delete the substaks
-                    $childrenIssues = $this->getRepository(Issue::class)->getByParameters(
-                        array('parent_id' => $issueIds[$i]),
-                        $loggedInUserId
-                    );
+                    $childrenIssues = $this->getRepository(Issue::class)->getByParameters(array('parent_id' => $issueIds[$i]), $loggedInUserId);
                     while ($childrenIssues && $childIssue = $childrenIssues->fetch_array(MYSQLI_ASSOC)) {
                         $this->getRepository(Issue::class)->deleteById($childIssue['id']);
                         $this->getRepository(IssueAttachment::class)->deleteByIssueId($childIssue['id']);
                     }
                 }
             }
-            return new RedirectResponse(
-                '/yongo/issue/search?' . UbirimiContainer::get()['session']->get('bulk_change_choose_issue_query_url')
-            );
+            return new RedirectResponse('/yongo/issue/search?' . UbirimiContainer::get()['session']->get('bulk_change_choose_issue_query_url'));
         }
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Bulk: Operation Confirmation';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Bulk: Operation Confirmation';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/issue/bulk/OperationConfirmation.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/issue/bulk/OperationConfirmation.php', get_defined_vars());
     }
 }

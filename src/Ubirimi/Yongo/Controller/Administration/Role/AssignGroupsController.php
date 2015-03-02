@@ -38,12 +38,7 @@ class AssignGroupsController extends UbirimiController
 
         $currentDate = Util::getServerCurrentDateTime();
         $this->getRepository(YongoProject::class)->deleteGroupsByPermissionRole($projectId, $permissionRoleId);
-        $this->getRepository(YongoProject::class)->addGroupsForPermissionRole(
-            $projectId,
-            $permissionRoleId,
-            $groupArrayIds,
-            $currentDate
-        );
+        $this->getRepository(YongoProject::class)->addGroupsForPermissionRole($projectId, $permissionRoleId, $groupArrayIds, $currentDate);
 
         return new Response('');
     }

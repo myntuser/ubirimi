@@ -14,10 +14,7 @@ use Ubirimi\Yongo\Repository\Field\Field;
             <div class="textLabel">Due:</div>
         </td>
         <td>
-            <?php if ($issue[Field::FIELD_DUE_DATE_CODE]) echo Util::getFormattedDate(
-                $issue[Field::FIELD_DUE_DATE_CODE],
-                $clientSettings['timezone']
-            ) ?>
+            <?php if ($issue[Field::FIELD_DUE_DATE_CODE]) echo Util::getFormattedDate($issue[Field::FIELD_DUE_DATE_CODE], $clientSettings['timezone']) ?>
         </td>
     </tr>
 
@@ -25,10 +22,7 @@ use Ubirimi\Yongo\Repository\Field\Field;
         <td width="120">
             <div class="textLabel">Created:</div>
         </td>
-        <td><?php if ($issue['date_created']) echo Util::getFormattedDate(
-                $issue['date_created'],
-                $clientSettings['timezone']
-            ) ?></td>
+        <td><?php if ($issue['date_created']) echo Util::getFormattedDate($issue['date_created'], $clientSettings['timezone']) ?></td>
     </tr>
     <tr>
         <td>
@@ -41,9 +35,6 @@ use Ubirimi\Yongo\Repository\Field\Field;
         <td>
             <div class="textLabel">Resolved:</div>
         </td>
-        <td><?php if ($issue['date_resolved']) echo Util::getFormattedDate(
-                $issue['date_resolved'],
-                $clientSettings['timezone']
-            ) ?></td>
+        <td><?php if ($issue['date_resolved']) echo Util::getFormattedDate($issue['date_resolved'], $clientSettings['timezone']) ?></td>
     </tr>
 </table>

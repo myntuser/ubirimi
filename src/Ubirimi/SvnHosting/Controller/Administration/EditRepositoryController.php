@@ -53,11 +53,7 @@ class EditRepositoryController extends UbirimiController
             if (empty($code)) {
                 $emptyCode = true;
             } else {
-                $svn_repository_exists = $this->getRepository(SvnRepository::class)->getByCode(
-                    mb_strtolower($code),
-                    $clientId,
-                    $repoId
-                );
+                $svn_repository_exists = $this->getRepository(SvnRepository::class)->getByCode(mb_strtolower($code), $clientId, $repoId);
                 if ($svn_repository_exists) {
                     $duplicateCode = true;
                 }

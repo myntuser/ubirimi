@@ -45,22 +45,15 @@ class AddController extends UbirimiController
         if ($request->request->has('add_new_post_function')) {
             $functionId = $request->request->get('function');
             if ($functionId) {
-                return new RedirectResponse(
-                    '/yongo/administration/workflow/transition-add-post-function-data/' . $workflowDataId . '?function_id=' . $functionId
-                );
+                return new RedirectResponse('/yongo/administration/workflow/transition-add-post-function-data/' . $workflowDataId . '?function_id=' . $functionId);
             } else {
                 $errors['no_function_selected'] = true;
             }
         }
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Post Function';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Post Function';
 
-        return $this->render(
-            __DIR__ . '/../../../../../Resources/views/administration/workflow/transition/post_function/Add.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../../Resources/views/administration/workflow/transition/post_function/Add.php', get_defined_vars());
     }
 }

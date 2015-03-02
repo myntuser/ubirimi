@@ -19,5 +19,5 @@
 
 ?>
 Are you sure you want to delete this print?
-<br/>
+<br />
 Also the issues planned in this sprint will be removed.

@@ -38,12 +38,7 @@ class AssignUsersController extends UbirimiController
 
         $currentDate = Util::getServerCurrentDateTime();
         $this->getRepository(YongoProject::class)->deleteUsersByPermissionRole($projectId, $permissionRoleId);
-        $this->getRepository(YongoProject::class)->addUsersForPermissionRole(
-            $projectId,
-            $permissionRoleId,
-            $userArray,
-            $currentDate
-        );
+        $this->getRepository(YongoProject::class)->addUsersForPermissionRole($projectId, $permissionRoleId, $userArray, $currentDate);
 
         return new Response('');
     }

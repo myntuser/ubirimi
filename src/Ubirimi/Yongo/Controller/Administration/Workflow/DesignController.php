@@ -45,13 +45,8 @@ class DesignController extends UbirimiController
 
         $steps = $this->getRepository(Workflow::class)->getSteps($workflowId, 1);
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Workflow';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Workflow';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/workflow/Design.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/workflow/Design.php', get_defined_vars());
     }
 }

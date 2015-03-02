@@ -29,59 +29,36 @@ $percMinuteskLogged = $minutesLogged * 100 / $max;
 
 <table width="100%" id="contentTimeTracking">
     <tr>
-        <td width="80">
-            <div class="textLabel">Estimated:</div>
-        </td>
-        <td width="110px" align="right"><?php echo Util::transformTimeToString(
-                Util::transformLogTimeToMinutes($issue['original_estimate'], $hoursPerDay, $daysPerWeek),
-                $hoursPerDay,
-                $daysPerWeek,
-                'short'
-            ); ?></td>
+        <td width="80"><div class="textLabel">Estimated:</div></td>
+        <td width="110px" align="right"><?php echo Util::transformTimeToString(Util::transformLogTimeToMinutes($issue['original_estimate'], $hoursPerDay, $daysPerWeek), $hoursPerDay, $daysPerWeek, 'short'); ?></td>
         <td valign="middle">
             <div style="background-color: #d3d3d3; width: 100%; height: 14px; margin-top: 2px">
-                <div
-                    style="float:left; background-color: #56A5EC; height: 14px; width: <?php echo $percOriginalEstimate ?>%"></div>
+                <div style="float:left; background-color: #56A5EC; height: 14px; width: <?php echo $percOriginalEstimate ?>%"></div>
             </div>
         </td>
     </tr>
     <tr>
-        <td>
-            <div class="textLabel">Remaining:</div>
-        </td>
-        <td align="right"><?php if ($issue['remaining_estimate'] == "0") {
-                echo "0";
-            } else {
-                echo Util::transformTimeToString(
-                    Util::transformLogTimeToMinutes($issue['remaining_estimate'], $hoursPerDay, $daysPerWeek),
-                    $hoursPerDay,
-                    $daysPerWeek,
-                    'short'
-                );
-            } ?></td>
+        <td><div class="textLabel">Remaining:</div></td>
+        <td align="right"><?php if ($issue['remaining_estimate'] == "0") echo "0"; else echo Util::transformTimeToString(Util::transformLogTimeToMinutes($issue['remaining_estimate'], $hoursPerDay, $daysPerWeek), $hoursPerDay, $daysPerWeek, 'short'); ?></td>
         <td valign="middle">
             <div style="background-color: #d3d3d3; width: 100%; height: 14px; margin-top: 2px">
-                <div
-                    style=" float:right; background-color: #ec9a1f; height: 14px; width: <?php echo $percRemainingEstimate ?>%"></div>
+                <div style=" float:right; background-color: #ec9a1f; height: 14px; width: <?php echo $percRemainingEstimate ?>%"></div>
             </div>
         </td>
     </tr>
     <tr>
-        <td>
-            <div class="textLabel">Logged:</div>
-        </td>
+        <td><div class="textLabel">Logged:</div></td>
         <td align="right">
             <?php
-            if ($worklogs) {
-                echo Util::transformTimeToString($minutesLogged, $hoursPerDay, $daysPerWeek, 'short');
-            } else
-                echo 'Not Specified'
+                if ($worklogs)
+                    echo Util::transformTimeToString($minutesLogged, $hoursPerDay, $daysPerWeek, 'short');
+                else
+                    echo 'Not Specified'
             ?>
         </td>
         <td valign="middle">
             <div style="background-color: #d3d3d3; width: 100%; height: 14px; margin-top: 2px">
-                <div
-                    style="float:left; background-color: #77ce5c; height: 14px; width: <?php echo $percMinuteskLogged ?>%"></div>
+                <div style="float:left; background-color: #77ce5c; height: 14px; width: <?php echo $percMinuteskLogged ?>%"></div>
             </div>
         </td>
     </tr>

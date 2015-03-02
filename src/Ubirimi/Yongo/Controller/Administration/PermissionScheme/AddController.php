@@ -40,9 +40,8 @@ class AddController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name)) {
+            if (empty($name))
                 $emptyName = true;
-            }
 
             if (!$emptyName) {
                 $permissionScheme = new PermissionScheme($session->get('client/id'), $name, $description);
@@ -55,13 +54,8 @@ class AddController extends UbirimiController
             }
         }
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Permission Scheme';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Permission Scheme';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/permission_scheme/Add.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/permission_scheme/Add.php', get_defined_vars());
     }
 }

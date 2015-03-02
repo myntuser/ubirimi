@@ -79,14 +79,7 @@ class AddController extends UbirimiController
 
                     // set default home page
                     $content = '<p><span style="font-size:24px"><strong>Welcome to your new space!</strong></span></p><div class="message-content" style="font-family: Arial, sans-serif; font-size: 14px;"><p>Documentador spaces are great for sharing content and news with your team. This is your home page. You can customize this page in anyway you like.</p></div>';
-                    $page = new Entity(
-                        EntityType::ENTITY_BLANK_PAGE,
-                        $spaceId,
-                        $loggedInUserId,
-                        null,
-                        $name . ' Home',
-                        $content
-                    );
+                    $page = new Entity(EntityType::ENTITY_BLANK_PAGE, $spaceId, $loggedInUserId, null, $name . ' Home', $content);
                     $pageId = $page->save($currentDate);
                     $this->getRepository(Space::class)->setHomePageId($spaceId, $pageId);
 

@@ -60,10 +60,7 @@ class ConfigureController extends UbirimiController
                 $lastOrder = $this->getRepository(Screen::class)->getLastOrderNumber($screenId);
                 $this->getRepository(Screen::class)->addData($screenId, $fieldId, ($lastOrder + 1), $currentDate);
 
-                $this->getLogger()->addInfo(
-                    'UPDATE Yongo Screen Data ' . $screenMetadata['name'],
-                    $this->getLoggerContext()
-                );
+                $this->getLogger()->addInfo('UPDATE Yongo Screen Data ' . $screenMetadata['name'], $this->getLoggerContext());
 
                 return new RedirectResponse('/yongo/administration/screen/configure/' . $screenId);
             }
@@ -77,13 +74,8 @@ class ConfigureController extends UbirimiController
         if ($source == 'project_screen' || $source == 'project_field') {
             $projectId = $request->get('project_id');
         }
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Screen';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Screen';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/screen/Configure.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/screen/Configure.php', get_defined_vars());
     }
 }

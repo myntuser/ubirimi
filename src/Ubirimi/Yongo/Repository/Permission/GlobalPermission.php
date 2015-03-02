@@ -31,38 +31,33 @@ class GlobalPermission
     const GLOBAL_PERMISSION_DOCUMENTADOR_SYSTEM_ADMINISTRATOR = 6;
     const GLOBAL_PERMISSION_DOCUMENTADOR_CREATE_SPACE = 7;
 
-    public function getAllByProductId($productId)
-    {
+    public function getAllByProductId($productId) {
         $query = "SELECT * FROM sys_permission_global where sys_product_id = ? order by name";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $productId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getById($permissionId)
-    {
+    public function getById($permissionId) {
         $query = "SELECT * FROM sys_permission_global where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $permissionId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getDataByPermissionIdAndUserId($clientId, $globalPermissionId, $userId)
-    {
+    public function getDataByPermissionIdAndUserId($clientId, $globalPermissionId, $userId) {
         $query = 'select `general_group`.name, `general_group`.id, sys_permission_global_data.id as sys_permission_global_data_id ' .
             'from sys_permission_global_data ' .
             'left join `general_group` on general_group.id = sys_permission_global_data.group_id ' .
@@ -74,15 +69,13 @@ class GlobalPermission
         $stmt->bind_param("iii", $globalPermissionId, $clientId, $userId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getDataByPermissionIdAndGroupId($clientId, $globalPermissionId, $groupId)
-    {
+    public function getDataByPermissionIdAndGroupId($clientId, $globalPermissionId, $groupId) {
         $query = 'select `general_group`.name, `general_group`.id, sys_permission_global_data.id as sys_permission_global_data_id ' .
             'from sys_permission_global_data ' .
             'left join `general_group` on general_group.id = sys_permission_global_data.group_id ' .
@@ -94,15 +87,13 @@ class GlobalPermission
         $stmt->bind_param("iii", $globalPermissionId, $clientId, $groupId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getDataByPermissionId($clientId, $globalPermissionId, $resultType = null, $resultColumn = null)
-    {
+    public function getDataByPermissionId($clientId, $globalPermissionId, $resultType = null, $resultColumn = null) {
         $query = 'select `general_group`.name, `general_group`.id, sys_permission_global_data.id as sys_permission_global_data_id ' .
             'from sys_permission_global_data ' .
             'left join `general_group` on general_group.id = sys_permission_global_data.group_id ' .
@@ -118,26 +109,23 @@ class GlobalPermission
             if ($resultType == 'array') {
                 $resultArray = array();
                 while ($data = $result->fetch_array(MYSQLI_ASSOC)) {
-                    if ($resultColumn) {
+                    if ($resultColumn)
                         $resultArray[] = $data[$resultColumn];
-                    } else {
+                    else
                         $resultArray[] = $data;
-                    }
                 }
 
-                return $resultArray;
-            } else {
+               return $resultArray;
+            } else
                 return $result;
-            }
         }
 
         return null;
     }
 
-    public function addDataForGroupId($clientId, $permissionId, $groupId, $date)
-    {
+    public function addDataForGroupId($clientId, $permissionId, $groupId, $date) {
         $query = "INSERT INTO sys_permission_global_data(client_id, sys_permission_global_id, group_id, date_created) VALUES " .
-            "(?, ?, ?, ?)";
+                 "(?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iiis", $clientId, $permissionId, $groupId, $date);
@@ -146,8 +134,7 @@ class GlobalPermission
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function addDataForUserId($clientId, $permissionId, $userId)
-    {
+    public function addDataForUserId($clientId, $permissionId, $userId) {
         $query = "INSERT INTO sys_permission_global_data(client_id, sys_permission_global_id, user_id) VALUES " .
             "(?, ?, ?)";
 
@@ -158,8 +145,7 @@ class GlobalPermission
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function deleteById($Id)
-    {
+    public function deleteById($Id) {
         $query = "delete from sys_permission_global_data where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -167,25 +153,20 @@ class GlobalPermission
         $stmt->execute();
     }
 
-    public function deleteByPermissionId($clientId, $globalsPermissionId, $type)
-    {
+    public function deleteByPermissionId($clientId, $globalsPermissionId, $type) {
         $query = "delete from sys_permission_global_data where client_id = ? and sys_permission_global_id = ? ";
 
-        if ($type == 'group') {
+        if ($type == 'group')
             $query .= 'and group_id is not null';
-        } else {
-            if ($type == 'user') {
-                $query .= 'and user_id is not null';
-            }
-        }
+        else if ($type == 'user')
+            $query .= 'and user_id is not null';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $clientId, $globalsPermissionId);
         $stmt->execute();
     }
 
-    public function getDataById($Id)
-    {
+    public function getDataById($Id) {
         $query = 'select `general_group`.name, `general_group`.id, sys_permission_global_data.id as sys_permission_global_data_id, ' .
             'sys_permission_global.name as permission_name ' .
             'from sys_permission_global_data ' .
@@ -198,10 +179,9 @@ class GlobalPermission
         $stmt->bind_param("i", $Id);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 }

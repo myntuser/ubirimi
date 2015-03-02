@@ -48,9 +48,6 @@ class DeleteConfirmController extends UbirimiController
             $issuesCount = $issuesResult->num_rows;
         }
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/issue/type/DeleteConfirm.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/type/DeleteConfirm.php', get_defined_vars());
     }
 }

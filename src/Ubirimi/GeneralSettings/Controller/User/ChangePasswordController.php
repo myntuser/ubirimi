@@ -42,14 +42,10 @@ class ChangePasswordController extends UbirimiController
 
         if (!UbirimiContainer::get()['password']->check($currentPassword, $user['password'])) {
             return new Response('current_password_wrong');
-        } else {
-            if ($newPassword != $confirmPassword) {
-                return new Response('password_mismatch');
-            } else {
-                if (strlen($newPassword) <= 3 || strlen($confirmPassword) <= 3) {
-                    return new Response('password_too_short');
-                }
-            }
+        } else if ($newPassword != $confirmPassword) {
+            return new Response('password_mismatch');
+        } else if (strlen($newPassword) <= 3 || strlen($confirmPassword) <= 3) {
+            return new Response('password_too_short');
         }
 
         $hash = UbirimiContainer::get()['password']->hash($newPassword);

@@ -37,18 +37,11 @@ class ViewContentByParamsController extends UbirimiController
         $workflowId = $request->get('workflow_id');
 
         $allPostFunctions = $this->getRepository(WorkflowFunction::class)->getAll();
-        $workflowData = $this->getRepository(Workflow::class)->getDataByStepIdFromAndStepIdTo(
-            $workflowId,
-            $idFrom,
-            $idTo
-        );
+        $workflowData = $this->getRepository(Workflow::class)->getDataByStepIdFromAndStepIdTo($workflowId, $idFrom, $idTo);
         $workflowDataId = $workflowData['id'];
 
         $postFunctions = $this->getRepository(WorkflowFunction::class)->getByWorkflowDataId($workflowDataId);
 
-        return $this->render(
-            __DIR__ . '/../../../../../Resources/views/administration/workflow/transition/post_function/ViewContentByParams.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../../Resources/views/administration/workflow/transition/post_function/ViewContentByParams.php', get_defined_vars());
     }
 }

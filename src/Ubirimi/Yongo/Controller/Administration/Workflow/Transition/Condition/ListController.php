@@ -181,13 +181,8 @@ class ListController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Workflow Transition Conditions';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Workflow Transition Conditions';
 
-        return $this->render(
-            __DIR__ . '/../../../../../Resources/views/administration/workflow/transition/condition/List.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../../Resources/views/administration/workflow/transition/condition/List.php', get_defined_vars());
     }
 }

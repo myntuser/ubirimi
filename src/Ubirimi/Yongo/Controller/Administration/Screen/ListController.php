@@ -35,9 +35,7 @@ class ListController extends UbirimiController
 
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Screens';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Screens';
 
         return $this->render(__DIR__ . '/../../../Resources/views/administration/screen/List.php', get_defined_vars());
     }

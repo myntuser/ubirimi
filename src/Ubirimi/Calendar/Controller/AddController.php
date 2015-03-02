@@ -49,23 +49,14 @@ class AddController extends UbirimiController
                 $emptyName = true;
             }
 
-            $calendarSameName = $this->getRepository(UbirimiCalendar::class)->getByName(
-                $session->get('user/id'),
-                $name
-            );
+            $calendarSameName = $this->getRepository(UbirimiCalendar::class)->getByName($session->get('user/id'), $name);
             if ($calendarSameName) {
                 $duplicateName = true;
             }
 
             if (!$emptyName && !$duplicateName) {
                 $currentDate = Util::getServerCurrentDateTime();
-                $calendarId = $this->getRepository(UbirimiCalendar::class)->save(
-                    $session->get('user/id'),
-                    $name,
-                    $description,
-                    $color,
-                    $currentDate
-                );
+                $calendarId = $this->getRepository(UbirimiCalendar::class)->save($session->get('user/id'), $name, $description, $color, $currentDate);
 
                 // add default reminders
 
@@ -82,9 +73,7 @@ class AddController extends UbirimiController
             }
         }
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_CALENDAR_NAME . ' / Create Calendar';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_CALENDAR_NAME . ' / Create Calendar';
 
         return $this->render(__DIR__ . '/../Resources/views/Add.php', get_defined_vars());
     }

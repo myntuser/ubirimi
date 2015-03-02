@@ -13,15 +13,14 @@ $sysOperationId = SystemOperation::OPERATION_CREATE;
                 <td>
                     <select id="field_type_<?php echo Field::FIELD_ISSUE_TYPE_CODE ?>" name="type" class="select2Input">
                         <?php while ($type = $issue_types->fetch_array(MYSQLI_ASSOC)): ?>
-                            <option <?php if ($typeId && $typeId == $type['id']) echo 'selected="selected"' ?>
-                                value="<?php echo $type['id'] ?>"><?php echo $type['name'] ?></option>
+                            <option <?php if ($typeId && $typeId == $type['id']) echo 'selected="selected"' ?> value="<?php echo $type['id'] ?>"><?php echo $type['name'] ?></option>
                         <?php endwhile ?>
                     </select>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
-                    <hr size="1"/>
+                    <hr size="1" />
                 </td>
             </tr>
             <tr></tr>
@@ -29,5 +28,5 @@ $sysOperationId = SystemOperation::OPERATION_CREATE;
         </table>
     </div>
 </div>
-<input type="hidden" value="<?php echo $projectId ?>" id="project_id"/>
-<input type="hidden" value="<?php echo SystemOperation::OPERATION_CREATE ?>" id="operation_id"/>
+<input type="hidden" value="<?php echo $projectId ?>" id="project_id" />
+<input type="hidden" value="<?php echo SystemOperation::OPERATION_CREATE ?>" id="operation_id" />

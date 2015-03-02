@@ -43,12 +43,7 @@ class ViewUnresolvedOthersController extends UbirimiController
         $selectedProjectId = $projectId;
         if ($projectId == -1) {
             $projects = array();
-            $projectsForBrowsing = $this->getRepository(UbirimiClient::class)->getProjectsByPermission(
-                $clientId,
-                $loggedInUserId,
-                Permission::PERM_BROWSE_PROJECTS,
-                'array'
-            );
+            $projectsForBrowsing = $this->getRepository(UbirimiClient::class)->getProjectsByPermission($clientId, $loggedInUserId, Permission::PERM_BROWSE_PROJECTS, 'array');
 
             for ($i = 0; $i < count($projectsForBrowsing); $i++) {
                 $projects[] = $projectsForBrowsing[$i]['id'];
@@ -57,38 +52,19 @@ class ViewUnresolvedOthersController extends UbirimiController
             $projects = array((int)$projectId);
         }
 
-        $issueQueryParameters = array(
-            'issues_per_page' => 20,
-            'resolution' => array(-2),
-            'sort' => 'code',
-            'sort_order' => 'desc',
-            'project' => $projects
-        );
+        $issueQueryParameters = array('issues_per_page' => 20, 'resolution' => array(-2),
+            'sort' => 'code', 'sort_order' => 'desc', 'project' => $projects);
 
         if ($loggedInUserId) {
             $issueQueryParameters['not_assignee'] = $loggedInUserId;
         }
 
-        $issuesUnresolvedOthers = $this->getRepository(Issue::class)->getByParameters(
-            $issueQueryParameters,
-            $loggedInUserId,
-            null,
-            $loggedInUserId
-        );
+        $issuesUnresolvedOthers = $this->getRepository(Issue::class)->getByParameters($issueQueryParameters, $loggedInUserId, null, $loggedInUserId);
 
-        $renderParameters = array(
-            'issues' => $issuesUnresolvedOthers,
-            'render_checkbox' => false,
-            'show_header' => true
-        );
+        $renderParameters = array('issues' => $issuesUnresolvedOthers, 'render_checkbox' => false, 'show_header' =>true);
         $renderColumns = array('code', 'summary', 'priority', 'assignee');
 
-        $projects = $this->getRepository(UbirimiClient::class)->getProjectsByPermission(
-            $clientId,
-            $loggedInUserId,
-            Permission::PERM_BROWSE_PROJECTS,
-            'array'
-        );
+        $projects = $this->getRepository(UbirimiClient::class)->getProjectsByPermission($clientId, $loggedInUserId, Permission::PERM_BROWSE_PROJECTS, 'array');
 
         $projectIdsNames = array();
         for ($i = 0; $i < count($projects); $i++) {

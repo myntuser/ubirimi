@@ -55,12 +55,7 @@ class EditController extends UbirimiController
                 $emptyName = true;
             }
             if (!$emptyName) {
-                $groupAlreadyExists = $this->getRepository(UbirimiGroup::class)->getByNameAndProductId(
-                    $clientId,
-                    SystemProduct::SYS_PRODUCT_YONGO,
-                    mb_strtolower($name),
-                    $Id
-                );
+                $groupAlreadyExists = $this->getRepository(UbirimiGroup::class)->getByNameAndProductId($clientId, SystemProduct::SYS_PRODUCT_YONGO, mb_strtolower($name), $Id);
 
                 if ($groupAlreadyExists) {
                     $duplicateName = true;

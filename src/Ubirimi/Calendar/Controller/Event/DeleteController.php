@@ -35,10 +35,7 @@ class DeleteController extends UbirimiController
         $recurringType = $request->request->get('recurring');
 
         // check if it is a shared calendar
-        $isSharedEvent = $this->getRepository(CalendarEvent::class)->getShareByUserIdAndEventId(
-            $session->get('user/id'),
-            $eventId
-        );
+        $isSharedEvent = $this->getRepository(CalendarEvent::class)->getShareByUserIdAndEventId($session->get('user/id'), $eventId);
 
         if ($isSharedEvent) {
             // delete only the share

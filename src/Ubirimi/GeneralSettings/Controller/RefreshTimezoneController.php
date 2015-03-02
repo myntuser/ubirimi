@@ -49,13 +49,7 @@ class RefreshTimezoneController extends UbirimiController
                 $offset--;
             }
 
-            return new Response(
-                '<option value="' . $zones[$i] . '">' . str_replace(
-                    array($prefixContinent . "/", "_"),
-                    array("", " "),
-                    $zones[$i]
-                ) . ' (GMT ' . $prefix . $offset . 'h)</option>'
-            );
+            return new Response('<option value="' . $zones[$i] . '">' . str_replace(array($prefixContinent . "/", "_"), array("", " "), $zones[$i]) . ' (GMT ' . $prefix . $offset . 'h)</option>');
         }
     }
 }

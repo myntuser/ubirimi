@@ -76,13 +76,7 @@ class EditController extends UbirimiController
                     $currentDate = Util::getServerCurrentDateTime();
 
                     $this->getRepository(SlaCalendar::class)->deleteDataByCalendarId($calendarId);
-                    $this->getRepository(SlaCalendar::class)->updateById(
-                        $calendarId,
-                        null,
-                        $name,
-                        $description,
-                        $currentDate
-                    );
+                    $this->getRepository(SlaCalendar::class)->updateById($calendarId, null, $name, $description, $currentDate);
                     $this->getRepository(SlaCalendar::class)->addData($calendarId, $dataCalendar);
 
                     return new RedirectResponse('/helpdesk/sla/calendar/' . $projectId);

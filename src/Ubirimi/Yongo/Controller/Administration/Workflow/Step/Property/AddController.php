@@ -64,7 +64,7 @@ class AddController extends UbirimiController
                     $currentDate = Util::getServerCurrentDateTime();
                     $this->getRepository(Workflow::class)->addStepProperty($stepId, $keyId, $value, $currentDate);
 
-                    $this->getLogger()->addInfo('ADD Yongo Workflow Step Property', $this->getLoggerContext());
+                    $this->getLogger()->addInfo('ADD Yongo Workflow Step Property' , $this->getLoggerContext());
 
                     return new RedirectResponse('/yongo/administration/workflow/view-step-properties/' . $stepId);
                 }
@@ -72,13 +72,8 @@ class AddController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Workflow Step Property';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Workflow Step Property';
 
-        return $this->render(
-            __DIR__ . '/../../../../../Resources/views/administration/workflow/step/property/Add.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../../Resources/views/administration/workflow/step/property/Add.php', get_defined_vars());
     }
 }

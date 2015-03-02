@@ -62,9 +62,7 @@ class ActivityController extends UbirimiController
         $menuSelectedCategory = 'documentator';
 
         $activities = $this->getRepository(UbirimiUser::class)->getDocumentadorActivityStream($userId);
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME . ' / ' . $user['first_name'] . ' ' . $user['last_name'] . ' / Activity';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME. ' / ' . $user['first_name'] . ' ' . $user['last_name'] . ' / Activity';
 
         return $this->render(__DIR__ . '/../../Resources/views/user/Activity.php', get_defined_vars());
     }

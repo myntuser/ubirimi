@@ -59,23 +59,13 @@ class ChangePasswordController extends UbirimiController
             }
 
             if (Util::hasNoErrors($errors)) {
-                $this->getRepository(SvnRepository::class)->updateUserPassword(
-                    $session->get('selected_svn_repo_id'),
-                    $userId,
-                    $password
-                );
+                $this->getRepository(SvnRepository::class)->updateUserPassword($session->get('selected_svn_repo_id'), $userId, $password);
 
-                $this->getRepository(SvnRepository::class)->updateHtpasswd(
-                    $session->get('selected_svn_repo_id'),
-                    $session->get('client/company_domain')
-                );
+                $this->getRepository(SvnRepository::class)->updateHtpasswd($session->get('selected_svn_repo_id'), $session->get('client/company_domain'));
                 $this->getRepository(SvnRepository::class)->updateAuthz();
 
                 $svnEvent = new SvnHostingEvent($svnRepo['name'], $user, array('password' => $password));
-                $this->getLogger()->addInfo(
-                    sprintf('SVN Change Password for [%s]', $svnRepo['name']),
-                    $this->getLoggerContext()
-                );
+                $this->getLogger()->addInfo(sprintf('SVN Change Password for [%s]', $svnRepo['name']), $this->getLoggerContext());
 
                 UbirimiContainer::get()['dispatcher']->dispatch(SvnHostingEvents::PASSWORD_UPDATE, $svnEvent);
 

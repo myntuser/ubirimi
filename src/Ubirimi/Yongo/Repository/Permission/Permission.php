@@ -21,8 +21,7 @@ namespace Ubirimi\Yongo\Repository\Permission;
 
 use Ubirimi\Container\UbirimiContainer;
 
-class Permission
-{
+class Permission {
     const PERMISSION_TYPE_CURRENT_ASSIGNEE = 'current_assignee';
     const PERMISSION_TYPE_REPORTER = 'reporter';
     const PERMISSION_TYPE_PROJECT_LEAD = 'project_lead';
@@ -67,23 +66,20 @@ class Permission
     const PERM_VIEW_VOTERS_AND_WATCHERS = 27;
     const PERM_MANAGE_WATCHERS = 28;
 
-    public function getAll()
-    {
+    public function getAll() {
         $query = "select sys_permission.id, sys_permission.name, sys_permission.description " .
             "from sys_permission";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getByCategory($categoryId)
-    {
+    public function getByCategory($categoryId) {
         $query = "select sys_permission.id, sys_permission.name, sys_permission.description " .
             "from sys_permission " .
             "where sys_permission_category_id = ?";
@@ -92,25 +88,22 @@ class Permission
         $stmt->bind_param("i", $categoryId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getCategories()
-    {
+    public function getCategories() {
         $query = "select sys_permission_category.* " .
             "from sys_permission_category";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 }

@@ -40,39 +40,23 @@ class EditController extends UbirimiController
 
         $menuSelectedCategory = 'doc_users';
 
-        $globalsPermissions = $this->getRepository(GlobalPermission::class)->getAllByProductId(
-            SystemProduct::SYS_PRODUCT_DOCUMENTADOR
-        );
+        $globalsPermissions = $this->getRepository(GlobalPermission::class)->getAllByProductId(SystemProduct::SYS_PRODUCT_DOCUMENTADOR);
 
         if ($request->request->has('update_configuration')) {
 
             $anonymous_use_flag = $request->request->get('anonymous_use_flag');
             $anonymous_view_user_profile_flag = $request->request->get('anonymous_view_user_profile_flag');
 
-            $parameters = array(
-                array('field' => 'anonymous_use_flag', 'value' => $anonymous_use_flag, 'type' => 'i'),
-                array(
-                    'field' => 'anonymous_view_user_profile_flag',
-                    'value' => $anonymous_view_user_profile_flag,
-                    'type' => 'i'
-                )
-            );
+            $parameters = array(array('field' => 'anonymous_use_flag', 'value' => $anonymous_use_flag, 'type' => 'i'),
+                array('field' => 'anonymous_view_user_profile_flag', 'value' => $anonymous_view_user_profile_flag, 'type' => 'i'));
 
-            $this->getRepository(UbirimiClient::class)->updateProductSettings(
-                $clientId,
-                SystemProduct::SYS_PRODUCT_DOCUMENTADOR,
-                $parameters
-            );
+            $this->getRepository(UbirimiClient::class)->updateProductSettings($clientId, SystemProduct::SYS_PRODUCT_DOCUMENTADOR, $parameters);
 
             // deal with permissions added to groups
 
             // delete first all the permissions related to groups
             while ($globalsPermission = $globalsPermissions->fetch_array(MYSQLI_ASSOC)) {
-                $this->getRepository(GlobalPermission::class)->deleteByPermissionId(
-                    $clientId,
-                    $globalsPermission['id'],
-                    'group'
-                );
+                $this->getRepository(GlobalPermission::class)->deleteByPermissionId($clientId, $globalsPermission['id'], 'group');
             }
 
             $date = Util::getServerCurrentDateTime();
@@ -85,12 +69,7 @@ class EditController extends UbirimiController
                     $globalsPermissionId = $data[1];
                     $groupId = $data[2];
 
-                    $this->getRepository(GlobalPermission::class)->addDataForGroupId(
-                        $clientId,
-                        $globalsPermissionId,
-                        $groupId,
-                        $date
-                    );
+                    $this->getRepository(GlobalPermission::class)->addDataForGroupId($clientId, $globalsPermissionId, $groupId, $date);
                 }
             }
 
@@ -98,11 +77,7 @@ class EditController extends UbirimiController
 
             // delete first all the permissions related to individual users
             while ($globalsPermission = $globalsPermissions->fetch_array(MYSQLI_ASSOC)) {
-                $this->getRepository(GlobalPermission::class)->deleteByPermissionId(
-                    $clientId,
-                    $globalsPermission['id'],
-                    'user'
-                );
+                $this->getRepository(GlobalPermission::class)->deleteByPermissionId($clientId, $globalsPermission['id'], 'user');
             }
 
             foreach ($requestParameters as $key => $value) {
@@ -111,11 +86,7 @@ class EditController extends UbirimiController
                     $globalsPermissionId = $data[1];
                     $userId = $data[2];
 
-                    $this->getRepository(GlobalPermission::class)->addDataForUserId(
-                        $clientId,
-                        $globalsPermissionId,
-                        $userId
-                    );
+                    $this->getRepository(GlobalPermission::class)->addDataForUserId($clientId, $globalsPermissionId, $userId);
                 }
             }
 
@@ -125,14 +96,8 @@ class EditController extends UbirimiController
         $session->set('documentator/settings', $documentatorSettings);
 
         $users = $this->getRepository(UbirimiUser::class)->getByClientId($clientId);
-        $groups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId(
-            $clientId,
-            SystemProduct::SYS_PRODUCT_DOCUMENTADOR
-        );
+        $groups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId($clientId, SystemProduct::SYS_PRODUCT_DOCUMENTADOR);
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/globalpermissions/Edit.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/globalpermissions/Edit.php', get_defined_vars());
     }
 }

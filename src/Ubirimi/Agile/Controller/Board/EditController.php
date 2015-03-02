@@ -60,13 +60,7 @@ class EditController extends UbirimiController
 
                 $date = Util::getServerCurrentDateTime();
 
-                $this->getRepository(Board::class)->updateMetadata(
-                    $session->get('client/id'),
-                    $boardId,
-                    $boardName,
-                    $boardDescription,
-                    $date
-                );
+                $this->getRepository(Board::class)->updateMetadata($session->get('client/id'), $boardId, $boardName, $boardDescription, $date);
 
                 $this->getLogger()->addInfo('UPDATE Cheetah Agile Board ' . $boardName, $this->getLoggerContext());
 
@@ -74,9 +68,7 @@ class EditController extends UbirimiController
             }
         }
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_AGILE_NAME . ' / Update Board';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_AGILE_NAME. ' / Update Board';
 
         return $this->render(__DIR__ . '/../../Resources/views/board/Edit.php', get_defined_vars());
     }

@@ -34,8 +34,6 @@ class DeleteDialogController extends UbirimiController
             return new Response('Are you sure you want to delete this workflow issue type scheme?');
         }
 
-        return new Response(
-            'This workflow issue type scheme can not be deleted. It is associated with one or more projects.'
-        );
+        return new Response('This workflow issue type scheme can not be deleted. It is associated with one or more projects.');
     }
 }

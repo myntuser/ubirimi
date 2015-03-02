@@ -62,20 +62,9 @@ class MoveStep2Controller extends UbirimiController
 
             // check if step 3 is necessary
 
-            $issueComponents = $this->getRepository(IssueComponent::class)->getByIssueIdAndProjectId(
-                $issue['id'],
-                $projectId
-            );
-            $issueFixVersions = $this->getRepository(IssueVersion::class)->getByIssueIdAndProjectId(
-                $issue['id'],
-                $projectId,
-                Issue::ISSUE_FIX_VERSION_FLAG
-            );
-            $issueAffectedVersions = $this->getRepository(IssueVersion::class)->getByIssueIdAndProjectId(
-                $issue['id'],
-                $projectId,
-                Issue::ISSUE_AFFECTED_VERSION_FLAG
-            );
+            $issueComponents = $this->getRepository(IssueComponent::class)->getByIssueIdAndProjectId($issue['id'], $projectId);
+            $issueFixVersions = $this->getRepository(IssueVersion::class)->getByIssueIdAndProjectId($issue['id'], $projectId, Issue::ISSUE_FIX_VERSION_FLAG);
+            $issueAffectedVersions = $this->getRepository(IssueVersion::class)->getByIssueIdAndProjectId($issue['id'], $projectId, Issue::ISSUE_AFFECTED_VERSION_FLAG);
 
             if ($issueComponents || $issueFixVersions || $issueAffectedVersions) {
                 return new RedirectResponse('/yongo/issue/move/fields/' . $issueId);
@@ -84,29 +73,17 @@ class MoveStep2Controller extends UbirimiController
             }
         }
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Move Issue - ' . $issue['project_code'] . '-' . $issue['nr'] . ' ' . $issue['summary'];
-        $currentWorkflow = $this->getRepository(YongoProject::class)->getWorkflowUsedForType(
-            $projectId,
-            $issue['type']
-        );
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Move Issue - ' . $issue['project_code'] . '-' . $issue['nr'] . ' ' . $issue['summary'];
+        $currentWorkflow = $this->getRepository(YongoProject::class)->getWorkflowUsedForType($projectId, $issue['type']);
 
         $previousData = $session->get('move_issue');
-        $newWorkflow = $this->getRepository(YongoProject::class)->getWorkflowUsedForType(
-            $previousData['new_project'],
-            $previousData['new_type']
-        );
+        $newWorkflow = $this->getRepository(YongoProject::class)->getWorkflowUsedForType($previousData['new_project'], $previousData['new_type']);
         $newStatuses = $this->getRepository(Workflow::class)->getLinkedStatuses($newWorkflow['id']);
         $menuSelectedCategory = 'issue';
 
         $newProject = $this->getRepository(YongoProject::class)->getById($session->get('move_issue/new_project'));
         $newProjectName = $newProject['name'];
-        $newTypeName = $this->getRepository(IssueSettings::class)->getById(
-            $session->get('move_issue/new_type'),
-            'type',
-            'name'
-        );
+        $newTypeName = $this->getRepository(IssueSettings::class)->getById($session->get('move_issue/new_type'), 'type', 'name');
 
         return $this->render(__DIR__ . '/../../../Resources/views/issue/move/MoveStep2.php', get_defined_vars());
     }

@@ -67,8 +67,7 @@ class ChooseIssueController extends UbirimiController
         $getDateCreatedAfter = isset($_GET['date_created_after']) ? $_GET['date_created_after'] : null;
         $getDateCreatedBefore = isset($_GET['date_created_before']) ? $_GET['date_created_before'] : null;
 
-        $getSearchParameters = array(
-            'search_query' => $getSearchQuery,
+        $getSearchParameters = array('search_query' => $getSearchQuery,
             'summary_flag' => $getSummaryFlag,
             'description_flag' => $getDescriptionFlag,
             'comments_flag' => $getCommentsFlag,
@@ -89,8 +88,7 @@ class ChooseIssueController extends UbirimiController
             'date_due_after' => $getDateDueAfter,
             'date_due_before' => $getDateDueBefore,
             'date_created_after' => $getDateCreatedAfter,
-            'date_created_before' => $getDateCreatedBefore
-        );
+            'date_created_before' => $getDateCreatedBefore);
 
         $parseURLData = parse_url($_SERVER['REQUEST_URI']);
 
@@ -98,12 +96,7 @@ class ChooseIssueController extends UbirimiController
             UbirimiContainer::get()['session']->set('bulk_change_choose_issue_query_url', $parseURLData['query']);
             if (Util::searchQueryNotEmpty($getSearchParameters)) {
 
-                $issues = $this->getRepository(Issue::class)->getByParameters(
-                    $getSearchParameters,
-                    $loggedInUserId,
-                    null,
-                    $loggedInUserId
-                );
+                $issues = $this->getRepository(Issue::class)->getByParameters($getSearchParameters, $loggedInUserId, null, $loggedInUserId);
 
                 $issuesCount = $issues->num_rows;
                 $getSearchParameters['link_to_page'] = '/yongo/issue/printable-list';
@@ -130,9 +123,7 @@ class ChooseIssueController extends UbirimiController
             }
         }
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Bulk: Choose Issues';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Bulk: Choose Issues';
 
         return $this->render(__DIR__ . '/../../../Resources/views/issue/bulk/ChooseIssue.php', get_defined_vars());
     }

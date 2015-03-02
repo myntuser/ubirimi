@@ -49,8 +49,7 @@ class EditController extends UbirimiController
         $lastName = $user['last_name'];
         $username = $user['username'];
 
-        $errors = array(
-            'empty_email' => false,
+        $errors = array('empty_email' => false,
             'email_not_valid' => false,
             'empty_username' => false,
             'invalid_username' => false,
@@ -58,8 +57,7 @@ class EditController extends UbirimiController
             'empty_first_name' => false,
             'empty_last_name' => false,
             'email_already_exists' => false,
-            'at_least_one_administrator' => false
-        );
+            'at_least_one_administrator' => false);
 
         if ($request->request->has('confirm_update_user')) {
             $userId = Util::cleanRegularInputField($request->request->get('user_id'));
@@ -88,18 +86,14 @@ class EditController extends UbirimiController
 
             if (!$clientAdministrators && $clientAdministratorFlag == 0) {
                 $errors['at_least_one_administrator'] = true;
-            } else {
-                if ($clientAdministratorFlag == 0 && $clientAdministrators && $clientAdministrators->num_rows == 0) {
-                    $errors['at_least_one_administrator'] = true;
-                }
+            } else if ($clientAdministratorFlag == 0 && $clientAdministrators && $clientAdministrators->num_rows == 0) {
+                $errors['at_least_one_administrator'] = true;
             }
 
             if (empty($email)) {
                 $errors['empty_email'] = true;
-            } else {
-                if (!Util::isValidEmail($email)) {
-                    $errors['email_not_valid'] = true;
-                }
+            } else if (!Util::isValidEmail($email)) {
+                $errors['email_not_valid'] = true;
             }
 
             $emailData = Util::checkEmailAddressExistenceWithinClient(
@@ -108,25 +102,21 @@ class EditController extends UbirimiController
                 $session->get('client/id')
             );
 
-            if ($emailData) {
+            if ($emailData)
                 $errors['email_already_exists'] = true;
-            }
 
-            if (empty($firstName)) {
+            if (empty($firstName))
                 $errors['empty_first_name'] = true;
-            }
 
-            if (empty($lastName)) {
+            if (empty($lastName))
                 $errors['empty_last_name'] = true;
-            }
 
-            if (empty($username)) {
+            if (empty($username))
                 $errors['empty_username'] = true;
-            }
 
-            if (!Util::validateUsername($username)) {
+            if (!Util::validateUsername($username))
                 $errors['invalid_username'] = true;
-            } else {
+            else {
                 $existingUser = $this->getRepository(UbirimiUser::class)->getByUsernameAndClientId(
                     $username,
                     $session->get('client/id'),
@@ -134,9 +124,8 @@ class EditController extends UbirimiController
                     $userId
                 );
 
-                if ($existingUser) {
+                if ($existingUser)
                     $errors['duplicate_username'] = true;
-                }
             }
 
             if (Util::hasNoErrors($errors)) {

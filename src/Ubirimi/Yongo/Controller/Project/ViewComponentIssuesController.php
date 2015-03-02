@@ -53,12 +53,7 @@ class ViewComponentIssuesController extends UbirimiController
         }
 
         $issueQueryParameters = array('project' => $projectId, 'resolution' => array(-2), 'component' => $componentId);
-        $issues = $this->getRepository(Issue::class)->getByParameters(
-            $issueQueryParameters,
-            $loggedInUserId,
-            null,
-            $loggedInUserId
-        );
+        $issues = $this->getRepository(Issue::class)->getByParameters($issueQueryParameters, $loggedInUserId, null, $loggedInUserId);
 
         $count = 0;
         $statsPriority = array();

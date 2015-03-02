@@ -36,34 +36,24 @@ class SelectSchemeController extends UbirimiController
 
         $projectId = $request->get('id');
         $project = $this->getRepository(YongoProject::class)->getById($projectId);
-
+        
         if ($project['client_id'] != $session->get('client/id')) {
             return new RedirectResponse('/general-settings/bad-link-access-denied');
         }
-        $issueTypeScreenSchemes = $this->getRepository(IssueTypeScreenScheme::class)->getByClientId(
-            $session->get('client/id')
-        );
+        $issueTypeScreenSchemes = $this->getRepository(IssueTypeScreenScheme::class)->getByClientId($session->get('client/id'));
 
         $menuSelectedCategory = 'project';
 
         if ($request->request->has('associate')) {
 
             $issueTypeScreenSchemeId = $request->request->get('issue_type_screen_scheme');
-            $this->getRepository(YongoProject::class)->updateIssueTypeScreenScheme(
-                $projectId,
-                $issueTypeScreenSchemeId
-            );
+            $this->getRepository(YongoProject::class)->updateIssueTypeScreenScheme($projectId, $issueTypeScreenSchemeId);
 
             return new RedirectResponse('/yongo/administration/project/screens/' . $projectId);
         }
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Select Issue Screen Scheme';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Select Issue Screen Scheme';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/project/SelectIssueTypeScreenScheme.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/project/SelectIssueTypeScreenScheme.php', get_defined_vars());
     }
 }

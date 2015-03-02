@@ -40,12 +40,7 @@ class ViewTwoDimensionalFilterController extends UbirimiController
             $clientId = $this->getRepository(UbirimiClient::class)->getClientIdAnonymous();
             $loggedInUserId = null;
         }
-        $projects = $this->getRepository(UbirimiClient::class)->getProjectsByPermission(
-            $clientId,
-            $loggedInUserId,
-            Permission::PERM_BROWSE_PROJECTS,
-            'array'
-        );
+        $projects = $this->getRepository(UbirimiClient::class)->getProjectsByPermission($clientId, $loggedInUserId, Permission::PERM_BROWSE_PROJECTS, 'array');
 
         $projectId = $request->request->get('id');
 
@@ -59,9 +54,6 @@ class ViewTwoDimensionalFilterController extends UbirimiController
 
         $twoDimensionalData = $this->getRepository(Issue::class)->get2DimensionalFilter($projectId, 'array');
 
-        return $this->render(
-            __DIR__ . '/../../Resources/views/charts/ViewTwoDimensionalFilter.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../Resources/views/charts/ViewTwoDimensionalFilter.php', get_defined_vars());
     }
 }

@@ -49,7 +49,7 @@ class AddController extends UbirimiController
             return new RedirectResponse('/general-settings/bad-link-access-denied');
         }
 
-        $parentEntityId = $request->get('entity_id');
+        $parentEntityId =  $request->get('entity_id');
         if ($parentEntityId) {
             $parentEntityId = str_replace("/", "", $parentEntityId);
         }
@@ -71,14 +71,7 @@ class AddController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $content = $request->request->get('content');
 
-            $page = new Entity(
-                EntityType::ENTITY_BLANK_PAGE,
-                $spaceId,
-                $loggedInUserId,
-                $parentEntityId,
-                $name,
-                $content
-            );
+            $page = new Entity(EntityType::ENTITY_BLANK_PAGE, $spaceId, $loggedInUserId, $parentEntityId, $name, $content);
             $currentDate = Util::getServerCurrentDateTime();
             $pageId = $page->save($currentDate);
 
@@ -87,9 +80,7 @@ class AddController extends UbirimiController
             return new RedirectResponse('/documentador/page/view/' . $pageId);
         }
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME . ' / Create Page';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME. ' / Create Page';
 
         return $this->render(__DIR__ . '/../../Resources/views/page/Add.php', get_defined_vars());
     }

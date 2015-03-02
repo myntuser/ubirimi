@@ -54,8 +54,7 @@ class SearchListPrintableContentController extends UbirimiController
         $getProjectVersionIds = $request->get('version') ? explode('|', $request->get('version')) : null;
         $getIssueResolutionIds = $request->get('resolution') ? explode('|', $request->get('resolution')) : null;
 
-        $getSearchParameters = array(
-            'search_query' => $getSearchQuery,
+        $getSearchParameters = array('search_query' => $getSearchQuery,
             'summary_flag' => $getSummaryFlag,
             'description_flag' => $getDescriptionFlag,
             'comments_flag' => $getCommentsFlag,
@@ -70,8 +69,7 @@ class SearchListPrintableContentController extends UbirimiController
             'version' => $getProjectVersionIds,
             'resolution' => $getIssueResolutionIds,
             'sort' => $getSortColumn,
-            'sort_order' => $getSortOrder
-        );
+            'sort_order' => $getSortOrder);
 
         $parseURLData = parse_url($_SERVER['REQUEST_URI']);
 
@@ -84,25 +82,18 @@ class SearchListPrintableContentController extends UbirimiController
             }
         }
 
-        $columns = array(
-            'code',
+        $columns = array('code',
             'summary',
             'priority',
             'status',
             'created',
             'updated',
             'reporter',
-            'assignee'
-        );
+            'assignee');
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Print List Full Content';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Print List Full Content';
         $menuSelectedCategory = null;
 
-        return $this->render(
-            __DIR__ . '/../../Resources/views/issue/search/SearchListPrintableContent.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../Resources/views/issue/search/SearchListPrintableContent.php', get_defined_vars());
     }
 }

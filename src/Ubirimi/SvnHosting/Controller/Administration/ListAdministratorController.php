@@ -39,9 +39,6 @@ class ListAdministratorController extends UbirimiController
         $isSVNAdministrator = $session->get('user/svn_administrator_flag');
         $session->set('selected_product_id', SystemProduct::SYS_PRODUCT_SVN_HOSTING);
 
-        return $this->render(
-            __DIR__ . '/../../Resources/views/administration/ListAdministrator.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../Resources/views/administration/ListAdministrator.php', get_defined_vars());
     }
 }

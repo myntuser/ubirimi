@@ -30,8 +30,7 @@ use Ubirimi\Yongo\Repository\Issue\IssueAttachment;
 class DeleteController extends UbirimiController
 {
 
-    public function indexAction(Request $request, SessionInterface $session)
-    {
+    public function indexAction(Request $request, SessionInterface $session) {
         Util::checkUserIsLoggedInAndRedirect();
 
         $attachmentId = $request->request->get('att_id');
@@ -40,14 +39,11 @@ class DeleteController extends UbirimiController
 
         $this->getRepository(IssueAttachment::class)->deleteById($attachmentId);
 
-        $pathToAttachment = UbirimiContainer::get()['asset.root_folder'] . UbirimiContainer::get(
-            )['asset.yongo_issue_attachments'];
+        $pathToAttachment = UbirimiContainer::get()['asset.root_folder'] . UbirimiContainer::get()['asset.yongo_issue_attachments'];
 
         unlink($pathToAttachment . $attachment['issue_id'] . '/' . $attachment['id'] . '/' . $attachment['name']);
         if (Util::isImage(Util::getExtension($attachment['name']))) {
-            unlink(
-                $pathToAttachment . $attachment['issue_id'] . '/' . $attachment['id'] . '/thumbs/' . $attachment['name']
-            );
+            unlink($pathToAttachment . $attachment['issue_id'] . '/' . $attachment['id'] . '/thumbs/' . $attachment['name']);
             Util::deleteDir($pathToAttachment . $attachment['issue_id'] . '/' . $attachment['id'] . '/thumbs');
         }
 

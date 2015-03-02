@@ -43,24 +43,15 @@ class AddSnapshotController extends UbirimiController
         $entity = $this->getRepository(Entity::class)->getById($entityId);
         $oldEntityContent = $entity['content'];
 
-        $newEntityContent = preg_replace("/[[:cntrl:]]/", "", $newEntityContent);;
-        $oldEntityContent = preg_replace("/[[:cntrl:]]/", "", $oldEntityContent);;
+        $newEntityContent =  preg_replace("/[[:cntrl:]]/", "", $newEntityContent); ;
+        $oldEntityContent =  preg_replace("/[[:cntrl:]]/", "", $oldEntityContent); ;
 
         if (md5($oldEntityContent) != md5($newEntityContent)) {
-            $this->getRepository(Entity::class)->deleteAllSnapshotsByEntityIdAndUserId(
-                $entityId,
-                $loggedInUserId,
-                $entityLastSnapshotId
-            );
+            $this->getRepository(Entity::class)->deleteAllSnapshotsByEntityIdAndUserId($entityId, $loggedInUserId, $entityLastSnapshotId);
             $this->getRepository(Entity::class)->addSnapshot($entityId, $newEntityContent, $loggedInUserId, $date);
 
             $now = date('Y-m-d H:i:s');
-            $activeSnapshots = $this->getRepository(Entity::class)->getOtherActiveSnapshots(
-                $entityId,
-                $loggedInUserId,
-                $now,
-                'array'
-            );
+            $activeSnapshots = $this->getRepository(Entity::class)->getOtherActiveSnapshots($entityId, $loggedInUserId, $now, 'array');
 
             return new JsonResponse($activeSnapshots);
         } else {

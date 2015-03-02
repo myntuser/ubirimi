@@ -70,26 +70,18 @@ class DeleteController extends UbirimiController
         $fieldChanges = array(
             array('time_spent', $workLog['time_spent'], 0),
             array('remaining_estimate', $previousEstimate, $remainingTime),
-            array('worklog_time_spent', $workLog['time_spent'], null)
-        );
+            array('worklog_time_spent', $workLog['time_spent'], null));
 
-        $this->getRepository(Issue::class)->updateHistory(
-            $issue['id'],
-            $session->get('user/id'),
-            $fieldChanges,
-            $currentDate
-        );
+        $this->getRepository(Issue::class)->updateHistory($issue['id'], $session->get('user/id'), $fieldChanges, $currentDate);
 
         // update the date_updated field
         $this->getRepository(Issue::class)->updateById($issueId, array('date_updated' => $currentDate), $currentDate);
 
         // send the email notification
         $project = $this->getRepository(YongoProject::class)->getById($issue['issue_project_id']);
-        $issueEventData = array(
-            'user_id' => $loggedInUserId,
-            'remaining_estimate' => $remainingTime,
-            'time_spent' => $workLog['time_spent']
-        );
+        $issueEventData = array('user_id' => $loggedInUserId,
+                                'remaining_estimate' => $remainingTime,
+                                'time_spent' => $workLog['time_spent']);
         $issueEvent = new IssueEvent($issue, $project, IssueEvent::STATUS_UPDATE, $issueEventData);
 
         UbirimiContainer::get()['dispatcher']->dispatch(YongoEvents::YONGO_ISSUE_WORK_LOG_DELETED, $issueEvent);

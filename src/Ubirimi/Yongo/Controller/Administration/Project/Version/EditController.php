@@ -50,27 +50,16 @@ class EditController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name)) {
+            if (empty($name))
                 $emptyName = true;
-            }
 
-            $releaseDuplicate = $this->getRepository(YongoProject::class)->getVersionByName(
-                $projectId,
-                $name,
-                $versionId
-            );
-            if ($releaseDuplicate) {
+            $releaseDuplicate = $this->getRepository(YongoProject::class)->getVersionByName($projectId, $name, $versionId);
+            if ($releaseDuplicate)
                 $alreadyExists = true;
-            }
 
             if (!$emptyName && !$alreadyExists) {
                 $currentDate = Util::getServerCurrentDateTime();
-                $this->getRepository(YongoProject::class)->updateVersionById(
-                    $versionId,
-                    $name,
-                    $description,
-                    $currentDate
-                );
+                $this->getRepository(YongoProject::class)->updateVersionById($versionId, $name, $description, $currentDate);
 
                 $this->getLogger()->addInfo('UPDATE Project Version ' . $name, $this->getLoggerContext());
 
@@ -79,13 +68,8 @@ class EditController extends UbirimiController
         }
 
         $menuSelectedCategory = 'project';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Project Version';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Project Version';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/project/version/Edit.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/project/version/Edit.php', get_defined_vars());
     }
 }

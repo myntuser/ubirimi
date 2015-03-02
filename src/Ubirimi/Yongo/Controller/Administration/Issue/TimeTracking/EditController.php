@@ -72,9 +72,6 @@ class EditController extends UbirimiController
             return new RedirectResponse('/yongo/administration/issue-features/time-tracking');
         }
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/issue/time_tracking/Edit.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/time_tracking/Edit.php', get_defined_vars());
     }
 }

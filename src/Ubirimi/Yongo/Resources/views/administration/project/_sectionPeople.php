@@ -5,8 +5,7 @@ use Ubirimi\SystemProduct;
 ?>
 <table width="100%">
     <tr>
-        <td id="sectPeople" width="74%" class="sectionDetail" colspan="3"><span
-                class="headerPageText sectionDetailTitle">People</span></td>
+        <td id="sectPeople" width="74%" class="sectionDetail" colspan="3"><span class="headerPageText sectionDetailTitle">People</span></td>
     </tr>
     <tr>
         <td>
@@ -18,15 +17,9 @@ use Ubirimi\SystemProduct;
                 </tr>
                 <tr>
                     <td valign="top" width="330">
-                        <div>Project Lead: <?php echo LinkHelper::getUserProfileLink(
-                                $project['lead_id'],
-                                SystemProduct::SYS_PRODUCT_YONGO,
-                                $project['first_name'],
-                                $project['last_name']
-                            ) ?></div>
+                        <div>Project Lead: <?php echo LinkHelper::getUserProfileLink($project['lead_id'], SystemProduct::SYS_PRODUCT_YONGO, $project['first_name'], $project['last_name']) ?></div>
                         <div>Default Assignee: Project Lead</div>
-                        <div>Roles: <a href="/yongo/administration/project/people/<?php echo $projectId ?>">View Project
-                                Roles</a></div>
+                        <div>Roles: <a href="/yongo/administration/project/people/<?php echo $projectId ?>">View Project Roles</a></div>
                     </td>
                 </tr>
             </table>

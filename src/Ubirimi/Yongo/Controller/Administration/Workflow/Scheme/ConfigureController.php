@@ -54,9 +54,8 @@ class ConfigureController extends UbirimiController
             $description = Util::cleanRegularInputField($request->request->get('description'));
             $currentDate = Util::getServerCurrentDateTime();
 
-            if (empty($name)) {
+            if (empty($name))
                 $emptyName = true;
-            }
 
             if (!$emptyName) {
                 $this->getRepository(WorkflowScheme::class)->updateMetaDataById($Id, $name, $description);
@@ -75,13 +74,8 @@ class ConfigureController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Workflow Scheme';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Workflow Scheme';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/workflow/scheme/Configure.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/workflow/scheme/Configure.php', get_defined_vars());
     }
 }

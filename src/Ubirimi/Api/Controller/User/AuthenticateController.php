@@ -36,9 +36,7 @@ class AuthenticateController extends UbirimiController
     {
         $requestParameters = json_decode($request->getContent(), true);
 
-        $userData = $this->getRepository(UbirimiUser::class)->getByUsernameAndAdministrator(
-            $requestParameters['username']
-        );
+        $userData = $this->getRepository(UbirimiUser::class)->getByUsernameAndAdministrator($requestParameters['username']);
 
         $response = array('success' => 0);
 
@@ -48,12 +46,8 @@ class AuthenticateController extends UbirimiController
                 UbirimiContainer::get()['warmup']->warmUpClient($userData);
                 UbirimiContainer::get()['login.time']->clientSaveLoginTime($userData['client_id']);
 
-                $clientData = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getById(
-                    $userData['client_id']
-                );
-                $clientSettings = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getSettings(
-                    $userData['client_id']
-                );
+                $clientData = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getById($userData['client_id']);
+                $clientSettings = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getSettings($userData['client_id']);
 
                 $response['success'] = 1;
                 $response['user'] = $userData;

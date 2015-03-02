@@ -23,8 +23,7 @@ use Ubirimi\Container\UbirimiContainer;
 
 class IssueStatistic
 {
-    public function getUnresolvedIssuesByProjectForUser($userId)
-    {
+    public function getUnresolvedIssuesByProjectForUser($userId) {
         $q = 'select count(yongo_issue.id) as total, project.name, project.id as project_id ' .
             'from yongo_issue ' .
             'left join project on yongo_issue.project_id = project.id ' .
@@ -38,21 +37,19 @@ class IssueStatistic
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getComponentOrVersionStatsUnresolvedBySetting($projectId, $setting, $comp_version_id, $type)
-    {
+    public function getComponentOrVersionStatsUnresolvedBySetting($projectId, $setting, $comp_version_id, $type) {
         $query = 'select count(yongo_issue.id) as count, ';
         if ($setting != 'assignee') {
             $query .= 'issue_' . $setting . '.name, yongo_issue.' . $setting . '_id as setting_id ';
-        } else {
-            $query .= 'CONCAT(user.first_name, " ", general_user.last_name) as name, yongo_issue.user_assigned_id ';
         }
+        else
+            $query .= 'CONCAT(user.first_name, " ", general_user.last_name) as name, yongo_issue.user_assigned_id ';
 
         $query .= 'from yongo_issue ' .
             'left join issue_' . $type . ' on yongo_issue.id = issue_' . $type . '.issue_id ';
@@ -77,9 +74,8 @@ class IssueStatistic
                 break;
         }
         $query .= 'where issue_' . $type . '.project_' . $type . '_id = ? ';
-        if ($type == 'version') {
-            $query .= 'and issue_version.affected_targeted_flag = ' . Issue::ISSUE_FIX_VERSION_FLAG . ' ';
-        }
+        if ($type == 'version')
+            $query .= 'and issue_version.affected_targeted_flag = ' . Issue::ISSUE_FIX_VERSION_FLAG  . ' ';
         $query .= 'and yongo_issue.resolution_id is null ';
         $query .= 'and yongo_issue.project_id = ? ';
 
@@ -90,15 +86,13 @@ class IssueStatistic
         $stmt->execute();
 
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getComponentORVersionCountUnresolved($comp_version_id, $type)
-    {
+    public function getComponentORVersionCountUnresolved($comp_version_id, $type) {
         $query = 'select count(yongo_issue.id) as count ' .
             'from yongo_issue ' .
             'left join issue_' . $type . ' on yongo_issue.id = issue_' . $type . '.issue_id ' .
@@ -112,8 +106,8 @@ class IssueStatistic
         if ($result->num_rows) {
             $row_result = $result->fetch_array(MYSQLI_ASSOC);
             return $row_result['count'];
-        } else {
-            return null;
         }
+        else
+            return null;
     }
 }

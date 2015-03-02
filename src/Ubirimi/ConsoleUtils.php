@@ -1,7 +1,6 @@
 <?php
 
 namespace Ubirimi;
-
 /**
  * Class with usefull static method for console.
  *
@@ -20,13 +19,11 @@ namespace Ubirimi;
  *
  * $Id: ConsoleUtils.php 1188 2007-10-06 12:03:17Z crivis_s $
  */
-class ConsoleUtils
-{
+class ConsoleUtils {
     /**
      * @param string Write the given string on stderror.
      */
-    static public function writeOnStdError($str)
-    {
+    static public function writeOnStdError($str) {
         $stderr = fopen('php://stderr', 'w');
         fwrite($stderr, $str);
         fclose($stderr);
@@ -35,21 +32,18 @@ class ConsoleUtils
     private static $lang = null;
     private static $locale = null;
 
-    static public function setLocale($system_locale)
-    {
+    static public function setLocale($system_locale) {
         ConsoleUtils::$locale = $system_locale;
     }
 
-    static private function prepareLang()
-    {
+    static private function prepareLang() {
         if (ConsoleUtils::$locale !== null) {
             ConsoleUtils::$lang = getenv('LANG');
             putenv('LANG=' . ConsoleUtils::$locale);
         }
     }
 
-    static private function restoreLang()
-    {
+    static private function restoreLang() {
         if (ConsoleUtils::$lang !== null) {
             putenv('LANG=' . ConsoleUtils::$lang);
         }
@@ -62,8 +56,7 @@ class ConsoleUtils
      * @param reference return value
      * @return string Ouput of STDOUT and STDERR
      */
-    static public function runCmdCaptureMessage($command, &$return)
-    {
+    static public function runCmdCaptureMessage($command, &$return) {
         return (htmlspecialchars(ConsoleUtils::runCmdCaptureMessageUnsafe($command, $return)));
     }
 
@@ -74,8 +67,7 @@ class ConsoleUtils
      * @param reference return value
      * @return string Ouput of STDOUT and STDERR
      */
-    static public function runCmdCaptureMessageUnsafe($command, &$return)
-    {
+    static public function runCmdCaptureMessageUnsafe($command, &$return) {
         ConsoleUtils::prepareLang();
         ob_start();
         passthru($command . " 2>&1", $return);
@@ -84,15 +76,13 @@ class ConsoleUtils
         ConsoleUtils::restoreLang();
         return ($msg);
     }
-
     /**
      * Run a cmd and return result
      *
      * @param string command line
      * @return int programm return code
      */
-    static public function runCmd($command)
-    {
+    static public function runCmd($command) {
         ConsoleUtils::prepareLang();
         ob_start();
         system($command . " 2>&1", $return);

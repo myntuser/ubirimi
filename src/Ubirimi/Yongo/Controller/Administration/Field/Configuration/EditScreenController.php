@@ -52,12 +52,7 @@ class EditScreenVisibilityController extends UbirimiController
                     $values = explode('_', $data);
                     $fieldSelectedId = $values[0];
                     $screenSelectedId = $values[1];
-                    $this->getRepository(Screen::class)->addData(
-                        $screenSelectedId,
-                        $fieldSelectedId,
-                        null,
-                        $currentDate
-                    );
+                    $this->getRepository(Screen::class)->addData($screenSelectedId, $fieldSelectedId, null, $currentDate);
                 }
             }
 
@@ -65,13 +60,8 @@ class EditScreenVisibilityController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Field Configuration Screen';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Field Configuration Screen';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/field/configuration/EditScreen.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/field/configuration/EditScreen.php', get_defined_vars());
     }
 }

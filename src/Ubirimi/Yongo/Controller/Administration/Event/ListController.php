@@ -34,9 +34,7 @@ class ListController extends UbirimiController
         $events = $this->getRepository(IssueEvent::class)->getByClient($session->get('client/id'));
         $menuSelectedCategory = 'system';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Events';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Events';
 
         return $this->render(__DIR__ . '/../../../Resources/views/administration/event/list.php', get_defined_vars());
     }

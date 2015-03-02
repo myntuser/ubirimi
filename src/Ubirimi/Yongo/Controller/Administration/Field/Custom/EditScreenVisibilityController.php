@@ -57,28 +57,15 @@ class EditScreenVisibilityController extends UbirimiController
                     $values = explode('_', $data);
                     $fieldSelectedId = $values[0];
                     $screenSelectedId = $values[1];
-                    $this->getRepository(Screen::class)->addData(
-                        $screenSelectedId,
-                        $fieldSelectedId,
-                        null,
-                        $currentDate
-                    );
+                    $this->getRepository(Screen::class)->addData($screenSelectedId, $fieldSelectedId, null, $currentDate);
                 }
             }
 
             // make field visible in all the field configurations
 
-            $fieldConfigurations = $this->getRepository(FieldConfiguration::class)->getByClientId(
-                $session->get('client/id')
-            );
+            $fieldConfigurations = $this->getRepository(FieldConfiguration::class)->getByClientId($session->get('client/id'));
             while ($fieldConfiguration = $fieldConfigurations->fetch_array(MYSQLI_ASSOC)) {
-                $this->getRepository(FieldConfiguration::class)->addCompleteData(
-                    $fieldConfiguration['id'],
-                    $fieldId,
-                    1,
-                    0,
-                    ''
-                );
+                $this->getRepository(FieldConfiguration::class)->addCompleteData($fieldConfiguration['id'], $fieldId, 1, 0, '');
             }
 
             $this->getLogger()->addInfo('UPDATE Yongo Custom Field ' . $field['name'], $this->getLoggerContext());
@@ -91,13 +78,8 @@ class EditScreenVisibilityController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Custome Field';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Custome Field';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/field/custom/EditScreen.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/field/custom/EditScreen.php', get_defined_vars());
     }
 }

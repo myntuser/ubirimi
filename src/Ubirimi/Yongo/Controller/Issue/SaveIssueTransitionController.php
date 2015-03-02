@@ -53,9 +53,7 @@ class SaveIssueTransitionController extends UbirimiController
         $stepIdTo = $request->request->get('step_id_to');
         $workflowId = $request->request->get('workflow_id');
         $attachIdsToBeKept = isset($_POST['attach_ids']) ? $_POST['attach_ids'] : array();
-        $attIdsSession = $session->has('added_attachments_in_screen') ? $session->get(
-            'added_attachments_in_screen'
-        ) : array();
+        $attIdsSession = $session->has('added_attachments_in_screen') ? $session->get('added_attachments_in_screen') : array();
 
         $fieldTypesCustom = $request->request->get('field_types_custom');
         $fieldValuesCustom = $request->request->get('field_values_custom');
@@ -82,18 +80,10 @@ class SaveIssueTransitionController extends UbirimiController
 
         $session->remove('added_attachments_in_screen');
         $issueData = $this->getRepository(Issue::class)->getById($issueId, $loggedInUserId);
-        $workflowData = $this->getRepository(Workflow::class)->getDataByStepIdFromAndStepIdTo(
-            $workflowId,
-            $stepIdFrom,
-            $stepIdTo
-        );
+        $workflowData = $this->getRepository(Workflow::class)->getDataByStepIdFromAndStepIdTo($workflowId, $stepIdFrom, $stepIdTo);
 
         // check if the transition can be executed with respect to the transition conditions
-        $canBeExecuted = $this->getRepository(Workflow::class)->checkConditionsByTransitionId(
-            $workflowData['id'],
-            $loggedInUserId,
-            $issueData
-        );
+        $canBeExecuted = $this->getRepository(Workflow::class)->checkConditionsByTransitionId($workflowData['id'], $loggedInUserId, $issueData);
 
         if ($canBeExecuted) {
             $currentDate = Util::getServerCurrentDateTime();
@@ -108,30 +98,18 @@ class SaveIssueTransitionController extends UbirimiController
             foreach ($issueCustomFieldsData as $key => $value) {
                 $keyData = explode("_", $key);
 
-                $oldIssueCustomFieldsData[$keyData[0]] = $this->getRepository(
-                    CustomField::class
-                )->getCustomFieldsDataByFieldId($issueId, $key);
+                $oldIssueCustomFieldsData[$keyData[0]] = $this->getRepository(CustomField::class)->getCustomFieldsDataByFieldId($issueId, $key);
                 unset($issueCustomFieldsData[$key]);
                 $issueCustomFieldsData[$keyData[0]] = $value;
             }
 
-            $fieldChanges = $this->getRepository(Issue::class)->computeDifference(
-                $issueData,
-                $newIssueSystemFieldsData,
-                $oldIssueCustomFieldsData,
-                $issueCustomFieldsData
-            );
+            $fieldChanges = $this->getRepository(Issue::class)->computeDifference($issueData, $newIssueSystemFieldsData, $oldIssueCustomFieldsData, $issueCustomFieldsData);
 
             if (in_array(Field::FIELD_COMMENT_CODE, $fieldTypes)) {
                 if ($fieldValues[array_search('comment', $fieldTypes)]) {
                     $commentText = $fieldValues[array_search('comment', $fieldTypes)];
 
-                    $this->getRepository(IssueComment::class)->add(
-                        $issueId,
-                        $loggedInUserId,
-                        $commentText,
-                        $currentDate
-                    );
+                    $this->getRepository(IssueComment::class)->add($issueId, $loggedInUserId, $commentText, $currentDate);
                     $fieldChanges[] = array('comment', $commentText);
                 }
             }
@@ -141,11 +119,7 @@ class SaveIssueTransitionController extends UbirimiController
 
                 // save custom fields
                 if (count($issueCustomFieldsData)) {
-                    $this->getRepository(CustomField::class)->updateCustomFieldsData(
-                        $issueId,
-                        $issueCustomFieldsData,
-                        $currentDate
-                    );
+                    $this->getRepository(CustomField::class)->updateCustomFieldsData($issueId, $issueCustomFieldsData, $currentDate);
                 }
             } catch (\Exception $e) {
 
@@ -156,21 +130,10 @@ class SaveIssueTransitionController extends UbirimiController
                 Email::$smtpSettings = $smtpSettings;
             }
 
-            $this->getRepository(WorkflowFunction::class)->triggerPostFunctions(
-                $clientId,
-                $issueData,
-                $workflowData,
-                $fieldChanges,
-                $loggedInUserId,
-                $currentDate
-            );
+            $this->getRepository(WorkflowFunction::class)->triggerPostFunctions($clientId, $issueData, $workflowData, $fieldChanges, $loggedInUserId, $currentDate);
 
             // update the date_updated field
-            $this->getRepository(Issue::class)->updateById(
-                $issueId,
-                array('date_updated' => $currentDate),
-                $currentDate
-            );
+            $this->getRepository(Issue::class)->updateById($issueId, array('date_updated' => $currentDate), $currentDate);
 
             return new Response('success');
         } else {

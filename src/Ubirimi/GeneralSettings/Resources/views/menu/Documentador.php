@@ -23,8 +23,7 @@ use Ubirimi\Util;
     <?php if ($spaces): ?>
         <tr>
             <td>
-                <span
-                    style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
+                <span style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
             </td>
         </tr>
         <?php while ($space = $spaces->fetch_array(MYSQLI_ASSOC)): ?>
@@ -32,11 +31,9 @@ use Ubirimi\Util;
                 <td>
                     <div>
                         <?php if ($space['home_entity_id']): ?>
-                            <a class="linkSubMenu"
-                               href="/documentador/page/view/<?php echo $space['home_entity_id'] ?>"><?php echo $space['name'] ?></a>
+                            <a class="linkSubMenu" href="/documentador/page/view/<?php echo $space['home_entity_id'] ?>"><?php echo $space['name'] ?></a>
                         <?php else: ?>
-                            <a class="linkSubMenu"
-                               href="/documentador/pages/<?php echo $space['space_id'] ?>"><?php echo $space['name'] ?></a>
+                            <a class="linkSubMenu" href="/documentador/pages/<?php echo $space['space_id'] ?>"><?php echo $space['name'] ?></a>
                         <?php endif ?>
                     </div>
                 </td>

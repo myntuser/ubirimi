@@ -41,19 +41,13 @@ class AddController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name)) {
+            if (empty($name))
                 $emptyName = true;
-            }
 
             // check for duplication
-            $resolution = $this->getRepository(IssueSettings::class)->getByName(
-                $session->get('client/id'),
-                'resolution',
-                mb_strtolower($name)
-            );
-            if ($resolution) {
+            $resolution = $this->getRepository(IssueSettings::class)->getByName($session->get('client/id'), 'resolution', mb_strtolower($name));
+            if ($resolution)
                 $resolutionExists = true;
-            }
 
             if (!$resolutionExists && !$emptyName) {
                 $currentDate = Util::getServerCurrentDateTime();
@@ -75,13 +69,8 @@ class AddController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Resolution';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Resolution';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/issue/resolution/Add.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/resolution/Add.php', get_defined_vars());
     }
 }

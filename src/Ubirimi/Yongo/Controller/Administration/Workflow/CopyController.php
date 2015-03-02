@@ -51,23 +51,14 @@ class CopyController extends UbirimiController
                 $emptyName = true;
             }
 
-            $workflowAlreadyExisting = $this->getRepository(Workflow::class)->getByClientIdAndName(
-                $session->get('client/id'),
-                $name
-            );
+            $workflowAlreadyExisting = $this->getRepository(Workflow::class)->getByClientIdAndName($session->get('client/id'), $name);
             if ($workflowAlreadyExisting) {
                 $duplicateName = true;
             }
 
             if (!$emptyName && !$workflowAlreadyExisting) {
                 $currentDate = Util::getServerCurrentDateTime();
-                $this->getRepository(Workflow::class)->copy(
-                    $session->get('client/id'),
-                    $workflowId,
-                    $name,
-                    $description,
-                    $currentDate
-                );
+                $this->getRepository(Workflow::class)->copy($session->get('client/id'), $workflowId, $name, $description, $currentDate);
 
                 $this->getLogger()->addInfo('Copy Yongo Workflow ' . $workflow['name'], $this->getLoggerContext());
 
@@ -77,13 +68,8 @@ class CopyController extends UbirimiController
 
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Workflow';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Workflow';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/workflow/Copy.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/workflow/Copy.php', get_defined_vars());
     }
 }

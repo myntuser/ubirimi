@@ -42,32 +42,21 @@ class IndexController extends UbirimiController
         $menuSelectedCategory = 'administration';
 
         if ($hasYongoGlobalAdministrationPermission && $hasYongoGlobalSystemAdministrationPermission) {
-            $projects = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getProjects(
+            $projects = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getProjects($session->get('client/id'), 'array');
+            $last5Projects = UbirimiContainer::get()['repository']->get(YongoProject::class)->getLast5ByClientId($session->get('client/id'));
+            $countProjects = UbirimiContainer::get()['repository']->get(YongoProject::class)->getCount($session->get('client/id'));
+        } else if ($hasYongoAdministerProjectsPermission) {
+            $projects = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getProjectsByPermission(
                 $session->get('client/id'),
+                $session->get('user/id'),
+                Permission::PERM_ADMINISTER_PROJECTS,
                 'array'
             );
-            $last5Projects = UbirimiContainer::get()['repository']->get(YongoProject::class)->getLast5ByClientId(
-                $session->get('client/id')
-            );
-            $countProjects = UbirimiContainer::get()['repository']->get(YongoProject::class)->getCount(
-                $session->get('client/id')
-            );
-        } else {
-            if ($hasYongoAdministerProjectsPermission) {
-                $projects = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getProjectsByPermission(
-                    $session->get('client/id'),
-                    $session->get('user/id'),
-                    Permission::PERM_ADMINISTER_PROJECTS,
-                    'array'
-                );
-                $countProjects = count($projects);
-                $last5Projects = null;
-            }
+            $countProjects = count($projects);
+            $last5Projects = null;
         }
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Administration';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Administration';
 
         return $this->render(__DIR__ . '/../../Resources/views/administration/Index.php', get_defined_vars());
     }

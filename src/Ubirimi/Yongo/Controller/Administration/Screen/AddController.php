@@ -44,9 +44,8 @@ class AddController extends UbirimiController
             $description = Util::cleanRegularInputField($request->request->get('description'));
             $currentDate = Util::getServerCurrentDateTime();
 
-            if (empty($name)) {
+            if (empty($name))
                 $emptyName = true;
-            }
 
             if (!$emptyName) {
                 $screen = new Screen($session->get('client/id'), $name, $description);
@@ -66,9 +65,7 @@ class AddController extends UbirimiController
                 return new RedirectResponse('/yongo/administration/screens');
             }
         }
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Screen';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Screen';
 
         return $this->render(__DIR__ . '/../../../Resources/views/administration/screen/Add.php', get_defined_vars());
     }

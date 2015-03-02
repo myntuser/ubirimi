@@ -35,9 +35,7 @@ class ListController extends UbirimiController
         $menuSelectedCategory = 'agile';
         $boards = $this->getRepository(Board::class)->getByClientId($session->get('client/id'));
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_AGILE_NAME . ' / Boards';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_AGILE_NAME. ' / Boards';
 
         return $this->render(__DIR__ . '/../../Resources/views/board/List.php', get_defined_vars());
     }

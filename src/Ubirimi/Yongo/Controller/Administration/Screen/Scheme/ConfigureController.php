@@ -49,13 +49,8 @@ class ConfigureController extends UbirimiController
             $projectId = $request->get('project_id');
         }
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Screen Scheme';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Screen Scheme';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/screen/scheme/Configure.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/screen/scheme/Configure.php', get_defined_vars());
     }
 }

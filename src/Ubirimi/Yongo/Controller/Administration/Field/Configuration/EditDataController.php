@@ -38,25 +38,13 @@ class EditDataController extends UbirimiController
         $requiredFlag = $request->get('required_flag');
 
         $fieldConfiguration = $this->getRepository(FieldConfiguration::class)->getMetaDataById($fieldConfigurationId);
-        $data = $this->getRepository(FieldConfiguration::class)->getDataByConfigurationAndField(
-            $fieldConfigurationId,
-            $fieldId
-        );
-        if (!$data) {
+        $data = $this->getRepository(FieldConfiguration::class)->getDataByConfigurationAndField($fieldConfigurationId, $fieldId);
+        if (!$data)
             $this->getRepository(FieldConfiguration::class)->addSimpleData($fieldConfigurationId, $fieldId);
-        }
 
-        $this->getRepository(FieldConfiguration::class)->updateData(
-            $fieldConfigurationId,
-            $fieldId,
-            $visibleFlag,
-            $requiredFlag
-        );
+        $this->getRepository(FieldConfiguration::class)->updateData($fieldConfigurationId, $fieldId, $visibleFlag, $requiredFlag);
 
-        $this->getLogger()->addInfo(
-            'UPDATE Yongo Field Configuration ' . $fieldConfiguration['name'],
-            $this->getLoggerContext()
-        );
+        $this->getLogger()->addInfo('UPDATE Yongo Field Configuration ' . $fieldConfiguration['name'], $this->getLoggerContext());
 
         return new RedirectResponse('/yongo/administration/field-configuration/edit/' . $fieldConfigurationId);
     }

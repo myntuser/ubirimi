@@ -57,25 +57,16 @@ class EditController extends UbirimiController
             $description = Util::cleanRegularInputField($request->request->get('description'));
             $currentDate = Util::getServerCurrentDateTime();
 
-            if (empty($name)) {
+            if (empty($name))
                 $emptyName = true;
-            }
 
             if (!$emptyName) {
-                $this->getRepository(IssueTypeScheme::class)->updateMetaDataById(
-                    $issueTypeSchemeId,
-                    $name,
-                    $description
-                );
+                $this->getRepository(IssueTypeScheme::class)->updateMetaDataById($issueTypeSchemeId, $name, $description);
                 $this->getRepository(IssueTypeScheme::class)->deleteDataByIssueTypeSchemeId($issueTypeSchemeId);
                 foreach ($request->request as $key => $value) {
                     if (substr($key, 0, 11) == 'issue_type_') {
                         $issueTypeId = str_replace('issue_type_', '', $key);
-                        $this->getRepository(IssueTypeScheme::class)->addData(
-                            $issueTypeSchemeId,
-                            $issueTypeId,
-                            $currentDate
-                        );
+                        $this->getRepository(IssueTypeScheme::class)->addData($issueTypeSchemeId, $issueTypeId, $currentDate);
                     }
                 }
 
@@ -90,13 +81,8 @@ class EditController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Type Scheme';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Type Scheme';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/issue/issue_type_scheme/Edit.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/issue/issue_type_scheme/Edit.php', get_defined_vars());
     }
 }

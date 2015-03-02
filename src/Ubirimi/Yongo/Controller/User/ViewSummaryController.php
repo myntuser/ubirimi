@@ -48,29 +48,13 @@ class ViewSummaryController extends UbirimiController
         }
         $clientSettings = $this->getRepository(UbirimiClient::class)->getSettings($session->get('client/id'));
 
-        $groups = $this->getRepository(UbirimiGroup::class)->getByUserIdAndProductId(
-            $userId,
-            SystemProduct::SYS_PRODUCT_YONGO
-        );
+        $groups = $this->getRepository(UbirimiGroup::class)->getByUserIdAndProductId($userId, SystemProduct::SYS_PRODUCT_YONGO);
         $stats = $this->getRepository(IssueStatistic::class)->getUnresolvedIssuesByProjectForUser($userId);
 
-        $hasAdministrationGlobalPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission(
-            $session->get('client/id'),
-            $userId,
-            GlobalPermission::GLOBAL_PERMISSION_YONGO_ADMINISTRATORS
-        );
-        $hasSystemAdministrationGlobalPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission(
-            $session->get('client/id'),
-            $userId,
-            GlobalPermission::GLOBAL_PERMISSION_YONGO_SYSTEM_ADMINISTRATORS
-        );
+        $hasAdministrationGlobalPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission($session->get('client/id'), $userId, GlobalPermission::GLOBAL_PERMISSION_YONGO_ADMINISTRATORS);
+        $hasSystemAdministrationGlobalPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission($session->get('client/id'), $userId, GlobalPermission::GLOBAL_PERMISSION_YONGO_SYSTEM_ADMINISTRATORS);
 
-        $projectsForBrowsing = $this->getRepository(UbirimiClient::class)->getProjectsByPermission(
-            $session->get('client/id'),
-            $session->get('user/id'),
-            Permission::PERM_BROWSE_PROJECTS,
-            'array'
-        );
+        $projectsForBrowsing = $this->getRepository(UbirimiClient::class)->getProjectsByPermission($session->get('client/id'), $session->get('user/id'), Permission::PERM_BROWSE_PROJECTS, 'array');
         $projectIds = array();
 
         if ($projectsForBrowsing) {
@@ -87,26 +71,15 @@ class ViewSummaryController extends UbirimiController
         $historyData = array();
         $userData = array();
         while ($historyList && $history = $historyList->fetch_array(MYSQLI_ASSOC)) {
-            $historyData[substr(
-                $history['date_created'],
-                0,
-                10
-            )][$history['user_id']][$history['date_created']][] = $history;
-            $userData[$history['user_id']] = array(
-                'picture' => $history['avatar_picture'],
-                'first_name' => $history['first_name'],
-                'last_name' => $history['last_name']
-            );
+            $historyData[substr($history['date_created'], 0, 10)][$history['user_id']][$history['date_created']][] = $history;
+            $userData[$history['user_id']] = array('picture' => $history['avatar_picture'],
+                                                   'first_name' => $history['first_name'],
+                                                   'last_name' => $history['last_name']);
         }
         $index = 0;
-        $startDate = date_sub(
-            new \DateTime(Util::getServerCurrentDateTime(), new \DateTimeZone($clientSettings['timezone'])),
-            date_interval_create_from_date_string('1 months')
-        );
+        $startDate = date_sub(new \DateTime(Util::getServerCurrentDateTime(), new \DateTimeZone($clientSettings['timezone'])), date_interval_create_from_date_string('1 months'));
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / User: ' . $user['first_name'] . ' ' . $user['last_name'] . ' / Profile';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / User: ' . $user['first_name'] . ' ' . $user['last_name'] . ' / Profile';
 
         return $this->render(__DIR__ . '/../../Resources/views/user/ViewSummary.php', get_defined_vars());
     }

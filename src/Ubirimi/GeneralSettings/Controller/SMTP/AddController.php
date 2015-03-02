@@ -77,9 +77,7 @@ class AddController extends UbirimiController
             return new RedirectResponse('/general-settings/smtp-settings');
         }
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / GeneralSettings Settings / Create SMTP Server';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / GeneralSettings Settings / Create SMTP Server';
 
         return $this->render(__DIR__ . '/../../Resources/views/smtp/Add.php', get_defined_vars());
     }

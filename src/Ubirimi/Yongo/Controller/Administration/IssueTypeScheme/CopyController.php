@@ -59,9 +59,8 @@ class CopyController extends UbirimiController
                 mb_strtolower($name)
             );
 
-            if ($duplicateIssueTypeScheme) {
+            if ($duplicateIssueTypeScheme)
                 $duplicateName = true;
-            }
 
             if (!$emptyName && !$duplicateName) {
                 $copiedIssueTypeScheme = new IssueTypeScheme($session->get('client/id'), $name, $description, $type);
@@ -75,10 +74,7 @@ class CopyController extends UbirimiController
                     $copiedIssueTypeScheme->addData($copiedIssueTypeSchemeId, $data['issue_type_id'], $currentDate);
                 }
 
-                $this->getLogger()->addInfo(
-                    'Copy Yongo Issue Type Scheme ' . $issueTypeScheme['name'],
-                    $this->getLoggerContext()
-                );
+                $this->getLogger()->addInfo('Copy Yongo Issue Type Scheme ' . $issueTypeScheme['name'], $this->getLoggerContext());
 
                 if ('workflow' == $type) {
                     return new RedirectResponse('/yongo/administration/workflows/issue-type-schemes');
@@ -89,14 +85,9 @@ class CopyController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Issue Type Scheme';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Issue Type Scheme';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/issue/issue_type_scheme/Copy.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/issue/issue_type_scheme/Copy.php', get_defined_vars());
     }
 }
 

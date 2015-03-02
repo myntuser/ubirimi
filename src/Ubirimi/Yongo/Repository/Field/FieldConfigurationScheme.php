@@ -21,15 +21,13 @@ namespace Ubirimi\Yongo\Repository\Field;
 
 use Ubirimi\Container\UbirimiContainer;
 
-class FieldConfigurationScheme
-{
+class FieldConfigurationScheme {
 
     public $name;
     public $description;
     public $clientId;
 
-    function __construct($clientId = null, $name = null, $description = null)
-    {
+    function __construct($clientId = null, $name = null, $description = null) {
         $this->clientId = $clientId;
         $this->name = $name;
         $this->description = $description;
@@ -37,8 +35,7 @@ class FieldConfigurationScheme
         return $this;
     }
 
-    public function getByClient($clientId)
-    {
+    public function getByClient($clientId) {
         $query = "SELECT * " .
             "FROM issue_type_field_configuration " .
             "where client_id = ?";
@@ -47,15 +44,13 @@ class FieldConfigurationScheme
         $stmt->bind_param("i", $clientId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function save($currentDate)
-    {
+    public function save($currentDate) {
         $query = "INSERT INTO issue_type_field_configuration(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -66,8 +61,7 @@ class FieldConfigurationScheme
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function addData($issueTypeFieldConfigurationId, $fieldConfigurationId, $issueTypeId, $currentDate)
-    {
+    public function addData($issueTypeFieldConfigurationId, $fieldConfigurationId, $issueTypeId, $currentDate) {
         $query = "INSERT INTO issue_type_field_configuration_data(issue_type_field_configuration_id, field_configuration_id, issue_type_id, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -75,8 +69,7 @@ class FieldConfigurationScheme
         $stmt->execute();
     }
 
-    public function deleteDataById($Id)
-    {
+    public function deleteDataById($Id) {
         $query = "delete from issue_type_field_configuration_data where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -84,8 +77,7 @@ class FieldConfigurationScheme
         $stmt->execute();
     }
 
-    public function deleteDataByFieldConfigurationSchemeId($Id)
-    {
+    public function deleteDataByFieldConfigurationSchemeId($Id) {
         $query = "delete from issue_type_field_configuration_data where issue_type_field_configuration_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -93,8 +85,7 @@ class FieldConfigurationScheme
         $stmt->execute();
     }
 
-    public function updateDataById($fieldConfigurationId, $issueTypeFieldConfigurationId, $issueTypeId)
-    {
+    public function updateDataById($fieldConfigurationId, $issueTypeFieldConfigurationId, $issueTypeId) {
         $query = "update issue_type_field_configuration_data
                     set field_configuration_id = ?
                     where issue_type_field_configuration_id = ?
@@ -105,8 +96,7 @@ class FieldConfigurationScheme
         $stmt->execute();
     }
 
-    public function updateMetaDataById($Id, $name, $description, $date)
-    {
+    public function updateMetaDataById($Id, $name, $description, $date) {
         $query = "update issue_type_field_configuration
                     set name = ?, description = ?, date_updated = ?
                     where id = ? limit 1";
@@ -116,8 +106,7 @@ class FieldConfigurationScheme
         $stmt->execute();
     }
 
-    public function getMetaDataById($Id)
-    {
+    public function getMetaDataById($Id) {
         $query = "select * " .
             "from issue_type_field_configuration " .
             "where id = ? " .
@@ -127,15 +116,13 @@ class FieldConfigurationScheme
         $stmt->bind_param("i", $Id);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getDataByFieldConfigurationSchemeId($Id)
-    {
+    public function getDataByFieldConfigurationSchemeId($Id) {
         $query = "select issue_type_field_configuration_data.id, issue_type_field_configuration_data.issue_type_id, " .
             "field_configuration.name as field_configuration_name, issue_type.name as issue_type_name, issue_type_field_configuration_data.field_configuration_id " .
             "from issue_type_field_configuration_data " .
@@ -148,37 +135,33 @@ class FieldConfigurationScheme
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getDataById($Id)
-    {
+    public function getDataById($Id) {
         $query = "select issue_type_field_configuration_data.id, issue_type_field_configuration_data.field_configuration_id, " .
-            "issue_type_field_configuration_data.issue_type_id, " .
-            "issue_type.name as issue_type_name, field_configuration.name as field_configuration_name, issue_type_field_configuration_data.issue_type_field_configuration_id " .
-            "from issue_type_field_configuration_data " .
-            "left join issue_type on issue_type.id = issue_type_field_configuration_data.issue_type_id " .
-            "left join field_configuration on field_configuration.id = issue_type_field_configuration_data.field_configuration_id " .
-            "where issue_type_field_configuration_data.id = ? ";
+                    "issue_type_field_configuration_data.issue_type_id, " .
+                    "issue_type.name as issue_type_name, field_configuration.name as field_configuration_name, issue_type_field_configuration_data.issue_type_field_configuration_id " .
+                 "from issue_type_field_configuration_data " .
+                 "left join issue_type on issue_type.id = issue_type_field_configuration_data.issue_type_id " .
+                 "left join field_configuration on field_configuration.id = issue_type_field_configuration_data.field_configuration_id " .
+                 "where issue_type_field_configuration_data.id = ? ";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getFieldConfigurations($issueTypeFieldConfigurationId)
-    {
+    public function getFieldConfigurations($issueTypeFieldConfigurationId) {
         $query = "select field_configuration.id, field_configuration.name " .
             "from issue_type_field_configuration_data " .
             "left join field_configuration on field_configuration.id = issue_type_field_configuration_data.field_configuration_id " .
@@ -190,15 +173,13 @@ class FieldConfigurationScheme
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getFieldConfigurationsSchemesByFieldConfigurationId($clientId, $fieldConfigurationId)
-    {
+    public function getFieldConfigurationsSchemesByFieldConfigurationId($clientId, $fieldConfigurationId) {
         $query = "select issue_type_field_configuration.id, issue_type_field_configuration.name " .
             "from issue_type_field_configuration_data " .
             "left join issue_type_field_configuration on issue_type_field_configuration.id = issue_type_field_configuration_data.issue_type_field_configuration_id " .
@@ -211,15 +192,13 @@ class FieldConfigurationScheme
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getIssueTypesForFieldConfiguration($issueTypeFieldConfigurationId, $fieldConfigurationId)
-    {
+    public function getIssueTypesForFieldConfiguration($issueTypeFieldConfigurationId, $fieldConfigurationId) {
         $query = "select issue_type.id, issue_type.name " .
             "from issue_type_field_configuration_data " .
             "left join issue_type on issue_type.id = issue_type_field_configuration_data.issue_type_id " .
@@ -230,15 +209,13 @@ class FieldConfigurationScheme
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function deleteById($Id)
-    {
+    public function deleteById($Id) {
         $query = "delete from issue_type_field_configuration where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -246,22 +223,16 @@ class FieldConfigurationScheme
         $stmt->execute();
     }
 
-    public function deleteByClientId($clientId)
-    {
+    public function deleteByClientId($clientId) {
         $fieldConfigurationSchemes = $this->getRepository(FieldConfigurationScheme::class)->getByClient($clientId);
 
-        while ($fieldConfigurationSchemes && $fieldConfigurationScheme = $fieldConfigurationSchemes->fetch_array(
-                MYSQLI_ASSOC
-            )) {
-            $this->getRepository(FieldConfigurationScheme::class)->deleteDataByFieldConfigurationSchemeId(
-                $fieldConfigurationScheme['id']
-            );
+        while ($fieldConfigurationSchemes && $fieldConfigurationScheme = $fieldConfigurationSchemes->fetch_array(MYSQLI_ASSOC)) {
+            $this->getRepository(FieldConfigurationScheme::class)->deleteDataByFieldConfigurationSchemeId($fieldConfigurationScheme['id']);
             $this->getRepository(FieldConfigurationScheme::class)->deleteById($fieldConfigurationScheme['id']);
         }
     }
 
-    public function getMetaDataByNameAndClientId($clientId, $name)
-    {
+    public function getMetaDataByNameAndClientId($clientId, $name) {
         $query = "select * from issue_type_field_configuration where client_id = ? and LOWER(name) = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -269,15 +240,13 @@ class FieldConfigurationScheme
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getByIssueTypeFieldConfigurationIdAndIssueTypeId($issueTypeFieldConfigurationId, $issueTypeId)
-    {
+    public function getByIssueTypeFieldConfigurationIdAndIssueTypeId($issueTypeFieldConfigurationId, $issueTypeId) {
         $query = "select issue_type_field_configuration.id, issue_type_field_configuration.name " .
             "from issue_type_field_configuration_data " .
             "where issue_type_field_configuration_data.issue_type_field_configuration_id = ? and " .
@@ -288,10 +257,9 @@ class FieldConfigurationScheme
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 }

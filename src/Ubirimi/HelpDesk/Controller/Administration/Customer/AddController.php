@@ -53,10 +53,8 @@ class AddController extends UbirimiController
 
             if (empty($email)) {
                 $errors['empty_email'] = true;
-            } else {
-                if (!Util::isValidEmail($email)) {
-                    $errors['email_not_valid'] = true;
-                }
+            } else if (!Util::isValidEmail($email)) {
+                $errors['email_not_valid'] = true;
             }
 
             $emailData = $this->getRepository(UbirimiUser::class)->getUserByClientIdAndEmailAddress(
@@ -70,17 +68,15 @@ class AddController extends UbirimiController
             if (Util::hasNoErrors($errors)) {
                 $password = Util::randomPassword(8);
 
-                $userId = UbirimiContainer::get()['user']->newUser(
-                    array(
-                        'clientId' => $session->get('client/id'),
-                        'firstName' => $firstName,
-                        'lastName' => $lastName,
-                        'password' => $password,
-                        'email' => $email,
-                        'isCustomer' => true,
-                        'clientDomain' => $session->get('client/company_domain')
-                    )
-                );
+                $userId = UbirimiContainer::get()['user']->newUser(array(
+                    'clientId' => $session->get('client/id'),
+                    'firstName' => $firstName,
+                    'lastName' => $lastName,
+                    'password' => $password,
+                    'email' => $email,
+                    'isCustomer' => true,
+                    'clientDomain' => $session->get('client/company_domain')
+                ));
 
                 if ($organizationId) {
                     $this->getRepository(Customer::class)->create($organizationId, $userId);

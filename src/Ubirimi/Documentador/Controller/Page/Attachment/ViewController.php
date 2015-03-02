@@ -40,13 +40,10 @@ class ViewController extends UbirimiController
             $session->set('selected_product_id', SystemProduct::SYS_PRODUCT_DOCUMENTADOR);
             $loggedInUserId = $session->get('user/id');
             $page = $this->getRepository(Entity::class)->getById($entityId, $loggedInUserId);
-            if ($page) {
+            if ($page)
                 $spaceId = $page['space_id'];
-            }
 
-            $sectionPageTitle = $session->get(
-                    'client/settings/title_name'
-                ) . ' / ' . SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME . ' / ' . $page['name'] . ' / Attachments';
+            $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME. ' / ' . $page['name'] . ' / Attachments';
         } else {
             $httpHOST = Util::getHttpHost();
             $clientId = $this->getRepository(UbirimiClient::class)->getByBaseURL($httpHOST, 'array', 'id');
@@ -66,7 +63,7 @@ class ViewController extends UbirimiController
                     die();
                 }
             }
-            $sectionPageTitle = SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME . ' / ' . $page['name'] . ' / Attachments';
+            $sectionPageTitle = SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME. ' / ' . $page['name'] . ' / Attachments';
         }
         $menuSelectedCategory = 'documentator';
 

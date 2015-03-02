@@ -8,55 +8,53 @@
         <tr>
             <td>
                 <div>
-                    <a class="linkSubMenu"
-                       href="<?php echo $urlPrefix . $selectedProjectId ?>"><?php echo $selectedProjectMenu['name'] . ' (' . $selectedProjectMenu['code'] . ')' ?></a>
+                    <a class="linkSubMenu" href="<?php echo $urlPrefix . $selectedProjectId ?>"><?php echo $selectedProjectMenu['name'] . ' (' . $selectedProjectMenu['code'] . ')' ?></a>
                 </div>
             </td>
         </tr>
         <tr>
             <td>
-                <span
-                    style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
+                <span style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
             </td>
         </tr>
     <?php endif ?>
 
     <?php
-    $htmlOtherProjects = '';
-    $menuOtherProjectsVisible = false;
-    if ($projectsMenu) {
-        $htmlOtherProjects .= '<tr>';
-        $htmlOtherProjects .= '<td><div style="cursor: text; background-color: #ffffff;"><b>Other Projects</b></div></td>';
-        $htmlOtherProjects .= '</tr>';
+        $htmlOtherProjects = '';
+        $menuOtherProjectsVisible = false;
+        if ($projectsMenu) {
+            $htmlOtherProjects .= '<tr>';
+                $htmlOtherProjects .= '<td><div style="cursor: text; background-color: #ffffff;"><b>Other Projects</b></div></td>';
+            $htmlOtherProjects .= '</tr>';
 
-        $showProjectsCount = 0;
-        for ($i = 0; $i < count($projectsMenu); $i++) {
-            if ($selectedProjectId != $projectsMenu[$i]['id']) {
+            $showProjectsCount = 0;
+            for ($i = 0; $i < count($projectsMenu); $i++) {
+                if ($selectedProjectId != $projectsMenu[$i]['id']) {
 
-                $menuOtherProjectsVisible = true;
-                $htmlOtherProjects .= '<tr>';
-                $htmlOtherProjects .= '<td>';
-                $htmlOtherProjects .= '<div>';
-                $htmlOtherProjects .= '<a class="linkSubMenu" href="' . $urlPrefix . $projectsMenu[$i]['id'] . '">' . $projectsMenu[$i]['name'] . ' (' . $projectsMenu[$i]['code'] . ')' . '</a>';
-                $htmlOtherProjects .= '</div>';
-                $htmlOtherProjects .= '</td>';
-                $htmlOtherProjects .= '</tr>';
-                $showProjectsCount++;
-                if ($showProjectsCount >= 10) {
-                    break;
+                    $menuOtherProjectsVisible = true;
+                    $htmlOtherProjects .= '<tr>';
+                        $htmlOtherProjects .= '<td>';
+                            $htmlOtherProjects .= '<div>';
+                                $htmlOtherProjects .= '<a class="linkSubMenu" href="' . $urlPrefix . $projectsMenu[$i]['id'] . '">' . $projectsMenu[$i]['name'] . ' (' . $projectsMenu[$i]['code'] . ')' . '</a>';
+                            $htmlOtherProjects .= '</div>';
+                        $htmlOtherProjects .= '</td>';
+                    $htmlOtherProjects .= '</tr>';
+                    $showProjectsCount++;
+                    if ($showProjectsCount >= 10) {
+                        break;
+                    }
                 }
             }
+            $htmlOtherProjects .= '<tr>';
+                $htmlOtherProjects .= '<td>';
+                    $htmlOtherProjects .= '<span style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>';
+                $htmlOtherProjects .= '</td>';
+            $htmlOtherProjects .= '</tr>';
         }
-        $htmlOtherProjects .= '<tr>';
-        $htmlOtherProjects .= '<td>';
-        $htmlOtherProjects .= '<span style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>';
-        $htmlOtherProjects .= '</td>';
-        $htmlOtherProjects .= '</tr>';
-    }
 
-    if ($menuOtherProjectsVisible) {
-        echo $htmlOtherProjects;
-    }
+        if ($menuOtherProjectsVisible) {
+            echo $htmlOtherProjects;
+        }
     ?>
 
     <tr>
@@ -67,8 +65,7 @@
     <?php if ($hasGlobalAdministrationPermission || $hasGlobalSystemAdministrationPermission): ?>
         <tr>
             <td>
-                <span
-                    style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
+                <span style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
             </td>
         </tr>
 

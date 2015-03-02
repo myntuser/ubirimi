@@ -29,9 +29,9 @@ class DeleteConfirmController extends UbirimiController
     public function indexAction(Request $request, SessionInterface $session)
     {
         $deletePossible = $request->get('delete_possible');
-        if ($deletePossible) {
+        if ($deletePossible)
             return new Response('Are you sure you want to delete this workflow step?');
-        } else {
+        else {
             return new Response('This step has incoming transitions. It can not be deleted');
         }
 

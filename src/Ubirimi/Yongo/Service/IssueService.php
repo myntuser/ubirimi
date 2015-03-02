@@ -60,20 +60,13 @@ class IssueService extends UbirimiService
         $newIssueNumber = $issueReturnValues[1];
 
         // update last issue number for this project
-        UbirimiContainer::get()['repository']->get(YongoProject::class)->updateLastIssueNumber(
-            $projectId,
-            $newIssueNumber
-        );
+        UbirimiContainer::get()['repository']->get(YongoProject::class)->updateLastIssueNumber($projectId, $newIssueNumber);
 
         // if a parent is set check if the parent issue id is part of a sprint. if yes also add the child
         if ($issueId) {
             $sprints = UbirimiContainer::get()['repository']->get(Sprint::class)->getByIssueId($clientId, $issueId);
             while ($sprints && $sprint = $sprints->fetch_array(MYSQLI_ASSOC)) {
-                UbirimiContainer::get()['repository']->get(Sprint::class)->addIssues(
-                    $sprint['id'],
-                    array($newIssueId),
-                    $loggedInUserId
-                );
+                UbirimiContainer::get()['repository']->get(Sprint::class)->addIssues($sprint['id'], array($newIssueId), $loggedInUserId);
             }
         }
 
@@ -81,12 +74,7 @@ class IssueService extends UbirimiService
         if (array_key_exists(Field::FIELD_COMMENT_CODE, $issueSystemFieldsData)) {
             $comment = Util::cleanRegularInputField($issueSystemFieldsData[Field::FIELD_COMMENT_CODE]);
             if (!empty($comment)) {
-                UbirimiContainer::get()['repository']->get(IssueComment::class)->add(
-                    $newIssueId,
-                    $loggedInUserId,
-                    $comment,
-                    $currentDate
-                );
+                UbirimiContainer::get()['repository']->get(IssueComment::class)->add($newIssueId, $loggedInUserId, $comment, $currentDate);
             }
         }
 

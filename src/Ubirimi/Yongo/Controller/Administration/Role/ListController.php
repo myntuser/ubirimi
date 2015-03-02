@@ -32,9 +32,7 @@ class ListController extends UbirimiController
         Util::checkUserIsLoggedInAndRedirect();
         $menuSelectedCategory = 'user';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Roles';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Roles';
 
         return $this->render(__DIR__ . '/../../../Resources/views/administration/role/List.php', get_defined_vars());
     }

@@ -45,54 +45,27 @@ class ViewEditFieldsController extends UbirimiController
 
         $issueId = $request->request->get('issue_id');
         $issueTypeId = $request->request->get('issue_type_id');
-        $issueData = $this->getRepository(Issue::class)->getByParameters(
-            array('issue_id' => $issueId),
-            $loggedInUserId
-        );
+        $issueData = $this->getRepository(Issue::class)->getByParameters(array('issue_id' => $issueId), $loggedInUserId);
 
         $projectId = $issueData['issue_project_id'];
 
         $project = UbirimiContainer::get()['repository']->get(YongoProject::class)->getById($projectId);
-        $screenData = UbirimiContainer::get()['repository']->get(YongoProject::class)->getScreenData(
-            $project,
-            $issueTypeId,
-            SystemOperation::OPERATION_EDIT
-        );
+        $screenData = UbirimiContainer::get()['repository']->get(YongoProject::class)->getScreenData($project, $issueTypeId, SystemOperation::OPERATION_EDIT);
 
-        $userHasModifyReporterPermission = UbirimiContainer::get()['repository']->get(
-            YongoProject::class
-        )->userHasPermission($projectId, Permission::PERM_MODIFY_REPORTER, $loggedInUserId);
-        $userHasAssignIssuePermission = UbirimiContainer::get()['repository']->get(
-            YongoProject::class
-        )->userHasPermission($projectId, Permission::PERM_ASSIGN_ISSUE, $loggedInUserId);
-        $userHasSetSecurityLevelPermission = UbirimiContainer::get()['repository']->get(
-            YongoProject::class
-        )->userHasPermission($projectId, Permission::PERM_SET_SECURITY_LEVEL, $loggedInUserId);
+        $userHasModifyReporterPermission = UbirimiContainer::get()['repository']->get(YongoProject::class)->userHasPermission($projectId, Permission::PERM_MODIFY_REPORTER, $loggedInUserId);
+        $userHasAssignIssuePermission = UbirimiContainer::get()['repository']->get(YongoProject::class)->userHasPermission($projectId, Permission::PERM_ASSIGN_ISSUE, $loggedInUserId);
+        $userHasSetSecurityLevelPermission = UbirimiContainer::get()['repository']->get(YongoProject::class)->userHasPermission($projectId, Permission::PERM_SET_SECURITY_LEVEL, $loggedInUserId);
 
-        $assignableUsers = UbirimiContainer::get()['repository']->get(YongoProject::class)->getUsersWithPermission(
-            $projectId,
-            Permission::PERM_ASSIGNABLE_USER
-        );
+        $assignableUsers = UbirimiContainer::get()['repository']->get(YongoProject::class)->getUsersWithPermission($projectId, Permission::PERM_ASSIGNABLE_USER);
 
-        $fieldData = UbirimiContainer::get()['repository']->get(YongoProject::class)->getFieldInformation(
-            $project['issue_type_field_configuration_id'],
-            $issueTypeId,
-            'array'
-        );
+        $fieldData = UbirimiContainer::get()['repository']->get(YongoProject::class)->getFieldInformation($project['issue_type_field_configuration_id'], $issueTypeId, 'array');
 
         // check to see if the issue type is a sub-task issue type. if yes then show only sub task issue types
-        $projectSubTaskIssueTypes = UbirimiContainer::get()['repository']->get(
-            YongoProject::class
-        )->getSubTasksIssueTypes($projectId, 'array', 'id');
+        $projectSubTaskIssueTypes = UbirimiContainer::get()['repository']->get(YongoProject::class)->getSubTasksIssueTypes($projectId, 'array', 'id');
         if ($projectSubTaskIssueTypes && in_array($issueTypeId, $projectSubTaskIssueTypes)) {
-            $projectIssueTypes = UbirimiContainer::get()['repository']->get(YongoProject::class)->getSubTasksIssueTypes(
-                $projectId
-            );
+            $projectIssueTypes = UbirimiContainer::get()['repository']->get(YongoProject::class)->getSubTasksIssueTypes($projectId);
         } else {
-            $projectIssueTypes = UbirimiContainer::get()['repository']->get(YongoProject::class)->getIssueTypes(
-                $projectId,
-                0
-            );
+            $projectIssueTypes = UbirimiContainer::get()['repository']->get(YongoProject::class)->getIssueTypes($projectId, 0);
         }
 
         $issuePriorities = $this->getRepository(IssueSettings::class)->getAllIssueSettings('priority', $clientId);
@@ -108,11 +81,7 @@ class ViewEditFieldsController extends UbirimiController
         }
 
         $projectVersions = UbirimiContainer::get()['repository']->get(YongoProject::class)->getVersions($projectId);
-        $issueVersionsAffected = $this->getRepository(IssueVersion::class)->getByIssueIdAndProjectId(
-            $issueId,
-            $projectId,
-            Issue::ISSUE_AFFECTED_VERSION_FLAG
-        );
+        $issueVersionsAffected = $this->getRepository(IssueVersion::class)->getByIssueIdAndProjectId($issueId, $projectId, Issue::ISSUE_AFFECTED_VERSION_FLAG);
         $arrayIssueVersionsAffected = array();
         if ($issueVersionsAffected) {
             while ($row = $issueVersionsAffected->fetch_array(MYSQLI_ASSOC)) {
@@ -121,10 +90,7 @@ class ViewEditFieldsController extends UbirimiController
         }
 
         $allUsers = UbirimiContainer::get()['repository']->get(UbirimiUser::class)->getByClientId($clientId);
-        $reporterUsers = UbirimiContainer::get()['repository']->get(YongoProject::class)->getUsersWithPermission(
-            $projectId,
-            Permission::PERM_CREATE_ISSUE
-        );
+        $reporterUsers = UbirimiContainer::get()['repository']->get(YongoProject::class)->getUsersWithPermission($projectId, Permission::PERM_CREATE_ISSUE);
 
         $timeTrackingFieldId = null;
         $timeTrackingFlag = $session->get('yongo/settings/time_tracking_flag');
@@ -132,9 +98,7 @@ class ViewEditFieldsController extends UbirimiController
         $issueSecuritySchemeId = $project['issue_security_scheme_id'];
         $issueSecuritySchemeLevels = null;
         if ($issueSecuritySchemeId) {
-            $issueSecuritySchemeLevels = $this->getRepository(
-                IssueSecurityScheme::class
-            )->getLevelsByIssueSecuritySchemeId($issueSecuritySchemeId);
+            $issueSecuritySchemeLevels = $this->getRepository(IssueSecurityScheme::class)->getLevelsByIssueSecuritySchemeId($issueSecuritySchemeId);
         }
 
         return $this->render(__DIR__ . '/../../Resources/views/issue/ViewEditDialog.php', get_defined_vars());

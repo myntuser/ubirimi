@@ -57,12 +57,7 @@ class ViewChartStatisticTypeController extends UbirimiController
         $chartType = Util::cleanRegularInputField($request->get('chart_type'));
 
         $issueQueryParameters = array('project' => array($projectId));
-        $issues = $this->getRepository(Issue::class)->getByParameters(
-            $issueQueryParameters,
-            $loggedInUserId,
-            null,
-            $loggedInUserId
-        );
+        $issues = $this->getRepository(Issue::class)->getByParameters($issueQueryParameters, $loggedInUserId, null, $loggedInUserId);
 
         if ($statisticType == 'assignee') {
             $issuesAssignee = array();
@@ -70,31 +65,17 @@ class ViewChartStatisticTypeController extends UbirimiController
                 $totalIssues = $issues->num_rows;
                 while ($issues && $issue = $issues->fetch_array(MYSQLI_ASSOC)) {
                     if (!array_key_exists($issue['assignee'], $issuesAssignee)) {
-                        $issuesAssignee[$issue['assignee']] = array(
-                            'assignee_name' => $issue['ua_first_name'] . ' ' . $issue['ua_last_name'],
-                            'issues_count' => 0
-                        );
+                        $issuesAssignee[$issue['assignee']] = array('assignee_name' => $issue['ua_first_name'] . ' ' . $issue['ua_last_name'],
+                            'issues_count' => 0);
                     }
                     $issuesAssignee[$issue['assignee']]['issues_count']++;
                 }
             }
         }
 
-        $hasGlobalAdministrationPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission(
-            $clientId,
-            $loggedInUserId,
-            GlobalPermission::GLOBAL_PERMISSION_YONGO_ADMINISTRATORS
-        );
-        $hasGlobalSystemAdministrationPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission(
-            $clientId,
-            $loggedInUserId,
-            GlobalPermission::GLOBAL_PERMISSION_YONGO_SYSTEM_ADMINISTRATORS
-        );
-        $hasAdministerProjectsPermission = $this->getRepository(UbirimiClient::class)->getProjectsByPermission(
-            $clientId,
-            $loggedInUserId,
-            Permission::PERM_ADMINISTER_PROJECTS
-        );
+        $hasGlobalAdministrationPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission($clientId, $loggedInUserId, GlobalPermission::GLOBAL_PERMISSION_YONGO_ADMINISTRATORS);
+        $hasGlobalSystemAdministrationPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission($clientId, $loggedInUserId, GlobalPermission::GLOBAL_PERMISSION_YONGO_SYSTEM_ADMINISTRATORS);
+        $hasAdministerProjectsPermission = $this->getRepository(UbirimiClient::class)->getProjectsByPermission($clientId, $loggedInUserId, Permission::PERM_ADMINISTER_PROJECTS);
 
         $hasAdministerProject = $hasGlobalSystemAdministrationPermission || $hasGlobalAdministrationPermission || $hasAdministerProjectsPermission;
 
@@ -103,9 +84,6 @@ class ViewChartStatisticTypeController extends UbirimiController
         $menuProjectCategory = 'reports';
         $menuSelectedCategory = 'project';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/project/report/ViewChartStatisticType.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/project/report/ViewChartStatisticType.php', get_defined_vars());
     }
 }

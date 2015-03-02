@@ -35,13 +35,8 @@ class ViewPreferenceController extends UbirimiController
 
         $menuSelectedCategory = 'user';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / User Preferences';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / User Preferences';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/user/ViewPreference.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/user/ViewPreference.php', get_defined_vars());
     }
 }

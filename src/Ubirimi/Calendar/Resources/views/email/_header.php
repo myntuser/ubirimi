@@ -3,11 +3,10 @@
         <table width="100%">
             <tr>
                 <td width="40">
-                    <a href="https://www.ubirimi.com"><img src="https://www.ubirimi.com/img/small.events.png"
-                                                           border="0"/></a>
+                    <a href="https://www.ubirimi.com"><img src="https://www.ubirimi.com/img/small.events.png" border="0" /></a>
                 </td>
             </tr>
         </table>
         <div>
-            <img src="https://www.ubirimi.com/img/bg.page.png"/>
+            <img src="https://www.ubirimi.com/img/bg.page.png" />
         </div>

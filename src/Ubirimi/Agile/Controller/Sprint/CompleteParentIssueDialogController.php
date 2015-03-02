@@ -31,9 +31,6 @@ class CompleteParentIssueDialogController extends UbirimiController
         $dataValues = json_decode($data, true);
         $textSelected = 'checked="checked"';
 
-        return $this->render(
-            __DIR__ . '/../../Resources/views/sprint/CompleteParentIssueDialog.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../Resources/views/sprint/CompleteParentIssueDialog.php', get_defined_vars());
     }
 }

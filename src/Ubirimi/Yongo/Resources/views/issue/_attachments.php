@@ -23,18 +23,13 @@ use Ubirimi\Util;
                                 <?php if (Util::isImage(Util::getExtension($attachment['name']))): ?>
                                     <td style="border: solid 1px #d3d3d3;" class="thumbnail-item">
                                         <div align="center">
-                                            <a class="fancybox" rel="group"
-                                               href="/assets<?php echo UbirimiContainer::get(
-                                                   )['asset.yongo_issue_attachments'] . $attachment['issue_id'] . '/' . $attachment['id'] . '/' . $attachment['name'] ?>">
-                                                <img src="/assets<?php echo UbirimiContainer::get(
-                                                    )['asset.yongo_issue_attachments'] . $attachment['issue_id'] . '/' . $attachment['id'] . '/thumbs/' . $attachment['name'] ?>"
-                                                     height="150" border="0"/>
+                                            <a class="fancybox" rel="group" href="/assets<?php echo UbirimiContainer::get()['asset.yongo_issue_attachments'] . $attachment['issue_id'] . '/' . $attachment['id'] . '/' . $attachment['name'] ?>">
+                                                <img src="/assets<?php echo UbirimiContainer::get()['asset.yongo_issue_attachments'] . $attachment['issue_id'] . '/' . $attachment['id'] . '/thumbs/' . $attachment['name'] ?>" height="150" border="0" />
                                             </a>
                                         </div>
                                         <div>
                                             <div style="float: left;">
-                                                <a target="_blank" href="/assets<?php echo UbirimiContainer::get(
-                                                    )['asset.yongo_issue_attachments'] . $attachment['issue_id'] . '/' . $attachment['id'] . '/' . $attachment['name'] ?>">
+                                                <a target="_blank" href="/assets<?php echo UbirimiContainer::get()['asset.yongo_issue_attachments'] . $attachment['issue_id'] . '/' . $attachment['id'] . '/' . $attachment['name'] ?>">
                                                     <?php if (strlen($attachment['name']) > 25): ?>
                                                         <?php echo substr($attachment['name'], 0, 25) ?>...
                                                     <?php else: ?>
@@ -44,22 +39,14 @@ use Ubirimi\Util;
                                             </div>
                                             <div style="float: right; margin-right: 0px;">
                                                 <?php if ($hasDeleteAllAttachmentsPermission || ($hasDeleteOwnAttachmentsPermission && $loggedInUserId == $attachment['user_id'])): ?>
-                                                    <img class="menu_img"
-                                                         style="vertical-align: bottom; margin-top: 5px" align="right"
-                                                         height="16px" src="/img/delete.png"
-                                                         id="list_att_<?php echo $attachment['id'] ?>"/>
+                                                    <img class="menu_img" style="vertical-align: bottom; margin-top: 5px" align="right" height="16px" src="/img/delete.png" id="list_att_<?php echo $attachment['id'] ?>" />
                                                 <?php endif ?>
                                             </div>
                                         </div>
                                         <div style="clear: both;"></div>
                                         <div>
-                                            <div style="float: left"><?php echo round($attachment['size'] / 1024, 2) ?>
-                                                KB
-                                            </div>
-                                            <div style="float: right; margin-right: 0px;"><?php echo date(
-                                                    'd/M/y',
-                                                    strtotime($attachment['date_created'])
-                                                ) ?></div>
+                                            <div style="float: left"><?php echo round($attachment['size'] / 1024, 2) ?> KB</div>
+                                            <div style="float: right; margin-right: 0px;"><?php echo date('d/M/y', strtotime($attachment['date_created'])) ?></div>
                                         </div>
                                     </td>
                                 <?php endif ?>
@@ -80,8 +67,7 @@ use Ubirimi\Util;
                                 <?php if (!Util::isImage(Util::getExtension($attachment['name']))): ?>
                                     <tr>
                                         <td width="75%">
-                                            <a target="_blank" href="/assets<?php echo UbirimiContainer::get(
-                                                )['asset.yongo_issue_attachments'] . $attachment['issue_id'] . '/' . $attachment['id'] . '/' . $attachment['name'] ?>">
+                                            <a target="_blank" href="/assets<?php echo UbirimiContainer::get()['asset.yongo_issue_attachments'] . $attachment['issue_id'] . '/' . $attachment['id'] . '/' . $attachment['name'] ?>">
                                                 <?php echo $attachment['name'] ?>
                                             </a>
                                         </td>
@@ -93,9 +79,7 @@ use Ubirimi\Util;
                                         </td>
                                         <?php if ($hasDeleteAllAttachmentsPermission || ($hasDeleteOwnAttachmentsPermission && $loggedInUserId == $attachment['user_id'])): ?>
                                             <td align="right">
-                                                <img class="menu_img" style="vertical-align: bottom; margin-top: 5px"
-                                                     align="right" height="16px" src="/img/delete.png"
-                                                     id="list_att_<?php echo $attachment['id'] ?>"/>
+                                                <img class="menu_img" style="vertical-align: bottom; margin-top: 5px" align="right" height="16px" src="/img/delete.png" id="list_att_<?php echo $attachment['id'] ?>" />
                                             </td>
                                         <?php endif ?>
                                     </tr>

@@ -41,43 +41,22 @@ class AddSubtaskDialogController extends UbirimiController
         $projectData = $this->getRepository(YongoProject::class)->getById($projectId);
         $projectId = $projectData['id'];
 
-        $issue_priorities = $this->getRepository(IssueSettings::class)->getAllIssueSettings(
-            'priority',
-            $session->get('client/id')
-        );
+        $issue_priorities = $this->getRepository(IssueSettings::class)->getAllIssueSettings('priority', $session->get('client/id'));
         $issue_types = $this->getRepository(YongoProject::class)->getSubTasksIssueTypes($projectId);
 
         $firstIssueType = $issue_types->fetch_array(MYSQLI_ASSOC);
         $issueTypeId = $firstIssueType['id'];
         $issue_types->data_seek(0);
 
-        $screenData = $this->getRepository(YongoProject::class)->getScreenData(
-            $projectData,
-            $issueTypeId,
-            SystemOperation::OPERATION_CREATE
-        );
+        $screenData = $this->getRepository(YongoProject::class)->getScreenData($projectData, $issueTypeId, SystemOperation::OPERATION_CREATE);
         $projectComponents = $this->getRepository(YongoProject::class)->getComponents($projectId);
         $projectVersions = $this->getRepository(YongoProject::class)->getVersions($projectId);
 
-        $assignableUsers = $this->getRepository(YongoProject::class)->getUsersWithPermission(
-            $projectId,
-            Permission::PERM_ASSIGNABLE_USER
-        );
-        $reporterUsers = $this->getRepository(YongoProject::class)->getUsersWithPermission(
-            $projectId,
-            Permission::PERM_CREATE_ISSUE
-        );
+        $assignableUsers = $this->getRepository(YongoProject::class)->getUsersWithPermission($projectId, Permission::PERM_ASSIGNABLE_USER);
+        $reporterUsers = $this->getRepository(YongoProject::class)->getUsersWithPermission($projectId, Permission::PERM_CREATE_ISSUE);
 
-        $userHasModifyReporterPermission = $this->getRepository(YongoProject::class)->userHasPermission(
-            $projectId,
-            Permission::PERM_MODIFY_REPORTER,
-            $session->get('user/id')
-        );
-        $userHasAssignIssuePermission = $this->getRepository(YongoProject::class)->userHasPermission(
-            $projectId,
-            Permission::PERM_ASSIGN_ISSUE,
-            $session->get('user/id')
-        );
+        $userHasModifyReporterPermission = $this->getRepository(YongoProject::class)->userHasPermission($projectId, Permission::PERM_MODIFY_REPORTER, $session->get('user/id'));
+        $userHasAssignIssuePermission = $this->getRepository(YongoProject::class)->userHasPermission($projectId, Permission::PERM_ASSIGN_ISSUE, $session->get('user/id'));
 
         $typeId = null;
 

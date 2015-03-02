@@ -58,13 +58,8 @@ class ViewHelpdeskController extends UbirimiController
 
         $menuSelectedCategory = 'project';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / ' . $project['name'];
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / ' . $project['name'];
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/project/ViewHelpdesk.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/project/ViewHelpdesk.php', get_defined_vars());
     }
 }

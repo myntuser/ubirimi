@@ -56,13 +56,7 @@ class AddController extends UbirimiController
             if (!$defaultNotebook) {
                 $defaultFlag = 1;
             }
-            $notebookId = $this->getRepository(Notebook::class)->save(
-                $session->get('user/id'),
-                $name,
-                $description,
-                $defaultFlag,
-                $currentDate
-            );
+            $notebookId = $this->getRepository(Notebook::class)->save($session->get('user/id'), $name, $description, $defaultFlag, $currentDate);
 
             $this->getLogger()->addInfo('ADD QUICK NOTES notebook ' . $name, $this->getLoggerContext());
         }

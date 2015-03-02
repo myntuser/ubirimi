@@ -40,17 +40,12 @@ class AddController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name)) {
+            if (empty($name))
                 $emptyName = true;
-            } else {
-                $data = $this->getRepository(ProjectCategory::class)->getByName(
-                    $name,
-                    null,
-                    $session->get('client/id')
-                );
-                if ($data) {
+            else {
+                $data = $this->getRepository(ProjectCategory::class)->getByName($name, null, $session->get('client/id'));
+                if ($data)
                     $duplicateName = true;
-                }
             }
 
             if (!$emptyName && !$duplicateName) {
@@ -64,13 +59,8 @@ class AddController extends UbirimiController
             }
         }
         $menuSelectedCategory = 'project';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Project Category';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Project Category';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/project/category/Add.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/project/category/Add.php', get_defined_vars());
     }
 }

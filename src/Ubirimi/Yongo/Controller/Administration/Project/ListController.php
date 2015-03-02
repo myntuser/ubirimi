@@ -45,23 +45,19 @@ class ListController extends UbirimiController
 
         if ($hasGlobalAdministrationPermission && $hasGlobalSystemAdministrationPermission) {
             $projects = $this->getRepository(UbirimiClient::class)->getProjects($session->get('client/id'), 'array');
-        } else {
-            if ($hasAdministerProjectsPermission) {
-                $projects = $this->getRepository(UbirimiClient::class)->getProjectsByPermission(
-                    $session->get('client/id'),
-                    $session->get('user/id'),
-                    Permission::PERM_ADMINISTER_PROJECTS,
-                    'array'
-                );
-            }
+        } else if ($hasAdministerProjectsPermission) {
+            $projects = $this->getRepository(UbirimiClient::class)->getProjectsByPermission(
+                $session->get('client/id'),
+                $session->get('user/id'),
+                Permission::PERM_ADMINISTER_PROJECTS,
+                'array'
+            );
         }
 
         $projectCategories = $this->getRepository(ProjectCategory::class)->getAll($session->get('client/id'));
         $menuSelectedCategory = 'project';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Projects';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Projects';
 
         $includeCheckbox = true;
 

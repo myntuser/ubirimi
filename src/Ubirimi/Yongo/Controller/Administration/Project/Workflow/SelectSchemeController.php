@@ -43,23 +43,14 @@ class SelectSchemeController extends UbirimiController
 
         if ($request->request->has('associate')) {
             $workflowSchemeId = $request->request->get('workflow_scheme');
-            return new RedirectResponse(
-                '/yongo/administration/project/workflows/update-status/' . $projectId . '/' . $workflowSchemeId
-            );
+            return new RedirectResponse('/yongo/administration/project/workflows/update-status/' . $projectId . '/' . $workflowSchemeId);
         }
 
-        $workflowSchemes = $this->getRepository(WorkflowScheme::class)->getMetaDataByClientId(
-            $session->get('client/id')
-        );
+        $workflowSchemes = $this->getRepository(WorkflowScheme::class)->getMetaDataByClientId($session->get('client/id'));
         $menuSelectedCategory = 'project';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Select Project Workflow Scheme';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Select Project Workflow Scheme';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/project/SelectWorkflowScheme.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/project/SelectWorkflowScheme.php', get_defined_vars());
     }
 }

@@ -52,16 +52,9 @@ class EditController extends UbirimiController
             return new RedirectResponse('/general-settings/bad-link-access-denied');
         }
 
-        $issueTypeScheme = $this->getRepository(IssueTypeScheme::class)->getByClientId(
-            $session->get('client/id'),
-            'project'
-        );
-        $issueTypeScreenScheme = $this->getRepository(IssueTypeScreenScheme::class)->getByClientId(
-            $session->get('client/id')
-        );
-        $workflowScheme = $this->getRepository(WorkflowScheme::class)->getMetaDataByClientId(
-            $session->get('client/id')
-        );
+        $issueTypeScheme = $this->getRepository(IssueTypeScheme::class)->getByClientId($session->get('client/id'), 'project');
+        $issueTypeScreenScheme = $this->getRepository(IssueTypeScreenScheme::class)->getByClientId($session->get('client/id'));
+        $workflowScheme = $this->getRepository(WorkflowScheme::class)->getMetaDataByClientId($session->get('client/id'));
         $projectCategories = $this->getRepository(ProjectCategory::class)->getAll($session->get('client/id'));
 
         $emptyName = false;
@@ -87,11 +80,7 @@ class EditController extends UbirimiController
             if (empty($name)) {
                 $emptyName = true;
             } else {
-                $duplicateProjectByName = $this->getRepository(YongoProject::class)->getByName(
-                    mb_strtolower($name),
-                    $projectId,
-                    $session->get('client/id')
-                );
+                $duplicateProjectByName = $this->getRepository(YongoProject::class)->getByName(mb_strtolower($name), $projectId, $session->get('client/id'));
                 if ($duplicateProjectByName) {
                     $duplicate_name = true;
                 }
@@ -100,29 +89,14 @@ class EditController extends UbirimiController
             if (empty($code)) {
                 $emptyCode = true;
             } else {
-                $project_exists = $this->getRepository(YongoProject::class)->getByCode(
-                    mb_strtolower($code),
-                    $projectId,
-                    $session->get('client/id')
-                );
-                if ($project_exists) {
+                $project_exists = $this->getRepository(YongoProject::class)->getByCode(mb_strtolower($code), $projectId, $session->get('client/id'));
+                if ($project_exists)
                     $duplicateCode = true;
-                }
             }
 
             if (!$emptyName && !$emptyCode && !$duplicate_name && !$duplicateCode) {
                 $currentDate = Util::getServerCurrentDateTime();
-                $this->getRepository(YongoProject::class)->updateById(
-                    $projectId,
-                    $leadId,
-                    $name,
-                    $code,
-                    $description,
-                    $issueTypeSchemeId,
-                    $workflowSchemeId,
-                    $projectCategoryId,
-                    $currentDate
-                );
+                $this->getRepository(YongoProject::class)->updateById($projectId, $leadId, $name, $code, $description, $issueTypeSchemeId, $workflowSchemeId, $projectCategoryId, $currentDate);
 
                 $this->getLogger()->addInfo('UPDATE Yongo Project ' . $name, $this->getLoggerContext());
 
@@ -132,9 +106,7 @@ class EditController extends UbirimiController
 
         $menuSelectedCategory = 'project';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Project';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Project';
 
         return $this->render(__DIR__ . '/../../../Resources/views/administration/project/Edit.php', get_defined_vars());
     }

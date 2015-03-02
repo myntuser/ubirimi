@@ -40,17 +40,12 @@ class AssignUsersConfirmController extends UbirimiController
         $roleUsers = $this->getRepository(Role::class)->getDefaultUsers($permissionRoleId);
 
         $role_users_arr_ids = array();
-        while ($roleUsers && $user = $roleUsers->fetch_array(MYSQLI_ASSOC)) {
+        while ($roleUsers && $user = $roleUsers->fetch_array(MYSQLI_ASSOC))
             $role_users_arr_ids[] = $user['user_id'];
-        }
 
-        if ($roleUsers) {
+        if ($roleUsers)
             $roleUsers->data_seek(0);
-        }
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/role/AssignUsersConfirm.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/role/AssignUsersConfirm.php', get_defined_vars());
     }
 }

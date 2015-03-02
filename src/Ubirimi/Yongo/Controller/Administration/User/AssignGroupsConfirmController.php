@@ -37,27 +37,19 @@ class AssignGroupsConfirmController extends UbirimiController
         $productId = $request->get('product_id');
 
         $user = $this->getRepository(UbirimiUser::class)->getById($userId);
-        $allProductGroups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId(
-            $session->get('client/id'),
-            $productId
-        );
+        $allProductGroups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId($session->get('client/id'), $productId);
         $userGroups = $this->getRepository(UbirimiGroup::class)->getByUserIdAndProductId($userId, $productId);
 
         $user_groups_ids_arr = array();
 
-        while ($userGroups && $group = $userGroups->fetch_array(MYSQLI_ASSOC)) {
+        while ($userGroups && $group = $userGroups->fetch_array(MYSQLI_ASSOC))
             $user_groups_ids_arr[] = $group['id'];
-        }
 
-        if ($userGroups) {
+        if ($userGroups)
             $userGroups->data_seek(0);
-        }
 
         $firstSelected = true;
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/user/AssignGroupsConfirm.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/user/AssignGroupsConfirm.php', get_defined_vars());
     }
 }

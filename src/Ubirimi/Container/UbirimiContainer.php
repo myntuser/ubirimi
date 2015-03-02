@@ -42,7 +42,8 @@ class UbirimiContainer
     {
         $pimple = self::get();
 
-        foreach ($configs as $key => $value) {
+        foreach ($configs as $key => $value)
+        {
             $pimple[$key] = $value;
         }
     }

@@ -39,11 +39,7 @@ class ProjectsDataController extends UbirimiController
         $projectIdArray = $request->request->get('project_id_arr');
 
         if (count($projectIdArray) == 1 && $projectIdArray[0] == -1) {
-            $projectsForBrowsing = $this->getRepository(UbirimiClient::class)->getProjectsByPermission(
-                $clientId,
-                $loggedInUserId,
-                Permission::PERM_BROWSE_PROJECTS
-            );
+            $projectsForBrowsing = $this->getRepository(UbirimiClient::class)->getProjectsByPermission($clientId, $loggedInUserId, Permission::PERM_BROWSE_PROJECTS);
             $projectIdArray = Util::getAsArray($projectsForBrowsing, array('id'));
         }
 
@@ -61,9 +57,8 @@ class ProjectsDataController extends UbirimiController
 
                 }
             }
-            if (!$found) {
+            if (!$found)
                 $issueTypeArray[] = $issueType;
-            }
         }
 
         $allIssueStatuses = $this->getRepository(UbirimiClient::class)->getAllIssueSettings('status', $clientId);
@@ -79,9 +74,8 @@ class ProjectsDataController extends UbirimiController
                     break;
                 }
             }
-            if (!$found) {
+            if (!$found)
                 $issueStatusArray[] = $issueStatus;
-            }
         }
 
         $allIssuePriorities = $this->getRepository(UbirimiClient::class)->getAllIssueSettings('priority', $clientId);
@@ -97,9 +91,8 @@ class ProjectsDataController extends UbirimiController
                     break;
                 }
             }
-            if (!$found) {
+            if (!$found)
                 $issuePriorityArray[] = $issuePriority;
-            }
         }
 
         $allIssueResolutions = $this->getRepository(UbirimiClient::class)->getAllIssueSettings('resolution', $clientId);
@@ -120,14 +113,8 @@ class ProjectsDataController extends UbirimiController
             }
         }
 
-        $assignableUsers = $this->getRepository(YongoProject::class)->getUsersWithPermission(
-            $projectIdArray,
-            Permission::PERM_ASSIGNABLE_USER
-        );
-        $allowUnassignedIssuesFlag = $this->getRepository(UbirimiClient::class)->getYongoSetting(
-            $clientId,
-            'allow_unassigned_issues_flag'
-        );
+        $assignableUsers = $this->getRepository(YongoProject::class)->getUsersWithPermission($projectIdArray, Permission::PERM_ASSIGNABLE_USER);
+        $allowUnassignedIssuesFlag = $this->getRepository(UbirimiClient::class)->getYongoSetting($clientId, 'allow_unassigned_issues_flag');
 
         $issueUsersAssignableArray = array();
         if ($allowUnassignedIssuesFlag) {

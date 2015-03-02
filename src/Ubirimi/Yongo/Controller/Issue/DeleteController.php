@@ -45,36 +45,24 @@ class DeleteController extends UbirimiController
         $project = $this->getRepository(YongoProject::class)->getById($issue['issue_project_id']);
 
         $loggedInUser = $this->getRepository(UbirimiUser::class)->getById($loggedInUserId);
-        $issueEvent = new IssueEvent(
-            $issue, $project, IssueEvent::STATUS_DELETE, array('loggedInUser' => $loggedInUser)
-        );
+        $issueEvent = new IssueEvent($issue, $project, IssueEvent::STATUS_DELETE, array('loggedInUser' => $loggedInUser));
         UbirimiContainer::get()['dispatcher']->dispatch(YongoEvents::YONGO_ISSUE_EMAIL, $issueEvent);
 
         $this->getRepository(Issue::class)->deleteById($issueId);
 
         // also delete the substaks
-        $childrenIssues = $this->getRepository(Issue::class)->getByParameters(
-            array('parent_id' => $issueId),
-            $loggedInUserId
-        );
+        $childrenIssues = $this->getRepository(Issue::class)->getByParameters(array('parent_id' => $issueId), $loggedInUserId);
         while ($childrenIssues && $childIssue = $childrenIssues->fetch_array(MYSQLI_ASSOC)) {
             $this->getRepository(Issue::class)->deleteById($childIssue['id']);
         }
 
-        $this->getLogger()->addInfo(
-            'DELETE Yongo issue ' . $issue['project_code'] . '-' . $issue['nr'],
-            $this->getLoggerContext()
-        );
+        $this->getLogger()->addInfo('DELETE Yongo issue ' . $issue['project_code'] . '-' . $issue['nr'], $this->getLoggerContext());
 
         if ($session->has('last_search_parameters')) {
-            return new Response(
-                json_encode(
-                    array(
-                        'go_to_search' => true,
-                        'url' => $session->get('last_search_parameters')
-                    )
-                )
-            );
+            return new Response(json_encode(array(
+                'go_to_search' => true,
+                'url' => $session->get('last_search_parameters'))
+            ));
         }
 
         return new Response(json_encode(array('go_to_dashboard' => true)));

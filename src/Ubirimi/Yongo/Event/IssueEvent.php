@@ -32,8 +32,7 @@ class IssueEvent extends Event
     private $project;
     private $extra;
 
-    public function __construct($issue, $project = null, $status = null, $extra = null)
-    {
+    public function __construct($issue, $project = null, $status = null, $extra = null) {
         $this->issue = $issue;
         $this->project = $project;
         $this->status = $status;

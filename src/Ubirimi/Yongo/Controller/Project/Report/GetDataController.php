@@ -35,20 +35,13 @@ class GetDataController extends UbirimiController
 
         if ($statisticType == 'assignee') {
             $issueQueryParameters = array('project' => array($projectId));
-            $issues = $this->getRepository(Issue::class)->getByParameters(
-                $issueQueryParameters,
-                $loggedInUserId,
-                null,
-                $loggedInUserId
-            );
+            $issues = $this->getRepository(Issue::class)->getByParameters($issueQueryParameters, $loggedInUserId, null, $loggedInUserId);
 
             $issuesAssignee = array();
             while ($issues && $issue = $issues->fetch_array(MYSQLI_ASSOC)) {
                 if (!array_key_exists($issue['assignee'], $issuesAssignee)) {
-                    $issuesAssignee[$issue['assignee']] = array(
-                        'assignee_name' => $issue['ua_first_name'] . ' ' . $issue['ua_last_name'],
-                        'issues_count' => 0
-                    );
+                    $issuesAssignee[$issue['assignee']] = array('assignee_name' => $issue['ua_first_name'] . ' ' . $issue['ua_last_name'],
+                        'issues_count' => 0);
                 }
                 $issuesAssignee[$issue['assignee']]['issues_count']++;
             }

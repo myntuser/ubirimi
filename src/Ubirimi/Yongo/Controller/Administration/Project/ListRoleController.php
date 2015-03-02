@@ -43,13 +43,8 @@ class ListRoleController extends UbirimiController
         $roles = $this->getRepository(Role::class)->getByClient($session->get('client/id'));
         $menuSelectedCategory = 'project';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Project Roles';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Project Roles';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/project/ListRole.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/project/ListRole.php', get_defined_vars());
     }
 }

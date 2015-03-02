@@ -51,29 +51,18 @@ class ListIssueController extends UbirimiController
             $projectsForBrowsing->data_seek(0);
             $projectIds = Util::getAsArray($projectsForBrowsing, array('id'));
 
-            $searchCriteria = $this->getRepository(Issue::class)->getSearchParameters(
-                $projectsForBrowsing,
-                $session->get('client/id'),
-                1
-            );
+            $searchCriteria = $this->getRepository(Issue::class)->getSearchParameters($projectsForBrowsing, $session->get('client/id'), 1);
             $issuesResult = null;
         }
 
         if ($request->request->has('search')) {
-            $searchParameters = $this->getRepository(Issue::class)->prepareDataForSearchFromPostGet(
-                $projectIds,
-                $request->request->all(),
-                $request->query->all()
-            );
+            $searchParameters = $this->getRepository(Issue::class)->prepareDataForSearchFromPostGet($projectIds, $request->request->all(), $request->query->all());
 
             $redirectLink = str_replace("%7C", "|", http_build_query($searchParameters));
 
             return new RedirectResponse('/helpdesk/customer-portal/tickets?' . $redirectLink);
         } else {
-            $getSearchParameters = $this->getRepository(Issue::class)->prepareDataForSearchFromURL(
-                $request->query->all(),
-                30
-            );
+            $getSearchParameters = $this->getRepository(Issue::class)->prepareDataForSearchFromURL($request->query->all(), 30);
             $getSearchParameters['helpdesk_flag'] = 1;
             // check to see if the project Ids are all belonging to the client
             $getProjectIds = $request->request->has('project') ? explode('|', $request->query->get('project')) : null;
@@ -91,10 +80,7 @@ class ListIssueController extends UbirimiController
             $projectsForBrowsing = array(229);
             if (isset($parseURLData['query']) && $projectsForBrowsing) {
                 if (Util::searchQueryNotEmpty($getSearchParameters)) {
-                    $issuesResult = $this->getRepository(Issue::class)->getByParameters(
-                        $getSearchParameters,
-                        $session->get('user/id')
-                    );
+                    $issuesResult = $this->getRepository(Issue::class)->getByParameters($getSearchParameters, $session->get('user/id'));
 
                     $issues = $issuesResult[0];
                     $issuesCount = $issuesResult[1];
@@ -109,17 +95,7 @@ class ListIssueController extends UbirimiController
 
         $SLAs = $this->getRepository(Sla::class)->getByProjectIds(array(229));
 
-        $columns = array(
-            'code',
-            'summary',
-            'priority',
-            'status',
-            'created',
-            'updated',
-            'reporter',
-            'assignee',
-            'settings_menu'
-        );
+        $columns = array('code', 'summary', 'priority', 'status', 'created', 'updated', 'reporter', 'assignee', 'settings_menu');
         if (Util::checkUserIsLoggedIn()) {
             $columns = explode('#', $session->get('user/issues_display_columns'));
 

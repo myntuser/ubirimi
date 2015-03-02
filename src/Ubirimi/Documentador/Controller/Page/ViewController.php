@@ -66,7 +66,7 @@ class ViewController extends UbirimiController
                     die();
                 }
             }
-            $sectionPageTitle = SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME . ' / ' . $page['name'];
+            $sectionPageTitle = SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME. ' / ' . $page['name'];
         }
 
         $menuSelectedCategory = 'documentator';
@@ -81,10 +81,7 @@ class ViewController extends UbirimiController
             $revisionId = $request->attributes->has('rev_id') ? str_replace('/', '', $request->get('rev_id')) : null;
 
             if ($revisionId) {
-                $revision = $this->getRepository(Entity::class)->getRevisionsByPageIdAndRevisionId(
-                    $entityId,
-                    $revisionId
-                );
+                $revision = $this->getRepository(Entity::class)->getRevisionsByPageIdAndRevisionId($entityId, $revisionId);
             }
 
             $space = $this->getRepository(Space::class)->getById($spaceId);

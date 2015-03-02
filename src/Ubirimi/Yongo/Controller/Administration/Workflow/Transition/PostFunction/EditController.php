@@ -47,11 +47,7 @@ class EditController extends UbirimiController
                     $fieldValue = $request->request->get('field_value');
                     $definitionData = 'field_name=' . $fieldCode . '###field_value=' . $fieldValue;
 
-                    $this->getRepository(WorkflowFunction::class)->updateByWorkflowDataIdAndFunctionId(
-                        $workflowDataId,
-                        $functionId,
-                        $definitionData
-                    );
+                    $this->getRepository(WorkflowFunction::class)->updateByWorkflowDataIdAndFunctionId($workflowDataId, $functionId, $definitionData);
 
                     break;
 
@@ -60,11 +56,7 @@ class EditController extends UbirimiController
                     $event = $request->request->get('fire_event');
                     $definitionData = 'event=' . $event;
 
-                    $this->getRepository(WorkflowFunction::class)->updateByWorkflowDataIdAndFunctionId(
-                        $workflowDataId,
-                        $functionId,
-                        $definitionData
-                    );
+                    $this->getRepository(WorkflowFunction::class)->updateByWorkflowDataIdAndFunctionId($workflowDataId, $functionId, $definitionData);
 
                     break;
             }
@@ -76,9 +68,7 @@ class EditController extends UbirimiController
 
         $workflowPostFunctionDataId = $request->get('id');
 
-        $workflowPostFunctionData = $this->getRepository(WorkflowFunction::class)->getDataById(
-            $workflowPostFunctionDataId
-        );
+        $workflowPostFunctionData = $this->getRepository(WorkflowFunction::class)->getDataById($workflowPostFunctionDataId);
 
         $postFunctionId = $workflowPostFunctionData['function_id'];
         $definitionData = $workflowPostFunctionData['definition_data'];
@@ -93,14 +83,9 @@ class EditController extends UbirimiController
                 break;
         }
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Post Function';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Post Function';
         $menuSelectedCategory = 'issue';
 
-        return $this->render(
-            __DIR__ . '/../../../../../Resources/views/administration/workflow/transition/post_function/EditData.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../../Resources/views/administration/workflow/transition/post_function/EditData.php', get_defined_vars());
     }
 }

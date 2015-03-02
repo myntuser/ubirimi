@@ -42,19 +42,12 @@ class ViewController extends UbirimiController
             return new RedirectResponse('/general-settings/bad-link-access-denied');
         }
 
-        $fieldConfigurations = $this->getRepository(FieldConfigurationScheme::class)->getFieldConfigurations(
-            $project['issue_type_field_configuration_id']
-        );
+        $fieldConfigurations = $this->getRepository(FieldConfigurationScheme::class)->getFieldConfigurations($project['issue_type_field_configuration_id']);
         $allFields = $this->getRepository(Field::class)->getByClient($session->get('client/id'));
         $menuSelectedCategory = 'project';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Issue Type Field Configuration';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Issue Type Field Configuration';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/project/ViewIssueTypeFieldConfiguration.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/project/ViewIssueTypeFieldConfiguration.php', get_defined_vars());
     }
 }

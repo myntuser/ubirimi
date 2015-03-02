@@ -49,13 +49,8 @@ class ViewController extends UbirimiController
                 break;
         }
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Time Tracking Settings';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Time Tracking Settings';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/issue/time_tracking/View.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/time_tracking/View.php', get_defined_vars());
     }
 }

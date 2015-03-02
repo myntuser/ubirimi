@@ -33,8 +33,7 @@ class UploadProfilePictureController extends UbirimiController
     public function indexAction(Request $request, SessionInterface $session)
     {
         $userId = $session->get('user/id');
-        $uploadPath = UbirimiContainer::get()['asset.root_folder'] . UbirimiContainer::get(
-            )['asset.user_avatar'] . $userId;
+        $uploadPath = UbirimiContainer::get()['asset.root_folder'] . UbirimiContainer::get()['asset.user_avatar'] . $userId;
 
         if (!file_exists($uploadPath)) {
             mkdir($uploadPath);

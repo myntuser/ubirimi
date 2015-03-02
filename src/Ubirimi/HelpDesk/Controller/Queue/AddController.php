@@ -56,9 +56,8 @@ class AddController extends UbirimiController
 
             // check for duplication
             $queue = $this->getRepository(Queue::class)->getByName($projectId, mb_strtolower($name));
-            if ($queue) {
+            if ($queue)
                 $queueExists = true;
-            }
 
             if (!$queueExists && !$emptyName) {
                 $currentDate = Util::getServerCurrentDateTime();

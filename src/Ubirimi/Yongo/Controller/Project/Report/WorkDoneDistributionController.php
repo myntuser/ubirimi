@@ -50,12 +50,7 @@ class WorkDoneDistributionController extends UbirimiController
         $dateTo = $request->get('date_to');
         $project = $this->getRepository(YongoProject::class)->getById($projectId);
 
-        $workData = $this->getRepository(YongoProject::class)->getWorkDoneDistributition(
-            $projectId,
-            $dateFrom,
-            $dateTo,
-            'array'
-        );
+        $workData = $this->getRepository(YongoProject::class)->getWorkDoneDistributition($projectId, $dateFrom, $dateTo, 'array');
         $workDataPrepared = array();
 
         if ($workData) {
@@ -73,36 +68,19 @@ class WorkDoneDistributionController extends UbirimiController
             $dateFrom = $request->request->get('filter_from_date');
             $dateTo = $request->request->get('filter_to_date');
 
-            return new RedirectResponse(
-                '/yongo/project/reports/' . $projectId . '/work-done-distribution/' . $dateFrom . '/' . $dateTo
-            );
+            return new RedirectResponse('/yongo/project/reports/' . $projectId . '/work-done-distribution/' . $dateFrom . '/' . $dateTo);
         }
 
-        $hasGlobalAdministrationPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission(
-            $clientId,
-            $loggedInUserId,
-            GlobalPermission::GLOBAL_PERMISSION_YONGO_ADMINISTRATORS
-        );
-        $hasGlobalSystemAdministrationPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission(
-            $clientId,
-            $loggedInUserId,
-            GlobalPermission::GLOBAL_PERMISSION_YONGO_SYSTEM_ADMINISTRATORS
-        );
-        $hasAdministerProjectsPermission = $this->getRepository(UbirimiClient::class)->getProjectsByPermission(
-            $clientId,
-            $loggedInUserId,
-            Permission::PERM_ADMINISTER_PROJECTS
-        );
+        $hasGlobalAdministrationPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission($clientId, $loggedInUserId, GlobalPermission::GLOBAL_PERMISSION_YONGO_ADMINISTRATORS);
+        $hasGlobalSystemAdministrationPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission($clientId, $loggedInUserId, GlobalPermission::GLOBAL_PERMISSION_YONGO_SYSTEM_ADMINISTRATORS);
+        $hasAdministerProjectsPermission = $this->getRepository(UbirimiClient::class)->getProjectsByPermission($clientId, $loggedInUserId, Permission::PERM_ADMINISTER_PROJECTS);
 
         $hasAdministerProject = $hasGlobalSystemAdministrationPermission || $hasGlobalAdministrationPermission || $hasAdministerProjectsPermission;
 
         $sectionPageTitle = $clientSettings['title_name'] . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / ' . $project['name'] . ' / Reports / Work Done Distribution';
         $menuSelectedCategory = 'project';
         $menuProjectCategory = 'reports';
-
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/project/report/ViewWorkDoneDistribution.php',
-            get_defined_vars()
-        );
+        
+        return $this->render(__DIR__ . '/../../../Resources/views/project/report/ViewWorkDoneDistribution.php', get_defined_vars());
     }
 }

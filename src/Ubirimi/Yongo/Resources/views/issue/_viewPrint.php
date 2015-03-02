@@ -14,9 +14,8 @@ use Ubirimi\Yongo\Repository\Field\Field;
             <td>Priority</td>
             <td><?php echo $issue['priority_name'] ?></td>
             <td>Assigned to</td>
-            <td><?php if ($issue[Field::FIELD_ASSIGNEE_CODE]) {
-                    echo $issue['ua_first_name'] . ' ' . $issue['ua_last_name'];
-                } else echo 'No one' ?></td>
+            <td><?php if ($issue[Field::FIELD_ASSIGNEE_CODE])
+                    echo $issue['ua_first_name'] . ' ' . $issue['ua_last_name']; else echo 'No one' ?></td>
             <td>Components</td>
             <td>
                 <?php if ($components): ?>
@@ -81,8 +80,7 @@ use Ubirimi\Yongo\Repository\Field\Field;
             <tr>
                 <td><?php echo $attachment['name'] ?></td>
                 <td>
-                    added by <?php echo $attachment['first_name'] . ' ' . $attachment['last_name'] ?>
-                    on <?php echo $attachment['date_created'] ?>
+                    added by <?php echo $attachment['first_name'] . ' ' . $attachment['last_name'] ?> on <?php echo $attachment['date_created'] ?>
                 </td>
             </tr>
             <?php if (Util::isImage(Util::getExtension($attachment['name']))): ?>

@@ -35,9 +35,7 @@ class CopyController extends UbirimiController
         Util::checkUserIsLoggedInAndRedirect();
 
         $fieldConfigurationSchemeId = $request->get('id');
-        $fieldConfigurationScheme = $this->getRepository(FieldConfigurationScheme::class)->getMetaDataById(
-            $fieldConfigurationSchemeId
-        );
+        $fieldConfigurationScheme = $this->getRepository(FieldConfigurationScheme::class)->getMetaDataById($fieldConfigurationSchemeId);
 
         if ($fieldConfigurationScheme['client_id'] != $session->get('client/id')) {
             return new RedirectResponse('/general-settings/bad-link-access-denied');
@@ -54,16 +52,13 @@ class CopyController extends UbirimiController
                 $emptyName = true;
             }
 
-            $duplicateFieldConfigurationScheme = $this->getRepository(
-                FieldConfigurationScheme::class
-            )->getMetaDataByNameAndClientId(
+            $duplicateFieldConfigurationScheme = $this->getRepository(FieldConfigurationScheme::class)->getMetaDataByNameAndClientId(
                 $session->get('client/id'),
                 mb_strtolower($name)
             );
 
-            if ($duplicateFieldConfigurationScheme) {
+            if ($duplicateFieldConfigurationScheme)
                 $duplicateName = true;
-            }
 
             if (!$emptyName && !$duplicateName) {
                 $currentDate = Util::getServerCurrentDateTime();
@@ -76,15 +71,11 @@ class CopyController extends UbirimiController
 
                 $copiedFieldConfigurationSchemeId = $copiedFieldConfigurationScheme->save($currentDate);
 
-                $fieldConfigurationSchemeData = $this->getRepository(
-                    FieldConfigurationScheme::class
-                )->getDataByFieldConfigurationSchemeId(
+                $fieldConfigurationSchemeData = $this->getRepository(FieldConfigurationScheme::class)->getDataByFieldConfigurationSchemeId(
                     $fieldConfigurationSchemeId
                 );
 
-                while ($fieldConfigurationSchemeData && $data = $fieldConfigurationSchemeData->fetch_array(
-                        MYSQLI_ASSOC
-                    )) {
+                while ($fieldConfigurationSchemeData && $data = $fieldConfigurationSchemeData->fetch_array(MYSQLI_ASSOC)) {
                     $copiedFieldConfigurationScheme->addData(
                         $copiedFieldConfigurationSchemeId,
                         $data['field_configuration_id'],
@@ -93,10 +84,7 @@ class CopyController extends UbirimiController
                     );
                 }
 
-                $this->getLogger()->addInfo(
-                    'Copy Yongo Field Configuration Scheme ' . $fieldConfigurationScheme['name'],
-                    $this->getLoggerContext()
-                );
+                $this->getLogger()->addInfo('Copy Yongo Field Configuration Scheme ' . $fieldConfigurationScheme['name'], $this->getLoggerContext());
 
                 return new RedirectResponse('/yongo/administration/field-configurations/schemes');
             }
@@ -104,13 +92,8 @@ class CopyController extends UbirimiController
 
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Field Configuration Scheme';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Field Configuration Scheme';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/field/configuration_scheme/Copy.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/field/configuration_scheme/Copy.php', get_defined_vars());
     }
 }

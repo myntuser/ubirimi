@@ -10,7 +10,7 @@
                    id="search_date_due_after"
                    style="width: 80px"
                    value="<?php if (isset($getSearchParameters['date_due_after'])) echo $getSearchParameters['date_due_after'] ?>"
-                   name="search_date_due_after"/>
+                   name="search_date_due_after" />
         </td>
     </tr>
     <tr>
@@ -20,7 +20,7 @@
                    class="inputText"
                    id="search_date_due_before" style="width: 80px"
                    value="<?php if (isset($getSearchParameters['date_due_before'])) echo $getSearchParameters['date_due_before'] ?>"
-                   name="search_date_due_before"/>
+                   name="search_date_due_before" />
         </td>
     </tr>
     <tr>
@@ -31,7 +31,7 @@
                    id="search_date_created_after"
                    style="width: 80px"
                    value="<?php if (isset($getSearchParameters['date_created_after'])) echo $getSearchParameters['date_created_after'] ?>"
-                   name="search_date_created_after"/>
+                   name="search_date_created_after" />
         </td>
     </tr>
     <tr>
@@ -42,7 +42,7 @@
                    id="search_date_created_before"
                    style="width: 80px"
                    value="<?php if (isset($getSearchParameters['date_created_before'])) echo $getSearchParameters['date_created_before'] ?>"
-                   name="search_date_created_before"/>
+                   name="search_date_created_before" />
         </td>
     </tr>
 </table>

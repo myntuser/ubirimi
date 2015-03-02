@@ -42,17 +42,9 @@ class ViewController extends UbirimiController
         $session->set('documentator/settings', $documentatorSettings);
 
         $users = $this->getRepository(UbirimiUser::class)->getByClientId($clientId);
-        $groups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId(
-            $clientId,
-            SystemProduct::SYS_PRODUCT_DOCUMENTADOR
-        );
-        $globalsPermissions = $this->getRepository(GlobalPermission::class)->getAllByProductId(
-            SystemProduct::SYS_PRODUCT_DOCUMENTADOR
-        );
+        $groups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId($clientId, SystemProduct::SYS_PRODUCT_DOCUMENTADOR);
+        $globalsPermissions = $this->getRepository(GlobalPermission::class)->getAllByProductId(SystemProduct::SYS_PRODUCT_DOCUMENTADOR);
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/globalpermissions/View.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/globalpermissions/View.php', get_defined_vars());
     }
 }

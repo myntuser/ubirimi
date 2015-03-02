@@ -53,9 +53,6 @@ class AddAdministratorController extends UbirimiController
             }
         }
 
-        return $this->render(
-            __DIR__ . '/../../Resources/views/administration/AddAdministrator.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../Resources/views/administration/AddAdministrator.php', get_defined_vars());
     }
 }

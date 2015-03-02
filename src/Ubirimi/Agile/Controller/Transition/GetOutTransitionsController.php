@@ -42,11 +42,7 @@ class GetOutTransitionsController extends UbirimiController
         $issueQueryParameters = array('issue_id' => $issueId);
         $issue = $this->getRepository(Issue::class)->getByParameters($issueQueryParameters, $session->get('user/id'));
 
-        $transitions = $this->getRepository(Workflow::class)->getOutgoingTransitionsForStep(
-            $workflowId,
-            $stepIdFrom,
-            'array'
-        );
+        $transitions = $this->getRepository(Workflow::class)->getOutgoingTransitionsForStep($workflowId, $stepIdFrom, 'array');
 
         // for each transition determine if the conditions allow it to be executed
         $transitionsToBeExecuted = array();
@@ -57,9 +53,8 @@ class GetOutTransitionsController extends UbirimiController
                 $issue
             );
 
-            if ($canBeExecuted) {
+            if ($canBeExecuted)
                 $transitionsToBeExecuted[] = $transitions[$i];
-            }
         }
 
         return new Response(json_encode($transitionsToBeExecuted));

@@ -43,13 +43,8 @@ class ListVersionController extends UbirimiController
 
         $menuSelectedCategory = 'project';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Project Versions';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Project Versions';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/project/ListVersion.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/project/ListVersion.php', get_defined_vars());
     }
 }

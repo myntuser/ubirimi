@@ -23,8 +23,7 @@ use Ubirimi\Container\UbirimiContainer;
 
 class UbirimiLog
 {
-    public function add($clientId, $userId, $message)
-    {
+    public function add($clientId, $userId, $message) {
         $query = "INSERT INTO general_log(client_id, user_id, message, date_created) VALUES (?, ?, ?, NOW())";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -35,10 +34,9 @@ class UbirimiLog
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function getAll()
-    {
+    public function getAll() {
         $query = "select general_log.id, general_log.message, general_log.date_created, " .
-            "client.company_domain, general_user.first_name, general_user.last_name " .
+                 "client.company_domain, general_user.first_name, general_user.last_name " .
             "from general_log " .
             "left join general_user on general_user.id = general_log.user_id " .
             "left join client on client.id = general_user.client_id " .
@@ -51,13 +49,11 @@ class UbirimiLog
 
         if ($result->num_rows) {
             return $result;
-        } else {
+        } else
             return null;
-        }
     }
 
-    public function getByClientIdAndInterval($clientId, $from, $to)
-    {
+    public function getByClientIdAndInterval($clientId, $from, $to) {
         $query = "select general_log.id, general_log.message, general_log.date_created, " .
             "client.company_domain, general_user.first_name, general_user.last_name " .
             "from general_log " .
@@ -75,8 +71,7 @@ class UbirimiLog
 
         if ($result->num_rows) {
             return $result;
-        } else {
+        } else
             return null;
-        }
     }
 }

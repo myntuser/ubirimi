@@ -32,10 +32,7 @@ class GetController extends UbirimiController
     {
         $username = $request->get('username');
 
-        $user = $this->getRepository(UbirimiUser::class)->getByUsernameAndClientDomain(
-            $username,
-            $request->get('api_client_domain')
-        );
+        $user = $this->getRepository(UbirimiUser::class)->getByUsernameAndClientDomain($username, $request->get('api_client_domain'));
 
         if (null === $user) {
             throw new NotFoundHttpException(sprintf('User [%s] not found', $username));

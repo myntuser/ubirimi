@@ -23,8 +23,7 @@ use Ubirimi\Container\UbirimiContainer;
 
 class Organization
 {
-    public function getByClientId($clientId)
-    {
+    public function getByClientId($clientId) {
         $query = 'SELECT * from help_organization where client_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -32,44 +31,38 @@ class Organization
         $stmt->bind_param("i", $clientId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getByName($clientId, $name, $organizationId = null)
-    {
+    public function getByName($clientId, $name, $organizationId = null) {
         $query = 'select id, name, description ' .
             'from help_organization ' .
             'where client_id = ? ' .
             'and LOWER(name) = ? ';
 
-        if ($organizationId) {
+        if ($organizationId)
             $query .= 'and id != ?';
-        }
 
         $query .= ' limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
-        if ($organizationId) {
+        if ($organizationId)
             $stmt->bind_param("isi", $clientId, $name, $organizationId);
-        } else {
+        else
             $stmt->bind_param("is", $clientId, $name);
-        }
 
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 
-    public function create($clientId, $name, $date)
-    {
+    public function create($clientId, $name, $date) {
         $query = "INSERT INTO help_organization(client_id, name, date_created) VALUES (?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -80,8 +73,7 @@ class Organization
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function getById($organizationId)
-    {
+    public function getById($organizationId) {
         $query = 'SELECT * from help_organization where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -89,15 +81,13 @@ class Organization
         $stmt->bind_param("i", $organizationId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 
-    public function updateById($organizationId, $name, $description, $date)
-    {
+    public function updateById($organizationId, $name, $description, $date) {
         $query = 'update help_organization set name = ?, description = ?, date_updated = ? where id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -105,8 +95,7 @@ class Organization
         $stmt->execute();
     }
 
-    public function deleteById($id)
-    {
+    public function deleteById($id) {
         $query = 'delete from help_organization WHERE id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

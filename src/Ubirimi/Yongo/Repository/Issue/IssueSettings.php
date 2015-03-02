@@ -23,8 +23,7 @@ use Ubirimi\Container\UbirimiContainer;
 
 class IssueSettings
 {
-    public function createIssueType($clientId, $name, $description, $subTaskFlag, $iconName, $currentDate)
-    {
+    public function createIssueType($clientId, $name, $description, $subTaskFlag, $iconName, $currentDate) {
         $query = "INSERT INTO issue_type(client_id, name, description, sub_task_flag, icon_name, date_created) VALUES (?, ?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -34,8 +33,7 @@ class IssueSettings
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function getAllIssueSettings($type, $clientId, $resultType = null)
-    {
+    public function getAllIssueSettings($type, $clientId, $resultType = null) {
         $query = "SELECT * FROM issue_" . $type . ' where client_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -49,46 +47,38 @@ class IssueSettings
                     $resultArray[] = $setting;
                 }
                 return $resultArray;
-            } else {
-                return $result;
-            }
+            } else return $result;
 
-        } else {
+        } else
             return null;
-        }
     }
 
-    public function getByName($clientId, $setting_type, $name, $settingId = null)
-    {
+    public function getByName($clientId, $setting_type, $name, $settingId = null) {
         $query = 'select id, name, description ' .
             'from issue_' . $setting_type . ' ' .
             'where client_id = ? ' .
             'and LOWER(name) = ? ';
 
-        if ($settingId) {
+        if ($settingId)
             $query .= 'and id != ?';
-        }
 
         $query .= ' limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
-        if ($settingId) {
+        if ($settingId)
             $stmt->bind_param("isi", $clientId, $name, $settingId);
-        } else {
+        else
             $stmt->bind_param("is", $clientId, $name);
-        }
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 
-    public function create($type, $clientId, $name, $description, $iconName = null, $color = null, $date)
-    {
+    public function create($type, $clientId, $name, $description, $iconName = null, $color = null, $date) {
         if ($iconName) {
             if ($color) {
                 $query = "INSERT INTO " . $type . "(client_id, name, description, icon_name, color, date_created) VALUES (?, ?, ?, ?, ?, ?)";
@@ -120,27 +110,24 @@ class IssueSettings
         }
     }
 
-    public function updateById($Id, $type, $name, $description, $color = null, $date)
-    {
+    public function updateById($Id, $type, $name, $description, $color = null, $date) {
         $query = 'UPDATE issue_' . $type . ' SET ' .
-            'name = ?, description = ?, date_updated = ? ';
-        if ($color) {
+                 'name = ?, description = ?, date_updated = ? ';
+        if ($color)
             $query .= ", color = '" . $color . "' ";
-        }
         $query .= 'WHERE id = ? ' .
-            'LIMIT 1';
+                  'LIMIT 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("sssi", $name, $description, $date, $Id);
         $stmt->execute();
     }
 
-    public function getById($Id, $settingType, $returnField = null)
-    {
+    public function getById($Id, $settingType, $returnField = null) {
         $query = 'select * ' .
-            'from issue_' . $settingType . ' ' .
-            'where id = ? ' .
-            'limit 1';
+                 'from issue_' . $settingType . ' ' .
+                 'where id = ? ' .
+                 'limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -148,15 +135,13 @@ class IssueSettings
         $result = $stmt->get_result();
 
         $dataArrayResult = $result->fetch_array(MYSQLI_ASSOC);
-        if (isset($returnField)) {
+        if (isset($returnField))
             return $dataArrayResult[$returnField];
-        } else {
+        else
             return $dataArrayResult;
-        }
     }
 
-    public function deleteStatusById($Id)
-    {
+    public function deleteStatusById($Id) {
         $query = 'delete from issue_status where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -164,8 +149,7 @@ class IssueSettings
         $stmt->execute();
     }
 
-    public function deleteResolutionById($Id)
-    {
+    public function deleteResolutionById($Id) {
         $query = 'delete from issue_resolution where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -173,8 +157,7 @@ class IssueSettings
         $stmt->execute();
     }
 
-    public function deletePriorityById($Id)
-    {
+    public function deletePriorityById($Id) {
         $query = 'delete from issue_priority where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

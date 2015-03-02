@@ -3,8 +3,8 @@
         <h3><?php echo $category['name'] ?></h3>
 
         <?php
-        $found = false;
-        $categoryId = $category['id'];
+            $found = false;
+            $categoryId = $category['id'];
         ?>
         <?php for ($i = 0; $i < count($projects); $i++): ?>
             <?php if ($projects[$i]['category_id'] == $categoryId): ?>

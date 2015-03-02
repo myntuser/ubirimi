@@ -63,10 +63,9 @@ class ValidateTimeSpentController extends UbirimiController
             }
         }
 
-        if ($valid) {
+        if ($valid)
             return new Response("ok");
-        } else {
+        else
             return new Response("error");
-        }
     }
 }

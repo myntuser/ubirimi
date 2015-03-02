@@ -30,14 +30,11 @@ use Ubirimi\Util;
 
 class SvnRepository
 {
-    public function getByCode($code, $clientId, $repositoryId = null)
-    {
+    public function getByCode($code, $clientId, $repositoryId = null) {
 
         $query = 'select id, name, code from svn_repository where client_id = ? and LOWER(code) = LOWER(?) ';
 
-        if ($repositoryId) {
-            $query .= 'and id != ?';
-        }
+        if ($repositoryId) $query .= 'and id != ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         if ($repositoryId) {
@@ -48,15 +45,13 @@ class SvnRepository
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return false;
-        }
     }
 
-    public function getLastMinute()
-    {
+    public function getLastMinute() {
 
         $query = 'SELECT svn_repository.id
                     FROM svn_repository
@@ -73,13 +68,11 @@ class SvnRepository
             }
 
             return $resultArray;
-        } else {
+        } else
             return null;
-        }
     }
 
-    public function getById($repoId)
-    {
+    public function getById($repoId) {
         $query = 'SELECT svn_repository.*,
                          general_user.first_name, general_user.last_name
                     FROM svn_repository
@@ -91,15 +84,13 @@ class SvnRepository
         $stmt->bind_param("i", $repoId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getUserById($repoUserId)
-    {
+    public function getUserById($repoUserId) {
         $query = 'SELECT svn_repository_user.*,
                          general_user.first_name, general_user.last_name, general_user.email, general_user.username
                     FROM svn_repository_user
@@ -111,15 +102,13 @@ class SvnRepository
         $stmt->bind_param("i", $repoUserId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getUserByRepoIdAndUserId($repoId, $userId)
-    {
+    public function getUserByRepoIdAndUserId($repoId, $userId) {
         $query = 'SELECT svn_repository_user.*,
                          general_user.first_name, general_user.last_name, general_user.email, general_user.username
                     FROM svn_repository_user
@@ -132,15 +121,13 @@ class SvnRepository
         $stmt->bind_param("ii", $repoId, $userId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 
-    public function addRepo($clientId, $userCreatedId, $name, $description, $code, $currentDate)
-    {
+    public function addRepo($clientId, $userCreatedId, $name, $description, $code, $currentDate) {
         $query = "INSERT INTO svn_repository(client_id, user_created_id, name, description, code, date_created) VALUES " .
             "(?, ?, ?, ?, ?, ?)";
 
@@ -151,8 +138,7 @@ class SvnRepository
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function updateRepo($description, $code, $repoId, $date)
-    {
+    public function updateRepo($description, $code, $repoId, $date) {
         $query = "UPDATE svn_repository SET
                     description = ?,
                     code = ?,
@@ -167,14 +153,13 @@ class SvnRepository
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function getAllByClientId($clientId, $resultType = null, $resultColumn = null)
-    {
+    public function getAllByClientId($clientId, $resultType = null, $resultColumn = null) {
         $query = 'SELECT svn_repository.id, svn_repository.client_id, user_created_id, name, description, code,
                             svn_repository.date_created, general_user.first_name, general_user.last_name ' .
-            'FROM svn_repository ' .
-            'LEFT join general_user ON svn_repository.user_created_id = general_user.id ' .
-            'WHERE svn_repository.client_id = ? ' .
-            'ORDER BY svn_repository.id';
+                    'FROM svn_repository ' .
+                    'LEFT join general_user ON svn_repository.user_created_id = general_user.id ' .
+                    'WHERE svn_repository.client_id = ? ' .
+                    'ORDER BY svn_repository.id';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -186,31 +171,26 @@ class SvnRepository
             if ($resultType == 'array') {
                 $resultArray = array();
                 while ($record = $result->fetch_array(MYSQLI_ASSOC)) {
-                    if ($resultColumn) {
+                    if ($resultColumn)
                         $resultArray[] = $record[$resultColumn];
-                    } else {
+                    else
                         $resultArray[] = $record;
-                    }
                 }
 
                 return $resultArray;
-            } else {
-                return $result;
-            }
-        } else {
+            } else return $result;
+        } else
             return null;
-        }
     }
 
-    public function getAll($filters = array())
-    {
+    public function getAll($filters = array()) {
         $query = 'SELECT svn_repository.id, svn_repository.client_id, user_created_id, name, description, code,
                             svn_repository.date_created, general_user.first_name, general_user.last_name,
                             client.company_domain ' .
-            'FROM svn_repository ' .
-            'LEFT join general_user ON svn_repository.user_created_id = general_user.id ' .
-            'LEFT JOIN client ON client.id = svn_repository.client_id ' .
-            'WHERE 1 = 1 ';
+                    'FROM svn_repository ' .
+                    'LEFT join general_user ON svn_repository.user_created_id = general_user.id ' .
+                    'LEFT JOIN client ON client.id = svn_repository.client_id ' .
+                    'WHERE 1 = 1 ';
 
         if (!empty($filters['today'])) {
             $query .= " AND DATE(svn_repository.date_created) = DATE(NOW())";
@@ -218,7 +198,8 @@ class SvnRepository
 
         if (!empty($filters['sort_by'])) {
             $query .= " ORDER BY " . $filters['sort_by'] . ' ' . $filters['sort_order'];
-        } else {
+        }
+        else {
             $query .= " ORDER BY svn_repository.id";
         }
 
@@ -229,21 +210,19 @@ class SvnRepository
 
         if ($result->num_rows) {
             return $result;
-        } else {
+        } else
             return null;
-        }
     }
 
-    public function getRepositoriesByUserId($clientId, $userId, $resultType = null, $resultColumn = null)
-    {
+    public function getRepositoriesByUserId($clientId, $userId, $resultType = null, $resultColumn = null) {
         $query = 'SELECT svn_repository.id, svn_repository.client_id, user_created_id, name, description, code,
                             svn_repository.date_created, general_user.first_name, general_user.last_name ' .
-            'FROM svn_repository ' .
-            'LEFT join general_user ON svn_repository.user_created_id = general_user.id ' .
-            'LEFT JOIN svn_repository_user ON svn_repository_user.svn_repository_id = svn_repository.id ' .
-            'WHERE svn_repository.client_id = ? ' .
-            'and svn_repository_user.user_id = ? ' .
-            'ORDER BY svn_repository.id';
+                    'FROM svn_repository ' .
+                    'LEFT join general_user ON svn_repository.user_created_id = general_user.id ' .
+                    'LEFT JOIN svn_repository_user ON svn_repository_user.svn_repository_id = svn_repository.id ' .
+                    'WHERE svn_repository.client_id = ? ' .
+                    'and svn_repository_user.user_id = ? ' .
+                    'ORDER BY svn_repository.id';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -255,24 +234,19 @@ class SvnRepository
             if ($resultType == 'array') {
                 $resultArray = array();
                 while ($record = $result->fetch_array(MYSQLI_ASSOC)) {
-                    if ($resultColumn) {
+                    if ($resultColumn)
                         $resultArray[] = $record[$resultColumn];
-                    } else {
+                    else
                         $resultArray[] = $record;
-                    }
                 }
 
                 return $resultArray;
-            } else {
-                return $result;
-            }
-        } else {
+            } else return $result;
+        } else
             return null;
-        }
     }
 
-    public function getUserList($repoId, $resultType = null, $resultColumn = null)
-    {
+    public function getUserList($repoId, $resultType = null, $resultColumn = null) {
         $query = 'SELECT svn_repository_user.*,
                          general_user.first_name, general_user.last_name, general_user.email, general_user.username
                     FROM svn_repository_user
@@ -289,26 +263,21 @@ class SvnRepository
             if ($resultType == 'array') {
                 $resultArray = array();
                 while ($record = $result->fetch_array(MYSQLI_ASSOC)) {
-                    if ($resultColumn) {
+                    if ($resultColumn)
                         $resultArray[] = $record[$resultColumn];
-                    } else {
+                    else
                         $resultArray[] = $record;
-                    }
                 }
 
                 return $resultArray;
-            } else {
-                return $result;
-            }
-        } else {
+            } else return $result;
+        } else
             return null;
-        }
     }
 
-    public function addUser($repoId, $userId)
-    {
+    public function addUser($repoId, $userId) {
         $query = "INSERT INTO svn_repository_user(svn_repository_id, user_id, date_created) " .
-            "VALUES (?, ?, ?)";
+                        "VALUES (?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $currentTime = time();
@@ -316,8 +285,7 @@ class SvnRepository
         $stmt->execute();
     }
 
-    public function updateUserPermissions($repoId, $userId, $hasRead, $hasWrite)
-    {
+    public function updateUserPermissions($repoId, $userId, $hasRead, $hasWrite) {
         $query = "UPDATE svn_repository_user
                     SET has_read = ?,
                         has_write = ?
@@ -329,8 +297,7 @@ class SvnRepository
         $stmt->execute();
     }
 
-    public function updateUserPassword($repoId, $userId, $password)
-    {
+    public function updateUserPassword($repoId, $userId, $password) {
         $query = "UPDATE svn_repository_user
                     SET password = ?
                     WHERE svn_repository_id = ?
@@ -342,8 +309,7 @@ class SvnRepository
         $stmt->execute();
     }
 
-    public function deleteById($Id)
-    {
+    public function deleteById($Id) {
         $query = "SET FOREIGN_KEY_CHECKS = 0;";
         UbirimiContainer::get()['db.connection']->query($query);
 
@@ -357,12 +323,9 @@ class SvnRepository
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function deleteAllById($Id)
-    {
+    public function deleteAllById($Id) {
         $repo = UbirimiContainer::get()['repository']->get(SvnRepository::class)->getById($Id);
-        $client = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getById(
-            $repo['svn_repository.client_id']
-        );
+        $client = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getById($repo['svn_repository.client_id']);
 
         self::deleteById($Id);
 
@@ -371,21 +334,18 @@ class SvnRepository
         SvnRepository::updateAuthz();
 
         /* delete from the disk */
-        $path = UbirimiContainer::get()['subversion.path'] . Util::slugify(
-                $client['company_domain']
-            ) . '/' . Util::slugify($repo['name']);
+        $path = UbirimiContainer::get()['subversion.path'] . Util::slugify($client['company_domain']) . '/' . Util::slugify($repo['name']);
         system("rm -rf $path");
 
         /* refresh apache config */
         SvnRepository::refreshApacheConfig();
     }
 
-    public function deleteUserById($Id)
-    {
+    public function deleteUserById($Id) {
         $query = "SET FOREIGN_KEY_CHECKS = 0;";
         UbirimiContainer::get()['db.connection']->query($query);
 
-        $query = "DELETE IGNORE FROM svn_repository_user WHERE user_id = " . (int)$Id;
+        $query = "DELETE IGNORE FROM svn_repository_user WHERE user_id = " . (int) $Id;
         UbirimiContainer::get()['db.connection']->query($query);
 
         $query = "SET FOREIGN_KEY_CHECKS = 1;";
@@ -400,8 +360,7 @@ class SvnRepository
      *
      * @param string Path to create subversion
      */
-    public function createSvn($path)
-    {
+    public function createSvn($path) {
         $escape_path = escapeshellarg($path);
         $message = ConsoleUtils::runCmdCaptureMessage(SVNUtils::svnadminCommand("create $escape_path"), $return);
         if ($return) {
@@ -409,8 +368,7 @@ class SvnRepository
         }
     }
 
-    public function updateHtpasswd($repoId, $companyDomain)
-    {
+    public function updateHtpasswd($repoId, $companyDomain) {
         $text = "";
 
         $repository = UbirimiContainer::get()['repository']->get(SvnRepository::class)->getById($repoId);
@@ -432,17 +390,12 @@ class SvnRepository
             }
         }
 
-        $path = str_replace(
-            'REPO_DIR',
-            Util::slugify($repository['name']),
-            UbirimiContainer::get()['subversion.passwd']
-        );
+        $path = str_replace('REPO_DIR', Util::slugify($repository['name']), UbirimiContainer::get()['subversion.passwd']);
         $path = str_replace('CLIENT_DIR', Util::slugify($companyDomain), $path);
         @file_put_contents($path, $text);
     }
 
-    public function updateAuthz()
-    {
+    public function updateAuthz() {
         $text = "# This is an auto generated file! Edit at your own risk!\n";
         $text .= "# You can edit this \"/\" section. Settings will be kept\n";
         $text .= "#\n";
@@ -476,26 +429,21 @@ class SvnRepository
                 if (!empty($svn_user['password']) && !empty($svn_user['username'])) {
                     if (1 == $svn_user['has_read'] && 1 == $svn_user['has_write']) {
                         $repo_read_write_users .= $svn_user['username'] . ',';
-                    } else {
-                        if (1 == $svn_user['has_read']) {
-                            $repo_read_users .= $svn_user['username'] . ',';
-                        }
+                    }
+                    else if (1 == $svn_user['has_read']) {
+                        $repo_read_users .= $svn_user['username'] . ',';
                     }
                 }
             }
 
             if (!empty($repo_read_users)) {
                 $repo_read_users = substr($repo_read_users, 0, -1);
-                $text_svn_groups .= "group_" . Util::slugify(
-                        $repository['name']
-                    ) . '_read = ' . $repo_read_users . "\n";
+                $text_svn_groups .= "group_" . Util::slugify($repository['name']) . '_read = ' . $repo_read_users . "\n";
             }
 
             if (!empty($repo_read_write_users)) {
                 $repo_read_write_users = substr($repo_read_write_users, 0, -1);
-                $text_svn_groups .= "group_" . Util::slugify(
-                        $repository['name']
-                    ) . '_read_write = ' . $repo_read_write_users . "\n";
+                $text_svn_groups .= "group_" . Util::slugify($repository['name']) . '_read_write = ' . $repo_read_write_users . "\n";
             }
 
             if (!empty($repo_read_users) || !empty($repo_read_write_users)) {
@@ -512,28 +460,18 @@ class SvnRepository
 
             $clientData = UbirimiContainer::get()['session']->get('client');
 
-            $path = str_replace(
-                'REPO_DIR',
-                Util::slugify($repository['name']),
-                UbirimiContainer::get()['subversion.authz']
-            );
+            $path = str_replace('REPO_DIR', Util::slugify($repository['name']), UbirimiContainer::get()['subversion.authz']);
             $path = str_replace('CLIENT_DIR', Util::slugify($clientData['company_domain']), $path);
 
             @file_put_contents($path, $text . $text_svn_groups . "\n" . $text_svn_projects);
         }
     }
 
-    public function apacheConfig($clientDomain, $repositoryName)
-    {
-        file_put_contents(
-            UbirimiContainer::get()['subversion.apache_config'],
-            "Use SubversionRepo $clientDomain $repositoryName\n",
-            FILE_APPEND | LOCK_EX
-        );
+    public function apacheConfig($clientDomain, $repositoryName) {
+        file_put_contents(UbirimiContainer::get()['subversion.apache_config'], "Use SubversionRepo $clientDomain $repositoryName\n", FILE_APPEND | LOCK_EX);
     }
 
-    public function refreshApacheConfig()
-    {
+    public function refreshApacheConfig() {
         $text = "";
 
         $query = "SELECT *
@@ -546,16 +484,13 @@ class SvnRepository
         $result = $stmt->get_result();
 
         while ($repo = $result->fetch_array(MYSQLI_ASSOC)) {
-            $text .= "Use SubversionRepo " . Util::slugify($repo['company_domain']) . ' ' . Util::slugify(
-                    $repo['name']
-                ) . "\n";
+            $text .= "Use SubversionRepo " . Util::slugify($repo['company_domain']) . ' ' . Util::slugify($repo['name']) . "\n";
         }
 
         file_put_contents(UbirimiContainer::get()['subversion.apache_config'], $text, LOCK_EX);
     }
 
-    public function getAdministratorsByClientId($clientId)
-    {
+    public function getAdministratorsByClientId($clientId) {
         $query = 'select general_user.* from general_user WHERE client_id = ? and svn_administrator_flag = 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -563,23 +498,20 @@ class SvnRepository
         $stmt->bind_param("i", $clientId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function addAdministrator($users)
-    {
+    public function addAdministrator($users) {
         $query = "update general_user set svn_administrator_flag = 1 where id IN (" . implode(', ', $users) . ")";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
     }
 
-    public function deleteAdministratorById($clientId, $Id)
-    {
+    public function deleteAdministratorById($clientId, $Id) {
         $query = "update general_user set svn_administrator_flag = 0 where client_id = ? and id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

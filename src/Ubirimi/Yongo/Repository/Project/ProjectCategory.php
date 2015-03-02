@@ -27,15 +27,13 @@ class ProjectCategory
     public $description;
     public $clientId;
 
-    function __construct($clientId = null, $name = null, $description = null)
-    {
+    function __construct($clientId = null, $name = null, $description = null) {
         $this->clientId = $clientId;
         $this->name = $name;
         $this->description = $description;
     }
 
-    public function deleteById($clientId, $projectCategoryId)
-    {
+    public function deleteById($clientId, $projectCategoryId) {
         $query = "delete from project_category where id = ? and client_id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -49,8 +47,7 @@ class ProjectCategory
         $stmt->execute();
     }
 
-    public function save($currentDate)
-    {
+    public function save($currentDate) {
         $query = "INSERT INTO project_category(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -61,38 +58,33 @@ class ProjectCategory
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function getAll($clientId)
-    {
+    public function getAll($clientId) {
         $query = "SELECT * from project_category WHERE client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getById($categoryId)
-    {
+    public function getById($categoryId) {
         $query = "SELECT * from project_category WHERE id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $categoryId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 
-    public function updateById($categoryId, $name, $description, $date)
-    {
+    public function updateById($categoryId, $name, $description, $date) {
         $query = "update project_category set name = ?, description = ?, date_updated = ? where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -101,27 +93,23 @@ class ProjectCategory
         $stmt->execute();
     }
 
-    public function getByName($name, $projectCategoryId, $clientId)
-    {
+    public function getByName($name, $projectCategoryId, $clientId) {
         $query = 'select id, name from project_category where client_id = ? and LOWER(name) = LOWER(?) ';
-        if ($projectCategoryId) {
+        if ($projectCategoryId)
             $query .= 'and id != ?';
-        }
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
-        if ($projectCategoryId) {
+        if ($projectCategoryId)
             $stmt->bind_param("isi", $clientId, $name, $projectCategoryId);
-        } else {
+        else
             $stmt->bind_param("is", $clientId, $name);
-        }
 
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return false;
-        }
     }
 }

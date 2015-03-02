@@ -51,23 +51,12 @@ class AddController extends UbirimiController
         $emptyCode = false;
         $duplicateCode = false;
 
-        $issueTypeScheme = $this->getRepository(IssueTypeScheme::class)->getByClientId(
-            $session->get('client/id'),
-            'project'
-        );
-        $issueTypeScreenScheme = $this->getRepository(IssueTypeScreenScheme::class)->getByClientId(
-            $session->get('client/id')
-        );
-        $fieldConfigurationSchemes = $this->getRepository(FieldConfigurationScheme::class)->getByClient(
-            $session->get('client/id')
-        );
-        $workflowScheme = $this->getRepository(WorkflowScheme::class)->getMetaDataByClientId(
-            $session->get('client/id')
-        );
+        $issueTypeScheme = $this->getRepository(IssueTypeScheme::class)->getByClientId($session->get('client/id'), 'project');
+        $issueTypeScreenScheme = $this->getRepository(IssueTypeScreenScheme::class)->getByClientId($session->get('client/id'));
+        $fieldConfigurationSchemes = $this->getRepository(FieldConfigurationScheme::class)->getByClient($session->get('client/id'));
+        $workflowScheme = $this->getRepository(WorkflowScheme::class)->getMetaDataByClientId($session->get('client/id'));
         $permissionScheme = $this->getRepository(PermissionScheme::class)->getByClientId($session->get('client/id'));
-        $notificationScheme = $this->getRepository(NotificationScheme::class)->getByClientId(
-            $session->get('client/id')
-        );
+        $notificationScheme = $this->getRepository(NotificationScheme::class)->getByClientId($session->get('client/id'));
         $projectCategories = $this->getRepository(ProjectCategory::class)->getAll($session->get('client/id'));
 
         if ($request->request->has('confirm_new_project')) {
@@ -97,23 +86,13 @@ class AddController extends UbirimiController
             if (empty($code)) {
                 $emptyCode = true;
             } else {
-                $projectExists = $this->getRepository(YongoProject::class)->getByCode(
-                    mb_strtolower($code),
-                    null,
-                    $session->get('client/id')
-                );
-                if ($projectExists) {
+                $projectExists = $this->getRepository(YongoProject::class)->getByCode(mb_strtolower($code), null, $session->get('client/id'));
+                if ($projectExists)
                     $duplicateCode = true;
-                }
             }
-            $projectExists = $this->getRepository(YongoProject::class)->getByName(
-                mb_strtolower($name),
-                null,
-                $session->get('client/id')
-            );
-            if ($projectExists) {
+            $projectExists = $this->getRepository(YongoProject::class)->getByName(mb_strtolower($name), null, $session->get('client/id'));
+            if ($projectExists)
                 $duplicateName = true;
-            }
 
             if (!$emptyName && !$emptyCode && !$duplicateName && !$duplicateCode) {
 
@@ -150,9 +129,7 @@ class AddController extends UbirimiController
         }
 
         $menuSelectedCategory = 'project';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Project';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Project';
 
         return $this->render(__DIR__ . '/../../../Resources/views/administration/project/Add.php', get_defined_vars());
     }

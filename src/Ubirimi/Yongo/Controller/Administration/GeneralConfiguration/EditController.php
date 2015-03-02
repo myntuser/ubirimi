@@ -48,24 +48,15 @@ class EditController extends UbirimiController
                 )
             );
 
-            $this->getRepository(UbirimiClient::class)->updateProductSettings(
-                $session->get('client/id'),
-                SystemProduct::SYS_PRODUCT_YONGO,
-                $parameters
-            );
+            $this->getRepository(UbirimiClient::class)->updateProductSettings($session->get('client/id'), SystemProduct::SYS_PRODUCT_YONGO, $parameters);
 
             $this->getLogger()->addInfo('UPDATE Yongo GeneralSettings Settings', $this->getLoggerContext());
 
             return new RedirectResponse('/yongo/administration/general-configuration');
         }
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update GeneralSettings Configuration';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update GeneralSettings Configuration';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/general_configuration/Edit.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/general_configuration/Edit.php', get_defined_vars());
     }
 }

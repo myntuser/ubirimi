@@ -46,18 +46,12 @@ class EditMetadataController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name)) {
+            if (empty($name))
                 $emptyName = true;
-            }
 
             if (!$emptyName) {
                 $currentDate = Util::getServerCurrentDateTime();
-                $this->getRepository(PermissionScheme::class)->updateMetaDataById(
-                    $permissionSchemeId,
-                    $name,
-                    $description,
-                    $currentDate
-                );
+                $this->getRepository(PermissionScheme::class)->updateMetaDataById($permissionSchemeId, $name, $description, $currentDate);
 
                 $this->getLogger()->addInfo('UPDATE Yongo Permission Scheme ' . $name, $this->getLoggerContext());
 
@@ -66,13 +60,8 @@ class EditMetadataController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Permission Scheme';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Permission Scheme';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/permission_scheme/EditMetadata.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/permission_scheme/EditMetadata.php', get_defined_vars());
     }
 }

@@ -38,43 +38,37 @@ class Tag
 
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getByNameAndUserId($userId, $name, $tagId = null)
-    {
+    public function getByNameAndUserId($userId, $name, $tagId = null) {
         $query = 'select * ' .
             'from qn_tag ' .
             'where user_id = ? ' .
             'and LOWER(name) = ? ';
 
-        if ($tagId) {
+        if ($tagId)
             $query .= 'and id != ? ';
-        }
 
         $query .= 'limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
-        if ($tagId) {
+        if ($tagId)
             $stmt->bind_param("isi", $userId, $name, $tagId);
-        } else {
+        else
             $stmt->bind_param("is", $userId, $name);
-        }
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getByUserId($userId)
-    {
+    public function getByUserId($userId) {
         $query = "select qn_tag.* " .
             "from qn_tag " .
             "where qn_tag.user_id = ?";
@@ -85,15 +79,13 @@ class Tag
 
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function add($userId, $value, $date)
-    {
+    public function add($userId, $value, $date) {
         $query = "INSERT INTO qn_tag(user_id, name, date_created) VALUES (?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -106,8 +98,7 @@ class Tag
         return $tagId;
     }
 
-    public function getById($tagId)
-    {
+    public function getById($tagId) {
         $query = "select * " .
             "from qn_tag " .
             "where id = ? " .
@@ -119,13 +110,11 @@ class Tag
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        } else
             return null;
-        }
     }
 
-    public function updateById($tagId, $name, $description, $date)
-    {
+    public function updateById($tagId, $name, $description, $date) {
         $query = 'UPDATE qn_tag SET name = ?, description = ?, date_updated = ? WHERE id = ? LIMIT 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -133,8 +122,7 @@ class Tag
         $stmt->execute();
     }
 
-    public function deleteById($tagId)
-    {
+    public function deleteById($tagId) {
         $query = 'delete from qn_tag where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

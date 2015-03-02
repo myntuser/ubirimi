@@ -23,16 +23,14 @@ use Ubirimi\Container\UbirimiContainer;
 
 class IssueHistory
 {
-    public function deleteByIssueId($issueId)
-    {
+    public function deleteByIssueId($issueId) {
         $query = 'DELETE FROM issue_history WHERE issue_id = ?';
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $issueId);
         $stmt->execute();
     }
 
-    public function getAll()
-    {
+    public function getAll() {
         $query = 'select * from issue_history';
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
@@ -40,9 +38,7 @@ class IssueHistory
         $result = $stmt->get_result();
         return $result;
     }
-
-    public function getByAssigneeNewChangedAfterDate($issueId, $userAssigneeId, $date)
-    {
+    public function getByAssigneeNewChangedAfterDate($issueId, $userAssigneeId, $date) {
         $query = "select * from issue_history where issue_id = ? and new_value_id = ? and field = 'assignee' ";
         if ($date) {
             $query .= ' and date_created >= ? ';
@@ -61,8 +57,7 @@ class IssueHistory
         return $result;
     }
 
-    public function updateChangedIds($Id, $oldValueId, $newValueId)
-    {
+    public function updateChangedIds($Id, $oldValueId, $newValueId) {
         $queryUpdate = 'update issue_history set old_value_id = ?, new_value_id = ? where id = ? limit 1';
 
         if ($stmtUpdate = UbirimiContainer::get()['db.connection']->prepare($queryUpdate)) {
@@ -93,12 +88,8 @@ class IssueHistory
             'left join project on project.id = yongo_issue.project_id ' .
             'where ';
 
-        if ($issueId) {
-            $query .= ' issue_history.issue_id = ' . $issueId . ' ';
-        }
-        if ($userId) {
-            $query .= ' issue_history.by_user_id = ' . $userId . ' ';
-        }
+        if ($issueId) $query .= ' issue_history.issue_id = ' . $issueId . ' ';
+        if ($userId) $query .= ' issue_history.by_user_id = ' . $userId . ' ';
 
         if (!$order) {
             $order = 'desc';
@@ -106,26 +97,26 @@ class IssueHistory
         $query .= 'order by date_created ' . $order . ', user_id) ';
 
         $query .= ' UNION (select ' .
-            "'event_commented' as source, " .
-            'issue_comment.date_created as date_created, ' .
-            'null as field, ' .
-            'null as old_value, ' .
-            'null as new_value, ' .
-            'null as old_value_id, ' .
-            'null as new_value_id, ' .
-            'null as content, ' .
-            'general_user.id as user_id, general_user.first_name, general_user.last_name, ' .
-            'yongo_issue.nr as nr, ' .
-            'project.code as code, ' .
-            'yongo_issue.id as issue_id ' .
-            'from yongo_issue ' .
-            'left join issue_comment on yongo_issue.id = issue_comment.issue_id ' .
-            'left join general_user on general_user.id = issue_comment.user_id ' .
-            'left join project on project.id = yongo_issue.project_id ' .
-            'where yongo_issue.id = ' . $issueId . ' ' .
-            'and issue_comment.issue_id is not null ' .
+        "'event_commented' as source, " .
+        'issue_comment.date_created as date_created, ' .
+        'null as field, ' .
+        'null as old_value, ' .
+        'null as new_value, ' .
+        'null as old_value_id, ' .
+        'null as new_value_id, ' .
+        'null as content, ' .
+        'general_user.id as user_id, general_user.first_name, general_user.last_name, ' .
+        'yongo_issue.nr as nr, ' .
+        'project.code as code, ' .
+        'yongo_issue.id as issue_id ' .
+        'from yongo_issue ' .
+        'left join issue_comment on yongo_issue.id = issue_comment.issue_id ' .
+        'left join general_user on general_user.id = issue_comment.user_id ' .
+        'left join project on project.id = yongo_issue.project_id ' .
+        'where yongo_issue.id = ' . $issueId . ' ' .
+        'and issue_comment.issue_id is not null ' .
 
-            'order by date_created ' . $order . ', user_id) ';
+        'order by date_created ' . $order . ', user_id) ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -138,9 +129,7 @@ class IssueHistory
                     $resultArray[] = $data;
                 }
                 return $resultArray;
-            } else {
-                return $result;
-            }
+            } else return $result;
 
         } else {
             return null;

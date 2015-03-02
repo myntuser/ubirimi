@@ -10,7 +10,7 @@
                class="inputText"
                value=""
                style="width: 110px"
-               name="goal_value_<?php echo $time ?>"/> minutes
+               name="goal_value_<?php echo $time ?>" /> minutes
     </td>
     <td>
         <select name="goal_calendar_<?php echo $time ?>" class="select2InputSmall">
@@ -22,7 +22,6 @@
     <td>
         <button type="button"
                 id="delete_goal_<?php echo $time ?>"
-                class="btn ubirimi-btn"><i class="icon-remove"></i> Delete
-        </button>
+                class="btn ubirimi-btn"><i class="icon-remove"></i> Delete</button>
     </td>
 </tr>

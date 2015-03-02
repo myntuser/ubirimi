@@ -48,18 +48,12 @@ class EditController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name)) {
+            if (empty($name))
                 $emptyName = true;
-            }
 
             if (!$emptyName) {
                 $dateUpdated = Util::getServerCurrentDateTime();
-                $this->getRepository(ProjectCategory::class)->updateById(
-                    $categoryId,
-                    $name,
-                    $description,
-                    $dateUpdated
-                );
+                $this->getRepository(ProjectCategory::class)->updateById($categoryId, $name, $description, $dateUpdated);
 
                 $this->getLogger()->addInfo('UPDATE Yongo Project Category ' . $name, $this->getLoggerContext());
 
@@ -67,13 +61,8 @@ class EditController extends UbirimiController
             }
         }
         $menuSelectedCategory = 'project';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Project Category';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Project Category';
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/project/category/Edit.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/project/category/Edit.php', get_defined_vars());
     }
 }

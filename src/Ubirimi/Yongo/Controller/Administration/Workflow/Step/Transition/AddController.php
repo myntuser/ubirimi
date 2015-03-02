@@ -49,10 +49,7 @@ class AddController extends UbirimiController
         }
 
         $workflowSteps = $this->getRepository(Workflow::class)->getSteps($workflowId);
-        $statuses = $this->getRepository(IssueSettings::class)->getAllIssueSettings(
-            'status',
-            $session->get('client/id')
-        );
+        $statuses = $this->getRepository(IssueSettings::class)->getAllIssueSettings('status', $session->get('client/id'));
         $screens = $this->getRepository(Screen::class)->getAll($session->get('client/id'));
 
         $emptyName = false;
@@ -63,9 +60,8 @@ class AddController extends UbirimiController
             $step = $request->request->get('step');
             $screen = $request->request->get('screen');
 
-            if (empty($name)) {
+            if (empty($name))
                 $emptyName = true;
-            }
 
             if (!$emptyName) {
                 $currentDate = Util::getServerCurrentDateTime();
@@ -110,13 +106,8 @@ class AddController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Workflow Transition';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Workflow Transition';
 
-        return $this->render(
-            __DIR__ . '/../../../../../Resources/views/administration/workflow/step/transition/Add.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../../Resources/views/administration/workflow/step/transition/Add.php', get_defined_vars());
     }
 }

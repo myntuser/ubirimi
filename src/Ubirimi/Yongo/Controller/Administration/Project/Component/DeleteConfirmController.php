@@ -28,12 +28,10 @@ class DeleteConfirmController extends UbirimiController
 {
     public function indexAction(Request $request, SessionInterface $session)
     {
-        return new Response(
-            '
+        return new Response('
 Are you sure you want to delete this project component?<br />
 This component will be removed from the issues that have it.<br />
-Also any sub-components will be deleted.'
-        );
+Also any sub-components will be deleted.');
     }
 }
 

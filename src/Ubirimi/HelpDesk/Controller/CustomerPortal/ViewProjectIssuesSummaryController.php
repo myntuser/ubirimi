@@ -140,9 +140,8 @@ class ViewProjectIssuesSummaryController extends UbirimiController
                 $session->get('user/id')
             );
 
-            if ($issues) {
+            if ($issues)
                 $statsComponent[$component['name']] = array($component['id'], $issues->num_rows);
-            }
         }
 
         $menuSelectedCategory = 'project';
@@ -153,9 +152,6 @@ class ViewProjectIssuesSummaryController extends UbirimiController
             . ' / ' . $project['name']
             . ' / Issue Summary';
 
-        return $this->render(
-            __DIR__ . '/../../Resources/views/customer_portal/ViewProjectIssuesSummary.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../Resources/views/customer_portal/ViewProjectIssuesSummary.php', get_defined_vars());
     }
 }

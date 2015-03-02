@@ -47,9 +47,7 @@ class DeleteRepositoryController extends UbirimiController
 
         /* delete the content from hdd */
         $companyDomain = Util::getSubdomain();
-        $path = UbirimiContainer::get()['subversion.path'] . Util::slugify($companyDomain) . '/' . Util::slugify(
-                $repo['name']
-            );
+        $path = UbirimiContainer::get()['subversion.path'] . Util::slugify($companyDomain) . '/' . Util::slugify($repo['name']);
         system("rm -rf $path");
 
         /* refresh apache config */

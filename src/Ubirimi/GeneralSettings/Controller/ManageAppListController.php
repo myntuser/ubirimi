@@ -61,22 +61,12 @@ class ManageAppListController extends UbirimiController
         }
 
         if ($visible) {
-            $this->getRepository(UbirimiClient::class)->addProduct(
-                $session->get('client/id'),
-                $productId,
-                $currentDate
-            );
+            $this->getRepository(UbirimiClient::class)->addProduct($session->get('client/id'), $productId, $currentDate);
         } else {
             $this->getRepository(UbirimiClient::class)->deleteProduct($session->get('client/id'), $productId);
             if ($productId == SystemProduct::SYS_PRODUCT_YONGO) {
-                $this->getRepository(UbirimiClient::class)->deleteProduct(
-                    $session->get('client/id'),
-                    SystemProduct::SYS_PRODUCT_HELP_DESK
-                );
-                $this->getRepository(UbirimiClient::class)->deleteProduct(
-                    $session->get('client/id'),
-                    SystemProduct::SYS_PRODUCT_AGILE
-                );
+                $this->getRepository(UbirimiClient::class)->deleteProduct($session->get('client/id'), SystemProduct::SYS_PRODUCT_HELP_DESK);
+                $this->getRepository(UbirimiClient::class)->deleteProduct($session->get('client/id'), SystemProduct::SYS_PRODUCT_AGILE);
             }
         }
 
@@ -85,18 +75,11 @@ class ManageAppListController extends UbirimiController
         UbirimiContainer::get()['session']->remove("client/products");
 
         if (count($clientProducts)) {
-            array_walk(
-                $clientProducts,
-                function ($value, $key) {
-                    UbirimiContainer::get()['session']->set("client/products/{$key}", $value);
-                }
-            );
+            array_walk($clientProducts, function($value, $key) {
+                UbirimiContainer::get()['session']->set("client/products/{$key}", $value);
+            });
         } else {
-            $this->getRepository(UbirimiClient::class)->addProduct(
-                $session->get('client/id'),
-                $productId,
-                $currentDate
-            );
+            $this->getRepository(UbirimiClient::class)->addProduct($session->get('client/id'), $productId, $currentDate);
             $session->set('client/products', array(array('sys_product_id' => $productId)));
         }
 

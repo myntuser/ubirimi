@@ -21,15 +21,13 @@ namespace Ubirimi\Yongo\Repository\Workflow;
 
 use Ubirimi\Container\UbirimiContainer;
 
-class WorkflowScheme
-{
+class WorkflowScheme {
 
     public $name;
     public $description;
     public $clientId;
 
-    function __construct($clientId = null, $name = null, $description = null)
-    {
+    function __construct($clientId = null, $name = null, $description = null) {
         $this->clientId = $clientId;
         $this->name = $name;
         $this->description = $description;
@@ -37,8 +35,7 @@ class WorkflowScheme
         return $this;
     }
 
-    public function save($currentDate)
-    {
+    public function save($currentDate) {
         $query = "INSERT INTO workflow_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -49,8 +46,7 @@ class WorkflowScheme
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function addData($workflowSchemeId, $workflowId, $currentDate)
-    {
+    public function addData($workflowSchemeId, $workflowId, $currentDate) {
         $query = "INSERT INTO workflow_scheme_data(workflow_scheme_id, workflow_id, date_created) VALUES (?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -59,8 +55,7 @@ class WorkflowScheme
         $stmt->execute();
     }
 
-    public function deleteDataByWorkflowSchemeId($Id)
-    {
+    public function deleteDataByWorkflowSchemeId($Id) {
         $query = "delete from workflow_scheme_data where workflow_scheme_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -68,8 +63,7 @@ class WorkflowScheme
         $stmt->execute();
     }
 
-    public function deleteById($Id)
-    {
+    public function deleteById($Id) {
         $query = "delete from workflow_scheme where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -77,8 +71,7 @@ class WorkflowScheme
         $stmt->execute();
     }
 
-    public function updateMetaDataById($Id, $name, $description)
-    {
+    public function updateMetaDataById($Id, $name, $description) {
         $query = "update workflow_scheme set name = ?, description = ? where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -86,27 +79,24 @@ class WorkflowScheme
         $stmt->execute();
     }
 
-    public function getDataById($Id)
-    {
+    public function getDataById($Id) {
         $query = "select workflow_scheme_data.id, workflow_scheme_data.workflow_id, workflow.name, workflow.description, " .
-            "workflow_scheme_data.workflow_scheme_id " .
-            "from workflow_scheme_data " .
-            "left join workflow on workflow.id = workflow_scheme_data.workflow_id " .
-            "where workflow_scheme_id = ? ";
+                 "workflow_scheme_data.workflow_scheme_id " .
+                 "from workflow_scheme_data " .
+                 "left join workflow on workflow.id = workflow_scheme_data.workflow_id " .
+                 "where workflow_scheme_id = ? ";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getMetaDataById($Id)
-    {
+    public function getMetaDataById($Id) {
         $query = "select * " .
             "from workflow_scheme " .
             "where id = ? " .
@@ -116,30 +106,26 @@ class WorkflowScheme
         $stmt->bind_param("i", $Id);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getMetaDataByClientId($clientId)
-    {
+    public function getMetaDataByClientId($clientId) {
         $query = "select * from workflow_scheme where client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getWorkflows($workflowSchemeId)
-    {
+    public function getWorkflows($workflowSchemeId) {
         $query = "select workflow.* " .
             "from workflow_scheme " .
             "left join workflow_scheme_data on workflow_scheme_data.workflow_scheme_id = workflow_scheme.id " .
@@ -150,15 +136,13 @@ class WorkflowScheme
         $stmt->bind_param("i", $workflowSchemeId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getByWorkflowId($workflowId)
-    {
+    public function getByWorkflowId($workflowId) {
         $query = "select workflow_scheme.id, workflow_scheme.name " .
             "from workflow_scheme_data " .
             "left join workflow_scheme on workflow_scheme.id = workflow_scheme_data.workflow_scheme_id " .
@@ -169,38 +153,32 @@ class WorkflowScheme
         $stmt->bind_param("i", $workflowId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function deleteByClientId($clientId)
-    {
+    public function deleteByClientId($clientId) {
         $schemes = UbirimiContainer::get()['repository']->get(WorkflowScheme::class)->getMetaDataByClientId($clientId);
         if ($schemes) {
             while ($scheme = $schemes->fetch_array(MYSQLI_ASSOC)) {
-                UbirimiContainer::get()['repository']->get(WorkflowScheme::class)->deleteDataByWorkflowSchemeId(
-                    $scheme['id']
-                );
+                UbirimiContainer::get()['repository']->get(WorkflowScheme::class)->deleteDataByWorkflowSchemeId($scheme['id']);
                 UbirimiContainer::get()['repository']->get(WorkflowScheme::class)->deleteById($scheme['id']);
             }
         }
     }
 
-    public function getByClientIdAndName($clientId, $name)
-    {
+    public function getByClientIdAndName($clientId, $name) {
         $query = "select * from workflow_scheme where client_id = ? and LOWER(name) = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $clientId, $name);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 }

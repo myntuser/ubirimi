@@ -40,18 +40,13 @@ class AddController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name)) {
+            if (empty($name))
                 $emptyName = true;
-            }
 
-            $organization = $this->getRepository(Organization::class)->getByName(
-                $session->get('client/id'),
-                mb_strtolower($name)
-            );
+            $organization = $this->getRepository(Organization::class)->getByName($session->get('client/id'), mb_strtolower($name));
 
-            if ($organization) {
+            if ($organization)
                 $statusExists = true;
-            }
 
             if (!$emptyName && !$statusExists) {
                 $currentDate = Util::getServerCurrentDateTime();
@@ -68,9 +63,6 @@ class AddController extends UbirimiController
             . ' / ' . SystemProduct::SYS_PRODUCT_HELP_DESK_NAME
             . ' / Create Organization';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/organization/AddOrganization.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/organization/AddOrganization.php', get_defined_vars());
     }
 }

@@ -34,8 +34,6 @@ class DeleteConfirmController extends UbirimiController
             return new Response('Are you sure you want to delete this field configuration?');
         }
 
-        return new Response(
-            'This field configuration can not be deleted. It is associated with a field configuration scheme.'
-        );
+        return new Response('This field configuration can not be deleted. It is associated with a field configuration scheme.');
     }
 }

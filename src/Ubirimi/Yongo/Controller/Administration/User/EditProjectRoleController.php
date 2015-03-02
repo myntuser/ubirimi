@@ -43,10 +43,7 @@ class EditProjectRoleController extends UbirimiController
         $user = $this->getRepository(UbirimiUser::class)->getById($userId);
         $projects = $this->getRepository(YongoProject::class)->getByClientId($session->get('client/id'));
         $roles = $this->getRepository(Role::class)->getByClient($session->get('client/id'));
-        $groups = $this->getRepository(UbirimiGroup::class)->getByUserIdAndProductId(
-            $userId,
-            SystemProduct::SYS_PRODUCT_YONGO
-        );
+        $groups = $this->getRepository(UbirimiGroup::class)->getByUserIdAndProductId($userId, SystemProduct::SYS_PRODUCT_YONGO);
         $groupIds = array();
         while ($groups && $group = $groups->fetch_array(MYSQLI_ASSOC)) {
             $groupIds[] = $group['id'];
@@ -59,12 +56,7 @@ class EditProjectRoleController extends UbirimiController
                 if (substr($key, 0, 5) == 'role_') {
                     $data = str_replace('role_', '', $key);
                     $params = explode('_', $data);
-                    $this->getRepository(Role::class)->addProjectRoleForUser(
-                        $userId,
-                        $params[0],
-                        $params[1],
-                        $currentDate
-                    );
+                    $this->getRepository(Role::class)->addProjectRoleForUser($userId, $params[0], $params[1], $currentDate);
                 }
             }
 
@@ -72,13 +64,8 @@ class EditProjectRoleController extends UbirimiController
         }
 
         $menuSelectedCategory = 'user';
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update User Project Roles';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update User Project Roles';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/user/EditProjectRole.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/user/EditProjectRole.php', get_defined_vars());
     }
 }

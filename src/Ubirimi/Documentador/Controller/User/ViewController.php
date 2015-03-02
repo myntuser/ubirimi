@@ -60,14 +60,9 @@ class ViewController extends UbirimiController
         }
 
         $menuSelectedCategory = 'documentator';
-        $groups = $this->getRepository(UbirimiGroup::class)->getByUserIdAndProductId(
-            $userId,
-            SystemProduct::SYS_PRODUCT_DOCUMENTADOR
-        );
+        $groups = $this->getRepository(UbirimiGroup::class)->getByUserIdAndProductId($userId, SystemProduct::SYS_PRODUCT_DOCUMENTADOR);
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME . ' / ' . $user['first_name'] . ' ' . $user['last_name'] . ' / Summary';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME. ' / ' . $user['first_name'] . ' ' . $user['last_name'] . ' / Summary';
 
         return $this->render(__DIR__ . '/../../Resources/views/user/View.php', get_defined_vars());
     }

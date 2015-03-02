@@ -52,12 +52,10 @@ class UploadTransitionAttachmentController extends UbirimiController
             $ext = substr($filename, strrpos($filename, '.') + 1);
             $filenameWithoutExtension = substr($filename, 0, strrpos($filename, '.'));
 
-            $attachmentId = $this->getRepository(IssueAttachment::class)->add(
-                $issueId,
+            $attachmentId = $this->getRepository(IssueAttachment::class)->add($issueId,
                 Util::slugify($filenameWithoutExtension) . '.' . $ext,
                 $loggedInUserId,
-                Util::getServerCurrentDateTime()
-            );
+                Util::getServerCurrentDateTime());
 
             if ($issueId == null) {
                 $issueId = 'user_' . $loggedInUserId;
@@ -93,9 +91,7 @@ class UploadTransitionAttachmentController extends UbirimiController
                 if (!file_exists($thumbUploaddirSubfolder)) {
                     mkdir($thumbUploaddirSubfolder);
                 }
-                $newThumbnailName = $thumbUploaddirSubfolder . '/' . Util::slugify(
-                        $filenameWithoutExtension
-                    ) . '.' . $ext;
+                $newThumbnailName = $thumbUploaddirSubfolder . '/' . Util::slugify($filenameWithoutExtension) . '.' . $ext;
 
                 $image = new ZebraImage();
                 $image->jpeg_quality = 100;

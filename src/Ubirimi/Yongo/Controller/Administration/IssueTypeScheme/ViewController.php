@@ -18,7 +18,6 @@
  */
 
 namespace Ubirimi\Yongo\Controller\Administration\IssueTypeScheme;
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Ubirimi\SystemProduct;
@@ -42,13 +41,8 @@ class ViewController extends UbirimiController
 
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Issue Type Scheme';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Issue Type Scheme';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/issue/issue_type_scheme/View.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/issue/issue_type_scheme/View.php', get_defined_vars());
     }
 }

@@ -6,17 +6,15 @@
 
         <div class="">
             <div class="align-left">
-                <form name="user-sign-up" method="post" action="/sign-up" class="standard-form" autocomplete="off"
-                      style="width: 400px;">
+                <form name="user-sign-up" method="post" action="/sign-up" class="standard-form" autocomplete="off" style="width: 400px;">
                     <?php require_once __DIR__ . '/_sigupForm.php' ?>
                     <?php if ($clientSettings['operating_mode'] == 'public'): ?>
-                        <button class="button_hp blue" type="submit" name="create-user-account">Create User Account
-                        </button>
+                        <button class="button_hp blue" type="submit" name="create-user-account">Create User Account</button>
                     <?php endif ?>
                     <button class="button_hp blue" type="submit" name="cancel">Back</button>
-                    <br/>
-                    <br/>
-                    <br/>
+                    <br />
+                    <br />
+                    <br />
                 </form>
             </div>
 
@@ -30,10 +28,8 @@
                     <li>Manage your events</li>
                 </ul>
                 <div style="border-top: 1px solid #d9e7f3; height: 2px;"></div>
-                <br/> <img src="/img/site/bg.home.logos.y.png" width="69px" style="padding-right: 8px"/> <img
-                    src="/img/site/bg.home.logos.a.png" width="69px" style="padding-right: 8px"/>
-                <img src="/img/site/bg.home.logos.d.png" width="69px" style="padding-right: 8px"/> <img
-                    src="/img/site/bg.home.logos.s.png" width="69px" style="padding-right: 8px"/>
+                <br/> <img src="/img/site/bg.home.logos.y.png" width="69px" style="padding-right: 8px"/> <img src="/img/site/bg.home.logos.a.png" width="69px" style="padding-right: 8px"/>
+                <img src="/img/site/bg.home.logos.d.png" width="69px" style="padding-right: 8px"/> <img src="/img/site/bg.home.logos.s.png" width="69px" style="padding-right: 8px"/>
                 <img src="/img/site/bg.home.logos.e.png" width="69px" style="padding-right: 8px"/>
             </div>
         </div>

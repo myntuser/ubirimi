@@ -36,9 +36,7 @@ class PurgeAllDialogController extends UbirimiController
 
         $pages = $this->getRepository(Space::class)->getDeletedPages($spaceId);
 
-        return new Response(
-            'This will remove all ' . $pages->num_rows . ' items permanently. Do you wish to continue?'
-        );
+        return new Response('This will remove all ' . $pages->num_rows . ' items permanently. Do you wish to continue?');
     }
 }
 

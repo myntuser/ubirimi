@@ -16,39 +16,23 @@ use Ubirimi\Util;
 
         <?php while ($comment = $comments->fetch_array(MYSQLI_ASSOC)): ?>
             <tr>
-                <td align="left" width="33px"
-                    valign="top" <?php if ($first) echo 'style="border-top: none; padding-right: 0px;"' ?>>
-                    <img style="height: 33px;" src="<?php echo UbirimiContainer::get()['repository']->get(
-                        UbirimiUser::class
-                    )->getUserAvatarPicture(
-                        array('avatar_picture' => $comment['avatar_picture'], 'id' => $comment['user_id']),
-                        'small'
-                    ) ?>"/>
+                <td align="left" width="33px" valign="top" <?php if ($first) echo 'style="border-top: none; padding-right: 0px;"' ?>>
+                    <img style="height: 33px;" src="<?php echo UbirimiContainer::get()['repository']->get(UbirimiUser::class)->getUserAvatarPicture(array('avatar_picture' => $comment['avatar_picture'], 'id' => $comment['user_id']), 'small') ?>" />
                 </td>
                 <td valign="top" <?php if ($first) echo 'style="border-top: none;"' ?>>
                     <span>
-                        <?php echo LinkHelper::getUserProfileLink(
-                            $comment['user_id'],
-                            SystemProduct::SYS_PRODUCT_YONGO,
-                            $comment['first_name'],
-                            $comment['last_name']
-                        ) ?> added a comment on <?php echo Util::getFormattedDate(
-                            $comment['date_created'],
-                            $clientSettings['timezone']
-                        ) ?>
+                        <?php echo LinkHelper::getUserProfileLink($comment['user_id'], SystemProduct::SYS_PRODUCT_YONGO, $comment['first_name'], $comment['last_name']) ?> added a comment on <?php echo Util::getFormattedDate($comment['date_created'], $clientSettings['timezone']) ?>
                     </span>
-                    <br/>
+                    <br />
                     <span><?php echo str_replace("\n", "<br />", htmlentities($comment['content'])) ?></span>
                 </td>
                 <?php if ($actionButtonsFlag): ?>
                     <td style="text-align: right; <?php if ($first) echo 'border-top: none;' ?>" width="160px;">
                         <?php if ($hasEditAllComments || ($hasEditOwnComments && $loggedInUserId == $comment['user_id'])): ?>
-                            <a id="edit_comment_<?php echo $comment['id'] ?>" class="btn ubirimi-btn" href="#"><i
-                                    class="icon-edit"></i> Edit</a>
+                            <a id="edit_comment_<?php echo $comment['id'] ?>" class="btn ubirimi-btn" href="#"><i class="icon-edit"></i> Edit</a>
                         <?php endif ?>
                         <?php if ($hasDeleteAllComments || ($hasDeleteOwnComments && $loggedInUserId == $comment['user_id'])): ?>
-                            <a id="comment_<?php echo $comment['id'] ?>" class="btn ubirimi-btn" href="#"><i
-                                    class="icon-remove"></i> Delete</a>
+                            <a id="comment_<?php echo $comment['id'] ?>" class="btn ubirimi-btn" href="#"><i class="icon-remove"></i> Delete</a>
                         <?php endif ?>
                     </td>
                 <?php endif ?>

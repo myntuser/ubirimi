@@ -47,9 +47,7 @@ class ViewUserSummaryController extends UbirimiController
         $isSVNAdministrator = $session->get('user/svn_administrator_flag');
         $session->set('selected_product_id', SystemProduct::SYS_PRODUCT_SVN_HOSTING);
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_SVN_HOSTING_NAME . ' / ' . $svnRepo['code'] . ' / Users';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_SVN_HOSTING_NAME. ' / ' . $svnRepo['code'] . ' / Users';
 
         return $this->render(__DIR__ . '/../Resources/views/ViewUserSummary.php', get_defined_vars());
     }

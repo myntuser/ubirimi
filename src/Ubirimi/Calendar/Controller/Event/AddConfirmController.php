@@ -48,10 +48,7 @@ class AddConfirmController extends UbirimiController
         }
         $defaultEventStartDate = $defaultYear . '-' . $defaultMonth . '-' . $defaultDay . ' 00:00';
 
-        $startDate = new \DateTime(
-            $defaultYear . '-' . $defaultMonth . '-' . $defaultDay,
-            new \DateTimeZone($clientSettings['timezone'])
-        );
+        $startDate = new \DateTime($defaultYear . '-' . $defaultMonth . '-' . $defaultDay, new \DateTimeZone($clientSettings['timezone']));
         $dayInWeek = date_format($startDate, 'w');
 
         return $this->render(__DIR__ . '/../../Resources/views/event/AddConfirm.php', get_defined_vars());

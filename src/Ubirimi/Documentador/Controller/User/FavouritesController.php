@@ -63,15 +63,10 @@ class FavouritesController extends UbirimiController
         }
 
         $menuSelectedCategory = 'documentator';
-        $groups = $this->getRepository(UbirimiGroup::class)->getByUserIdAndProductId(
-            $userId,
-            SystemProduct::SYS_PRODUCT_DOCUMENTADOR
-        );
+        $groups = $this->getRepository(UbirimiGroup::class)->getByUserIdAndProductId($userId, SystemProduct::SYS_PRODUCT_DOCUMENTADOR);
 
         $pages = $this->getRepository(Entity::class)->getFavouritePagesByClientIdAndUserId($clientId, $userId);
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME . ' / ' . $user['first_name'] . ' ' . $user['last_name'] . ' / Favourites';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME. ' / ' . $user['first_name'] . ' ' . $user['last_name'] . ' / Favourites';
 
         return $this->render(__DIR__ . '/../../Resources/views/user/Favourites.php', get_defined_vars());
     }

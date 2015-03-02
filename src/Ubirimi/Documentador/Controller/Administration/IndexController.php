@@ -36,15 +36,10 @@ class IndexController extends UbirimiController
 
         $menuSelectedCategory = 'doc_administration';
 
-        $spacesWithAdminPermission = $this->getRepository(Space::class)->getWithAdminPermissionByUserId(
-            $clientId,
-            $loggedInUserId
-        );
+        $spacesWithAdminPermission = $this->getRepository(Space::class)->getWithAdminPermissionByUserId($clientId, $loggedInUserId);
 
         $hasDocumentadorGlobalAdministrationPermission = $session->get('user/documentator/is_global_administrator');
-        $hasDocumentadorGlobalSystemAdministrationPermission = $session->get(
-            'user/documentator/is_global_system_administrator'
-        );
+        $hasDocumentadorGlobalSystemAdministrationPermission = $session->get('user/documentator/is_global_system_administrator');
 
         return $this->render(__DIR__ . '/../../Resources/views/administration/Index.php', get_defined_vars());
     }

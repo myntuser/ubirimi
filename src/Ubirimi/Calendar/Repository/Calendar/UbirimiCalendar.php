@@ -24,10 +24,9 @@ use Ubirimi\Container\UbirimiContainer;
 
 class UbirimiCalendar
 {
-    public function getByUserId($userId, $resultType = null, $resultColumn = null)
-    {
+    public function getByUserId($userId, $resultType = null, $resultColumn = null) {
         $query = "select cal_calendar.id, cal_calendar.name, cal_calendar.description, cal_calendar.date_created, cal_calendar.default_flag, " .
-            "cal_calendar.color " .
+                 "cal_calendar.color " .
             "from cal_calendar " .
             "left join general_user on general_user.id = cal_calendar.user_id " .
             "where cal_calendar.user_id = ?";
@@ -40,24 +39,21 @@ class UbirimiCalendar
             if ($resultType == 'array') {
                 $resultArray = array();
                 while ($record = $result->fetch_array(MYSQLI_ASSOC)) {
-                    if ($resultColumn) {
+                    if ($resultColumn)
                         $resultArray[] = $record[$resultColumn];
-                    } else {
+                    else
                         $resultArray[] = $record;
-                    }
                 }
 
                 return $resultArray;
             } else {
                 return $result;
             }
-        } else {
+        } else
             return null;
-        }
     }
 
-    public function getSharedWithUserId($userId, $resultType = null, $resultColumn = null)
-    {
+    public function getSharedWithUserId($userId, $resultType = null, $resultColumn = null) {
         $query = "select cal_calendar.id, cal_calendar.name, cal_calendar.description, cal_calendar.date_created " .
             "from cal_calendar_share " .
             "left join cal_calendar on cal_calendar.id = cal_calendar_share.cal_calendar_id " .
@@ -71,11 +67,10 @@ class UbirimiCalendar
             if ($resultType == 'array') {
                 $resultArray = array();
                 while ($record = $result->fetch_array(MYSQLI_ASSOC)) {
-                    if ($resultColumn) {
+                    if ($resultColumn)
                         $resultArray[] = $record[$resultColumn];
-                    } else {
+                    else
                         $resultArray[] = $record;
-                    }
                 }
 
                 return $resultArray;
@@ -87,8 +82,7 @@ class UbirimiCalendar
         }
     }
 
-    public function getSharedUsers($calendarId, $resultType = null)
-    {
+    public function getSharedUsers($calendarId, $resultType = null) {
         $query = "select general_user.id, general_user.first_name, general_user.last_name " .
             "from cal_calendar_share " .
             "left join general_user on general_user.id = cal_calendar_share.user_id " .
@@ -106,16 +100,13 @@ class UbirimiCalendar
                 }
 
                 return $resultArray;
-            } else {
+            } else
                 return $result;
-            }
-        } else {
+        } else
             return null;
-        }
     }
 
-    public function save($userId, $name, $description, $color, $date, $defaultFlag = null)
-    {
+    public function save($userId, $name, $description, $color, $date, $defaultFlag = null) {
         $query = "INSERT INTO cal_calendar(user_id, name, description, color, default_flag, date_created) VALUES (?, ?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -128,11 +119,10 @@ class UbirimiCalendar
         return $calendarId;
     }
 
-    public function getById($calendarId)
-    {
+    public function getById($calendarId) {
         $query = "select cal_calendar.id, cal_calendar.user_id, cal_calendar.name, cal_calendar.description, " .
-            "cal_calendar.default_flag, cal_calendar.date_created, cal_calendar.date_updated, cal_calendar.color, " .
-            "general_user.client_id " .
+                 "cal_calendar.default_flag, cal_calendar.date_created, cal_calendar.date_updated, cal_calendar.color, " .
+                 "general_user.client_id " .
             "from cal_calendar " .
             "left join general_user on general_user.id = cal_calendar.user_id " .
             "where cal_calendar.id = ? " .
@@ -144,13 +134,11 @@ class UbirimiCalendar
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        } else
             return null;
-        }
     }
 
-    public function getByIds($calendarIds)
-    {
+    public function getByIds($calendarIds) {
         $query = "select * " .
             "from cal_calendar " .
             "where cal_calendar.id IN (?) " .
@@ -162,41 +150,35 @@ class UbirimiCalendar
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        } else
             return null;
-        }
     }
 
-    public function getByName($userId, $name, $calendarId = null)
-    {
+    public function getByName($userId, $name, $calendarId = null) {
         $query = 'select id, name, description ' .
             'from cal_calendar ' .
             'where user_id = ? ' .
             'and LOWER(name) = ? ';
 
-        if ($calendarId) {
+        if ($calendarId)
             $query .= 'and id != ? ';
-        }
 
         $query .= 'limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
-        if ($calendarId) {
+        if ($calendarId)
             $stmt->bind_param("isi", $userId, $name, $calendarId);
-        } else {
+        else
             $stmt->bind_param("is", $userId, $name);
-        }
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 
-    public function updateById($calendarId, $name, $description, $color, $date)
-    {
+    public function updateById($calendarId, $name, $description, $color, $date) {
         $query = 'UPDATE cal_calendar SET name = ?, description = ?, color = ?, date_updated = ? WHERE id = ? LIMIT 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -204,8 +186,7 @@ class UbirimiCalendar
         $stmt->execute();
     }
 
-    public function deleteSharesByCalendarId($calendarId)
-    {
+    public function deleteSharesByCalendarId($calendarId) {
         $query = 'delete from cal_calendar_share WHERE cal_calendar_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -213,8 +194,7 @@ class UbirimiCalendar
         $stmt->execute();
     }
 
-    public function deleteById($calendarId)
-    {
+    public function deleteById($calendarId) {
         // if calendar is shared delete the shares
         UbirimiContainer::get()['repository']->get(UbirimiCalendar::class)->deleteSharesByCalendarId($calendarId);
 
@@ -255,8 +235,7 @@ class UbirimiCalendar
         $stmt->execute();
     }
 
-    public function shareWithUsers($calendarId, $userIds, $date)
-    {
+    public function shareWithUsers($calendarId, $userIds, $date) {
         for ($i = 0; $i < count($userIds); $i++) {
             $query = "INSERT INTO cal_calendar_share(cal_calendar_id, user_id, date_created) VALUES (?, ?, ?)";
             $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -266,8 +245,7 @@ class UbirimiCalendar
         }
     }
 
-    public function getDefaultCalendar($userId)
-    {
+    public function getDefaultCalendar($userId) {
         $query = "select * " .
             "from cal_calendar " .
             "where cal_calendar.user_id = ? and default_flag = 1 " .
@@ -279,13 +257,11 @@ class UbirimiCalendar
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        } else
             return null;
-        }
     }
 
-    public function getAll()
-    {
+    public function getAll() {
         $query = "select cal_calendar.name, cal_calendar.description, cal_calendar.date_created, client.company_domain, cal_calendar.id " .
             "from cal_calendar " .
             "left join general_user on general_user.id = cal_calendar.user_id " .
@@ -297,13 +273,11 @@ class UbirimiCalendar
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result;
-        } else {
+        } else
             return null;
-        }
     }
 
-    public function getByClientId($clientId)
-    {
+    public function getByClientId($clientId) {
         $query = "select cal_calendar.* " .
             "from cal_calendar " .
             "left join general_user on cal_calendar.user_id = general_user.id " .
@@ -316,13 +290,11 @@ class UbirimiCalendar
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result;
-        } else {
+        } else
             return null;
-        }
     }
 
-    public function getReminders($calendarId)
-    {
+    public function getReminders($calendarId) {
         $query = "select cal_calendar_default_reminder.* " .
             "from cal_calendar_default_reminder " .
             "where cal_calendar_default_reminder.cal_calendar_id = ?";
@@ -333,13 +305,11 @@ class UbirimiCalendar
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result;
-        } else {
+        } else
             return null;
-        }
     }
 
-    public function deleteReminders($calendarId)
-    {
+    public function deleteReminders($calendarId) {
         $query = "delete from cal_calendar_default_reminder where cal_calendar_default_reminder.cal_calendar_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -347,8 +317,7 @@ class UbirimiCalendar
         $stmt->execute();
     }
 
-    public function addReminder($calendarId, $reminderType, $reminderPeriod, $reminderValue)
-    {
+    public function addReminder($calendarId, $reminderType, $reminderPeriod, $reminderValue) {
         $query = "INSERT INTO cal_calendar_default_reminder(cal_calendar_id, cal_event_reminder_type_id, cal_event_reminder_period_id, value) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -357,8 +326,7 @@ class UbirimiCalendar
         $stmt->execute();
     }
 
-    public function deleteByUserId($userId)
-    {
+    public function deleteByUserId($userId) {
         $calendars = UbirimiContainer::get()['repository']->get(UbirimiCalendar::class)->getByUserId($userId);
 
         while ($calendars && $calendar = $calendars->fetch_array(MYSQLI_ASSOC)) {
@@ -366,8 +334,7 @@ class UbirimiCalendar
         }
     }
 
-    public function deleteReminderById($reminderId)
-    {
+    public function deleteReminderById($reminderId) {
         $query = "delete from cal_calendar_default_reminder where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -375,8 +342,7 @@ class UbirimiCalendar
         $stmt->execute();
     }
 
-    public function getEventsByLinkId($eventLinkId)
-    {
+    public function getEventsByLinkId($eventLinkId) {
         $query = "select cal_event.* " .
             "from cal_event " .
             "where cal_event.cal_event_link_id = ? " .
@@ -388,13 +354,11 @@ class UbirimiCalendar
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result;
-        } else {
+        } else
             return null;
-        }
     }
 
-    public function updateEventsLinkByLinkId($oldLinkId, $newLinkId)
-    {
+    public function updateEventsLinkByLinkId($oldLinkId, $newLinkId) {
         $query = "update cal_event set cal_event_link_id = ? where cal_event_link_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

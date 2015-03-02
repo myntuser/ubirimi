@@ -40,27 +40,16 @@ class ImportUsersController extends UbirimiController
         $usersIdsToImport = $request->request->get('users');
 
         foreach ($usersIdsToImport as $userToImport) {
-            $this->getRepository(SvnRepository::class)->addUser(
-                $session->get('selected_svn_repo_id'),
-                (int)$userToImport
-            );
-            $this->getRepository(SvnRepository::class)->updateUserPermissions(
-                $session->get('selected_svn_repo_id'),
-                (int)$userToImport,
-                1,
-                1
-            );
+            $this->getRepository(SvnRepository::class)->addUser($session->get('selected_svn_repo_id'), (int) $userToImport);
+            $this->getRepository(SvnRepository::class)->updateUserPermissions($session->get('selected_svn_repo_id'), (int) $userToImport, 1, 1);
 
-            $userRec = $this->getRepository(UbirimiUser::class)->getById((int)$userToImport);
+            $userRec = $this->getRepository(UbirimiUser::class)->getById((int) $userToImport);
             $svnRepo = $this->getRepository(SvnRepository::class)->getById($session->get('selected_svn_repo_id'));
 
             $this->getRepository(SvnRepository::class)->updateAuthz();
 
             $svnEvent = new SvnHostingEvent($svnRepo['name'], $userRec);
-            $this->getLogger()->addInfo(
-                sprintf('SVN users imported into SVN Repository [%s]', $svnRepo['name']),
-                $this->getLoggerContext()
-            );
+            $this->getLogger()->addInfo(sprintf('SVN users imported into SVN Repository [%s]', $svnRepo['name']), $this->getLoggerContext());
 
             UbirimiContainer::get()['dispatcher']->dispatch(SvnHostingEvents::IMPORT_USERS, $svnEvent);
         }

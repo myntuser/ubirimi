@@ -34,13 +34,8 @@ class ListController extends UbirimiController
         $workflows = $this->getRepository(Workflow::class)->getAllByClientId($session->get('client/id'));
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Workflows';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Workflows';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/workflow/List.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/workflow/List.php', get_defined_vars());
     }
 }

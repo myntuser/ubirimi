@@ -39,10 +39,7 @@ class AddController extends UbirimiController
 
         $clientDomain = $session->get('client/company_domain');
 
-        $groupDevelopers = $this->getRepository(UbirimiGroup::class)->getByName(
-            $session->get('client/id'),
-            'Developers'
-        );
+        $groupDevelopers = $this->getRepository(UbirimiGroup::class)->getByName($session->get('client/id'), 'Developers');
 
         $errors = array(
             'empty_email' => false,
@@ -77,28 +74,20 @@ class AddController extends UbirimiController
 
             if (empty($email)) {
                 $errors['empty_email'] = true;
-            } else {
-                if (!Util::isValidEmail($email)) {
-                    $errors['email_not_valid'] = true;
-                }
+            } else if (!Util::isValidEmail($email)) {
+                $errors['email_not_valid'] = true;
             }
             if (!Util::validateUsername($username)) {
                 $errors['invalid_username'] = true;
             } else {
-                $existingUser = $this->getRepository(UbirimiUser::class)->getByUsernameAndClientId(
-                    $username,
-                    $session->get('client/id')
-                );
+                $existingUser = $this->getRepository(UbirimiUser::class)->getByUsernameAndClientId($username, $session->get('client/id'));
 
                 if ($existingUser) {
                     $errors['duplicate_username'] = true;
                 }
             }
 
-            $emailData = $this->getRepository(UbirimiUser::class)->getUserByClientIdAndEmailAddress(
-                $session->get('client/id'),
-                mb_strtolower($email)
-            );
+            $emailData = $this->getRepository(UbirimiUser::class)->getUserByClientIdAndEmailAddress($session->get('client/id'), mb_strtolower($email));
             if ($emailData) {
                 $errors['email_already_exists'] = true;
             }

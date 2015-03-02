@@ -43,11 +43,10 @@ class AddConfirmController extends UbirimiController
                 $value = $nameComponents[count($nameComponents) - 1];
                 $value++;
                 array_pop($nameComponents);
-                if (count($nameComponents) == 1) {
+                if (count($nameComponents) == 1)
                     $suggestedName = $nameComponents[0] . ' ' . $value;
-                } else {
+                else
                     $suggestedName = implode(' ', $nameComponents) . ' ' . $value;
-                }
             }
         } else {
             $suggestedName = 'Sprint 1';

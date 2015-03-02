@@ -33,10 +33,7 @@ class ListController extends UbirimiController
         Util::checkUserIsLoggedInAndRedirect();
 
         $clientId = $session->get('client/id');
-        $groups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId(
-            $clientId,
-            SystemProduct::SYS_PRODUCT_DOCUMENTADOR
-        );
+        $groups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId($clientId, SystemProduct::SYS_PRODUCT_DOCUMENTADOR);
 
         $menuSelectedCategory = 'doc_users';
 

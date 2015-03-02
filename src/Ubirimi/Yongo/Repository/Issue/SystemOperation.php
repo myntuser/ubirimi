@@ -27,18 +27,16 @@ class SystemOperation
     const OPERATION_EDIT = 2;
     const OPERATION_VIEW = 3;
 
-    public function getAll()
-    {
+    public function getAll() {
         $query = "SELECT * " .
             "FROM sys_operation";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 }

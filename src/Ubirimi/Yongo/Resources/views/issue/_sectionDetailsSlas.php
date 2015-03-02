@@ -17,18 +17,14 @@ use Ubirimi\HelpDesk\Repository\Sla\Sla;
                     <div><?php echo 'within ' . $slaData['goalValue'] ?> minutes</div>
                 </td>
                 <td valign="top">
-                    <span class="<?php if (($slaData['goalValue'] - $slaData['intervalMinutes']) < 0) {
-                        echo 'slaNegative';
-                    } else echo 'slaPositive' ?>">
-                        <?php echo UbirimiContainer::get()['repository']->get(Sla::class)->formatOffset(
-                            $slaData['goalValue'] - $slaData['intervalMinutes']
-                        ) ?>
+                    <span class="<?php if (($slaData['goalValue'] - $slaData['intervalMinutes']) < 0) echo 'slaNegative'; else echo 'slaPositive' ?>">
+                        <?php echo UbirimiContainer::get()['repository']->get(Sla::class)->formatOffset($slaData['goalValue'] - $slaData['intervalMinutes']) ?>
                     </span>
                     &nbsp;
                     <?php if ($slaData['endDate']): ?>
-                        <img src="/img/accept.png"/>
+                        <img src="/img/accept.png" />
                     <?php else: ?>
-                        <img src="/img/clock.png" height="16px"/>
+                        <img src="/img/clock.png" height="16px" />
                     <?php endif ?>
                 </td>
             </tr>

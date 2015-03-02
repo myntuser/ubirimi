@@ -25,10 +25,7 @@ $parameters = array('sprint' => $sprintId);
 if ($onlyMyIssuesFlag) {
     $parameters['assignee'] = $loggedInUserId;
 }
-$strategyIssue = UbirimiContainer::get()['repository']->get(Issue::class)->getByParameters(
-    $parameters,
-    $loggedInUserId
-);
+$strategyIssue = UbirimiContainer::get()['repository']->get(Issue::class)->getByParameters($parameters, $loggedInUserId);
 
 if ($strategyIssue) {
     require '_strategy_body.php';

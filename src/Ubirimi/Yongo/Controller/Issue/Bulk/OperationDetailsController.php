@@ -42,9 +42,7 @@ class OperationDetailsController extends UbirimiController
             return new RedirectResponse('/yongo/issue/bulk-change-confirmation');
         }
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Bulk: Operation Details';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Bulk: Operation Details';
 
         return $this->render(__DIR__ . '/../../../Resources/views/issue/bulk/OperationDetails.php', get_defined_vars());
     }

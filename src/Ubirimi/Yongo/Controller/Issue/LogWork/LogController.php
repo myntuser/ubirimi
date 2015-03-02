@@ -58,48 +58,20 @@ class LogController extends UbirimiController
             $issueQueryParameters = array('issue_id' => $issueId);
             $issue = $this->getRepository(Issue::class)->getByParameters($issueQueryParameters, $loggedInUserId);
 
-            $this->getRepository(WorkLog::class)->addLog(
-                $issueId,
-                $loggedInUserId,
-                $timeSpentPost,
-                $dateStartedString,
-                $comment,
-                $currentDate
-            );
-            $remainingTime = $this->getRepository(WorkLog::class)->adjustRemainingEstimate(
-                $issue,
-                $timeSpentPost,
-                $remainingTime,
-                $session->get('yongo/settings/time_tracking_hours_per_day'),
-                $session->get('yongo/settings/time_tracking_days_per_week'),
-                $loggedInUserId
-            );
+            $this->getRepository(WorkLog::class)->addLog($issueId, $loggedInUserId, $timeSpentPost, $dateStartedString, $comment, $currentDate);
+            $remainingTime = $this->getRepository(WorkLog::class)->adjustRemainingEstimate($issue, $timeSpentPost, $remainingTime, $session->get('yongo/settings/time_tracking_hours_per_day'), $session->get('yongo/settings/time_tracking_days_per_week'), $loggedInUserId);
 
-            $fieldChanges = array(
-                array('time_spent', null, $timeSpentPost),
-                array('remaining_estimate', $issue['remaining_estimate'], $remainingTime)
-            );
-            $this->getRepository(Issue::class)->updateHistory(
-                $issue['id'],
-                $loggedInUserId,
-                $fieldChanges,
-                $currentDate
-            );
+            $fieldChanges = array(array('time_spent', null, $timeSpentPost), array('remaining_estimate', $issue['remaining_estimate'], $remainingTime));
+            $this->getRepository(Issue::class)->updateHistory($issue['id'], $loggedInUserId, $fieldChanges, $currentDate);
 
             // update the date_updated field
-            $this->getRepository(Issue::class)->updateById(
-                $issueId,
-                array('date_updated' => $currentDate),
-                $currentDate
-            );
+            $this->getRepository(Issue::class)->updateById($issueId, array('date_updated' => $currentDate), $currentDate);
 
             $project = $this->getRepository(YongoProject::class)->getById($issue['issue_project_id']);
-            $issueEventData = array(
-                'user_id' => $loggedInUserId,
-                'comment' => $comment,
-                'date_started' => $dateStartedString,
-                'time_spent' => $timeSpentPost
-            );
+            $issueEventData = array('user_id' => $loggedInUserId,
+                                    'comment' => $comment,
+                                    'date_started' => $dateStartedString,
+                                    'time_spent' => $timeSpentPost);
             $issueEvent = new IssueEvent($issue, $project, IssueEvent::STATUS_UPDATE, $issueEventData);
 
             UbirimiContainer::get()['dispatcher']->dispatch(YongoEvents::YONGO_ISSUE_WORK_LOGGED, $issueEvent);

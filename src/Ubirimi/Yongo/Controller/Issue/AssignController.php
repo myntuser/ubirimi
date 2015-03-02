@@ -45,17 +45,8 @@ class AssignController extends UbirimiController
         $userAssignedId = $request->request->get('user_assigned_id');
         $comment = Util::cleanRegularInputField($request->request->get('comment'));
 
-        $issueData = $this->getRepository(Issue::class)->getByParameters(
-            array('issue_id' => $issueId),
-            $loggedInUserId
-        );
-        $this->getRepository(Issue::class)->updateAssignee(
-            $session->get('client/id'),
-            $issueId,
-            $session->get('user/id'),
-            $userAssignedId,
-            $comment
-        );
+        $issueData = $this->getRepository(Issue::class)->getByParameters(array('issue_id' => $issueId), $loggedInUserId);
+        $this->getRepository(Issue::class)->updateAssignee($session->get('client/id'), $issueId, $session->get('user/id'), $userAssignedId, $comment);
 
         // update the date_updated field
         $this->getRepository(Issue::class)->updateById($issueId, array('date_updated' => $currentDate), $currentDate);

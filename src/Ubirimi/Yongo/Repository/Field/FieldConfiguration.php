@@ -21,15 +21,13 @@ namespace Ubirimi\Yongo\Repository\Field;
 
 use Ubirimi\Container\UbirimiContainer;
 
-class FieldConfiguration
-{
+class FieldConfiguration {
 
     private $name;
     private $description;
     private $clientId;
 
-    function __construct($clientId = null, $name = null, $description = null)
-    {
+    function __construct($clientId = null, $name = null, $description = null) {
         $this->clientId = $clientId;
         $this->name = $name;
         $this->description = $description;
@@ -37,8 +35,7 @@ class FieldConfiguration
         return $this;
     }
 
-    public function save($currentDate)
-    {
+    public function save($currentDate) {
         $query = "INSERT INTO field_configuration(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -48,8 +45,7 @@ class FieldConfiguration
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function getByClientId($clientId)
-    {
+    public function getByClientId($clientId) {
         $query = "SELECT * " .
             "FROM field_configuration " .
             "where client_id = ?";
@@ -59,15 +55,13 @@ class FieldConfiguration
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getByName($clientId, $name)
-    {
+    public function getByName($clientId, $name) {
         $query = "SELECT * " .
             "FROM field_configuration " .
             "where client_id = ? and name = ? " .
@@ -77,15 +71,13 @@ class FieldConfiguration
         $stmt->bind_param("is", $clientId, $name);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getMetaDataById($Id)
-    {
+    public function getMetaDataById($Id) {
         $query = "select * " .
             "from field_configuration " .
             "where id = ? " .
@@ -95,15 +87,13 @@ class FieldConfiguration
         $stmt->bind_param("i", $Id);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 
-    public function updateMetadataById($Id, $name, $description, $date)
-    {
+    public function updateMetadataById($Id, $name, $description, $date) {
         $query = "update field_configuration set name = ?, description = ?, date_updated = ? " .
             "where id = ? " .
             "limit 1 ";
@@ -113,8 +103,7 @@ class FieldConfiguration
         $stmt->execute();
     }
 
-    public function getByIssueType($issueTypeId, $clientId)
-    {
+    public function getByIssueType($issueTypeId, $clientId) {
         $query = "select field_configuration.id, field_configuration.name " .
             "from field_configuration " .
             "left join issue_type_field_configuration_data on issue_type_field_configuration_data.field_configuration_id = field_configuration.id " .
@@ -127,15 +116,13 @@ class FieldConfiguration
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getDataByConfigurationAndField($fieldConfigurationId, $fieldId)
-    {
+    public function getDataByConfigurationAndField($fieldConfigurationId, $fieldId) {
         $query = "select * " .
             "from field_configuration_data " .
             "where field_configuration_id = ? and field_id = ? " .
@@ -145,15 +132,13 @@ class FieldConfiguration
         $stmt->bind_param("ii", $fieldConfigurationId, $fieldId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else {
+        else
             return null;
-        }
     }
 
-    public function getDataByConfigurationId($fieldConfigurationId)
-    {
+    public function getDataByConfigurationId($fieldConfigurationId) {
         $query = "select * " .
             "from field_configuration_data " .
             "where field_configuration_id = ?";
@@ -163,15 +148,13 @@ class FieldConfiguration
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 
-    public function updateFieldDescription($fieldConfigurationId, $fieldId, $description)
-    {
+    public function updateFieldDescription($fieldConfigurationId, $fieldId, $description) {
         $query = "update field_configuration_data set field_description = ? " .
             "where field_configuration_id = ? and field_id = ? " .
             "limit 1 ";
@@ -181,8 +164,7 @@ class FieldConfiguration
         $stmt->execute();
     }
 
-    public function updateData($fieldConfigurationId, $fieldId, $visibleFlag, $requiredFlag)
-    {
+    public function updateData($fieldConfigurationId, $fieldId, $visibleFlag, $requiredFlag) {
         if (isset($visibleFlag)) {
             if ($visibleFlag == 1) {
                 $query = "update field_configuration_data set visible_flag = 1 " .
@@ -214,8 +196,7 @@ class FieldConfiguration
         }
     }
 
-    public function addSimpleData($fieldConfigurationId, $fieldId)
-    {
+    public function addSimpleData($fieldConfigurationId, $fieldId) {
         $query = "INSERT INTO field_configuration_data(field_configuration_id, field_id) VALUES (?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -225,8 +206,7 @@ class FieldConfiguration
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function addCompleteData($fieldConfigurationId, $fieldId, $visibleFlag, $requiredFlag, $fieldDescription)
-    {
+    public function addCompleteData($fieldConfigurationId, $fieldId, $visibleFlag, $requiredFlag, $fieldDescription) {
         $query = "INSERT INTO field_configuration_data(field_configuration_id, field_id, visible_flag, required_flag, field_description) VALUES (?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -236,8 +216,7 @@ class FieldConfiguration
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function deleteDataByFieldConfigurationId($fieldConfigurationId)
-    {
+    public function deleteDataByFieldConfigurationId($fieldConfigurationId) {
         $query = "delete from field_configuration_data where field_configuration_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -245,8 +224,7 @@ class FieldConfiguration
         $stmt->execute();
     }
 
-    public function deleteById($fieldConfigurationId)
-    {
+    public function deleteById($fieldConfigurationId) {
         $query = "delete from field_configuration where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -254,34 +232,25 @@ class FieldConfiguration
         $stmt->execute();
     }
 
-    public function deleteByClientId($clientId)
-    {
-        $fieldConfigurations = UbirimiContainer::get()['repository']->get(FieldConfiguration::class)->getByClientId(
-            $clientId
-        );
+    public function deleteByClientId($clientId) {
+        $fieldConfigurations = UbirimiContainer::get()['repository']->get(FieldConfiguration::class)->getByClientId($clientId);
 
         while ($fieldConfigurations && $fieldConfiguration = $fieldConfigurations->fetch_array(MYSQLI_ASSOC)) {
-            UbirimiContainer::get()['repository']->get(FieldConfiguration::class)->deleteDataByFieldConfigurationId(
-                $fieldConfiguration['id']
-            );
-            UbirimiContainer::get()['repository']->get(FieldConfiguration::class)->deleteById(
-                $fieldConfiguration['id']
-            );
+            UbirimiContainer::get()['repository']->get(FieldConfiguration::class)->deleteDataByFieldConfigurationId($fieldConfiguration['id']);
+            UbirimiContainer::get()['repository']->get(FieldConfiguration::class)->deleteById($fieldConfiguration['id']);
         }
     }
 
-    public function getMetaDataByNameAndClientId($clientId, $name)
-    {
+    public function getMetaDataByNameAndClientId($clientId, $name) {
         $query = "select * from field_configuration where client_id = ? and LOWER(name) = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $clientId, $name);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows) {
+        if ($result->num_rows)
             return $result;
-        } else {
+        else
             return null;
-        }
     }
 }

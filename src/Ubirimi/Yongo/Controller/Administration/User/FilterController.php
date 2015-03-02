@@ -53,13 +53,8 @@ class FilterController extends UbirimiController
 
         $menuSelectedCategory = 'user';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Users';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Users';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/user/_list_user.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/user/_list_user.php', get_defined_vars());
     }
 }

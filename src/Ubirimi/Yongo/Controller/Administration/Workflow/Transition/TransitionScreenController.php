@@ -40,18 +40,11 @@ class TransitionScreenController extends UbirimiController
 
         $workflowMetadata = $this->getRepository(Workflow::class)->getMetaDataById($workflowId);
 
-        $workflowData = $this->getRepository(Workflow::class)->getDataByStepIdFromAndStepIdTo(
-            $workflowId,
-            $stepIdFrom,
-            $stepIdTo
-        );
+        $workflowData = $this->getRepository(Workflow::class)->getDataByStepIdFromAndStepIdTo($workflowId, $stepIdFrom, $stepIdTo);
         $transitionName = $workflowData['transition_name'];
         $screens = $this->getRepository(Screen::class)->getAll($clientId);
         $initialStep = $this->getRepository(Workflow::class)->getInitialStep($workflowId);
 
-        return $this->render(
-            __DIR__ . '/../../../../Resources/views/administration/workflow/transition/TransitionScreen.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../../Resources/views/administration/workflow/transition/TransitionScreen.php', get_defined_vars());
     }
 }

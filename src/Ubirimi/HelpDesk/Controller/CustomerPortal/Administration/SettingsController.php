@@ -42,9 +42,6 @@ class SettingsController extends UbirimiController
             . ' / ' . SystemProduct::SYS_PRODUCT_HELP_DESK_NAME
             . ' / Customer Portal / Settings';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/customer_portal/administration/Settings.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/customer_portal/administration/Settings.php', get_defined_vars());
     }
 }

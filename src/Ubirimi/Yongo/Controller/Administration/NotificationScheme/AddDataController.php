@@ -47,16 +47,10 @@ class AddDataController extends UbirimiController
         $notificationScheme = $this->getRepository(NotificationScheme::class)->getMetaDataById($notificationSchemeId);
         $events = $this->getRepository(IssueEvent::class)->getByClient($session->get('client/id'));
         $users = $this->getRepository(UbirimiUser::class)->getByClientId($session->get('client/id'));
-        $groups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId(
-            $session->get('client/id'),
-            SystemProduct::SYS_PRODUCT_YONGO
-        );
+        $groups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId($session->get('client/id'), SystemProduct::SYS_PRODUCT_YONGO);
         $roles = $this->getRepository(Role::class)->getByClient($session->get('client/id'));
 
-        $fieldsUserPickerMultipleSelection = $this->getRepository(Field::class)->getByClientIdAndFieldTypeId(
-            $session->get('client/id'),
-            Field::CUSTOM_FIELD_TYPE_USER_PICKER_MULTIPLE_USER_CODE_ID
-        );
+        $fieldsUserPickerMultipleSelection = $this->getRepository(Field::class)->getByClientIdAndFieldTypeId($session->get('client/id'), Field::CUSTOM_FIELD_TYPE_USER_PICKER_MULTIPLE_USER_CODE_ID);
 
         if ($request->request->has('confirm_new_data')) {
 
@@ -76,9 +70,7 @@ class AddDataController extends UbirimiController
                     // check for duplicate information
                     $duplication = false;
 
-                    $dataNotification = $this->getRepository(
-                        NotificationScheme::class
-                    )->getDataByNotificationSchemeIdAndEventId($notificationSchemeId, $eventIds[$i]);
+                    $dataNotification = $this->getRepository(NotificationScheme::class)->getDataByNotificationSchemeIdAndEventId($notificationSchemeId, $eventIds[$i]);
 
                     if ($dataNotification) {
                         while ($data = $dataNotification->fetch_array(MYSQLI_ASSOC)) {
@@ -92,39 +84,32 @@ class AddDataController extends UbirimiController
                                 $duplication = true;
                             }
                             if ($notificationType == Notification::NOTIFICATION_TYPE_PROJECT_LEAD) {
-                                if ($data['project_lead']) {
+                                if ($data['project_lead'])
                                     $duplication = true;
-                                }
                             }
                             if ($notificationType == Notification::NOTIFICATION_TYPE_COMPONENT_LEAD) {
-                                if ($data['component_lead']) {
+                                if ($data['component_lead'])
                                     $duplication = true;
-                                }
                             }
                             if ($notificationType == Notification::NOTIFICATION_TYPE_CURRENT_ASSIGNEE) {
-                                if ($data['current_assignee']) {
+                                if ($data['current_assignee'])
                                     $duplication = true;
-                                }
                             }
                             if ($notificationType == Notification::NOTIFICATION_TYPE_CURRENT_USER) {
-                                if ($data['current_user']) {
+                                if ($data['current_user'])
                                     $duplication = true;
-                                }
                             }
                             if ($notificationType == Notification::NOTIFICATION_TYPE_REPORTER) {
-                                if ($data['reporter']) {
+                                if ($data['reporter'])
                                     $duplication = true;
-                                }
                             }
                             if ($notificationType == Notification::NOTIFICATION_TYPE_ALL_WATCHERS) {
-                                if ($data['all_watchers']) {
+                                if ($data['all_watchers'])
                                     $duplication = true;
-                                }
                             }
                             if ($notificationType == Notification::NOTIFICATION_TYPE_USER_PICKER_MULTIPLE_SELECTION) {
-                                if ($data['custom_field_id']) {
+                                if ($data['custom_field_id'])
                                     $duplication = true;
-                                }
                             }
                         }
                     }
@@ -148,13 +133,8 @@ class AddDataController extends UbirimiController
             return new RedirectResponse('/yongo/administration/notification-scheme/edit/' . $notificationSchemeId);
         }
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Notification Data';
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Notification Data';
 
-        return $this->render(
-            __DIR__ . '/../../../Resources/views/administration/notification_scheme/AddData.php',
-            get_defined_vars()
-        );
+        return $this->render(__DIR__ . '/../../../Resources/views/administration/notification_scheme/AddData.php', get_defined_vars());
     }
 }

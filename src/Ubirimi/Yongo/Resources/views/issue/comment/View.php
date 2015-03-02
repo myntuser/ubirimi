@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/_comments.php';
+    require_once __DIR__ . '/_comments.php';
 ?>
 
 <table width="100%">
@@ -12,7 +12,7 @@ require_once __DIR__ . '/_comments.php';
 
         <tr>
             <td>
-                <input class="btn ubirimi-btn" id="add_comment" type="button" value="Add comment" name="add_comment"/>
+                <input class="btn ubirimi-btn" id="add_comment" type="button" value="Add comment" name="add_comment" />
             </td>
         </tr>
     <?php endif ?>

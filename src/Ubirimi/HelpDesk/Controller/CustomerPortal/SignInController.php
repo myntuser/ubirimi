@@ -47,10 +47,7 @@ class SignInController extends UbirimiController
             $username = $request->request->get('username');
             $password = $request->request->get('password');
 
-            $userData = $this->getRepository(UbirimiUser::class)->getCustomerByEmailAddressAndClientId(
-                $username,
-                $clientId
-            );
+            $userData = $this->getRepository(UbirimiUser::class)->getCustomerByEmailAddressAndClientId($username, $clientId);
 
             if ($userData['id']) {
                 if (UbirimiContainer::get()['password']->check($password, $userData['password'])) {
@@ -68,14 +65,10 @@ class SignInController extends UbirimiController
             if ($signInError) {
                 return new RedirectResponse('/helpdesk/customer-portal');
             }
-        } else {
-            if ($request->request->has('create_account')) {
-                return new RedirectResponse('/helpdesk/customer-portal/sign-up');
-            } else {
-                if ($request->request->has('get_password')) {
-                    return new RedirectResponse('/helpdesk/customer-portal/get-password');
-                }
-            }
+        } else if ($request->request->has('create_account')) {
+            return new RedirectResponse('/helpdesk/customer-portal/sign-up');
+        } else if ($request->request->has('get_password')) {
+            return new RedirectResponse('/helpdesk/customer-portal/get-password');
         }
     }
 }

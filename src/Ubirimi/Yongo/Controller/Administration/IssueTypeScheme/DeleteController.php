@@ -37,10 +37,7 @@ class DeleteController extends UbirimiController
         $issueTypeScheme = $this->getRepository(IssueTypeScheme::class)->getMetaDataById($issueTypeSchemeId);
         $this->getRepository(IssueTypeScheme::class)->deleteById($issueTypeSchemeId);
 
-        $this->getLogger()->addInfo(
-            'DELETE Yongo Issue Type Scheme ' . $issueTypeScheme['name'],
-            $this->getLoggerContext()
-        );
+        $this->getLogger()->addInfo('DELETE Yongo Issue Type Scheme ' . $issueTypeScheme['name'], $this->getLoggerContext());
 
         return new Response('');
     }

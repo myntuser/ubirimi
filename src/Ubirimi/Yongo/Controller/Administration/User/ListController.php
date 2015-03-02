@@ -44,22 +44,12 @@ class ListController extends UbirimiController
             }
         }
 
-        $users = $this->getRepository(UbirimiClient::class)->getUsers(
-            $session->get('client/id'),
-            $filterGroupId,
-            null,
-            1
-        );
+        $users = $this->getRepository(UbirimiClient::class)->getUsers($session->get('client/id'), $filterGroupId, null, 1);
 
         $menuSelectedCategory = 'user';
 
-        $sectionPageTitle = $session->get(
-                'client/settings/title_name'
-            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Users';
-        $allGroups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId(
-            $session->get('client/id'),
-            SystemProduct::SYS_PRODUCT_YONGO
-        );
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Users';
+        $allGroups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId($session->get('client/id'), SystemProduct::SYS_PRODUCT_YONGO);
 
         return $this->render(__DIR__ . '/../../../Resources/views/administration/user/List.php', get_defined_vars());
     }

@@ -39,11 +39,9 @@ class DeleteController extends UbirimiController
         if ($action == 'swap') {
             $this->getRepository(IssueLinkType::class)->updateLinkTypeId($sourceLinkTypeId, $targetLinkTypeId);
             $this->getRepository(IssueLinkType::class)->deleteById($sourceLinkTypeId);
-        } else {
-            if ($action == 'remove' || $action == null) {
-                $this->getRepository(IssueLinkType::class)->deleteLinksByLinkTypeId($sourceLinkTypeId);
-                $this->getRepository(IssueLinkType::class)->deleteById($sourceLinkTypeId);
-            }
+        } else if ($action == 'remove' || $action == null) {
+            $this->getRepository(IssueLinkType::class)->deleteLinksByLinkTypeId($sourceLinkTypeId);
+            $this->getRepository(IssueLinkType::class)->deleteById($sourceLinkTypeId);
         }
 
         return new Response('');

@@ -45,27 +45,11 @@ class ViewController extends UbirimiController
 
         $workLogs = $this->getRepository(WorkLog::class)->getByIssueId($issueId);
 
-        $hasEditOwnWorklogsPermission = $this->getRepository(YongoProject::class)->userHasPermission(
-            $projectId,
-            Permission::PERM_EDIT_OWN_WORKLOGS,
-            $session->get('user/id')
-        );
-        $hasEditAllWorklogsPermission = $this->getRepository(YongoProject::class)->userHasPermission(
-            $projectId,
-            Permission::PERM_EDIT_ALL_WORKLOGS,
-            $session->get('user/id')
-        );
+        $hasEditOwnWorklogsPermission = $this->getRepository(YongoProject::class)->userHasPermission($projectId, Permission::PERM_EDIT_OWN_WORKLOGS, $session->get('user/id'));
+        $hasEditAllWorklogsPermission = $this->getRepository(YongoProject::class)->userHasPermission($projectId, Permission::PERM_EDIT_ALL_WORKLOGS, $session->get('user/id'));
 
-        $hasDeleteOwnWorklogsPermission = $this->getRepository(YongoProject::class)->userHasPermission(
-            $projectId,
-            Permission::PERM_DELETE_OWN_WORKLOGS,
-            $session->get('user/id')
-        );
-        $hasDeleteAllWorklogsPermission = $this->getRepository(YongoProject::class)->userHasPermission(
-            $projectId,
-            Permission::PERM_DELETE_ALL_WORKLOGS,
-            $session->get('user/id')
-        );
+        $hasDeleteOwnWorklogsPermission = $this->getRepository(YongoProject::class)->userHasPermission($projectId, Permission::PERM_DELETE_OWN_WORKLOGS, $session->get('user/id'));
+        $hasDeleteAllWorklogsPermission = $this->getRepository(YongoProject::class)->userHasPermission($projectId, Permission::PERM_DELETE_ALL_WORKLOGS, $session->get('user/id'));
 
         return $this->render(__DIR__ . '/../../../Resources/views/issue/log_work/View.php', get_defined_vars());
     }
