@@ -26,7 +26,7 @@ use Ubirimi\Util;
 class IssueAttachment
 {
     public function getAll() {
-        $query = 'select id, issue_id, name, size from issue_attachment';
+        $query = 'select id, issue_id, name, size from yongo_issue_attachment';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
@@ -39,7 +39,7 @@ class IssueAttachment
     }
 
     public function getById($Id) {
-        $query = 'select id, issue_id, name, size from issue_attachment where id = ? limit 1';
+        $query = 'select id, issue_id, name, size from yongo_issue_attachment where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -53,12 +53,12 @@ class IssueAttachment
     }
 
     public function getByIssueId($issueId, $fetchAll = false) {
-        $query = 'SELECT issue_attachment.id, issue_id, name, size, issue_attachment.date_created,' .
+        $query = 'SELECT yongo_issue_attachment.id, issue_id, name, size, yongo_issue_attachment.date_created,' .
             'general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'FROM issue_attachment ' .
-            'LEFT join general_user on issue_attachment.user_id = general_user.id ' .
+            'FROM yongo_issue_attachment ' .
+            'LEFT join general_user on yongo_issue_attachment.user_id = general_user.id ' .
             'WHERE issue_id = ? ' .
-            'ORDER BY issue_attachment.date_created ASC';
+            'ORDER BY yongo_issue_attachment.date_created ASC';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $issueId);
@@ -77,7 +77,7 @@ class IssueAttachment
     }
 
     public function deleteById($attachmentId) {
-        $query = "DELETE FROM issue_attachment WHERE id = ? limit 1";
+        $query = "DELETE FROM yongo_issue_attachment WHERE id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $attachmentId);
@@ -107,7 +107,7 @@ class IssueAttachment
     }
 
     public function updateByIdAndIssueId($attachmentId, $issueId) {
-        $query = 'UPDATE issue_attachment SET issue_id = ? where id = ? limit 1';
+        $query = 'UPDATE yongo_issue_attachment SET issue_id = ? where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $issueId, $attachmentId);
@@ -115,7 +115,7 @@ class IssueAttachment
     }
 
     public function add($issueId, $name, $userId, $date) {
-        $query = "INSERT INTO issue_attachment(issue_id, user_id, name, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_issue_attachment(issue_id, user_id, name, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iiss", $issueId, $userId, $name, $date);
@@ -125,7 +125,7 @@ class IssueAttachment
     }
 
     public function updateSizeById($attachmentId, $size) {
-        $query = "UPDATE issue_attachment SET size = ? WHERE id = ? limit 1";
+        $query = "UPDATE yongo_issue_attachment SET size = ? WHERE id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $size, $attachmentId);

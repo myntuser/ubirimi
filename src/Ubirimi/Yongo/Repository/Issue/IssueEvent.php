@@ -76,7 +76,7 @@ class IssueEvent
 
     public function getByClient($clientId) {
         $query = "SELECT event.* " .
-            "FROM event " .
+            "from yongo_event " .
             "WHERE event.client_id = ? " .
             "order by system_flag desc, name";
 
@@ -93,7 +93,7 @@ class IssueEvent
 
     public function getById($Id) {
         $query = "SELECT event.* " .
-            "FROM event " .
+            "from yongo_event " .
             "WHERE event.id = ? " .
             "limit 1";
 
@@ -109,7 +109,7 @@ class IssueEvent
 
     public function getByClientIdAndCode($clientId, $code, $returnedField = null) {
         $query = "SELECT event.* " .
-            "FROM event " .
+            "from yongo_event " .
             "WHERE event.client_id = ? and code = ? " .
             "limit 1";
 
@@ -200,7 +200,7 @@ class IssueEvent
     }
 
     public function deleteById($eventId) {
-        $query = "delete from event where id = ? limit 1";
+        $query = "delete from yongo_event where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 

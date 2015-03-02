@@ -1120,8 +1120,8 @@ class YongoProject
             'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
             'yongo_notification_scheme_data.user_picker_multiple_selection is not null) ' .
             'left join yongo_issue on yongo_issue.id = ? ' .
-            'left join issue_custom_field_data on (issue_custom_field_data.issue_id = yongo_issue.id and issue_custom_field_data.field_id = yongo_notification_scheme_data.user_picker_multiple_selection) ' .
-            'left join general_user on general_user.id = issue_custom_field_data.value ' .
+            'left join yongo_issue_custom_field_data on (yongo_issue_custom_field_data.issue_id = yongo_issue.id and yongo_issue_custom_field_data.field_id = yongo_notification_scheme_data.user_picker_multiple_selection) ' .
+            'left join general_user on general_user.id = yongo_issue_custom_field_data.value ' .
             'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
             'yongo_notification_scheme_data.event_id = ? and ' .
             'general_user.id is not null';
@@ -1384,7 +1384,7 @@ class YongoProject
                  "field.code as field_code " .
             "FROM issue_type_field_configuration_data " .
             "LEFT JOIN yongo_field_configuration_data on yongo_field_configuration_data.field_configuration_id = issue_type_field_configuration_data.field_configuration_id " .
-            "left join field on field.id = yongo_field_configuration_data.field_id " .
+            "left join yongo_field on yongo_field.id = yongo_field_configuration_data.field_id " .
             "WHERE issue_type_field_configuration_data.issue_type_field_configuration_id = ? and " .
             "issue_type_field_configuration_data.issue_type_id = ?";
 

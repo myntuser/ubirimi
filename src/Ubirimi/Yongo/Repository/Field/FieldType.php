@@ -24,7 +24,7 @@ use Ubirimi\Container\UbirimiContainer;
 class FieldType
 {
     public function getByCode($code) {
-        $query = "SELECT * from sys_field_type where code = ? limit 1";
+        $query = "SELECT * from yongo_field_type where code = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("s", $code);

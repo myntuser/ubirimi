@@ -211,7 +211,7 @@ class NotificationScheme
 
     public function getDataByNotificationSchemeIdAndEventId($notificationSchemeId, $eventId) {
         $query = "select yongo_notification_scheme_data.id, general_user.first_name, general_user.last_name, general_user.id as user_id, general_group.id as group_id, general_group.name as group_name, yongo_notification_scheme_data.current_assignee, yongo_notification_scheme_data.reporter,  " .
-            "yongo_notification_scheme_data.all_watchers, field.name as custom_field_name, field.id as custom_field_id, " .
+            "yongo_notification_scheme_data.all_watchers, yongo_field.name as custom_field_name, yongo_field.id as custom_field_id, " .
             "yongo_notification_scheme_data.current_user, yongo_notification_scheme_data.permission_role_id, yongo_notification_scheme_data.project_lead, yongo_notification_scheme_data.component_lead, " .
             "permission_role.name as role_name, " .
             "event.id as event_id, event.name as event_name " .
@@ -220,7 +220,7 @@ class NotificationScheme
             "left join general_user on general_user.id = yongo_notification_scheme_data.user_id " .
             "left join `general_group` on  `general_group`.id = yongo_notification_scheme_data.group_id " .
             "left join permission_role on permission_role.id = yongo_notification_scheme_data.permission_role_id " .
-            "left join field on field.id = yongo_notification_scheme_data.user_picker_multiple_selection " .
+            "left join yongo_field on yongo_field.id = yongo_notification_scheme_data.user_picker_multiple_selection " .
             "where yongo_notification_scheme_data.notification_scheme_id = ? and " .
                 "yongo_notification_scheme_data.event_id = ?";
 

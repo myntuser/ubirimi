@@ -82,7 +82,7 @@ class Field {
     );
 
     public function getByClient($clientId) {
-        $query = "SELECT * FROM field where client_id = ? order by name";
+        $query = "SELECT * from yongo_field where client_id = ? order by name";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
@@ -112,7 +112,7 @@ class Field {
     }
 
     public function getById($fieldId) {
-        $query = "SELECT * FROM field where id = ? limit 1";
+        $query = "SELECT * from yongo_field where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $fieldId);
@@ -125,7 +125,7 @@ class Field {
     }
 
     public function getByCode($clientId, $code) {
-        $query = "SELECT * FROM field where client_id = ? and code = ? limit 1";
+        $query = "SELECT * from yongo_field where client_id = ? and code = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $clientId, $code);
@@ -171,7 +171,7 @@ class Field {
 
     public function getCustomFieldValueByFieldId($issueId, $fieldId) {
         $query = "SELECT * " .
-            "FROM issue_custom_field_data " .
+            "FROM yongo_issue_custom_field_data " .
             "where issue_id = ? and field_id = ? " .
             "limit 1";
 
@@ -203,14 +203,14 @@ class Field {
             }
         }
 
-        $query = "delete from field where client_id = ?";
+        $query = "delete from yongo_field where client_id = ?";
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
         $stmt->execute();
     }
 
     public function add($clientId, $code, $name, $description, $systemFlag, $allIssueTypeFlag, $allProjectFlag) {
-        $query = "INSERT INTO field(client_id, code, name, description, system_flag, all_issue_type_flag, all_project_flag) VALUES " .
+        $query = "INSERT INTO yongo_field(client_id, code, name, description, system_flag, all_issue_type_flag, all_project_flag) VALUES " .
             "(?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -221,7 +221,7 @@ class Field {
     }
 
     public function addData($fieldId, $value, $currentDate) {
-        $query = "INSERT INTO field_data(field_id, `value`, date_created) VALUES " .
+        $query = "INSERT INTO yongo_field_data(field_id, `value`, date_created) VALUES " .
                  "(?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -233,7 +233,7 @@ class Field {
 
     public function getDataByFieldId($fieldId) {
         $query = "SELECT * " .
-            "FROM field_data " .
+            "FROM yongo_field_data " .
             "where field_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -247,7 +247,7 @@ class Field {
     }
 
     public function getDataByFieldIdAndValue($fieldId, $value, $dataId = null) {
-        $query = 'select * from `field_data` where field_id = ? and value = ?';
+        $query = 'select * from `yongo_field_data` where field_id = ? and value = ?';
 
         if ($dataId) {
             $query .= ' and id != ' . $dataId;
@@ -267,7 +267,7 @@ class Field {
     }
 
     public function getDataById($id) {
-        $query = 'select * from `field_data` where id = ? limit 1';
+        $query = 'select * from `yongo_field_data` where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $id);
@@ -283,12 +283,12 @@ class Field {
     public function deleteDataById($customFieldDataId) {
         $field = UbirimiContainer::get()['repository']->get(Field::class)->getDataById($customFieldDataId);
 
-        $query = "delete from field_data where id = ? limit 1";
+        $query = "delete from yongo_field_data where id = ? limit 1";
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $customFieldDataId);
         $stmt->execute();
 
-        $query = "delete from issue_custom_field_data where field_id = ? and value = ?";
+        $query = "delete from yongo_issue_custom_field_data where field_id = ? and value = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $field['id'], $customFieldDataId);
@@ -296,7 +296,7 @@ class Field {
     }
 
     public function updateDataById($id, $value, $date) {
-        $query = "update field_data set `value` = ?, date_updated = ? where id = ? limit 1";
+        $query = "update yongo_field_data set `value` = ?, date_updated = ? where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ssi", $value, $date, $id);

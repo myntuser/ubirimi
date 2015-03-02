@@ -480,7 +480,7 @@ class UbirimiClient
         $query = 'delete from general_user where client_id = ' . $clientId;
         UbirimiContainer::get()['db.connection']->query($query);
 
-        $query = 'delete from event where client_id = ' . $clientId;
+        $query = 'delete from yongo_event where client_id = ' . $clientId;
         UbirimiContainer::get()['db.connection']->query($query);
 
         $query = 'delete from client_product where client_id = ' . $clientId;

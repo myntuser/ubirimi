@@ -25,11 +25,11 @@ use Ubirimi\Util;
 class WorkLog
 {
     public function getByIssueId($issueId) {
-        $query = 'select issue_work_log.id, issue_work_log.time_spent, issue_work_log.date_started, issue_work_log.comment, general_user.id as user_id, general_user.first_name, general_user.last_name, edited_flag
-                  from issue_work_log
-                  left join general_user on issue_work_log.user_id = general_user.id
-                  where issue_work_log.issue_id = ?
-                  order by issue_work_log.date_created desc';
+        $query = 'select yongo_issue_work_log.id, yongo_issue_work_log.time_spent, yongo_issue_work_log.date_started, yongo_issue_work_log.comment, general_user.id as user_id, general_user.first_name, general_user.last_name, edited_flag
+                  from yongo_issue_work_log
+                  left join general_user on yongo_issue_work_log.user_id = general_user.id
+                  where yongo_issue_work_log.issue_id = ?
+                  order by yongo_issue_work_log.date_created desc';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $issueId);
@@ -43,8 +43,8 @@ class WorkLog
 
     public function getById($Id) {
         $query = 'select *
-                  from issue_work_log
-                  where issue_work_log.id = ?
+                  from yongo_issue_work_log
+                  where yongo_issue_work_log.id = ?
                   limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -58,7 +58,7 @@ class WorkLog
     }
 
     public function addLog($issueId, $loggedInUserId, $timeSpent, $dateStarted, $comment, $currentDate) {
-        $query = "INSERT INTO issue_work_log(issue_id, user_id, time_spent, comment, date_started, date_created) VALUES (?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_issue_work_log(issue_id, user_id, time_spent, comment, date_started, date_created) VALUES (?, ?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iissss", $issueId, $loggedInUserId, $timeSpent, $comment, $dateStarted, $currentDate);
@@ -66,7 +66,7 @@ class WorkLog
     }
 
     public function updateLogById($workLogId, $timeSpent, $dateStartedString, $comment) {
-        $query = "update issue_work_log set time_spent = ?, comment = ?, date_started = ?, edited_flag = 1 where id = ? limit 1";
+        $query = "update yongo_issue_work_log set time_spent = ?, comment = ?, date_started = ?, edited_flag = 1 where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("sssi", $timeSpent, $comment, $dateStartedString, $workLogId);
@@ -74,7 +74,7 @@ class WorkLog
     }
 
     public function deleteById($Id) {
-        $query = "delete from issue_work_log where id = ? limit 1";
+        $query = "delete from yongo_issue_work_log where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -82,7 +82,7 @@ class WorkLog
     }
 
     public function deleteByIssueId($issueId) {
-        $query = 'delete from issue_work_log where issue_id = ?';
+        $query = 'delete from yongo_issue_work_log where issue_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $issueId);

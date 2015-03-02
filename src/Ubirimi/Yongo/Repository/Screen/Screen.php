@@ -103,11 +103,11 @@ class Screen
     }
 
     public function getDataById($Id) {
-        $query = "select yongo_screen_data.id, field.name as field_name, field.code as field_code, field.id as field_id, yongo_screen_data.position, field.system_flag, " .
-                 "field.all_issue_type_flag, field.all_project_flag, sys_field_type.code as type_code, field.description " .
+        $query = "select yongo_screen_data.id, yongo_field.name as field_name, yongo_field.code as field_code, yongo_field.id as field_id, yongo_screen_data.position, yongo_field.system_flag, " .
+                 "yongo_field.all_issue_type_flag, yongo_field.all_project_flag, yongo_field_type.code as type_code, yongo_field.description " .
             "from yongo_screen_data " .
-            "left join field on field.id = yongo_screen_data.field_id " .
-            "left join sys_field_type on sys_field_type.id = field.sys_field_type_id " .
+            "left join yongo_field on yongo_field.id = yongo_screen_data.field_id " .
+            "left join yongo_field_type on yongo_field_type.id = yongo_field.sys_field_type_id " .
             "where yongo_screen_data.screen_id = " . $Id . " " .
             "order by `position`";
 

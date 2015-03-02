@@ -26,7 +26,7 @@ use Ubirimi\Yongo\Repository\Project\YongoProject;
 class CustomField {
 
     public function getById($Id) {
-        $query = "SELECT * FROM field where id = ? limit 1";
+        $query = "SELECT * from yongo_field where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -40,10 +40,10 @@ class CustomField {
     }
 
     public function getAllByClient($clientId) {
-        $query = "SELECT field.id, field.name, field.description, sys_field_type.id as type_id, sys_field_type.name as type_name, " .
-                 "field.all_issue_type_flag, field.all_project_flag, sys_field_type.description as type_description " .
-            "FROM field " .
-            "left join sys_field_type on sys_field_type.id = field.sys_field_type_id " .
+        $query = "SELECT yongo_field.id, yongo_field.name, field.description, yongo_field_type.id as type_id, yongo_field_type.name as type_name, " .
+                 "yongo_field.all_issue_type_flag, yongo_field.all_project_flag, yongo_field_type.description as type_description " .
+            "from yongo_field " .
+            "left join yongo_field_type on yongo_field_type.id = yongo_field.sys_field_type_id " .
             "where system_flag = 0 and client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -57,7 +57,7 @@ class CustomField {
     }
 
     public function getTypes() {
-        $query = "SELECT * FROM sys_field_type";
+        $query = "SELECT * FROM yongo_field_type";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -70,7 +70,7 @@ class CustomField {
     }
 
     public function create($clientId, $fieldType, $name, $description, $issueType, $project, $date) {
-        $query = "INSERT INTO field(client_id, sys_field_type_id, name, description, system_flag, all_issue_type_flag, all_project_flag, date_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_field(client_id, sys_field_type_id, name, description, system_flag, all_issue_type_flag, all_project_flag, date_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         $systemFlag = 0;
         $fieldTypeResult = UbirimiContainer::get()['repository']->get(FieldType::class)->getByCode($fieldType);
@@ -140,7 +140,7 @@ class CustomField {
     }
 
     public function deleteById($customFieldId) {
-        $query = "delete from field where id = ? limit 1";
+        $query = "delete from yongo_field where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $customFieldId);
@@ -161,7 +161,7 @@ class CustomField {
         $stmt->bind_param("i", $customFieldId);
         $stmt->execute();
 
-        $query = "delete from issue_custom_field_data where field_id = ?";
+        $query = "delete from yongo_issue_custom_field_data where field_id = ?";
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $customFieldId);
         $stmt->execute();
@@ -173,7 +173,7 @@ class CustomField {
     }
 
     public function getByNameAndType($clientId, $name, $fieldType) {
-        $query = "SELECT * FROM field where client_id = ? and sys_field_type_id = ? and name = ? limit 1";
+        $query = "SELECT * from yongo_field where client_id = ? and sys_field_type_id = ? and name = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iis", $clientId, $fieldType, $name);
