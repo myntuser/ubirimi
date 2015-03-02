@@ -48,8 +48,9 @@ class EditController extends UbirimiController
             $description = Util::cleanRegularInputField($request->request->get('description'));
             $color = $request->request->get('color');
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             // check for duplication
             $priority = $this->getRepository(IssueSettings::class)->getByName(
@@ -59,12 +60,20 @@ class EditController extends UbirimiController
                 $Id
             );
 
-            if ($priority)
+            if ($priority) {
                 $priorityExists = true;
+            }
 
             if (!$priorityExists && !$emptyName) {
                 $currentDate = Util::getServerCurrentDateTime();
-                $this->getRepository(IssueSettings::class)->updateById($Id, 'priority', $name, $description, $color, $currentDate);
+                $this->getRepository(IssueSettings::class)->updateById(
+                    $Id,
+                    'priority',
+                    $name,
+                    $description,
+                    $color,
+                    $currentDate
+                );
 
                 $this->getLogger()->addInfo('UPDATE Yongo Issue Priority ' . $name, $this->getLoggerContext());
 
@@ -73,8 +82,13 @@ class EditController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Priority';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Priority';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/priority/Edit.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/issue/priority/Edit.php',
+            get_defined_vars()
+        );
     }
 }

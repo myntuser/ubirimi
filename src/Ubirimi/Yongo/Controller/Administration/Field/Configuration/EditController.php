@@ -51,8 +51,13 @@ class EditController extends UbirimiController
             $projectId = $request->get('project_id');
         }
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Field Configuration';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Field Configuration';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/field/configuration/Edit.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/field/configuration/Edit.php',
+            get_defined_vars()
+        );
     }
 }

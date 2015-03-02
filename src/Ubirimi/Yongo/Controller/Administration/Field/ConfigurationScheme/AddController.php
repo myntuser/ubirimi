@@ -40,17 +40,25 @@ class AddController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             if (!$emptyName) {
-                $fieldConfigurationScheme = new FieldConfigurationScheme($session->get('client/id'), $name, $description);
+                $fieldConfigurationScheme = new FieldConfigurationScheme(
+                    $session->get('client/id'), $name, $description
+                );
                 $currentDate = Util::getServerCurrentDateTime();
                 $fieldConfigurationSchemeId = $fieldConfigurationScheme->save($currentDate);
 
                 $issueTypes = $this->getRepository(IssueType::class)->getAll($session->get('client/id'));
                 while ($issueType = $issueTypes->fetch_array(MYSQLI_ASSOC)) {
-                    $this->getRepository(FieldConfigurationScheme::class)->addData($fieldConfigurationSchemeId, null, $issueType['id'], $currentDate);
+                    $this->getRepository(FieldConfigurationScheme::class)->addData(
+                        $fieldConfigurationSchemeId,
+                        null,
+                        $issueType['id'],
+                        $currentDate
+                    );
                 }
 
                 $this->getLogger()->addInfo('ADD Yongo Field Configuration Scheme ' . $name, $this->getLoggerContext());
@@ -60,8 +68,13 @@ class AddController extends UbirimiController
         }
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Event';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Event';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/field/configuration_scheme/Add.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/field/configuration_scheme/Add.php',
+            get_defined_vars()
+        );
     }
 }

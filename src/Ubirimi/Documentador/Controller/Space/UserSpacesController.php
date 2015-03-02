@@ -38,7 +38,9 @@ class UserSpacesController extends UbirimiController
 
             $spaces = $this->getRepository(Space::class)->getByClientId($clientId);
             $session->set('selected_product_id', SystemProduct::SYS_PRODUCT_DOCUMENTADOR);
-            $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME. ' / Spaces';
+            $sectionPageTitle = $session->get(
+                    'client/settings/title_name'
+                ) . ' / ' . SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME . ' / Spaces';
             $clientSettings = $session->get('client/settings');
         } else {
             $httpHOST = Util::getHttpHost();
@@ -46,7 +48,7 @@ class UserSpacesController extends UbirimiController
             $clientSettings = $this->getRepository(UbirimiClient::class)->getSettings($clientId);
             $spaces = $this->getRepository(Space::class)->getByClientIdAndAnonymous($clientId);
             $loggedInUserId = null;
-            $sectionPageTitle = SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME. ' / Spaces';
+            $sectionPageTitle = SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME . ' / Spaces';
         }
 
         $menuSelectedCategory = 'documentator';

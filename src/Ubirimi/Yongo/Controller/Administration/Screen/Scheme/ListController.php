@@ -35,8 +35,13 @@ class ListController extends UbirimiController
         $screensSchemes = $this->getRepository(ScreenScheme::class)->getMetaDataByClientId($session->get('client/id'));
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Screen Schemes';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Screen Schemes';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/screen/scheme/List.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/screen/scheme/List.php',
+            get_defined_vars()
+        );
     }
 }

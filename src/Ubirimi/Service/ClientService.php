@@ -54,7 +54,9 @@ class ClientService
                 $data['adminPass'],
                 $data['adminEmail'],
                 $clientId,
-                20, 1, 1,
+                20,
+                1,
+                1,
                 Util::getServerCurrentDateTime()
             );
 
@@ -68,12 +70,16 @@ class ClientService
                 $data['adminEmail'],
                 null,
                 'Your account details - Ubirimi.com',
-                Util::getTemplate('_newAccount.php', array(
+                Util::getTemplate(
+                    '_newAccount.php',
+                    array(
                         'username' => $data['adminUsername'],
                         'companyDomain' => $data['companyDomain'],
-                        'emailAddress' => $data['adminEmail'])
+                        'emailAddress' => $data['adminEmail']
+                    )
                 ),
-                Util::getServerCurrentDateTime());
+                Util::getServerCurrentDateTime()
+            );
 
             $conn->commit();
         } catch (\Exception $e) {

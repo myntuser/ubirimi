@@ -2,7 +2,8 @@
     <table cellspacing="0" border="0" cellpadding="0" class="tableButtons">
         <tr>
             <td>
-                <a id="btnNew" href="/yongo/administration/project/<?php echo $projectId ?>" class="btn ubirimi-btn">Administer Project</a>
+                <a id="btnNew" href="/yongo/administration/project/<?php echo $projectId ?>" class="btn ubirimi-btn">Administer
+                    Project</a>
             </td>
         </tr>
     </table>

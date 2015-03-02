@@ -51,8 +51,18 @@ class ViewCreatedVsResolvedController extends UbirimiController
 
         $result = array();
         while (strtotime($date) <= strtotime($currentDate)) {
-            $countAllIssues = $this->getRepository(YongoProject::class)->getTotalIssuesPreviousDate($clientId, $projectId, $date, $helpdeskFlag);
-            $resolvedCount = $this->getRepository(YongoProject::class)->getTotalIssuesResolvedOnDate($clientId, $projectId, $date, $helpdeskFlag);
+            $countAllIssues = $this->getRepository(YongoProject::class)->getTotalIssuesPreviousDate(
+                $clientId,
+                $projectId,
+                $date,
+                $helpdeskFlag
+            );
+            $resolvedCount = $this->getRepository(YongoProject::class)->getTotalIssuesResolvedOnDate(
+                $clientId,
+                $projectId,
+                $date,
+                $helpdeskFlag
+            );
 
             $result[] = array($dateWithoutYear, $countAllIssues, $resolvedCount);
             $dateWithoutYear = date('d M', strtotime("+1 day", strtotime($date)));

@@ -54,8 +54,16 @@ class AddDialogController extends UbirimiController
             $watchers->data_seek(0);
         }
 
-        $hasViewVotersAndWatchersPermission = $this->getRepository(YongoProject::class)->userHasPermission($issueData['project_id'], Permission::PERM_VIEW_VOTERS_AND_WATCHERS, $loggedInUserId);
-        $hasManageWatchersPermission = $this->getRepository(YongoProject::class)->userHasPermission($issueData['project_id'], Permission::PERM_MANAGE_WATCHERS, $loggedInUserId);
+        $hasViewVotersAndWatchersPermission = $this->getRepository(YongoProject::class)->userHasPermission(
+            $issueData['project_id'],
+            Permission::PERM_VIEW_VOTERS_AND_WATCHERS,
+            $loggedInUserId
+        );
+        $hasManageWatchersPermission = $this->getRepository(YongoProject::class)->userHasPermission(
+            $issueData['project_id'],
+            Permission::PERM_MANAGE_WATCHERS,
+            $loggedInUserId
+        );
 
         return $this->render(__DIR__ . '/../../../Resources/views/issue/watcher/AddDialog.php', get_defined_vars());
 

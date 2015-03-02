@@ -8,57 +8,105 @@ use Ubirimi\Util;
 if ($session->has('client/products')) {
     $productsArray = $session->get('client/products');
 } else {
-    $productsArray = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getProducts(UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getClientIdAnonymous(), 'array');
+    $productsArray = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getProducts(
+        UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getClientIdAnonymous(),
+        'array'
+    );
 }
 ?>
-<input type="hidden" value="<?php echo $session->get('selected_product_id') ?>" id="product_id" />
+<input type="hidden" value="<?php echo $session->get('selected_product_id') ?>" id="product_id"/>
 <table cellpadding="0" cellspacing="0" border="0" style="height: 44px">
     <tr>
         <?php ($session->get('selected_product_id') == -2) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
 
-        <td valign="middle" width="50px" align="center" class="product-menu" style="border-right: 1px #9c9c9c solid; color: #ffffff; <?php echo $style ?>">
-            <a style="color: #ffffff; text-decoration: none;" href="/ubirimi/about"><img style="vertical-align: middle" src="/img/site/bg_white.png" height="30px"/></a>
+        <td valign="middle" width="50px" align="center" class="product-menu"
+            style="border-right: 1px #9c9c9c solid; color: #ffffff; <?php echo $style ?>">
+            <a style="color: #ffffff; text-decoration: none;" href="/ubirimi/about"><img style="vertical-align: middle"
+                                                                                         src="/img/site/bg_white.png"
+                                                                                         height="30px"/></a>
         </td>
 
         <?php ($session->get('selected_product_id') == -1) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
         <?php if (Util::checkUserIsLoggedIn()): ?>
-            <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="50px" class="product-menu" align="center">
-                <a href="/general-settings/home"><img border="0" style="vertical-align: middle" height="30px" src="/img/settings.png"/></a>
+            <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="50px" class="product-menu"
+                align="center">
+                <a href="/general-settings/home"><img border="0" style="vertical-align: middle" height="30px"
+                                                      src="/img/settings.png"/></a>
             </td>
         <?php endif ?>
         <?php if (Util::checkKeyAndValueInArray('sys_product_id', SystemProduct::SYS_PRODUCT_YONGO, $productsArray)): ?>
-            <?php ($session->get('selected_product_id') == SystemProduct::SYS_PRODUCT_YONGO) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
+            <?php ($session->get(
+                    'selected_product_id'
+                ) == SystemProduct::SYS_PRODUCT_YONGO) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
 
-            <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="100px" class="product-menu" align="center" valign="middle">
+            <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="100px" class="product-menu"
+                align="center" valign="middle">
                 <div><a href="/yongo/my-dashboard"><?php echo SystemProduct::SYS_PRODUCT_YONGO_NAME ?></a></div>
             </td>
         <?php endif ?>
 
-        <?php if (Util::checkKeyAndValueInArray('sys_product_id', SystemProduct::SYS_PRODUCT_SVN_HOSTING, $productsArray)): ?>
-            <?php ($session->get('selected_product_id') == SystemProduct::SYS_PRODUCT_SVN_HOSTING) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
-            <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="140px" class="product-menu" align="center">
-                <div><a href="/svn-hosting/repositories"><?php echo SystemProduct::SYS_PRODUCT_SVN_HOSTING_NAME ?></a></div>
+        <?php if (Util::checkKeyAndValueInArray(
+            'sys_product_id',
+            SystemProduct::SYS_PRODUCT_SVN_HOSTING,
+            $productsArray
+        )
+        ): ?>
+            <?php ($session->get(
+                    'selected_product_id'
+                ) == SystemProduct::SYS_PRODUCT_SVN_HOSTING) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
+            <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="140px" class="product-menu"
+                align="center">
+                <div><a href="/svn-hosting/repositories"><?php echo SystemProduct::SYS_PRODUCT_SVN_HOSTING_NAME ?></a>
+                </div>
             </td>
         <?php endif ?>
 
-        <?php if (Util::checkKeyAndValueInArray('sys_product_id', SystemProduct::SYS_PRODUCT_DOCUMENTADOR, $productsArray)): ?>
-            <?php ($session->get('selected_product_id') == SystemProduct::SYS_PRODUCT_DOCUMENTADOR) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
-            <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="180px" class="product-menu" align="center">
-                <div><a href="/documentador/dashboard/spaces"><?php echo SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME ?></a></div>
+        <?php if (Util::checkKeyAndValueInArray(
+            'sys_product_id',
+            SystemProduct::SYS_PRODUCT_DOCUMENTADOR,
+            $productsArray
+        )
+        ): ?>
+            <?php ($session->get(
+                    'selected_product_id'
+                ) == SystemProduct::SYS_PRODUCT_DOCUMENTADOR) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
+            <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="180px" class="product-menu"
+                align="center">
+                <div>
+                    <a href="/documentador/dashboard/spaces"><?php echo SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME ?></a>
+                </div>
             </td>
         <?php endif ?>
 
-        <?php if (Util::checkKeyAndValueInArray('sys_product_id', SystemProduct::SYS_PRODUCT_CALENDAR, $productsArray)): ?>
-            <?php ($session->get('selected_product_id') == SystemProduct::SYS_PRODUCT_CALENDAR) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
-            <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="110px" class="product-menu" align="center">
+        <?php if (Util::checkKeyAndValueInArray(
+            'sys_product_id',
+            SystemProduct::SYS_PRODUCT_CALENDAR,
+            $productsArray
+        )
+        ): ?>
+            <?php ($session->get(
+                    'selected_product_id'
+                ) == SystemProduct::SYS_PRODUCT_CALENDAR) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
+            <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="110px" class="product-menu"
+                align="center">
                 <div><a href="/calendar/calendars"><?php echo SystemProduct::SYS_PRODUCT_CALENDAR_NAME ?></a></div>
             </td>
         <?php endif ?>
 
-        <?php if (Util::checkKeyAndValueInArray('sys_product_id', SystemProduct::SYS_PRODUCT_QUICK_NOTES, $productsArray)): ?>
-            <?php ($session->get('selected_product_id') == SystemProduct::SYS_PRODUCT_QUICK_NOTES) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
-            <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="130px" class="product-menu" align="center">
-                <div><a href="/quick-notes/note/snippets/all"><?php echo SystemProduct::SYS_PRODUCT_QUICK_NOTES_NAME ?></a></div>
+        <?php if (Util::checkKeyAndValueInArray(
+            'sys_product_id',
+            SystemProduct::SYS_PRODUCT_QUICK_NOTES,
+            $productsArray
+        )
+        ): ?>
+            <?php ($session->get(
+                    'selected_product_id'
+                ) == SystemProduct::SYS_PRODUCT_QUICK_NOTES) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
+            <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="130px" class="product-menu"
+                align="center">
+                <div>
+                    <a href="/quick-notes/note/snippets/all"><?php echo SystemProduct::SYS_PRODUCT_QUICK_NOTES_NAME ?></a>
+                </div>
             </td>
         <?php endif ?>
     </tr>

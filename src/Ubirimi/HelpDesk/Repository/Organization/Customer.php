@@ -23,49 +23,56 @@ use Ubirimi\Container\UbirimiContainer;
 
 class Customer
 {
-    public function getByOrganizationId($organizationId) {
+    public function getByOrganizationId($organizationId)
+    {
         $query = 'select general_user.id, general_user.first_name, general_user.last_name, general_user.email ' .
-                 'from help_customer ' .
-                 'left join general_user on general_user.id = help_customer.user_id ' .
-                 'where help_organization_id = ?';
+            'from help_customer ' .
+            'left join general_user on general_user.id = help_customer.user_id ' .
+            'where help_organization_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
         $stmt->bind_param("i", $organizationId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function getByName($clientId, $name, $organizationId = null) {
+    public function getByName($clientId, $name, $organizationId = null)
+    {
         $query = 'select id, name, description ' .
             'from help_organization ' .
             'where client_id = ? ' .
             'and LOWER(name) = ? ';
 
-        if ($organizationId)
+        if ($organizationId) {
             $query .= 'and id != ?';
+        }
 
         $query .= ' limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
-        if ($organizationId)
+        if ($organizationId) {
             $stmt->bind_param("isi", $clientId, $name, $organizationId);
-        else
+        } else {
             $stmt->bind_param("is", $clientId, $name);
+        }
 
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        else
+        } else {
             return null;
+        }
     }
 
-    public function create($organizationId, $userId) {
+    public function create($organizationId, $userId)
+    {
         $query = "INSERT INTO help_customer(help_organization_id, user_id) VALUES (?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

@@ -9,7 +9,8 @@
     <?php if ($clientAdministratorFlag): ?>
         <tr>
             <td>
-                <span style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
+                <span
+                    style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
             </td>
         </tr>
         <tr>
@@ -21,7 +22,8 @@
         </tr>
         <tr>
             <td>
-                <span style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
+                <span
+                    style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
             </td>
         </tr>
         <tr>

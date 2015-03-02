@@ -23,7 +23,8 @@ use Ubirimi\Container\UbirimiContainer;
 
 class UserProfileCategory
 {
-    public static function getByClientId($clientId) {
+    public static function getByClientId($clientId)
+    {
         $query = "SELECT * FROM user_profile_category where client_id = ? order by name";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -31,13 +32,15 @@ class UserProfileCategory
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public static function add($clientId, $name, $description, $date) {
+    public static function add($clientId, $name, $description, $date)
+    {
         $query = "INSERT INTO user_profile_category(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -45,7 +48,8 @@ class UserProfileCategory
         $stmt->execute();
     }
 
-    public static function getByName($clientId, $name, $userProfileCategoryId = null) {
+    public static function getByName($clientId, $name, $userProfileCategoryId = null)
+    {
         $query = 'select id, name from user_profile_category where client_id = ? and LOWER(name)= LOWER(?) ';
 
         if ($userProfileCategoryId) {
@@ -62,9 +66,10 @@ class UserProfileCategory
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        else
+        } else {
             return false;
+        }
     }
 }

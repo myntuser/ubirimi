@@ -33,20 +33,29 @@ class EditController extends UbirimiController
     {
         Util::checkUserIsLoggedInAndRedirect();
         $fieldConfigurationSchemeId = $request->get('id');
-        $fieldConfigurationScheme = $this->getRepository(FieldConfigurationScheme::class)->getMetaDataById($fieldConfigurationSchemeId);
+        $fieldConfigurationScheme = $this->getRepository(FieldConfigurationScheme::class)->getMetaDataById(
+            $fieldConfigurationSchemeId
+        );
 
         if ($fieldConfigurationScheme['client_id'] != $session->get('client/id')) {
             return new RedirectResponse('/general-settings/bad-link-access-denied');
         }
 
-        $fieldConfigurationSchemeData = $this->getRepository(FieldConfigurationScheme::class)->getDataByFieldConfigurationSchemeId(
+        $fieldConfigurationSchemeData = $this->getRepository(
+            FieldConfigurationScheme::class
+        )->getDataByFieldConfigurationSchemeId(
             $fieldConfigurationSchemeId
         );
 
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Field Configuration Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Field Configuration Scheme';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/field/configuration_scheme/Edit.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/field/configuration_scheme/Edit.php',
+            get_defined_vars()
+        );
     }
 }

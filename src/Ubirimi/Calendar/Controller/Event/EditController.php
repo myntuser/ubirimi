@@ -89,10 +89,14 @@ class EditController extends UbirimiController
 
                         if ('never' == $request->request->get('repeat_data_daily')) {
                             $repeatData .= '#n';
-                        } else if ('after' == $request->request->get('repeat_data_daily')) {
-                            $repeatData .= '#a' . $request->request->get('add_event_repeat_after_daily');
-                        } else if ('on' == $request->request->get('repeat_data_daily')) {
-                            $repeatData .= '#o' . $request->request->get('add_event_repeat_end_date_on_daily');
+                        } else {
+                            if ('after' == $request->request->get('repeat_data_daily')) {
+                                $repeatData .= '#a' . $request->request->get('add_event_repeat_after_daily');
+                            } else {
+                                if ('on' == $request->request->get('repeat_data_daily')) {
+                                    $repeatData .= '#o' . $request->request->get('add_event_repeat_end_date_on_daily');
+                                }
+                            }
                         }
                         $repeatData .= '#' . $dateFrom;
                         break;
@@ -103,10 +107,14 @@ class EditController extends UbirimiController
 
                         if ('never' == $request->request->get('repeat_data_weekly')) {
                             $repeatData .= '#n';
-                        } else if ('after' == $request->request->get('repeat_data_weekly')) {
-                            $repeatData .= '#a' . $request->request->get('add_event_repeat_after_weekly');
-                        } else if ('on' == $request->request->get('repeat_data_weekly')) {
-                            $repeatData .= '#o' . $request->request->get('add_event_repeat_end_date_on_weekly');
+                        } else {
+                            if ('after' == $request->request->get('repeat_data_weekly')) {
+                                $repeatData .= '#a' . $request->request->get('add_event_repeat_after_weekly');
+                            } else {
+                                if ('on' == $request->request->get('repeat_data_weekly')) {
+                                    $repeatData .= '#o' . $request->request->get('add_event_repeat_end_date_on_weekly');
+                                }
+                            }
                         }
 
                         $repeatData .= $request->request->get('add_event_repeat_start_date_weekly');
@@ -130,60 +138,72 @@ class EditController extends UbirimiController
                      * if yes update those events to be linked to the following event in the series
                      * update current event and remove the repeat and link information
                      */
-                    $eventsLinked = $this->getRepository(UbirimiCalendar::class)->getEventsByLinkId($event['cal_event_link_id']);
+                    $eventsLinked = $this->getRepository(UbirimiCalendar::class)->getEventsByLinkId(
+                        $event['cal_event_link_id']
+                    );
                     if ($eventsLinked) {
                         $nextEvent = $eventsLinked->fetch_array(MYSQLI_ASSOC);
-                        $this->getRepository(UbirimiCalendar::class)->updateEventsLinkByLinkId($event['cal_event_link_id'], $nextEvent['cal_event_link_id']);
-                    }
-                    $this->getRepository(CalendarEvent::class)->updateRemoveLinkAndRepeat($eventId, $dateFrom, $dateTo);
-                } else if ("following_events" == $changeType) {
-
-                    if ($repeatData) {
-                        /*
-                         * delete all following events
-                         * add this new event as a stand alone event
-                         */
-
-                        $this->getRepository(CalendarEvent::class)->deleteEventAndFollowingByLinkId($eventId);
-
-                        $this->getRepository(CalendarEvent::class)->add(
-                            $calendarId,
-                            $session->get('user/id'),
-                            $name,
-                            $description,
-                            $location,
-                            $dateFrom,
-                            $dateTo,
-                            $color,
-                            $date,
-                            $repeatData,
-                            $clientSettings
+                        $this->getRepository(UbirimiCalendar::class)->updateEventsLinkByLinkId(
+                            $event['cal_event_link_id'],
+                            $nextEvent['cal_event_link_id']
                         );
                     }
-                } else if ("all_events" == $changeType) {
-                    $eventLink = $this->getRepository(CalendarEvent::class)->getById($event['cal_event_link_id'], 'array');
+                    $this->getRepository(CalendarEvent::class)->updateRemoveLinkAndRepeat($eventId, $dateFrom, $dateTo);
+                } else {
+                    if ("following_events" == $changeType) {
 
-                    $repeatDataPieces = explode('#', $repeatData);
-                    array_pop($repeatDataPieces);
-                    $repeatDataPieces[] = $eventLink['date_from'];
-                    $repeatData = implode("#", $repeatDataPieces);
+                        if ($repeatData) {
+                            /*
+                             * delete all following events
+                             * add this new event as a stand alone event
+                             */
 
-                    // delete current event and create new one
-                    $this->getRepository(CalendarEvent::class)->deleteById($eventId, 'all_series');
+                            $this->getRepository(CalendarEvent::class)->deleteEventAndFollowingByLinkId($eventId);
 
-                    $this->getRepository(CalendarEvent::class)->add(
-                        $calendarId,
-                        $session->get('user/id'),
-                        $name,
-                        $description,
-                        $location,
-                        $eventLink['date_from'],
-                        $eventLink['date_to'],
-                        $color,
-                        $date,
-                        $repeatData,
-                        $clientSettings
-                    );
+                            $this->getRepository(CalendarEvent::class)->add(
+                                $calendarId,
+                                $session->get('user/id'),
+                                $name,
+                                $description,
+                                $location,
+                                $dateFrom,
+                                $dateTo,
+                                $color,
+                                $date,
+                                $repeatData,
+                                $clientSettings
+                            );
+                        }
+                    } else {
+                        if ("all_events" == $changeType) {
+                            $eventLink = $this->getRepository(CalendarEvent::class)->getById(
+                                $event['cal_event_link_id'],
+                                'array'
+                            );
+
+                            $repeatDataPieces = explode('#', $repeatData);
+                            array_pop($repeatDataPieces);
+                            $repeatDataPieces[] = $eventLink['date_from'];
+                            $repeatData = implode("#", $repeatDataPieces);
+
+                            // delete current event and create new one
+                            $this->getRepository(CalendarEvent::class)->deleteById($eventId, 'all_series');
+
+                            $this->getRepository(CalendarEvent::class)->add(
+                                $calendarId,
+                                $session->get('user/id'),
+                                $name,
+                                $description,
+                                $location,
+                                $eventLink['date_from'],
+                                $eventLink['date_to'],
+                                $color,
+                                $date,
+                                $repeatData,
+                                $clientSettings
+                            );
+                        }
+                    }
                 }
             } else {
                 $this->getRepository(CalendarEvent::class)->updateById(
@@ -210,7 +230,12 @@ class EditController extends UbirimiController
 
                         // add the reminder
                         if (is_numeric($reminderValue)) {
-                            $this->getRepository(CalendarEvent::class)->addReminder($eventId, $reminderType, $reminderPeriod, $reminderValue);
+                            $this->getRepository(CalendarEvent::class)->addReminder(
+                                $eventId,
+                                $reminderType,
+                                $reminderPeriod,
+                                $reminderValue
+                            );
                         }
                     }
                 }

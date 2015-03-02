@@ -46,13 +46,23 @@ class IssueEmailService extends UbirimiService
     {
         $project = UbirimiContainer::get()['repository']->get(YongoProject::class)->getById($issue['issue_project_id']);
 
-        if ($this->workflowService->hasEvent($this->session->get('client/id'), $issue['issue_project_id'], $issue['type'])) {
+        if ($this->workflowService->hasEvent(
+            $this->session->get('client/id'),
+            $issue['issue_project_id'],
+            $issue['type']
+        )
+        ) {
             $smtpSettings = $this->session->get('client/settings/smtp');
             if ($smtpSettings) {
 
                 Email::$smtpSettings = $smtpSettings;
 
-                UbirimiContainer::get()['repository']->get(Email::class)->triggerNewIssueNotification($this->session->get('client/id'), $issue, $project, $this->session->get('user/id'));
+                UbirimiContainer::get()['repository']->get(Email::class)->triggerNewIssueNotification(
+                    $this->session->get('client/id'),
+                    $issue,
+                    $project,
+                    $this->session->get('user/id')
+                );
             }
         }
     }
@@ -63,7 +73,12 @@ class IssueEmailService extends UbirimiService
 
         Email::$smtpSettings = $smtpSettings;
 
-        UbirimiContainer::get()['repository']->get(Email::class)->triggerIssueUpdatedNotification($this->session->get('client/id'), $oldIssueData, $this->session->get('user/id'), $fieldChanges);
+        UbirimiContainer::get()['repository']->get(Email::class)->triggerIssueUpdatedNotification(
+            $this->session->get('client/id'),
+            $oldIssueData,
+            $this->session->get('user/id'),
+            $fieldChanges
+        );
 
     }
 
@@ -73,7 +88,12 @@ class IssueEmailService extends UbirimiService
         if ($smtpSettings) {
 
             Email::$smtpSettings = $smtpSettings;
-            UbirimiContainer::get()['repository']->get(Email::class)->triggerDeleteIssueNotification($this->session->get('client/id'), $issue, $project, $extraInformation);
+            UbirimiContainer::get()['repository']->get(Email::class)->triggerDeleteIssueNotification(
+                $this->session->get('client/id'),
+                $issue,
+                $project,
+                $extraInformation
+            );
         }
     }
 
@@ -84,16 +104,35 @@ class IssueEmailService extends UbirimiService
             Email::$smtpSettings = $this->session->get('client/settings/smtp');
 
             // notify people
-            $eventId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($this->session->get('client/id'), IssueEvent::EVENT_ISSUE_COMMENTED_CODE, 'id');
-            $users = UbirimiContainer::get()['repository']->get(YongoProject::class)->getUsersForNotification($issue['issue_project_id'], $eventId, $issue, $this->session->get('user/id'));
+            $eventId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+                $this->session->get('client/id'),
+                IssueEvent::EVENT_ISSUE_COMMENTED_CODE,
+                'id'
+            );
+            $users = UbirimiContainer::get()['repository']->get(YongoProject::class)->getUsersForNotification(
+                $issue['issue_project_id'],
+                $eventId,
+                $issue,
+                $this->session->get('user/id')
+            );
 
             while ($users && $userToNotify = $users->fetch_array(MYSQLI_ASSOC)) {
 
-                if ($userToNotify['user_id'] == $this->session->get('user/id') && !$userToNotify['notify_own_changes_flag']) {
+                if ($userToNotify['user_id'] == $this->session->get(
+                        'user/id'
+                    ) && !$userToNotify['notify_own_changes_flag']
+                ) {
                     continue;
                 }
 
-                UbirimiContainer::get()['repository']->get(Email::class)->sendEmailNotificationNewComment($issue, $this->session->get('client/id'), $project, $userToNotify, $content, $this->session->get('user'));
+                UbirimiContainer::get()['repository']->get(Email::class)->sendEmailNotificationNewComment(
+                    $issue,
+                    $this->session->get('client/id'),
+                    $project,
+                    $userToNotify,
+                    $content,
+                    $this->session->get('user')
+                );
             }
         }
     }
@@ -104,16 +143,44 @@ class IssueEmailService extends UbirimiService
         if ($smtpSettings) {
             Email::$smtpSettings = $smtpSettings;
 
-            $issue = UbirimiContainer::get()['repository']->get(Issue::class)->getByParameters(array('issue_id' => $issueId), $this->session->get('user/id'));
-            $eventId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($this->session->get('client/id'), IssueEvent::EVENT_ISSUE_COMMENTED_CODE, 'id');
-            $users = UbirimiContainer::get()['repository']->get(YongoProject::class)->getUsersForNotification($issue['issue_project_id'], $eventId, $issue, $this->session->get('user/id'));
+            $issue = UbirimiContainer::get()['repository']->get(Issue::class)->getByParameters(
+                array('issue_id' => $issueId),
+                $this->session->get('user/id')
+            );
+            $eventId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+                $this->session->get('client/id'),
+                IssueEvent::EVENT_ISSUE_COMMENTED_CODE,
+                'id'
+            );
+            $users = UbirimiContainer::get()['repository']->get(YongoProject::class)->getUsersForNotification(
+                $issue['issue_project_id'],
+                $eventId,
+                $issue,
+                $this->session->get('user/id')
+            );
 
             while ($users && $userToNotify = $users->fetch_array(MYSQLI_ASSOC)) {
-                if ($userToNotify['user_id'] == $this->session->get('user/id') && $userToNotify['notify_own_changes_flag']) {
-                    UbirimiContainer::get()['repository']->get(Email::class)->sendEmailNotificationNewComment($issue, $this->session->get('client/id'), $project, $userToNotify, $comment, $this->session->get('user'));
-                }
-                else {
-                    UbirimiContainer::get()['repository']->get(Email::class)->sendEmailNotificationNewComment($issue, $this->session->get('client/id'), $project, $userToNotify, $comment, $this->session->get('user'));
+                if ($userToNotify['user_id'] == $this->session->get(
+                        'user/id'
+                    ) && $userToNotify['notify_own_changes_flag']
+                ) {
+                    UbirimiContainer::get()['repository']->get(Email::class)->sendEmailNotificationNewComment(
+                        $issue,
+                        $this->session->get('client/id'),
+                        $project,
+                        $userToNotify,
+                        $comment,
+                        $this->session->get('user')
+                    );
+                } else {
+                    UbirimiContainer::get()['repository']->get(Email::class)->sendEmailNotificationNewComment(
+                        $issue,
+                        $this->session->get('client/id'),
+                        $project,
+                        $userToNotify,
+                        $comment,
+                        $this->session->get('user')
+                    );
                 }
             }
         }
@@ -126,12 +193,20 @@ class IssueEmailService extends UbirimiService
         if ($smtpSettings) {
 
             Email::$smtpSettings = $smtpSettings;
-            $userThatShares = UbirimiContainer::get()['repository']->get(UbirimiUser::class)->getById($this->session->get('user/id'));
+            $userThatShares = UbirimiContainer::get()['repository']->get(UbirimiUser::class)->getById(
+                $this->session->get('user/id')
+            );
             for ($i = 0; $i < count($userIds); $i++) {
 
                 $user = UbirimiContainer::get()['repository']->get(UbirimiUser::class)->getById($userIds[$i]);
 
-                UbirimiContainer::get()['repository']->get(Email::class)->shareIssue($this->session->get('client/id'), $issue, $userThatShares, $user['email'], $noteContent);
+                UbirimiContainer::get()['repository']->get(Email::class)->shareIssue(
+                    $this->session->get('client/id'),
+                    $issue,
+                    $userThatShares,
+                    $user['email'],
+                    $noteContent
+                );
             }
         }
     }
@@ -144,16 +219,35 @@ class IssueEmailService extends UbirimiService
 
             Email::$smtpSettings = $smtpSettings;
             // notify people
-            $eventId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($this->session->get('client/id'), IssueEvent::EVENT_WORK_LOGGED_ON_ISSUE_CODE, 'id');
-            $users = UbirimiContainer::get()['repository']->get(YongoProject::class)->getUsersForNotification($issue['issue_project_id'], $eventId, $issue, $this->session->get('user/id'));
+            $eventId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+                $this->session->get('client/id'),
+                IssueEvent::EVENT_WORK_LOGGED_ON_ISSUE_CODE,
+                'id'
+            );
+            $users = UbirimiContainer::get()['repository']->get(YongoProject::class)->getUsersForNotification(
+                $issue['issue_project_id'],
+                $eventId,
+                $issue,
+                $this->session->get('user/id')
+            );
 
             while ($users && $userToNotify = $users->fetch_array(MYSQLI_ASSOC)) {
 
-                if ($userToNotify['user_id'] == $this->session->get('user/id') && !$userToNotify['notify_own_changes_flag']) {
+                if ($userToNotify['user_id'] == $this->session->get(
+                        'user/id'
+                    ) && !$userToNotify['notify_own_changes_flag']
+                ) {
                     continue;
                 }
 
-                UbirimiContainer::get()['repository']->get(Email::class)->sendEmailNotificationWorkLogged($issue, $this->session->get('client/id'), $project, $userToNotify, $extraInformation, $this->session->get('user'));
+                UbirimiContainer::get()['repository']->get(Email::class)->sendEmailNotificationWorkLogged(
+                    $issue,
+                    $this->session->get('client/id'),
+                    $project,
+                    $userToNotify,
+                    $extraInformation,
+                    $this->session->get('user')
+                );
             }
         }
     }
@@ -166,16 +260,35 @@ class IssueEmailService extends UbirimiService
 
             Email::$smtpSettings = $smtpSettings;
             // notify people
-            $eventId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($this->session->get('client/id'), IssueEvent::EVENT_ISSUE_UPDATED_CODE, 'id');
-            $users = UbirimiContainer::get()['repository']->get(YongoProject::class)->getUsersForNotification($issue['issue_project_id'], $eventId, $issue, $this->session->get('user/id'));
+            $eventId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+                $this->session->get('client/id'),
+                IssueEvent::EVENT_ISSUE_UPDATED_CODE,
+                'id'
+            );
+            $users = UbirimiContainer::get()['repository']->get(YongoProject::class)->getUsersForNotification(
+                $issue['issue_project_id'],
+                $eventId,
+                $issue,
+                $this->session->get('user/id')
+            );
 
             while ($users && $userToNotify = $users->fetch_array(MYSQLI_ASSOC)) {
 
-                if ($userToNotify['user_id'] == $this->session->get('user/id') && !$userToNotify['notify_own_changes_flag']) {
+                if ($userToNotify['user_id'] == $this->session->get(
+                        'user/id'
+                    ) && !$userToNotify['notify_own_changes_flag']
+                ) {
                     continue;
                 }
 
-                UbirimiContainer::get()['repository']->get(Email::class)->sendEmailNotificationAddAttachment($issue, $this->session->get('client/id'), $project, $userToNotify, $extraInformation, $this->session->get('user'));
+                UbirimiContainer::get()['repository']->get(Email::class)->sendEmailNotificationAddAttachment(
+                    $issue,
+                    $this->session->get('client/id'),
+                    $project,
+                    $userToNotify,
+                    $extraInformation,
+                    $this->session->get('user')
+                );
             }
         }
     }
@@ -188,16 +301,35 @@ class IssueEmailService extends UbirimiService
 
             Email::$smtpSettings = $smtpSettings;
             // notify people
-            $eventId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($this->session->get('client/id'), IssueEvent::EVENT_ISSUE_WORKLOG_UPDATED_CODE, 'id');
-            $users = UbirimiContainer::get()['repository']->get(YongoProject::class)->getUsersForNotification($issue['issue_project_id'], $eventId, $issue, $this->session->get('user/id'));
+            $eventId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+                $this->session->get('client/id'),
+                IssueEvent::EVENT_ISSUE_WORKLOG_UPDATED_CODE,
+                'id'
+            );
+            $users = UbirimiContainer::get()['repository']->get(YongoProject::class)->getUsersForNotification(
+                $issue['issue_project_id'],
+                $eventId,
+                $issue,
+                $this->session->get('user/id')
+            );
 
             while ($users && $userToNotify = $users->fetch_array(MYSQLI_ASSOC)) {
 
-                if ($userToNotify['user_id'] == $this->session->get('user/id') && !$userToNotify['notify_own_changes_flag']) {
+                if ($userToNotify['user_id'] == $this->session->get(
+                        'user/id'
+                    ) && !$userToNotify['notify_own_changes_flag']
+                ) {
                     continue;
                 }
 
-                UbirimiContainer::get()['repository']->get(Email::class)->sendEmailNotificationWorkLogUpdated($issue, $this->session->get('client/id'), $project, $userToNotify, $extraInformation, $this->session->get('user'));
+                UbirimiContainer::get()['repository']->get(Email::class)->sendEmailNotificationWorkLogUpdated(
+                    $issue,
+                    $this->session->get('client/id'),
+                    $project,
+                    $userToNotify,
+                    $extraInformation,
+                    $this->session->get('user')
+                );
             }
         }
     }
@@ -210,16 +342,35 @@ class IssueEmailService extends UbirimiService
 
             Email::$smtpSettings = $smtpSettings;
             // notify people
-            $eventId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($this->session->get('client/id'), IssueEvent::EVENT_ISSUE_WORKLOG_DELETED_CODE, 'id');
-            $users = UbirimiContainer::get()['repository']->get(YongoProject::class)->getUsersForNotification($issue['issue_project_id'], $eventId, $issue, $this->session->get('user/id'));
+            $eventId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+                $this->session->get('client/id'),
+                IssueEvent::EVENT_ISSUE_WORKLOG_DELETED_CODE,
+                'id'
+            );
+            $users = UbirimiContainer::get()['repository']->get(YongoProject::class)->getUsersForNotification(
+                $issue['issue_project_id'],
+                $eventId,
+                $issue,
+                $this->session->get('user/id')
+            );
 
             while ($users && $userToNotify = $users->fetch_array(MYSQLI_ASSOC)) {
 
-                if ($userToNotify['user_id'] == $this->session->get('user/id') && !$userToNotify['notify_own_changes_flag']) {
+                if ($userToNotify['user_id'] == $this->session->get(
+                        'user/id'
+                    ) && !$userToNotify['notify_own_changes_flag']
+                ) {
                     continue;
                 }
 
-                UbirimiContainer::get()['repository']->get(Email::class)->sendEmailNotificationWorkLogDeleted($issue, $this->session->get('client/id'), $project, $userToNotify, $extraInformation, $this->session->get('user'));
+                UbirimiContainer::get()['repository']->get(Email::class)->sendEmailNotificationWorkLogDeleted(
+                    $issue,
+                    $this->session->get('client/id'),
+                    $project,
+                    $userToNotify,
+                    $extraInformation,
+                    $this->session->get('user')
+                );
             }
         }
     }

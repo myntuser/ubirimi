@@ -46,12 +46,18 @@ class EditController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             if (!$emptyName) {
                 $currentDate = Util::getServerCurrentDateTime();
-                $this->getRepository(NotificationScheme::class)->updateMetaDataById($notificationSchemeId, $name, $description, $currentDate);
+                $this->getRepository(NotificationScheme::class)->updateMetaDataById(
+                    $notificationSchemeId,
+                    $name,
+                    $description,
+                    $currentDate
+                );
 
                 $this->getLogger()->addInfo('UPDATE Yongo Notification Scheme ' . $name, $this->getLoggerContext());
 
@@ -60,8 +66,13 @@ class EditController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Notification Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Notification Scheme';
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/notification_scheme/Edit.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/notification_scheme/Edit.php',
+            get_defined_vars()
+        );
     }
 }

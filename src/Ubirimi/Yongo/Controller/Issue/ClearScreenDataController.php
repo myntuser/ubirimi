@@ -38,7 +38,9 @@ class ClearScreenDataController extends UbirimiController
 
         $issueId = $request->request->get('issue_id');
 
-        $attIdsSession = $session->has('added_attachments_in_screen') ? $session->get('added_attachments_in_screen') : null;
+        $attIdsSession = $session->has('added_attachments_in_screen') ? $session->get(
+            'added_attachments_in_screen'
+        ) : null;
         if ($attIdsSession) {
             for ($i = 0; $i < count($attIdsSession); $i++) {
 
@@ -47,7 +49,9 @@ class ClearScreenDataController extends UbirimiController
                 $this->getRepository(IssueAttachment::class)->deleteById($attachmentId);
 
                 if ($issueId) {
-                    Util::deleteDir(Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . $issueId . '/' . $attachmentId);
+                    Util::deleteDir(
+                        Util::getAssetsFolder(SystemProduct::SYS_PRODUCT_YONGO) . $issueId . '/' . $attachmentId
+                    );
                 }
             }
 

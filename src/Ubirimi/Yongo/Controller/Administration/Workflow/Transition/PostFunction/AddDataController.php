@@ -52,7 +52,11 @@ class AddDataController extends UbirimiController
                 $field_value = $request->request->get('field_value');
                 $value = 'field_name=' . $field_name . '###field_value=' . $field_value;
 
-                $this->getRepository(WorkflowFunction::class)->addPostFunction($workflowDataId, $postFunctionId, $value);
+                $this->getRepository(WorkflowFunction::class)->addPostFunction(
+                    $workflowDataId,
+                    $postFunctionId,
+                    $value
+                );
 
                 $this->getLogger()->addInfo('ADD Yongo Workflow Post Function', $this->getLoggerContext());
             }
@@ -61,8 +65,13 @@ class AddDataController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Post Function Data';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Post Function Data';
 
-        return $this->render(__DIR__ . '/../../../../../Resources/views/administration/workflow/transition/post_function/AddData.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../../Resources/views/administration/workflow/transition/post_function/AddData.php',
+            get_defined_vars()
+        );
     }
 }

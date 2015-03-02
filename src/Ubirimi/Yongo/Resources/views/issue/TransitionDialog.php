@@ -35,11 +35,14 @@ while ($screenData && $field = $screenData->fetch_array(MYSQLI_ASSOC)) {
             break;
 
         case Field::FIELD_ASSIGNEE_CODE:
-            $allowUnassignedIssuesFlag = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getYongoSetting($clientId, 'allow_unassigned_issues_flag');
+            $allowUnassignedIssuesFlag = UbirimiContainer::get()['repository']->get(
+                UbirimiClient::class
+            )->getYongoSetting($clientId, 'allow_unassigned_issues_flag');
 
             $htmlOutput .= '<select ' . $requiredHTML . ' id="field_type_assignee" name="' . $field['field_code'] . '" class="select2Input">';
-            if ($allowUnassignedIssuesFlag)
+            if ($allowUnassignedIssuesFlag) {
                 $htmlOutput .= '<option value="-1">No one</option>';
+            }
 
             while ($assignableUsers && $user = $assignableUsers->fetch_array(MYSQLI_ASSOC)) {
                 $textSelected = '';
@@ -127,7 +130,10 @@ while ($screenData && $field = $screenData->fetch_array(MYSQLI_ASSOC)) {
         // deal with the custom fields
         case $fieldCodeNULL:
 
-            $fieldValue = UbirimiContainer::get()['repository']->get(Field::class)->getCustomFieldValueByFieldId($issueId, $field['field_id']);
+            $fieldValue = UbirimiContainer::get()['repository']->get(Field::class)->getCustomFieldValueByFieldId(
+                $issueId,
+                $field['field_id']
+            );
             switch ($field['type_code']) {
                 case Field::CUSTOM_FIELD_TYPE_SMALL_TEXT_CODE:
                     $htmlOutput .= '<input ' . $requiredHTML . ' id="field_custom_type_' . $field['field_id'] . '_' . $field['type_code'] . '" class="inputTextLarge" type="text" value="' . $fieldValue['value'] . '" name="' . $field['type_code'] . '" />';
@@ -139,15 +145,17 @@ while ($screenData && $field = $screenData->fetch_array(MYSQLI_ASSOC)) {
 
                 case Field::CUSTOM_FIELD_TYPE_DATE_PICKER_CODE:
                     $stringDate = '';
-                    if ($fieldValue['value'])
+                    if ($fieldValue['value']) {
                         $stringDate = date('Y-m-d', strtotime($fieldValue['value']));
+                    }
                     $htmlOutput .= '<input ' . $requiredHTML . ' value="' . $stringDate . '" name="' . $field['field_code'] . '" type="text" class="inputText" value="" id="field_custom_type_' . $field['field_id'] . '_' . $field['type_code'] . '" />';
                     break;
 
                 case Field::CUSTOM_FIELD_TYPE_DATE_TIME_PICKER_CODE:
                     $stringDate = '';
-                    if ($fieldValue['value'])
+                    if ($fieldValue['value']) {
                         $stringDate = date('Y-m-d H:i', strtotime($fieldValue['value']));
+                    }
                     $htmlOutput .= '<input ' . $requiredHTML . ' value="' . $stringDate . '" name="' . $field['field_code'] . '" type="text" class="inputText" value="" id="field_custom_type_' . $field['field_id'] . '_' . $field['type_code'] . '" />';
                     break;
 
@@ -156,7 +164,9 @@ while ($screenData && $field = $screenData->fetch_array(MYSQLI_ASSOC)) {
                     break;
 
                 case Field::CUSTOM_FIELD_TYPE_SELECT_LIST_SINGLE_CHOICE_CODE:
-                    $possibleValues = UbirimiContainer::get()['repository']->get(Field::class)->getDataByFieldId($field['field_id']);
+                    $possibleValues = UbirimiContainer::get()['repository']->get(Field::class)->getDataByFieldId(
+                        $field['field_id']
+                    );
                     $htmlOutput .= '<select ' . $requiredHTML . ' id="field_custom_type_' . $field['field_id'] . '" name="' . $field['type_code'] . '" class="mousetrap select2InputMedium">';
                     $htmlOutput .= '<option value="">None</option>';
                     while ($possibleValues && $customValue = $possibleValues->fetch_array(MYSQLI_ASSOC)) {
@@ -166,7 +176,9 @@ while ($screenData && $field = $screenData->fetch_array(MYSQLI_ASSOC)) {
                     break;
 
                 case Field::CUSTOM_FIELD_TYPE_USER_PICKER_MULTIPLE_USER_CODE:
-                    $customFieldsDataUserPickerMultipleUserData = UbirimiContainer::get()['repository']->get(CustomField::class)->getUserPickerData($issueId, $field['field_id']);
+                    $customFieldsDataUserPickerMultipleUserData = UbirimiContainer::get()['repository']->get(
+                        CustomField::class
+                    )->getUserPickerData($issueId, $field['field_id']);
                     $customFieldsDataUserPickerMultipleUser = $customFieldsDataUserPickerMultipleUserData[$field['field_id']];
 
                     $htmlOutput .= '<select ' . $requiredHTML . ' id="field_custom_type_' . $field['field_id'] . '_' . $field['type_code'] . '" class="select2Input mousetrap" type="text" multiple="multiple" name="' . $field['type_code'] . '[]">';
@@ -192,8 +204,9 @@ while ($screenData && $field = $screenData->fetch_array(MYSQLI_ASSOC)) {
                     break;
             }
 
-            if ($field['description'])
+            if ($field['description']) {
                 $htmlOutput .= '<div class="smallDescription">' . $field['description'] . '</div>';
+            }
 
             break;
     }

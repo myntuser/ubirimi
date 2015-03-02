@@ -43,7 +43,9 @@ class PrintController extends UbirimiController
 
         if (Util::checkUserIsLoggedIn()) {
             $issue = $this->getRepository(Issue::class)->getById($Id, $loggedInUserId);
-            $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / ' . $issue['project_code'] . '-' . $issue['nr'];
+            $sectionPageTitle = $session->get(
+                    'client/settings/title_name'
+                ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / ' . $issue['project_code'] . '-' . $issue['nr'];
             $clientSettings = $session->get('client/settings');
         } else {
             $httpHOST = Util::getHttpHost();
@@ -62,9 +64,20 @@ class PrintController extends UbirimiController
 
         $issueId = $issue['id'];
 
-        $components = $this->getRepository(IssueComponent::class)->getByIssueIdAndProjectId($issueId, $issue['issue_project_id']);
-        $versionsAffected = $this->getRepository(IssueVersion::class)->getByIssueIdAndProjectId($issueId, $issue['issue_project_id'], Issue::ISSUE_AFFECTED_VERSION_FLAG);
-        $versionsTargeted = $this->getRepository(IssueVersion::class)->getByIssueIdAndProjectId($issueId, $issue['issue_project_id'], Issue::ISSUE_FIX_VERSION_FLAG);
+        $components = $this->getRepository(IssueComponent::class)->getByIssueIdAndProjectId(
+            $issueId,
+            $issue['issue_project_id']
+        );
+        $versionsAffected = $this->getRepository(IssueVersion::class)->getByIssueIdAndProjectId(
+            $issueId,
+            $issue['issue_project_id'],
+            Issue::ISSUE_AFFECTED_VERSION_FLAG
+        );
+        $versionsTargeted = $this->getRepository(IssueVersion::class)->getByIssueIdAndProjectId(
+            $issueId,
+            $issue['issue_project_id'],
+            Issue::ISSUE_FIX_VERSION_FLAG
+        );
         $attachments = $this->getRepository(IssueAttachment::class)->getByIssueId($issueId);
         $countAttachments = 0;
         if ($attachments) {

@@ -36,16 +36,25 @@ class AssociateStep1Controller extends UbirimiController
         $projectId = $request->get('id');
         $project = $this->getRepository(YongoProject::class)->getById($projectId);
         $menuSelectedCategory = 'project';
-        $issueSecuritySchemes = $this->getRepository(IssueSecurityScheme::class)->getByClientId($session->get('client/id'));
+        $issueSecuritySchemes = $this->getRepository(IssueSecurityScheme::class)->getByClientId(
+            $session->get('client/id')
+        );
 
         if ($request->request->has('cancel')) {
             return new RedirectResponse('/yongo/administration/project/issue-security/' . $projectId);
         } elseif ($request->request->has('next')) {
             $schemeId = $request->request->get('scheme');
-            return new RedirectResponse('/yongo/administration/project/associate-issue-security-level/' . $projectId . '/' . $schemeId);
+            return new RedirectResponse(
+                '/yongo/administration/project/associate-issue-security-level/' . $projectId . '/' . $schemeId
+            );
         }
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Associate Issue Security';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Associate Issue Security';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/security_scheme/AssociateStep1.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/issue/security_scheme/AssociateStep1.php',
+            get_defined_vars()
+        );
     }
 }

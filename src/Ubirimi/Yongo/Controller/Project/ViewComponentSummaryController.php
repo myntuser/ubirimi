@@ -57,20 +57,34 @@ class ViewComponentSummaryController extends UbirimiController
         $menuSelectedCategory = 'project';
 
         $sectionPageTitle = $clientSettings['title_name'] . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Component: ' . $component['name'] . ' / Summary';
-        $issuesResult = $this->getRepository(Issue::class)->getByParameters(array('project' => $projectId,
-            'resolution' => array(-2),
-            'page' => 1,
-            'component' => array($componentId),
-            'issues_per_page' => 10), $loggedInUserId, null, $loggedInUserId);
+        $issuesResult = $this->getRepository(Issue::class)->getByParameters(
+            array(
+                'project' => $projectId,
+                'resolution' => array(-2),
+                'page' => 1,
+                'component' => array($componentId),
+                'issues_per_page' => 10
+            ),
+            $loggedInUserId,
+            null,
+            $loggedInUserId
+        );
         $issues = $issuesResult[0];
 
-        $issuesResultUpdatedRecently = $this->getRepository(Issue::class)->getByParameters(array('project' => $projectId,
-            'resolution' => array(-2),
-            'page' => 1,
-            'issues_per_page' => 10,
-            'sort' => 'updated',
-            'component' => array($componentId),
-            'sort_order' => 'desc'), $loggedInUserId, null, $loggedInUserId);
+        $issuesResultUpdatedRecently = $this->getRepository(Issue::class)->getByParameters(
+            array(
+                'project' => $projectId,
+                'resolution' => array(-2),
+                'page' => 1,
+                'issues_per_page' => 10,
+                'sort' => 'updated',
+                'component' => array($componentId),
+                'sort_order' => 'desc'
+            ),
+            $loggedInUserId,
+            null,
+            $loggedInUserId
+        );
         $issuesUpdatedRecently = $issuesResultUpdatedRecently[0];
 
         return $this->render(__DIR__ . '/../../Resources/views/project/ViewComponentSummary.php', get_defined_vars());

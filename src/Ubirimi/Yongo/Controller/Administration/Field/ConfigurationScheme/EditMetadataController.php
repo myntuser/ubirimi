@@ -35,7 +35,9 @@ class EditMetadataController extends UbirimiController
 
         $fieldConfigurationSchemeId = $request->get('id');
 
-        $fieldConfigurationScheme = $this->getRepository(FieldConfigurationScheme::class)->getMetaDataById($fieldConfigurationSchemeId);
+        $fieldConfigurationScheme = $this->getRepository(FieldConfigurationScheme::class)->getMetaDataById(
+            $fieldConfigurationSchemeId
+        );
 
         if ($fieldConfigurationScheme['client_id'] != $session->get('client/id')) {
             return new RedirectResponse('/general-settings/bad-link-access-denied');
@@ -47,21 +49,35 @@ class EditMetadataController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             if (!$emptyName) {
                 $currentDate = Util::getServerCurrentDateTime();
-                $this->getRepository(FieldConfigurationScheme::class)->updateMetaDataById($fieldConfigurationSchemeId, $name, $description, $currentDate);
+                $this->getRepository(FieldConfigurationScheme::class)->updateMetaDataById(
+                    $fieldConfigurationSchemeId,
+                    $name,
+                    $description,
+                    $currentDate
+                );
 
-                $this->getLogger()->addInfo('UPDATE Yongo Field Configuration Scheme ' . $name, $this->getLoggerContext());
+                $this->getLogger()->addInfo(
+                    'UPDATE Yongo Field Configuration Scheme ' . $name,
+                    $this->getLoggerContext()
+                );
 
                 return new RedirectResponse('/yongo/administration/field-configurations/schemes');
             }
         }
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Field Configuration Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Field Configuration Scheme';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/field/configuration_scheme/EditMetadata.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/field/configuration_scheme/EditMetadata.php',
+            get_defined_vars()
+        );
     }
 }

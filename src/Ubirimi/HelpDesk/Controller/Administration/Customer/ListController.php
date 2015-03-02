@@ -50,6 +50,9 @@ class ListController extends UbirimiController
             . ' / ' . SystemProduct::SYS_PRODUCT_HELP_DESK_NAME
             . ' / Administration / Customers';
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/customer/List.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/customer/List.php',
+            get_defined_vars()
+        );
     }
 }

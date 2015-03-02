@@ -23,7 +23,8 @@ use Ubirimi\Container\UbirimiContainer;
 
 class DatabaseConnectorService
 {
-    public function getConnection() {
+    public function getConnection()
+    {
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
         $connection = new \mysqli(
@@ -37,7 +38,13 @@ class DatabaseConnectorService
         $driver->report_mode = MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT;
 
         if ($connection->connect_errno) {
-            throw new \Exception(sprintf('Failed to connect to database (%d). Reason: %s', $connection->connect_errno, $connection->connect_error));
+            throw new \Exception(
+                sprintf(
+                    'Failed to connect to database (%d). Reason: %s',
+                    $connection->connect_errno,
+                    $connection->connect_error
+                )
+            );
         }
 
         $query = "SET NAMES 'utf8'";

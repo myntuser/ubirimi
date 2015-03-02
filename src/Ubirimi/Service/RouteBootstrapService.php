@@ -124,7 +124,9 @@ class RouteBootstrapService
         foreach ($routingPathsAdministration as $routingPath) {
             $loader = new YamlFileLoader(new FileLocator($routingPath));
 
-            $this->router->getRouteCollection()->addCollection($routeCollection = $loader->load('routing_administration.yml'));
+            $this->router->getRouteCollection()->addCollection(
+                $routeCollection = $loader->load('routing_administration.yml')
+            );
         }
     }
 }

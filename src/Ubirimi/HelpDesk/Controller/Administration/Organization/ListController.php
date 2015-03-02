@@ -40,6 +40,9 @@ class ListController extends UbirimiController
 
         $organizations = $this->getRepository(Organization::class)->getByClientId($session->get('client/id'));
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/organization/ListOrganization.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/organization/ListOrganization.php',
+            get_defined_vars()
+        );
     }
 }

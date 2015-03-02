@@ -40,10 +40,16 @@ class ListUserController extends UbirimiController
         $isSVNAdministrator = $session->get('user/svn_administrator_flag');
         $menuSelectedCategory = 'svn';
 
-        $svnRepos = $this->getRepository(SvnRepository::class)->getRepositoriesByUserId($clientId, $loggedInUserId, 'array');
+        $svnRepos = $this->getRepository(SvnRepository::class)->getRepositoriesByUserId(
+            $clientId,
+            $loggedInUserId,
+            'array'
+        );
         $session->set('selected_product_id', SystemProduct::SYS_PRODUCT_SVN_HOSTING);
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_SVN_HOSTING_NAME. ' / My Repositories';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_SVN_HOSTING_NAME . ' / My Repositories';
 
         return $this->render(__DIR__ . '/../Resources/views/ListUser.php', get_defined_vars());
     }

@@ -32,7 +32,9 @@ class ManageApplicationsController extends UbirimiController
         $session->set('selected_product_id', -1);
         $menuSelectedCategory = 'general_home';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / GeneralSettings Settings / Manage Applications';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / GeneralSettings Settings / Manage Applications';
 
         $productsArray = $session->get('client/products');
 

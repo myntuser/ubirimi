@@ -35,7 +35,10 @@ class DeleteUserController extends UbirimiController
         $Id = $request->request->get('id');
         $this->getRepository(SvnRepository::class)->deleteUserById($Id);
 
-        $this->getRepository(SvnRepository::class)->updateHtpasswd($session->get('selected_svn_repo_id'), $session->get('client/company_domain'));
+        $this->getRepository(SvnRepository::class)->updateHtpasswd(
+            $session->get('selected_svn_repo_id'),
+            $session->get('client/company_domain')
+        );
         $this->getRepository(SvnRepository::class)->updateAuthz();
 
         return new Response('');

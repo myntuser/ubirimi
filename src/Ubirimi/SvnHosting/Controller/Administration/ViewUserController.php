@@ -44,7 +44,10 @@ class ViewUserController extends UbirimiController
             return new RedirectResponse('/general-settings/bad-link-access-denied');
         }
 
-        $svnRepoUserList = $this->getRepository(SvnRepository::class)->getUserList($session->get('selected_svn_repo_id'), 'array');
+        $svnRepoUserList = $this->getRepository(SvnRepository::class)->getUserList(
+            $session->get('selected_svn_repo_id'),
+            'array'
+        );
 
         $isSVNAdministrator = $session->get('user/svn_administrator_flag');
         $session->set('selected_product_id', SystemProduct::SYS_PRODUCT_SVN_HOSTING);

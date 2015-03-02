@@ -24,7 +24,8 @@ use Ubirimi\Container\UbirimiContainer;
 
 class EmailQueue
 {
-    public function send($smtpSettings, $emailData) {
+    public function send($smtpSettings, $emailData)
+    {
         $mailer = UbirimiContainer::get()['repository']->get(Email::class)->getMailer($smtpSettings);
 
         $message = Swift_Message::newInstance($emailData['subject'])
@@ -35,7 +36,8 @@ class EmailQueue
         @$mailer->send($message);
     }
 
-    public function add($clientId, $fromAddress, $toAddress, $replyToAddress, $subject, $content, $date) {
+    public function add($clientId, $fromAddress, $toAddress, $replyToAddress, $subject, $content, $date)
+    {
         $query = "INSERT INTO general_mail_queue(client_id, from_address, to_address, reply_to_address, subject, content, date_created)
                   VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -45,7 +47,8 @@ class EmailQueue
         $stmt->execute();
     }
 
-    public function getBatch() {
+    public function getBatch()
+    {
         $query = 'SELECT * ' .
             'FROM general_mail_queue ' .
             "order by id asc " .
@@ -61,7 +64,8 @@ class EmailQueue
         }
     }
 
-    public function deleteById($emailId) {
+    public function deleteById($emailId)
+    {
         $query = "delete from general_mail_queue where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -70,7 +74,8 @@ class EmailQueue
         $stmt->execute();
     }
 
-    public function getByClientId($clientId) {
+    public function getByClientId($clientId)
+    {
         $query = 'SELECT * ' .
             'FROM general_mail_queue ' .
             "where client_id = ?";
@@ -86,9 +91,10 @@ class EmailQueue
         }
     }
 
-    public function getAll() {
+    public function getAll()
+    {
         $query = 'SELECT general_mail_queue.from_address, general_mail_queue.to_address, general_mail_queue.subject, general_mail_queue.content, general_mail_queue.date_created, ' .
-                 'client.company_domain ' .
+            'client.company_domain ' .
             'FROM general_mail_queue ' .
             'left join client on client.id = general_mail_queue.client_id';
 

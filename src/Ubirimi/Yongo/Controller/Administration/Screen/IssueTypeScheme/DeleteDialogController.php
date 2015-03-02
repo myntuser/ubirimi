@@ -34,6 +34,8 @@ class DeleteDialogController extends UbirimiController
             return new Response('Are you sure you want to delete this issue type screen scheme?');
         }
 
-        return new Response('This issue type screen scheme can not be deleted. It is associated with one or more projects.');
+        return new Response(
+            'This issue type screen scheme can not be deleted. It is associated with one or more projects.'
+        );
     }
 }

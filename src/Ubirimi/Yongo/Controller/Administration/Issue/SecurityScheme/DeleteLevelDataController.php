@@ -33,13 +33,20 @@ class DeleteLevelDataController extends UbirimiController
         Util::checkUserIsLoggedInAndRedirect();
 
         $issueSecuritySchemeLevelDataId = $request->request->get('id');
-        $issueSecuritySchemeLevelData = $this->getRepository(IssueSecurityScheme::class)->getLevelDataById($issueSecuritySchemeLevelDataId);
+        $issueSecuritySchemeLevelData = $this->getRepository(IssueSecurityScheme::class)->getLevelDataById(
+            $issueSecuritySchemeLevelDataId
+        );
         $issueSecuritySchemeLevelId = $issueSecuritySchemeLevelData['issue_security_scheme_level_id'];
-        $issueSecuritySchemeLevel = $this->getRepository(IssueSecurityScheme::class)->getLevelById($issueSecuritySchemeLevelId);
+        $issueSecuritySchemeLevel = $this->getRepository(IssueSecurityScheme::class)->getLevelById(
+            $issueSecuritySchemeLevelId
+        );
 
         $this->getRepository(IssueSecurityScheme::class)->deleteLevelDataById($issueSecuritySchemeLevelDataId);
 
-        $this->getLogger()->addInfo('UPDATE Yongo Issue Security Scheme Level ' . $issueSecuritySchemeLevel['name'], $this->getLoggerContext());
+        $this->getLogger()->addInfo(
+            'UPDATE Yongo Issue Security Scheme Level ' . $issueSecuritySchemeLevel['name'],
+            $this->getLoggerContext()
+        );
 
         return new Response('');
     }

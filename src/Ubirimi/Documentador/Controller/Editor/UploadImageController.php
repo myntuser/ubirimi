@@ -70,12 +70,18 @@ class UploadImageController extends UbirimiController
                     $revisionNumber = $revisions->num_rows + 1;
 
                     // create the revision folder
-                    mkdir($attachmentsBaseFilePath . $spaceId . '/' . $entityId. '/' . $attachmentId . '/' . $revisionNumber);
+                    mkdir(
+                        $attachmentsBaseFilePath . $spaceId . '/' . $entityId . '/' . $attachmentId . '/' . $revisionNumber
+                    );
 
                 } else {
                     // add the attachment in the database
                     $currentDate = Util::getServerCurrentDateTime();
-                    $attachmentId = $this->getRepository(EntityAttachment::class)->add($entityId, $fileName, $currentDate);
+                    $attachmentId = $this->getRepository(EntityAttachment::class)->add(
+                        $entityId,
+                        $fileName,
+                        $currentDate
+                    );
 
                     $revisionNumber = 1;
 
@@ -91,16 +97,22 @@ class UploadImageController extends UbirimiController
                         mkdir($attachmentsBaseFilePath . $spaceId . '/' . $entityId . '/' . $attachmentId);
                     }
 
-                    mkdir($attachmentsBaseFilePath . $spaceId . '/' . $entityId . '/' . $attachmentId . '/' . $revisionNumber);
+                    mkdir(
+                        $attachmentsBaseFilePath . $spaceId . '/' . $entityId . '/' . $attachmentId . '/' . $revisionNumber
+                    );
                 }
 
-                $directoryName = $attachmentsBaseFilePath . $spaceId . '/' . $entityId. '/' . $attachmentId . '/' . $revisionNumber;
+                $directoryName = $attachmentsBaseFilePath . $spaceId . '/' . $entityId . '/' . $attachmentId . '/' . $revisionNumber;
                 move_uploaded_file($_FILES["upload"]["tmp_name"], $directoryName . '/' . $fileName);
 
-                $this->getRepository(EntityAttachment::class)->addRevision($attachmentId, $loggedInUserId, $currentDate);
+                $this->getRepository(EntityAttachment::class)->addRevision(
+                    $attachmentId,
+                    $loggedInUserId,
+                    $currentDate
+                );
 
                 $attachmentsPath = UbirimiContainer::get()['asset.documentador_entity_attachments'];
-                $html = '<html><body><script type="text/javascript">window.parent.CKEDITOR.tools.callFunction("' . $CKEditorFuncNum . '", "/assets/' . $attachmentsPath . $spaceId . '/' . $entityId. '/' . $attachmentId . '/' . $revisionNumber . '/' . $fileName . '");</script></body></html>';
+                $html = '<html><body><script type="text/javascript">window.parent.CKEDITOR.tools.callFunction("' . $CKEditorFuncNum . '", "/assets/' . $attachmentsPath . $spaceId . '/' . $entityId . '/' . $attachmentId . '/' . $revisionNumber . '/' . $fileName . '");</script></body></html>';
 
                 return new Response($html);
             }

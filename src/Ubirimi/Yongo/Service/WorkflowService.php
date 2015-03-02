@@ -30,10 +30,21 @@ class WorkflowService extends UbirimiService
 {
     public function hasEvent($clientId, $projectId, $issueTypeId)
     {
-        $workflowUsed = UbirimiContainer::get()['repository']->get(YongoProject::class)->getWorkflowUsedForType($projectId, $issueTypeId);
-        $creationData = UbirimiContainer::get()['repository']->get(Workflow::class)->getDataForCreation($workflowUsed['id']);
-        $eventData = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_CREATED_CODE);
+        $workflowUsed = UbirimiContainer::get()['repository']->get(YongoProject::class)->getWorkflowUsedForType(
+            $projectId,
+            $issueTypeId
+        );
+        $creationData = UbirimiContainer::get()['repository']->get(Workflow::class)->getDataForCreation(
+            $workflowUsed['id']
+        );
+        $eventData = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_CREATED_CODE
+        );
 
-        return UbirimiContainer::get()['repository']->get(WorkflowFunction::class)->hasEvent($creationData['id'], 'event=' . $eventData['id']);
+        return UbirimiContainer::get()['repository']->get(WorkflowFunction::class)->hasEvent(
+            $creationData['id'],
+            'event=' . $eventData['id']
+        );
     }
 }

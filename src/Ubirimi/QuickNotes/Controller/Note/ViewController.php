@@ -47,7 +47,12 @@ class ViewController extends UbirimiController
         $noteId = $request->get('note_id');
         $notebookId = $request->get('notebook_id');
         $notebook = $this->getRepository(Notebook::class)->getById($notebookId);
-        $notes = $this->getRepository(Notebook::class)->getNotesByNotebookId($notebookId, $session->get('user/id'), null, 'array');
+        $notes = $this->getRepository(Notebook::class)->getNotesByNotebookId(
+            $notebookId,
+            $session->get('user/id'),
+            null,
+            'array'
+        );
 
         $allTags = $this->getRepository(Tag::class)->getAll($session->get('user/id'));
 

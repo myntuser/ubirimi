@@ -31,11 +31,19 @@ class ListController extends UbirimiController
     public function indexAction(Request $request, SessionInterface $session)
     {
         Util::checkUserIsLoggedInAndRedirect();
-        $issueTypeSchemes = $this->getRepository(IssueTypeScheme::class)->getByClientId($session->get('client/id'), 'workflow');
+        $issueTypeSchemes = $this->getRepository(IssueTypeScheme::class)->getByClientId(
+            $session->get('client/id'),
+            'workflow'
+        );
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Workflow Issue Type Schemes';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Workflow Issue Type Schemes';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/workflow/issue_type_scheme/List.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/workflow/issue_type_scheme/List.php',
+            get_defined_vars()
+        );
     }
 }

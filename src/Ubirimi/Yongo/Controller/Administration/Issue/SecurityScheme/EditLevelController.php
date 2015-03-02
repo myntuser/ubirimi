@@ -34,8 +34,12 @@ class EditLevelController extends UbirimiController
         Util::checkUserIsLoggedInAndRedirect();
 
         $issueSecuritySchemeLevelId = $request->get('id');
-        $issueSecuritySchemeLevel = $this->getRepository(IssueSecurityScheme::class)->getLevelById($issueSecuritySchemeLevelId);
-        $issueSecurityScheme = $this->getRepository(IssueSecurityScheme::class)->getMetaDataById($issueSecuritySchemeLevel['issue_security_scheme_id']);
+        $issueSecuritySchemeLevel = $this->getRepository(IssueSecurityScheme::class)->getLevelById(
+            $issueSecuritySchemeLevelId
+        );
+        $issueSecurityScheme = $this->getRepository(IssueSecurityScheme::class)->getMetaDataById(
+            $issueSecuritySchemeLevel['issue_security_scheme_id']
+        );
 
         if ($issueSecurityScheme['client_id'] != $session->get('client/id')) {
             return new RedirectResponse('/general-settings/bad-link-access-denied');
@@ -46,22 +50,38 @@ class EditLevelController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             if (!$emptyName) {
                 $date = Util::getServerCurrentDateTime();
-                $this->getRepository(IssueSecurityScheme::class)->updateLevelById($issueSecuritySchemeLevelId, $name, $description, $date);
+                $this->getRepository(IssueSecurityScheme::class)->updateLevelById(
+                    $issueSecuritySchemeLevelId,
+                    $name,
+                    $description,
+                    $date
+                );
 
-                $this->getLogger()->addInfo('UPDATE Yongo Issue Security Scheme Level ' . $name, $this->getLoggerContext());
+                $this->getLogger()->addInfo(
+                    'UPDATE Yongo Issue Security Scheme Level ' . $name,
+                    $this->getLoggerContext()
+                );
 
-                return new RedirectResponse('/yongo/administration/issue-security-scheme-levels/' . $issueSecurityScheme['id']);
+                return new RedirectResponse(
+                    '/yongo/administration/issue-security-scheme-levels/' . $issueSecurityScheme['id']
+                );
             }
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Security Scheme Level';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Security Scheme Level';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/security_scheme/EditLevel.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/issue/security_scheme/EditLevel.php',
+            get_defined_vars()
+        );
     }
 }

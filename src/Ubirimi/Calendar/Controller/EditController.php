@@ -53,13 +53,23 @@ class EditController extends UbirimiController
             }
 
             // check for duplication
-            $calendarDuplicate = $this->getRepository(UbirimiCalendar::class)->getByName($session->get('user/id'), mb_strtolower($name), $calendarId);
+            $calendarDuplicate = $this->getRepository(UbirimiCalendar::class)->getByName(
+                $session->get('user/id'),
+                mb_strtolower($name),
+                $calendarId
+            );
             if ($calendarDuplicate) {
                 $calendarExists = true;
             }
             if (!$calendarExists && !$emptyName) {
                 $date = Util::getServerCurrentDateTime();
-                $this->getRepository(UbirimiCalendar::class)->updateById($calendarId, $name, $description, $color, $date);
+                $this->getRepository(UbirimiCalendar::class)->updateById(
+                    $calendarId,
+                    $name,
+                    $description,
+                    $color,
+                    $date
+                );
 
                 $this->getLogger()->addInfo('UPDATE EVENTS calendar ' . $name, $this->getLoggerContext());
 
@@ -68,7 +78,9 @@ class EditController extends UbirimiController
         }
 
         $menuSelectedCategory = 'calendar';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_CALENDAR_NAME . ' / Calendar: ' . $calendar['name'] . ' / Update';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_CALENDAR_NAME . ' / Calendar: ' . $calendar['name'] . ' / Update';
 
         return $this->render(__DIR__ . '/../Resources/views/Edit.php', get_defined_vars());
     }

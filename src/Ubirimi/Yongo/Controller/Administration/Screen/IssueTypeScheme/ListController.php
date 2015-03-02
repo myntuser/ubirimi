@@ -31,11 +31,18 @@ class ListController extends UbirimiController
     public function indexAction(Request $request, SessionInterface $session)
     {
         Util::checkUserIsLoggedInAndRedirect();
-        $issueTypeScreenSchemes = $this->getRepository(IssueTypeScreenScheme::class)->getByClientId($session->get('client/id'));
+        $issueTypeScreenSchemes = $this->getRepository(IssueTypeScreenScheme::class)->getByClientId(
+            $session->get('client/id')
+        );
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Issue Type Screen Schemes';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Issue Type Screen Schemes';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/screen/issue_type_scheme/List.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/screen/issue_type_scheme/List.php',
+            get_defined_vars()
+        );
     }
 }

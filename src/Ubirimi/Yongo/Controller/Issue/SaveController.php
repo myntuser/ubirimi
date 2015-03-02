@@ -63,8 +63,7 @@ class SaveController extends UbirimiController
         for ($i = 0; $i < count($fieldTypes); $i++) {
             if ($fieldValues[$i] != 'null' && $fieldValues[$i] != '') {
                 $issueSystemFieldsData[$fieldTypes[$i]] = $fieldValues[$i];
-            }
-            else {
+            } else {
                 $issueSystemFieldsData[$fieldTypes[$i]] = null;
             }
         }
@@ -114,7 +113,10 @@ class SaveController extends UbirimiController
 
         $issueEvent = new IssueEvent($issue, $project, IssueEvent::STATUS_NEW);
 
-        $this->getLogger()->addInfo('ADD Yongo issue ' . $project['code'] . '-' . $issue['nr'], $this->getLoggerContext());
+        $this->getLogger()->addInfo(
+            'ADD Yongo issue ' . $project['code'] . '-' . $issue['nr'],
+            $this->getLoggerContext()
+        );
 
         UbirimiContainer::get()['dispatcher']->dispatch(YongoEvents::YONGO_ISSUE, $issueEvent);
         UbirimiContainer::get()['dispatcher']->dispatch(YongoEvents::YONGO_ISSUE_EMAIL, $issueEvent);
@@ -123,6 +125,8 @@ class SaveController extends UbirimiController
         $session->remove('array_ids');
         $session->remove('last_search_parameters');
 
-        return new Response('New Issue Created <a href="/yongo/issue/' . $issue['id'] . '">' . $project['code'] . '-' . $issue['nr'] . '</a>');
+        return new Response(
+            'New Issue Created <a href="/yongo/issue/' . $issue['id'] . '">' . $project['code'] . '-' . $issue['nr'] . '</a>'
+        );
     }
 }

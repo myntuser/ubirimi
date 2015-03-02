@@ -33,8 +33,14 @@ class DeleteConfirmController extends UbirimiController
 
         $Id = $request->get('id');
 
-        $priorities = $this->getRepository(IssueSettings::class)->getAllIssueSettings('priority', $session->get('client/id'));
+        $priorities = $this->getRepository(IssueSettings::class)->getAllIssueSettings(
+            'priority',
+            $session->get('client/id')
+        );
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/priority/DeleteConfirm.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/issue/priority/DeleteConfirm.php',
+            get_defined_vars()
+        );
     }
 }

@@ -40,8 +40,18 @@ class EditSettingsController extends UbirimiController
 
         $timezoneData = explode("/", $session->get('client/settings/timezone'));
         $timezoneContinent = $timezoneData[0];
-        $timeZoneContinents = array('Africa' => 1, 'America' => 2, 'Antarctica' => 4, 'Arctic' => 8, 'Asia' => 16,
-            'Atlantic' => 32, 'Australia' => 64, 'Europe' => 128, 'Indian' => 256, 'Pacific' => 512);
+        $timeZoneContinents = array(
+            'Africa' => 1,
+            'America' => 2,
+            'Antarctica' => 4,
+            'Arctic' => 8,
+            'Asia' => 16,
+            'Atlantic' => 32,
+            'Australia' => 64,
+            'Europe' => 128,
+            'Indian' => 256,
+            'Pacific' => 512
+        );
         $timeZoneCountry = $timezoneData[1];
 
         $clientSettings = $this->getRepository(UbirimiClient::class)->getSettings($clientId);
@@ -54,12 +64,18 @@ class EditSettingsController extends UbirimiController
             $titleName = Util::cleanRegularInputField($request->request->get('title_name'));
             $operatingMode = Util::cleanRegularInputField($request->request->get('mode'));
 
-            $parameters = array(array('field' => 'title_name', 'value' => $titleName, 'type' => 's'),
+            $parameters = array(
+                array('field' => 'title_name', 'value' => $titleName, 'type' => 's'),
                 array('field' => 'operating_mode', 'value' => $operatingMode, 'type' => 's'),
                 array('field' => 'language', 'value' => $language, 'type' => 's'),
-                array('field' => 'timezone', 'value' => $timezone, 'type' => 's'));
+                array('field' => 'timezone', 'value' => $timezone, 'type' => 's')
+            );
 
-            $this->getRepository(UbirimiClient::class)->updateProductSettings($clientId, 'client_settings', $parameters);
+            $this->getRepository(UbirimiClient::class)->updateProductSettings(
+                $clientId,
+                'client_settings',
+                $parameters
+            );
 
             $session->set('client/settings/language', $language);
             $session->set('client/settings/timezone', $timezone);

@@ -37,7 +37,10 @@ class DeleteController extends UbirimiController
         $this->getRepository(WorkflowScheme::class)->deleteDataByWorkflowSchemeId($Id);
         $this->getRepository(WorkflowScheme::class)->deleteById($Id);
 
-        $this->getLogger()->addInfo('DELETE Yongo Workflow Scheme ' . $workflowScheme['name'], $this->getLoggerContext());
+        $this->getLogger()->addInfo(
+            'DELETE Yongo Workflow Scheme ' . $workflowScheme['name'],
+            $this->getLoggerContext()
+        );
 
         return new Response('');
     }

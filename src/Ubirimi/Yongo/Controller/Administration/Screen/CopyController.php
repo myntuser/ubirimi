@@ -46,14 +46,19 @@ class CopyController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyScreenName = true;
+            }
 
             // check for duplication
-            $screen_row_exists = $this->getRepository(Screen::class)->getByName($session->get('client/id'), mb_strtolower($name));
+            $screen_row_exists = $this->getRepository(Screen::class)->getByName(
+                $session->get('client/id'),
+                mb_strtolower($name)
+            );
 
-            if ($screen_row_exists)
+            if ($screen_row_exists) {
                 $screenExists = true;
+            }
 
             if (!$screenExists && !$emptyScreenName) {
                 $copiedScreen = new Screen($session->get('client/id'), $name, $description);
@@ -62,7 +67,12 @@ class CopyController extends UbirimiController
 
                 $screenData = $this->getRepository(Screen::class)->getDataById($screenId);
                 while ($data = $screenData->fetch_array(MYSQLI_ASSOC)) {
-                    $this->getRepository(Screen::class)->addData($copiedScreenId, $data['field_id'], $data['position'], $currentDate);
+                    $this->getRepository(Screen::class)->addData(
+                        $copiedScreenId,
+                        $data['field_id'],
+                        $data['position'],
+                        $currentDate
+                    );
                 }
 
                 return new RedirectResponse('/yongo/administration/screens');
@@ -70,7 +80,9 @@ class CopyController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Screen';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Screen';
 
         return $this->render(__DIR__ . '/../../../Resources/views/administration/screen/Copy.php', get_defined_vars());
     }

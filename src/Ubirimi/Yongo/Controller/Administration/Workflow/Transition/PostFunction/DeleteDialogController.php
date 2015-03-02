@@ -29,9 +29,10 @@ class DeleteDialogController extends UbirimiController
     public function indexAction(Request $request, SessionInterface $session)
     {
         $deletable = $request->get('deletable');
-        if ($deletable)
+        if ($deletable) {
             return new Response('Are you sure you want to delete this post function?');
-        else
+        } else {
             return new Response('This post function can not be deleted.');
+        }
     }
 }

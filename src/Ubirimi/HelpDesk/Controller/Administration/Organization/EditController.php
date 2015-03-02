@@ -48,7 +48,8 @@ class EditController extends UbirimiController
             }
 
             $organizationDuplicate = $this->getRepository(Organization::class)->getByName(
-                $session->get('client/id'), mb_strtolower($name),
+                $session->get('client/id'),
+                mb_strtolower($name),
                 $organizationId
             );
 
@@ -58,7 +59,12 @@ class EditController extends UbirimiController
 
             if (!$emptyName && !$organizationDuplicate) {
                 $currentDate = Util::getServerCurrentDateTime();
-                $this->getRepository(Organization::class)->updateById($organizationId, $name, $description, $currentDate);
+                $this->getRepository(Organization::class)->updateById(
+                    $organizationId,
+                    $name,
+                    $description,
+                    $currentDate
+                );
 
                 $this->getLogger()->addInfo('UPDATE Organization ' . $name, $this->getLoggerContext());
 
@@ -67,8 +73,13 @@ class EditController extends UbirimiController
         }
 
         $menuSelectedCategory = 'helpdesk_organizations';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_HELP_DESK_NAME. ' / Create Organization';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_HELP_DESK_NAME . ' / Create Organization';
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/organization/EditOrganization.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/organization/EditOrganization.php',
+            get_defined_vars()
+        );
     }
 }

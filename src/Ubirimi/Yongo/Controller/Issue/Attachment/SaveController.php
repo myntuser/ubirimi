@@ -60,9 +60,11 @@ class SaveController extends UbirimiController
         $issue = $this->getRepository(Issue::class)->getByParameters($issueQueryParameters, $loggedInUserId);
         $project = $this->getRepository(YongoProject::class)->getById($issue['issue_project_id']);
 
-        $issueEventData = array('user_id' => $loggedInUserId,
-                                'attachmentIds' => UbirimiContainer::get()['session']->get('added_attachments_in_screen'),
-                                'comment' => $comment);
+        $issueEventData = array(
+            'user_id' => $loggedInUserId,
+            'attachmentIds' => UbirimiContainer::get()['session']->get('added_attachments_in_screen'),
+            'comment' => $comment
+        );
         $issueEvent = new IssueEvent($issue, $project, IssueEvent::STATUS_UPDATE, $issueEventData);
 
         UbirimiContainer::get()['dispatcher']->dispatch(YongoEvents::YONGO_ISSUE_ADD_ATTACHMENT, $issueEvent);

@@ -1,12 +1,14 @@
 <table cellspacing="0" cellpadding="0" border="0" class="tableMenu" width="100%">
     <tr>
         <td>
-            <div><a class="linkSubMenu" href="/yongo/issue/<?php echo $issueId ?>" id="view_issue_in_issue_search">View Issue</a></div>
+            <div><a class="linkSubMenu" href="/yongo/issue/<?php echo $issueId ?>" id="view_issue_in_issue_search">View
+                    Issue</a></div>
         </td>
     </tr>
     <tr>
         <td>
-            <span style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
+            <span
+                style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
         </td>
     </tr>
     <tr>

@@ -41,8 +41,13 @@ class ListController extends UbirimiController
         $menuSelectedCategory = 'issue';
         $stepProperties = $this->getRepository(Workflow::class)->getStepProperties($stepId);
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Workflow Step Properties';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Workflow Step Properties';
 
-        return $this->render(__DIR__ . '/../../../../../Resources/views/administration/workflow/step/property/List.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../../Resources/views/administration/workflow/step/property/List.php',
+            get_defined_vars()
+        );
     }
 }

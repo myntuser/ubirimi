@@ -31,12 +31,19 @@ class ListController extends UbirimiController
     public function indexAction(Request $request, SessionInterface $session)
     {
         Util::checkUserIsLoggedInAndRedirect();
-        $fieldConfigurationSchemes = $this->getRepository(FieldConfigurationScheme::class)->getByClient($session->get('client/id'));
+        $fieldConfigurationSchemes = $this->getRepository(FieldConfigurationScheme::class)->getByClient(
+            $session->get('client/id')
+        );
 
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Field Configuration Schemes';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Field Configuration Schemes';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/field/configuration_scheme/List.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/field/configuration_scheme/List.php',
+            get_defined_vars()
+        );
     }
 }

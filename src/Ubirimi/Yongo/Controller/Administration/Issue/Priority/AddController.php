@@ -42,13 +42,19 @@ class AddController extends UbirimiController
             $description = Util::cleanRegularInputField($request->request->get('description'));
             $color = Util::cleanRegularInputField($request->request->get('color'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyPriorityName = true;
+            }
 
             // check for duplication
-            $priority = $this->getRepository(IssueSettings::class)->getByName($session->get('client/id'), 'priority', mb_strtolower($name));
-            if ($priority)
+            $priority = $this->getRepository(IssueSettings::class)->getByName(
+                $session->get('client/id'),
+                'priority',
+                mb_strtolower($name)
+            );
+            if ($priority) {
                 $priorityExists = true;
+            }
 
             if (!$priorityExists && !$emptyPriorityName) {
                 $iconName = 'generic.png';
@@ -72,8 +78,13 @@ class AddController extends UbirimiController
 
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Priority';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Priority';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/priority/Add.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/issue/priority/Add.php',
+            get_defined_vars()
+        );
     }
 }

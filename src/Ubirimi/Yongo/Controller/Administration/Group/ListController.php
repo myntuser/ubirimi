@@ -33,11 +33,16 @@ class ListController extends UbirimiController
     {
         Util::checkUserIsLoggedInAndRedirect();
 
-        $groups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId($session->get('client/id'), SystemProduct::SYS_PRODUCT_YONGO);
+        $groups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId(
+            $session->get('client/id'),
+            SystemProduct::SYS_PRODUCT_YONGO
+        );
 
         $menuSelectedCategory = 'user';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Groups';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Groups';
 
         return $this->render(__DIR__ . '/../../../Resources/views/administration/group/List.php', get_defined_vars());
     }

@@ -47,8 +47,13 @@ class FilterController extends UbirimiController
 
         $menuSelectedCategory = 'group';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Groups';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Groups';
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/group/_list_group.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/group/_list_group.php',
+            get_defined_vars()
+        );
     }
 }

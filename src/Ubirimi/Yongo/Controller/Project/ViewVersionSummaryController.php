@@ -55,20 +55,30 @@ class ViewVersionSummaryController extends UbirimiController
         $menuSelectedCategory = 'project';
 
         $sectionPageTitle = $clientSettings['title_name'] . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Version: ' . $version['name'] . ' / Summary';
-        $issuesResult = $this->getRepository(Issue::class)->getByParameters(array('project' => $projectId,
-            'resolution' => array(-2),
-            'page' => 1,
-            'version' => array($versionId),
-            'issues_per_page' => 10), $loggedInUserId);
+        $issuesResult = $this->getRepository(Issue::class)->getByParameters(
+            array(
+                'project' => $projectId,
+                'resolution' => array(-2),
+                'page' => 1,
+                'version' => array($versionId),
+                'issues_per_page' => 10
+            ),
+            $loggedInUserId
+        );
         $issues = $issuesResult[0];
 
-        $issuesResultUpdatedRecently = $this->getRepository(Issue::class)->getByParameters(array('project' => $projectId,
-            'resolution' => array(-2),
-            'page' => 1,
-            'issues_per_page' => 10,
-            'sort' => 'updated',
-            'version' => array($versionId),
-            'sort_order' => 'desc'), $loggedInUserId);
+        $issuesResultUpdatedRecently = $this->getRepository(Issue::class)->getByParameters(
+            array(
+                'project' => $projectId,
+                'resolution' => array(-2),
+                'page' => 1,
+                'issues_per_page' => 10,
+                'sort' => 'updated',
+                'version' => array($versionId),
+                'sort_order' => 'desc'
+            ),
+            $loggedInUserId
+        );
         $issuesUpdatedRecently = $issuesResultUpdatedRecently[0];
 
         return $this->render(__DIR__ . '/../../Resources/views/project/ViewVersionSummary.php', get_defined_vars());

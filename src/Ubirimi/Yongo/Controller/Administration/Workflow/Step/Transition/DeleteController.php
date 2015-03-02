@@ -59,8 +59,13 @@ class DeleteController extends UbirimiController
 
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Delete Transitions';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Delete Transitions';
 
-        return $this->render(__DIR__ . '/../../../../../Resources/views/administration/workflow/step/transition/Delete.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../../Resources/views/administration/workflow/step/transition/Delete.php',
+            get_defined_vars()
+        );
     }
 }

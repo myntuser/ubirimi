@@ -42,7 +42,10 @@ class EditConfigController extends UbirimiController
             return new RedirectResponse('/general-settings/bad-link-access-denied');
         }
 
-        $fieldConfigurationData = $this->getRepository(FieldConfiguration::class)->getDataByConfigurationAndField($fieldConfigurationId, $fieldId);
+        $fieldConfigurationData = $this->getRepository(FieldConfiguration::class)->getDataByConfigurationAndField(
+            $fieldConfigurationId,
+            $fieldId
+        );
         $description = $fieldConfigurationData['field_description'];
         $field = $this->getRepository(Field::class)->getById($fieldId);
 
@@ -54,13 +57,22 @@ class EditConfigController extends UbirimiController
 
         if ($request->request->has('edit_field_configuration')) {
             $description = $request->request->get('description');
-            $this->getRepository(FieldConfiguration::class)->updateFieldDescription($fieldConfigurationId, $fieldId, $description);
+            $this->getRepository(FieldConfiguration::class)->updateFieldDescription(
+                $fieldConfigurationId,
+                $fieldId,
+                $description
+            );
 
             return new RedirectResponse('/yongo/administration/field-configuration/edit/' . $fieldConfigurationId);
         }
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Field';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Field';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/field/configuration/EditConfig.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/field/configuration/EditConfig.php',
+            get_defined_vars()
+        );
     }
 }

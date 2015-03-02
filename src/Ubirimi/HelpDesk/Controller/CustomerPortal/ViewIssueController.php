@@ -83,14 +83,23 @@ class ViewIssueController extends UbirimiController
             $index = array_search($issueId, $arrayListResultIds);
         }
 
-        $workflowUsed = $this->getRepository(YongoProject::class)->getWorkflowUsedForType($projectId, $issue[Field::FIELD_ISSUE_TYPE_CODE]);
+        $workflowUsed = $this->getRepository(YongoProject::class)->getWorkflowUsedForType(
+            $projectId,
+            $issue[Field::FIELD_ISSUE_TYPE_CODE]
+        );
 
-        $step = $this->getRepository(Workflow::class)->getStepByWorkflowIdAndStatusId($workflowUsed['id'], $issue[Field::FIELD_STATUS_CODE]);
+        $step = $this->getRepository(Workflow::class)->getStepByWorkflowIdAndStatusId(
+            $workflowUsed['id'],
+            $issue[Field::FIELD_STATUS_CODE]
+        );
         $stepProperties = $this->getRepository(Workflow::class)->getStepProperties($step['id'], 'array');
 
         if ($issueValid) {
 
-            $workflowActions = $this->getRepository(Workflow::class)->getTransitionsForStepId($workflowUsed['id'], $step['id']);
+            $workflowActions = $this->getRepository(Workflow::class)->getTransitionsForStepId(
+                $workflowUsed['id'],
+                $step['id']
+            );
             $screenData = $this->getRepository(YongoProject::class)->getScreenData(
                 $issueProject,
                 $issue[Field::FIELD_ISSUE_TYPE_CODE],
@@ -104,7 +113,11 @@ class ViewIssueController extends UbirimiController
             $countAttachments = count($attachments);
 
             $atLeastOneSLA = false;
-            $slasPrintData = $this->getRepository(Issue::class)->updateSLAValue($issue, $session->get('client/id'), $clientSettings);
+            $slasPrintData = $this->getRepository(Issue::class)->updateSLAValue(
+                $issue,
+                $session->get('client/id'),
+                $clientSettings
+            );
 
             foreach ($slasPrintData as $slaData) {
                 if ($slaData['goal']) {
@@ -116,7 +129,9 @@ class ViewIssueController extends UbirimiController
             $timeTrackingFlag = $session->get('yongo/settings/time_tracking_flag');
 
             $customFieldsData = $this->getRepository(CustomField::class)->getCustomFieldsData($issue['id']);
-            $customFieldsDataUserPickerMultipleUser = $this->getRepository(CustomField::class)->getUserPickerData($issue['id']);
+            $customFieldsDataUserPickerMultipleUser = $this->getRepository(CustomField::class)->getUserPickerData(
+                $issue['id']
+            );
         }
 
         $menuSelectedCategory = 'issue';

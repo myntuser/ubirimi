@@ -28,7 +28,8 @@ class IssueTypeScheme
     private $clientId;
     private $type;
 
-    function __construct($clientId = null, $name = null, $description = null, $type = null) {
+    function __construct($clientId = null, $name = null, $description = null, $type = null)
+    {
         $this->clientId = $clientId;
         $this->name = $name;
         $this->description = $description;
@@ -37,7 +38,8 @@ class IssueTypeScheme
         return $this;
     }
 
-    public function save($currentDate) {
+    public function save($currentDate)
+    {
         $query = "INSERT INTO issue_type_scheme(client_id, name, description, type, date_created) VALUES (?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -48,45 +50,52 @@ class IssueTypeScheme
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function getByClientId($clientId, $type = null) {
+    public function getByClientId($clientId, $type = null)
+    {
         $query = "select issue_type_scheme.id, issue_type_scheme.name, issue_type_scheme.description " .
-                 "from issue_type_scheme " .
-                 "where issue_type_scheme.client_id = ? ";
+            "from issue_type_scheme " .
+            "where issue_type_scheme.client_id = ? ";
 
-        if ($type)
+        if ($type) {
             $query .= " and type = ?";
+        }
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
-        if ($type)
+        if ($type) {
             $stmt->bind_param("is", $clientId, $type);
-        else
+        } else {
             $stmt->bind_param("i", $clientId);
+        }
 
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function getById($issueTypeSchemeId) {
+    public function getById($issueTypeSchemeId)
+    {
         $query = "select issue_type_scheme.id, issue_type_scheme.name, issue_type_scheme.description " .
-                 "from issue_type_scheme " .
-                 "where issue_type_scheme.id = ? " .
-                 "limit 1";
+            "from issue_type_scheme " .
+            "where issue_type_scheme.id = ? " .
+            "limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $issueTypeSchemeId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        else
+        } else {
             return null;
+        }
     }
 
-    public function getMetaDataById($Id) {
+    public function getMetaDataById($Id)
+    {
         $query = "select * " .
             "from issue_type_scheme " .
             "where issue_type_scheme.id = ? " .
@@ -96,13 +105,15 @@ class IssueTypeScheme
         $stmt->bind_param("i", $Id);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        else
+        } else {
             return null;
+        }
     }
 
-    public function getDataById($Id) {
+    public function getDataById($Id)
+    {
         $query = "select issue_type_scheme_data.id, issue_type.name, issue_type.description, issue_type_scheme_data.issue_type_id, issue_type.icon_name as issue_type_icon_name " .
             "from issue_type_scheme_data " .
             "left join issue_type on issue_type.id = issue_type_scheme_data.issue_type_id " .
@@ -112,13 +123,15 @@ class IssueTypeScheme
         $stmt->bind_param("i", $Id);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function updateMetaDataById($Id, $name, $description) {
+    public function updateMetaDataById($Id, $name, $description)
+    {
         $query = "update issue_type_scheme set name = ?, description = ? where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -126,7 +139,8 @@ class IssueTypeScheme
         $stmt->execute();
     }
 
-    public function deleteDataByIssueTypeSchemeId($Id) {
+    public function deleteDataByIssueTypeSchemeId($Id)
+    {
         $query = "delete from issue_type_scheme_data where issue_type_scheme_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -134,7 +148,8 @@ class IssueTypeScheme
         $stmt->execute();
     }
 
-    public function addData($issueTypeSchemeId, $issueTypeId, $currentDate) {
+    public function addData($issueTypeSchemeId, $issueTypeId, $currentDate)
+    {
         $query = "INSERT INTO issue_type_scheme_data(issue_type_scheme_id, issue_type_id, date_created) VALUES (?, ?, ?)";
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -142,7 +157,8 @@ class IssueTypeScheme
         $stmt->execute();
     }
 
-    public function deleteById($issueTypeSchemeId) {
+    public function deleteById($issueTypeSchemeId)
+    {
         $query = "delete from issue_type_scheme where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -150,7 +166,8 @@ class IssueTypeScheme
         $stmt->execute();
     }
 
-    public function deleteByClientId($clientId) {
+    public function deleteByClientId($clientId)
+    {
         $issueTypeSchemes = IssueTypeScheme::getByClientId($clientId);
         while ($issueTypeSchemes && $issueTypeScheme = $issueTypeSchemes->fetch_array(MYSQLI_ASSOC)) {
             IssueTypeScheme::deleteDataByIssueTypeSchemeId($issueTypeScheme['id']);
@@ -158,16 +175,18 @@ class IssueTypeScheme
         }
     }
 
-    public function getMetaDataByNameAndClientId($clientId, $name) {
+    public function getMetaDataByNameAndClientId($clientId, $name)
+    {
         $query = "select * from issue_type_scheme where client_id = ? and LOWER(name) = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $clientId, $name);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 }

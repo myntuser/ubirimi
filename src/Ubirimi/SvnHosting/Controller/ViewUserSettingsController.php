@@ -47,7 +47,9 @@ class ViewUserSettingsController extends UbirimiController
         $userData = $this->getRepository(SvnRepository::class)->getUserByRepoIdAndUserId($svnRepoId, $loggedInUserId);
         $session->set('selected_product_id', SystemProduct::SYS_PRODUCT_SVN_HOSTING);
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_SVN_HOSTING_NAME. ' / ' . $svnRepo['code'] . ' / My Settings';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_SVN_HOSTING_NAME . ' / ' . $svnRepo['code'] . ' / My Settings';
 
         return $this->render(__DIR__ . '/../Resources/views/ViewUserSettings.php', get_defined_vars());
     }

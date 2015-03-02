@@ -33,7 +33,12 @@ class ListProjectController extends UbirimiController
         Util::checkUserIsLoggedInAndRedirect();
 
         $clientSettings = $session->get('client/settings');
-        $projects = $this->getRepository(UbirimiClient::class)->getProjects($session->get('client/id'), null, null, true);
+        $projects = $this->getRepository(UbirimiClient::class)->getProjects(
+            $session->get('client/id'),
+            null,
+            null,
+            true
+        );
 
         $menuSelectedCategory = 'project';
 

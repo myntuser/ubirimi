@@ -36,7 +36,9 @@ class PurgeDialogController extends UbirimiController
 
         $page = $this->getRepository(Entity::class)->getById($pageId);
 
-        return new Response('This will permanently remove the Page ' . $page['name'] . ' from Documentador. Do you wish to continue?');
+        return new Response(
+            'This will permanently remove the Page ' . $page['name'] . ' from Documentador. Do you wish to continue?'
+        );
     }
 }
 

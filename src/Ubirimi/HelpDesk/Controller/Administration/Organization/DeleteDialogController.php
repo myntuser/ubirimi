@@ -30,6 +30,9 @@ class DeleteDialogController extends UbirimiController
     {
         Util::checkUserIsLoggedInAndRedirect();
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/organization/DeleteDialog.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/organization/DeleteDialog.php',
+            get_defined_vars()
+        );
     }
 }

@@ -23,7 +23,8 @@ use Ubirimi\Container\UbirimiContainer;
 
 class CustomField
 {
-    public function saveCustomFieldsData($issueId, $issueCustomFieldsData, $currentDate) {
+    public function saveCustomFieldsData($issueId, $issueCustomFieldsData, $currentDate)
+    {
         foreach ($issueCustomFieldsData as $key => $value) {
             $keyData = explode("_", $key);
             $fieldId = $keyData[0];
@@ -49,7 +50,8 @@ class CustomField
         }
     }
 
-    public function getCustomFieldsData($issueId) {
+    public function getCustomFieldsData($issueId)
+    {
         $query = 'SELECT coalesce(field_data.value, issue_custom_field_data.value) as value, field.name, sys_field_type.code ' .
             'FROM issue_custom_field_data ' .
             'LEFT JOIN field on field.id = issue_custom_field_data.field_id ' .
@@ -63,13 +65,15 @@ class CustomField
         $stmt->execute();
 
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function updateCustomFieldsData($issueId, $issueCustomFieldsData, $currentDate) {
+    public function updateCustomFieldsData($issueId, $issueCustomFieldsData, $currentDate)
+    {
         foreach ($issueCustomFieldsData as $key => $value) {
             $keyData = explode("_", $key);
             $fieldId = $keyData[0];
@@ -91,7 +95,9 @@ class CustomField
                         $stmt->execute();
                     }
                 } else {
-                    $valueField = UbirimiContainer::get()['repository']->get(CustomField::class)->getCustomFieldsDataByFieldId($issueId, $fieldId);
+                    $valueField = UbirimiContainer::get()['repository']->get(
+                        CustomField::class
+                    )->getCustomFieldsDataByFieldId($issueId, $fieldId);
 
                     if ($valueField) {
                         $query = "update issue_custom_field_data set `value` = ?, date_updated = ? where issue_id = ? and field_id = ? limit 1";
@@ -118,7 +124,8 @@ class CustomField
         }
     }
 
-    public function getCustomFieldsDataByFieldId($issueId, $fieldId) {
+    public function getCustomFieldsDataByFieldId($issueId, $fieldId)
+    {
         $query = 'SELECT issue_custom_field_data.value, field.name, field.sys_field_type_id ' .
             'FROM issue_custom_field_data ' .
             'LEFT JOIN field on field.id = issue_custom_field_data.field_id ' .
@@ -129,13 +136,15 @@ class CustomField
         $stmt->execute();
 
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function deleteCustomFieldsData($issueId) {
+    public function deleteCustomFieldsData($issueId)
+    {
         $query = 'delete from issue_custom_field_data where issue_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -143,7 +152,8 @@ class CustomField
         $stmt->execute();
     }
 
-    public function getUserPickerData($issueId, $fieldId = null) {
+    public function getUserPickerData($issueId, $fieldId = null)
+    {
         $queryWhere = '';
 
         if ($fieldId) {
@@ -170,14 +180,20 @@ class CustomField
                 if (!array_key_exists($data['field_id'], $resultData)) {
                     $resultData[$data['field_id']] = array();
                 }
-                array_push($resultData[$data['field_id']], array('user_id' => $data['id'],
-                                                             'first_name' => $data['first_name'],
-                                                             'last_name' => $data['last_name'],
-                                                             'field_name' => $data['name'],
-                                                             'field_code' => $data['code']));
+                array_push(
+                    $resultData[$data['field_id']],
+                    array(
+                        'user_id' => $data['id'],
+                        'first_name' => $data['first_name'],
+                        'last_name' => $data['last_name'],
+                        'field_name' => $data['name'],
+                        'field_code' => $data['code']
+                    )
+                );
             }
             return $resultData;
-        } else
+        } else {
             return null;
+        }
     }
 }

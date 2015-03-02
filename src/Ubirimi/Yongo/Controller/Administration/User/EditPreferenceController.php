@@ -57,8 +57,13 @@ class EditPreferenceController extends UbirimiController
             return new RedirectResponse('/yongo/administration/user-preference');
         }
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update User Preferences';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update User Preferences';
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/user/EditPreference.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/user/EditPreference.php',
+            get_defined_vars()
+        );
     }
 }

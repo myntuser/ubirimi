@@ -38,14 +38,16 @@ class AddController extends UbirimiController
         $emptyType = false;
         if ($request->request->has('new_custom_field')) {
             $type = $request->request->get('type');
-            if (!$type)
+            if (!$type) {
                 $emptyType = true;
-            else {
+            } else {
                 return new RedirectResponse('/yongo/administration/custom-field/add-data/' . $type);
             }
         }
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Custom Field';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Custom Field';
 
         return $this->render(__DIR__ . '/../../../Resources/views/administration/field/Add.php', get_defined_vars());
     }

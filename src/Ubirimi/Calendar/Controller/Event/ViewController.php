@@ -40,7 +40,11 @@ class ViewController extends UbirimiController
         $eventId = $request->get('id');
 
         $event = $this->getRepository(CalendarEvent::class)->getById($eventId, 'array');
-        $myCalendarIds = $this->getRepository(UbirimiCalendar::class)->getByUserId($session->get('user/id'), 'array', 'id');
+        $myCalendarIds = $this->getRepository(UbirimiCalendar::class)->getByUserId(
+            $session->get('user/id'),
+            'array',
+            'id'
+        );
         $myEvent = in_array($event['calendar_id'], $myCalendarIds) ? true : false;
         if ($event['client_id'] != $session->get('client/id')) {
             return new RedirectResponse('/general-settings/bad-link-access-denied');

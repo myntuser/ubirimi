@@ -59,7 +59,11 @@ class SearchController extends UbirimiController
         $selectedProductId = $session->get('selected_product_id');
         $cliMode = false;
 
-        $projectsForBrowsing = $this->getRepository(UbirimiClient::class)->getProjectsByPermission($clientId, $loggedInUserId, Permission::PERM_BROWSE_PROJECTS);
+        $projectsForBrowsing = $this->getRepository(UbirimiClient::class)->getProjectsByPermission(
+            $clientId,
+            $loggedInUserId,
+            Permission::PERM_BROWSE_PROJECTS
+        );
 
         $searchParameters = array();
         $parseURLData = null;
@@ -78,7 +82,11 @@ class SearchController extends UbirimiController
 
         if ($request->request->has('search')) {
 
-            $searchParameters = $this->getRepository(Issue::class)->prepareDataForSearchFromPostGet($projectIds, $_POST, $_GET);
+            $searchParameters = $this->getRepository(Issue::class)->prepareDataForSearchFromPostGet(
+                $projectIds,
+                $_POST,
+                $_GET
+            );
 
             $redirectLink = str_replace("%7C", "|", http_build_query($searchParameters));
             return new RedirectResponse('/yongo/issue/search?' . $redirectLink);
@@ -87,13 +95,20 @@ class SearchController extends UbirimiController
             $currentSearchPage = $request->get('page');
             $currentSearchPage = isset($currentSearchPage) ? $currentSearchPage : 1;
 
-            $getSearchParameters = $this->getRepository(Issue::class)->prepareDataForSearchFromURL($_GET, $issuesPerPage);
+            $getSearchParameters = $this->getRepository(Issue::class)->prepareDataForSearchFromURL(
+                $_GET,
+                $issuesPerPage
+            );
 
             // check to see if the project Ids are all belonging to the client
             $getProjectIds = isset($_GET['project']) ? explode('|', $_GET['project']) : null;
 
             if ($getProjectIds && !(count($getProjectIds) == 1 && $getProjectIds[0] == -1)) {
-                if (!$this->getRepository(YongoProject::class)->checkProjectsBelongToClient($clientId, $getProjectIds)) {
+                if (!$this->getRepository(YongoProject::class)->checkProjectsBelongToClient(
+                    $clientId,
+                    $getProjectIds
+                )
+                ) {
                     return new RedirectResponse('/general-settings/bad-link-access-denied');
                 }
             }
@@ -103,7 +118,12 @@ class SearchController extends UbirimiController
             if (isset($parseURLData['query']) && $projectsForBrowsing) {
                 if (Util::searchQueryNotEmpty($getSearchParameters)) {
 
-                    $issuesResult = $this->getRepository(Issue::class)->getByParameters($getSearchParameters, $loggedInUserId, null, $loggedInUserId);
+                    $issuesResult = $this->getRepository(Issue::class)->getByParameters(
+                        $getSearchParameters,
+                        $loggedInUserId,
+                        null,
+                        $loggedInUserId
+                    );
 
                     $issues = $issuesResult[0];
                     $issuesCount = $issuesResult[1];
@@ -114,7 +134,17 @@ class SearchController extends UbirimiController
             }
         }
 
-        $columns = array('code', 'summary', 'priority', 'status', 'created', 'updated', 'reporter', 'assignee', 'settings_menu');
+        $columns = array(
+            'code',
+            'summary',
+            'priority',
+            'status',
+            'created',
+            'updated',
+            'reporter',
+            'assignee',
+            'settings_menu'
+        );
         if (Util::checkUserIsLoggedIn()) {
             $columns = explode('#', $session->get('user/issues_display_columns'));
 
@@ -122,7 +152,11 @@ class SearchController extends UbirimiController
             $columns[] = '';
         }
 
-        $hasGlobalBulkPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission($clientId, $loggedInUserId, GlobalPermission::GLOBAL_PERMISSION_YONGO_BULK_CHANGE);
+        $hasGlobalBulkPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission(
+            $clientId,
+            $loggedInUserId,
+            GlobalPermission::GLOBAL_PERMISSION_YONGO_BULK_CHANGE
+        );
         $customFilters = $this->getRepository(IssueFilter::class)->getAllByUser($loggedInUserId);
 
         if ($getFilter) {

@@ -63,7 +63,11 @@ class AddController extends UbirimiController
                 foreach ($request->request as $key => $value) {
                     if (substr($key, 0, 11) == 'issue_type_') {
                         $issueTypeId = str_replace('issue_type_', '', $key);
-                        $this->getRepository(IssueTypeScheme::class)->addData($issueTypeSchemeId, $issueTypeId, $currentDate);
+                        $this->getRepository(IssueTypeScheme::class)->addData(
+                            $issueTypeSchemeId,
+                            $issueTypeId,
+                            $currentDate
+                        );
                     }
                 }
 
@@ -78,8 +82,13 @@ class AddController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Type Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Type Scheme';
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/issue/issue_type_scheme/Add.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/issue/issue_type_scheme/Add.php',
+            get_defined_vars()
+        );
     }
 }

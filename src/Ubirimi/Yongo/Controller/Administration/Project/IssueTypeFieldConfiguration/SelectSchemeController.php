@@ -39,19 +39,29 @@ class SelectSchemeController extends UbirimiController
         if ($project['client_id'] != $session->get('client/id')) {
             return new RedirectResponse('/general-settings/bad-link-access-denied');
         }
-        $fieldConfigurationSchemes = $this->getRepository(FieldConfigurationScheme::class)->getByClient($session->get('client/id'));
+        $fieldConfigurationSchemes = $this->getRepository(FieldConfigurationScheme::class)->getByClient(
+            $session->get('client/id')
+        );
 
         $menuSelectedCategory = 'project';
 
         if ($request->request->has('associate')) {
             $issueTypeFieldSchemeId = $request->request->get('issue_type_field_scheme');
-            $this->getRepository(YongoProject::class)->updateFieldConfigurationScheme($projectId, $issueTypeFieldSchemeId);
+            $this->getRepository(YongoProject::class)->updateFieldConfigurationScheme(
+                $projectId,
+                $issueTypeFieldSchemeId
+            );
 
             return new RedirectResponse('/yongo/administration/project/fields/' . $projectId);
         }
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Select Issue Type Field Configuration';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Select Issue Type Field Configuration';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/project/SelectIssueTypeFieldScheme.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/project/SelectIssueTypeFieldScheme.php',
+            get_defined_vars()
+        );
     }
 }

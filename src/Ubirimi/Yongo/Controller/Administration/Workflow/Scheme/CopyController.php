@@ -72,7 +72,10 @@ class CopyController extends UbirimiController
                     $copiedWorkflowScheme->addData($copiedWorkflowSchemeId, $data['workflow_id'], $currentDate);
                 }
 
-                $this->getLogger()->addInfo('Copy Yongo Workflow Scheme ' . $workflowScheme['name'], $this->getLoggerContext());
+                $this->getLogger()->addInfo(
+                    'Copy Yongo Workflow Scheme ' . $workflowScheme['name'],
+                    $this->getLoggerContext()
+                );
 
                 return new RedirectResponse('/yongo/administration/workflows/schemes');
             }
@@ -80,8 +83,13 @@ class CopyController extends UbirimiController
 
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Workflow Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Workflow Scheme';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/workflow/scheme/Copy.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/workflow/scheme/Copy.php',
+            get_defined_vars()
+        );
     }
 }

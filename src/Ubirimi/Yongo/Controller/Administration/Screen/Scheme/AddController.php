@@ -46,15 +46,21 @@ class AddController extends UbirimiController
             $screenId = Util::cleanRegularInputField($request->request->get('screen'));
             $currentDate = Util::getServerCurrentDateTime();
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             if (!$emptyName) {
                 $screenScheme = new ScreenScheme($session->get('client/id'), $name, $description);
                 $screenSchemeId = $screenScheme->save($currentDate);
                 while ($operation = $allOperations->fetch_array(MYSQLI_ASSOC)) {
                     $operationId = $operation['id'];
-                    $this->getRepository(ScreenScheme::class)->addData($screenSchemeId, $operationId, $screenId, $currentDate);
+                    $this->getRepository(ScreenScheme::class)->addData(
+                        $screenSchemeId,
+                        $operationId,
+                        $screenId,
+                        $currentDate
+                    );
                 }
 
                 $this->getLogger()->addInfo('ADD Yongo Screen Scheme ' . $name, $this->getLoggerContext());
@@ -62,8 +68,13 @@ class AddController extends UbirimiController
                 return new RedirectResponse('/yongo/administration/screens/schemes');
             }
         }
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Screen Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Screen Scheme';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/screen/scheme/Add.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/screen/scheme/Add.php',
+            get_defined_vars()
+        );
     }
 }

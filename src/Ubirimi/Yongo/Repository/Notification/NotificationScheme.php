@@ -28,7 +28,8 @@ class NotificationScheme
     private $description;
     private $clientId;
 
-    function __construct($clientId = null, $name = null, $description = null) {
+    function __construct($clientId = null, $name = null, $description = null)
+    {
         $this->clientId = $clientId;
         $this->name = $name;
         $this->description = $description;
@@ -36,20 +37,23 @@ class NotificationScheme
         return $this;
     }
 
-    public function getAll() {
+    public function getAll()
+    {
         $query = "select * " .
-                 "from notification_scheme ";
+            "from notification_scheme ";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function save($currentDate) {
+    public function save($currentDate)
+    {
         $query = "INSERT INTO notification_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -60,7 +64,8 @@ class NotificationScheme
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function getByClientId($clientId) {
+    public function getByClientId($clientId)
+    {
         $query = "select * " .
             "from notification_scheme " .
             "where client_id = ? ";
@@ -69,13 +74,15 @@ class NotificationScheme
         $stmt->bind_param("i", $clientId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function getMetaDataById($Id) {
+    public function getMetaDataById($Id)
+    {
         $query = "select * " .
             "from notification_scheme " .
             "where id = ? " .
@@ -85,26 +92,30 @@ class NotificationScheme
         $stmt->bind_param("i", $Id);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        else
+        } else {
             return null;
+        }
     }
 
-    public function getMetaDataByNameAndClientId($clientId, $name) {
+    public function getMetaDataByNameAndClientId($clientId, $name)
+    {
         $query = "select * from notification_scheme where client_id = ? and LOWER(name) = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $clientId, $name);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function updateMetaDataById($Id, $name, $description, $date) {
+    public function updateMetaDataById($Id, $name, $description, $date)
+    {
         $query = "update notification_scheme set name = ?, description = ?, date_updated = ? where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -112,19 +123,59 @@ class NotificationScheme
         $stmt->execute();
     }
 
-    public function addDataRaw($notificationSchemeId, $eventId, $permissionRoleId, $groupId, $userId, $currentAssignee, $reporter, $currentUser, $projectLead, $componentLead, $allWatchers, $userPickerMultipleSelection, $currentDate) {
+    public function addDataRaw(
+        $notificationSchemeId,
+        $eventId,
+        $permissionRoleId,
+        $groupId,
+        $userId,
+        $currentAssignee,
+        $reporter,
+        $currentUser,
+        $projectLead,
+        $componentLead,
+        $allWatchers,
+        $userPickerMultipleSelection,
+        $currentDate
+    )
+    {
         $query = "INSERT INTO notification_scheme_data(notification_scheme_id, event_id, permission_role_id, group_id, user_id, current_assignee, reporter, " .
-                    "`current_user`, project_lead, component_lead, all_watchers, user_picker_multiple_selection, date_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "`current_user`, project_lead, component_lead, all_watchers, user_picker_multiple_selection, date_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
-        $stmt->bind_param("iiiiiiiiiiiis", $notificationSchemeId, $eventId, $permissionRoleId, $groupId, $userId, $currentAssignee, $reporter, $currentUser, $projectLead, $componentLead, $allWatchers, $userPickerMultipleSelection, $currentDate);
+        $stmt->bind_param(
+            "iiiiiiiiiiiis",
+            $notificationSchemeId,
+            $eventId,
+            $permissionRoleId,
+            $groupId,
+            $userId,
+            $currentAssignee,
+            $reporter,
+            $currentUser,
+            $projectLead,
+            $componentLead,
+            $allWatchers,
+            $userPickerMultipleSelection,
+            $currentDate
+        );
         $stmt->execute();
 
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function addData($notificationSchemeId, $eventId, $notificationType, $user, $group, $role, $userPickerMultipleSelection, $currentDate) {
+    public function addData(
+        $notificationSchemeId,
+        $eventId,
+        $notificationType,
+        $user,
+        $group,
+        $role,
+        $userPickerMultipleSelection,
+        $currentDate
+    )
+    {
         switch ($notificationType) {
             case Notification::NOTIFICATION_TYPE_USER:
                 $query = "INSERT INTO notification_scheme_data(notification_scheme_id, event_id, user_id, date_created) VALUES (?, ?, ?, ?)";
@@ -193,23 +244,26 @@ class NotificationScheme
         }
     }
 
-    public function getDataByNotificationSchemeId($notificationSchemeId) {
+    public function getDataByNotificationSchemeId($notificationSchemeId)
+    {
         $query = "select notification_scheme_data.* " .
-                     "from notification_scheme_data " .
-                     "where notification_scheme_data.notification_scheme_id = ?";
+            "from notification_scheme_data " .
+            "where notification_scheme_data.notification_scheme_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $notificationSchemeId);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function getDataByNotificationSchemeIdAndEventId($notificationSchemeId, $eventId) {
+    public function getDataByNotificationSchemeIdAndEventId($notificationSchemeId, $eventId)
+    {
         $query = "select notification_scheme_data.id, general_user.first_name, general_user.last_name, general_user.id as user_id, general_group.id as group_id, general_group.name as group_name, notification_scheme_data.current_assignee, notification_scheme_data.reporter,  " .
             "notification_scheme_data.all_watchers, field.name as custom_field_name, field.id as custom_field_id, " .
             "notification_scheme_data.current_user, notification_scheme_data.permission_role_id, notification_scheme_data.project_lead, notification_scheme_data.component_lead, " .
@@ -222,19 +276,21 @@ class NotificationScheme
             "left join permission_role on permission_role.id = notification_scheme_data.permission_role_id " .
             "left join field on field.id = notification_scheme_data.user_picker_multiple_selection " .
             "where notification_scheme_data.notification_scheme_id = ? and " .
-                "notification_scheme_data.event_id = ?";
+            "notification_scheme_data.event_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $notificationSchemeId, $eventId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function deleteDataById($notificationSchemeDataId) {
+    public function deleteDataById($notificationSchemeDataId)
+    {
         $query = "delete from notification_scheme_data where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -243,7 +299,8 @@ class NotificationScheme
         $stmt->execute();
     }
 
-    public function deleteDataByNotificationSchemeId($notificationSchemeId) {
+    public function deleteDataByNotificationSchemeId($notificationSchemeId)
+    {
         $query = "delete from notification_scheme_data where notification_scheme_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -252,93 +309,159 @@ class NotificationScheme
         $stmt->execute();
     }
 
-    public function addDefaultNotifications($clientId, $notificationSchemeId) {
-        $eventCreatedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_CREATED_CODE, 'id');
+    public function addDefaultNotifications($clientId, $notificationSchemeId)
+    {
+        $eventCreatedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_CREATED_CODE,
+            'id'
+        );
 
-        $eventUpdatedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_UPDATED_CODE, 'id');
-        $eventAssignedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_ASSIGNED_CODE, 'id');
+        $eventUpdatedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_UPDATED_CODE,
+            'id'
+        );
+        $eventAssignedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_ASSIGNED_CODE,
+            'id'
+        );
 
-        $eventResolvedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_RESOLVED_CODE, 'id');
+        $eventResolvedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_RESOLVED_CODE,
+            'id'
+        );
 
-        $eventClosedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_CLOSED_CODE, 'id');
-        $eventCommentedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_COMMENTED_CODE, 'id');
+        $eventClosedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_CLOSED_CODE,
+            'id'
+        );
+        $eventCommentedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_COMMENTED_CODE,
+            'id'
+        );
 
-        $eventCommentEditedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_COMMENT_EDITED_CODE, 'id');
-        $eventReopenedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_REOPENED_CODE, 'id');
-        $eventWorkStartedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_WORK_STARTED_CODE, 'id');
+        $eventCommentEditedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_COMMENT_EDITED_CODE,
+            'id'
+        );
+        $eventReopenedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_REOPENED_CODE,
+            'id'
+        );
+        $eventWorkStartedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_WORK_STARTED_CODE,
+            'id'
+        );
 
-        $eventWorkStoppedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_WORK_STOPPED_CODE, 'id');
-        $eventDeletedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_DELETED_CODE, 'id');
+        $eventWorkStoppedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_WORK_STOPPED_CODE,
+            'id'
+        );
+        $eventDeletedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_DELETED_CODE,
+            'id'
+        );
 
-        $eventMovedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_MOVED_CODE, 'id');
-        $eventWorkLoggedOnIssueId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_WORK_LOGGED_ON_ISSUE_CODE, 'id');
-        $eventWorkLogUpdatedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_WORKLOG_UPDATED_CODE, 'id');
-        $eventWorkLogDeletedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_WORKLOG_DELETED_CODE, 'id');
+        $eventMovedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_MOVED_CODE,
+            'id'
+        );
+        $eventWorkLoggedOnIssueId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_WORK_LOGGED_ON_ISSUE_CODE,
+            'id'
+        );
+        $eventWorkLogUpdatedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_WORKLOG_UPDATED_CODE,
+            'id'
+        );
+        $eventWorkLogDeletedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_WORKLOG_DELETED_CODE,
+            'id'
+        );
 
-        $eventGenericId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_GENERIC_CODE, 'id');
+        $eventGenericId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_GENERIC_CODE,
+            'id'
+        );
 
         $query = "INSERT INTO notification_scheme_data(notification_scheme_id, event_id, reporter) VALUES " .
-            "(" . $notificationSchemeId. "," . $eventCreatedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventUpdatedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventAssignedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventResolvedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventClosedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventCommentedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventCommentEditedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventReopenedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventDeletedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventWorkStartedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventGenericId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventMovedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventWorkLoggedOnIssueId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventWorkLogUpdatedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventWorkLogDeletedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventWorkStoppedId . ', 1)';
+            "(" . $notificationSchemeId . "," . $eventCreatedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventUpdatedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventAssignedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventResolvedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventClosedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventCommentedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventCommentEditedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventReopenedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventDeletedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventWorkStartedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventGenericId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventMovedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventWorkLoggedOnIssueId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventWorkLogUpdatedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventWorkLogDeletedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventWorkStoppedId . ', 1)';
 
         UbirimiContainer::get()['db.connection']->query($query);
 
         $query = "INSERT INTO notification_scheme_data(notification_scheme_id, event_id, current_assignee) VALUES " .
-            "(" . $notificationSchemeId. "," . $eventCreatedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventUpdatedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventAssignedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventResolvedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventClosedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventCommentedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventCommentEditedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventReopenedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventDeletedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventWorkStartedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventGenericId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventMovedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventWorkLoggedOnIssueId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventWorkLogUpdatedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventWorkLogDeletedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventWorkStoppedId . ', 1)';
+            "(" . $notificationSchemeId . "," . $eventCreatedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventUpdatedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventAssignedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventResolvedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventClosedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventCommentedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventCommentEditedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventReopenedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventDeletedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventWorkStartedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventGenericId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventMovedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventWorkLoggedOnIssueId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventWorkLogUpdatedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventWorkLogDeletedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventWorkStoppedId . ', 1)';
 
         UbirimiContainer::get()['db.connection']->query($query);
 
         $query = "INSERT INTO notification_scheme_data(notification_scheme_id, event_id, all_watchers) VALUES " .
-            "(" . $notificationSchemeId. "," . $eventCreatedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventUpdatedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventAssignedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventResolvedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventClosedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventCommentedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventCommentEditedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventReopenedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventDeletedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventWorkStartedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventGenericId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventMovedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventWorkLoggedOnIssueId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventWorkLogUpdatedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventWorkLogDeletedId . ', 1),' .
-            "(" . $notificationSchemeId. "," . $eventWorkStoppedId . ', 1)';
+            "(" . $notificationSchemeId . "," . $eventCreatedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventUpdatedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventAssignedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventResolvedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventClosedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventCommentedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventCommentEditedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventReopenedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventDeletedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventWorkStartedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventGenericId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventMovedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventWorkLoggedOnIssueId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventWorkLogUpdatedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventWorkLogDeletedId . ', 1),' .
+            "(" . $notificationSchemeId . "," . $eventWorkStoppedId . ', 1)';
 
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function deleteById($notificationSchemeId) {
+    public function deleteById($notificationSchemeId)
+    {
         $query = "delete from notification_scheme where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -347,11 +470,18 @@ class NotificationScheme
         $stmt->execute();
     }
 
-    public function deleteByClientId($clientId) {
-        $notificationSchemes = UbirimiContainer::get()['repository']->get(NotificationScheme::class)->getByClientId($clientId);
+    public function deleteByClientId($clientId)
+    {
+        $notificationSchemes = UbirimiContainer::get()['repository']->get(NotificationScheme::class)->getByClientId(
+            $clientId
+        );
         while ($notificationSchemes && $notificationScheme = $notificationSchemes->fetch_array(MYSQLI_ASSOC)) {
-            UbirimiContainer::get()['repository']->get(NotificationScheme::class)->deleteDataByNotificationSchemeId($notificationScheme['id']);
-            UbirimiContainer::get()['repository']->get(NotificationScheme::class)->deleteById($notificationScheme['id']);
+            UbirimiContainer::get()['repository']->get(NotificationScheme::class)->deleteDataByNotificationSchemeId(
+                $notificationScheme['id']
+            );
+            UbirimiContainer::get()['repository']->get(NotificationScheme::class)->deleteById(
+                $notificationScheme['id']
+            );
         }
     }
 }

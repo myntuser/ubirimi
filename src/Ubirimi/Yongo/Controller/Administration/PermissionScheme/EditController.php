@@ -53,8 +53,13 @@ class EditController extends UbirimiController
 
         $permissionCategories = $this->getRepository(Permission::class)->getCategories();
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Permission Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Permission Scheme';
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/permission_scheme/Edit.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/permission_scheme/Edit.php',
+            get_defined_vars()
+        );
     }
 }

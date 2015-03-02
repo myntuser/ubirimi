@@ -40,7 +40,10 @@ class UserService extends UbirimiService
     {
         $currentDate = Util::getServerCurrentDateTime();
 
-        $issuesPerPage = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getYongoSetting($data['clientId'], 'issues_per_page');
+        $issuesPerPage = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getYongoSetting(
+            $data['clientId'],
+            'issues_per_page'
+        );
 
         if (array_key_exists('isCustomer', $data) && $data['isCustomer']) {
             $data['customer_service_desk_flag'] = 1;
@@ -61,29 +64,66 @@ class UserService extends UbirimiService
             $data['country'] = null;
         }
 
-        $result = UbirimiContainer::get()['repository']->get(UserRepository::class)->add($data['clientId'], $data['firstName'], $data['lastName'], $data['email'],
-                                      $data['username'], $data['password'], $issuesPerPage,
-                                      $data['customer_service_desk_flag'], $data['country'], $currentDate);
+        $result = UbirimiContainer::get()['repository']->get(UserRepository::class)->add(
+            $data['clientId'],
+            $data['firstName'],
+            $data['lastName'],
+            $data['email'],
+            $data['username'],
+            $data['password'],
+            $issuesPerPage,
+            $data['customer_service_desk_flag'],
+            $data['country'],
+            $currentDate
+        );
 
         $userId = $result[0];
 
         $defaultColumns = 'code#summary#priority#status#created#type#updated#reporter#assignee';
-        UbirimiContainer::get()['repository']->get(UserRepository::class)->updateDisplayColumns($userId, $defaultColumns);
+        UbirimiContainer::get()['repository']->get(UserRepository::class)->updateDisplayColumns(
+            $userId,
+            $defaultColumns
+        );
 
         // add default calendar
-        $calendarId = UbirimiContainer::get()['repository']->get(UbirimiCalendar::class)->save($userId, $data['firstName'] . ' ' . $data['lastName'], 'My default calendar', '#A1FF9E', $currentDate, 1);
+        $calendarId = UbirimiContainer::get()['repository']->get(UbirimiCalendar::class)->save(
+            $userId,
+            $data['firstName'] . ' ' . $data['lastName'],
+            'My default calendar',
+            '#A1FF9E',
+            $currentDate,
+            1
+        );
 
         // add the default notebook
-        UbirimiContainer::get()['repository']->get(Notebook::class)->save($userId, 'Default Notebook', 'My default notebook', 1, $currentDate);
+        UbirimiContainer::get()['repository']->get(Notebook::class)->save(
+            $userId,
+            'Default Notebook',
+            'My default notebook',
+            1,
+            $currentDate
+        );
 
         if (!$data['isCustomer']) {
             // add default reminders
-            UbirimiContainer::get()['repository']->get(UbirimiCalendar::class)->addReminder($calendarId, ReminderType::REMINDER_EMAIL, ReminderPeriod::PERIOD_MINUTE, 30);
+            UbirimiContainer::get()['repository']->get(UbirimiCalendar::class)->addReminder(
+                $calendarId,
+                ReminderType::REMINDER_EMAIL,
+                ReminderPeriod::PERIOD_MINUTE,
+                30
+            );
 
             // add the newly created user to the Ubirimi Users Global Permission Groups
-            $groups = UbirimiContainer::get()['repository']->get(GlobalPermission::class)->getDataByPermissionId($data['clientId'], GlobalPermission::GLOBAL_PERMISSION_YONGO_USERS);
+            $groups = UbirimiContainer::get()['repository']->get(GlobalPermission::class)->getDataByPermissionId(
+                $data['clientId'],
+                GlobalPermission::GLOBAL_PERMISSION_YONGO_USERS
+            );
             while ($groups && $group = $groups->fetch_array(MYSQLI_ASSOC)) {
-                UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->addData($group['id'], array($userId), $currentDate);
+                UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->addData(
+                    $group['id'],
+                    array($userId),
+                    $currentDate
+                );
             }
         }
 
@@ -91,7 +131,15 @@ class UserService extends UbirimiService
             /* also add user to svn_repository_user table */
             UbirimiContainer::get()['repository']->get(SvnRepository::class)->addUser($data['svnRepoId'], $userId);
 
-            $userEvent = new UserEvent(UserEvent::STATUS_NEW_SVN, $data['firstName'], $data['lastName'], $data['username'], null, $data['email'], array('repositoryName' => $data['svnRepositoryName']));
+            $userEvent = new UserEvent(
+                UserEvent::STATUS_NEW_SVN,
+                $data['firstName'],
+                $data['lastName'],
+                $data['username'],
+                null,
+                $data['email'],
+                array('repositoryName' => $data['svnRepositoryName'])
+            );
             UbirimiContainer::get()['dispatcher']->dispatch(UbirimiEvents::USER, $userEvent);
         }
 

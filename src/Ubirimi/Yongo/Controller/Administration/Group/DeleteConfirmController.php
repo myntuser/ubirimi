@@ -34,6 +34,9 @@ class DeleteConfirmController extends UbirimiController
         $groupId = $request->get('id');
         $group = $this->getRepository(UbirimiGroup::class)->getMetadataById($groupId);
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/group/DeleteConfirm.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/group/DeleteConfirm.php',
+            get_defined_vars()
+        );
     }
 }

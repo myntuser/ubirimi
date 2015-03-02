@@ -60,12 +60,18 @@ class MoveStep1SubtaskController extends UbirimiController
                 if (substr($key, 0, 23) == 'new_subtask_issue_type_') {
                     $oldSubtaskIssueTypeId = str_replace('new_subtask_issue_type_', '', $key);
                     $newSubtaskIssueTypeId = $_POST[$key];
-                    UbirimiContainer::get()['session']->set('move_issue/sub_task_new_issue_type', array($oldSubtaskIssueTypeId, $newSubtaskIssueTypeId));
+                    UbirimiContainer::get()['session']->set(
+                        'move_issue/sub_task_new_issue_type',
+                        array($oldSubtaskIssueTypeId, $newSubtaskIssueTypeId)
+                    );
                 }
             }
 
             // check if step 2 is necessary
-            $newWorkflow = $this->getRepository(YongoProject::class)->getWorkflowUsedForType(UbirimiContainer::get()['session']->get('move_issue/new_project'), UbirimiContainer::get()['session']->get('move_issue/new_type'));
+            $newWorkflow = $this->getRepository(YongoProject::class)->getWorkflowUsedForType(
+                UbirimiContainer::get()['session']->get('move_issue/new_project'),
+                UbirimiContainer::get()['session']->get('move_issue/new_type')
+            );
             $newStatuses = $this->getRepository(Workflow::class)->getLinkedStatuses($newWorkflow['id']);
 
             $step2Necessary = true;
@@ -86,12 +92,16 @@ class MoveStep1SubtaskController extends UbirimiController
                 $errorNoNewSubtaskIssueTypeSelected = true;
             }
         }
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Move Issue - ' . $issue['project_code'] . '-' . $issue['nr'] . ' ' . $issue['summary'];
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Move Issue - ' . $issue['project_code'] . '-' . $issue['nr'] . ' ' . $issue['summary'];
 
         $menuSelectedCategory = 'issue';
 
         $oldSubtaskIssueType = UbirimiContainer::get()['session']->get('move_issue/sub_task_old_issue_type');
-        $newSubtaskIssueType = $this->getRepository(YongoProject::class)->getSubTasksIssueTypes(UbirimiContainer::get()['session']->get('move_issue/new_project'));
+        $newSubtaskIssueType = $this->getRepository(YongoProject::class)->getSubTasksIssueTypes(
+            UbirimiContainer::get()['session']->get('move_issue/new_project')
+        );
 
         return $this->render(__DIR__ . '/../../../Resources/views/issue/move/MoveStep1Subtask.php', get_defined_vars());
     }

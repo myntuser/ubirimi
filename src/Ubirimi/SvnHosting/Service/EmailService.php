@@ -30,7 +30,15 @@ class EmailService extends UbirimiService
         if ($this->session->get('client/settings/smtp')) {
 
             Email::$smtpSettings = $this->session->get('client/settings/smtp');
-            UbirimiContainer::get()['repository']->get(Email::class)->sendNewUserRepositoryNotificationEmail($this->session->get('client/id'), $firstName, $lastName, $username, null, $mail, $repositoryName);
+            UbirimiContainer::get()['repository']->get(Email::class)->sendNewUserRepositoryNotificationEmail(
+                $this->session->get('client/id'),
+                $firstName,
+                $lastName,
+                $username,
+                null,
+                $mail,
+                $repositoryName
+            );
         }
     }
 
@@ -39,7 +47,9 @@ class EmailService extends UbirimiService
         if ($this->session->get('client/settings/smtp')) {
             Email::$smtpSettings = $this->session->get('client/settings/smtp');
 
-            UbirimiContainer::get()['repository']->get(Email::class)->sendUserChangedPasswordForRepositoryNotificationEmail(
+            UbirimiContainer::get()['repository']->get(
+                Email::class
+            )->sendUserChangedPasswordForRepositoryNotificationEmail(
                 $this->session->get('client/id'),
                 $user['first_name'],
                 $user['last_name'],

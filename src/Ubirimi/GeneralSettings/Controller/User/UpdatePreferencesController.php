@@ -43,8 +43,10 @@ class UpdatePreferencesController extends UbirimiController
 
         if (empty($emailAddress)) {
             $errors['empty_email'] = true;
-        } else if (!Util::isValidEmail($emailAddress)) {
-            $errors['email_not_valid'] = true;
+        } else {
+            if (!Util::isValidEmail($emailAddress)) {
+                $errors['email_not_valid'] = true;
+            }
         }
 
         $emailData = Util::checkEmailAddressExistenceWithinClient(

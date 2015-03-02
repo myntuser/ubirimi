@@ -38,7 +38,10 @@ class DeleteController extends UbirimiController
         $this->getRepository(FieldConfigurationScheme::class)->deleteDataByFieldConfigurationSchemeId($Id);
         $this->getRepository(FieldConfigurationScheme::class)->deleteById($Id);
 
-        $this->getLogger()->addInfo('DELETE Yongo Field Configuration Scheme ' . $fieldConfigurationScheme['name'], $this->getLoggerContext());
+        $this->getLogger()->addInfo(
+            'DELETE Yongo Field Configuration Scheme ' . $fieldConfigurationScheme['name'],
+            $this->getLoggerContext()
+        );
 
         return new Response('');
     }

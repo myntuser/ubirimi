@@ -33,7 +33,7 @@ class AddFavouriteController extends UbirimiController
         Util::checkUserIsLoggedInAndRedirect();
 
         $loggedInUserId = $session->get('user/id');
-        
+
         $pageId = $request->request->get('id');
         $date = Util::getServerCurrentDateTime();
 

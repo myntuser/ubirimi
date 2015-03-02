@@ -44,7 +44,9 @@ class ViewController extends UbirimiController
             return new RedirectResponse('/general-settings/bad-link-access-denied');
         }
 
-        $permissionScheme = $this->getRepository(PermissionScheme::class)->getMetaDataById($project['permission_scheme_id']);
+        $permissionScheme = $this->getRepository(PermissionScheme::class)->getMetaDataById(
+            $project['permission_scheme_id']
+        );
         $permissionCategories = $this->getRepository(Permission::class)->getCategories();
         $hasGlobalAdministrationPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission(
             $session->get('client/id'),
@@ -60,8 +62,13 @@ class ViewController extends UbirimiController
 
         $menuSelectedCategory = 'project';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Project Permission Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Project Permission Scheme';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/project/permission_scheme/View.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/project/permission_scheme/View.php',
+            get_defined_vars()
+        );
     }
 }

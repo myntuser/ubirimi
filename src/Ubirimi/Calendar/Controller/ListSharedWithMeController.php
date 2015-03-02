@@ -35,12 +35,16 @@ class ListSharedWithMeController extends UbirimiController
         $session->set('selected_product_id', SystemProduct::SYS_PRODUCT_CALENDAR);
         $menuSelectedCategory = 'calendars';
 
-        $calendarsSharedWithMe = $this->getRepository(UbirimiCalendar::class)->getSharedWithUserId($session->get('user/id'));
+        $calendarsSharedWithMe = $this->getRepository(UbirimiCalendar::class)->getSharedWithUserId(
+            $session->get('user/id')
+        );
 
         $month = date('n');
         $year = date('Y');
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_CALENDAR_NAME . ' / Calendars Shared With Me';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_CALENDAR_NAME . ' / Calendars Shared With Me';
 
         return $this->render(__DIR__ . '/../Resources/views/ListSharedWithMe.php', get_defined_vars());
     }

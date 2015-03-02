@@ -35,7 +35,9 @@ class ListController extends UbirimiController
 
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Custom Fields';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Custom Fields';
 
         return $this->render(__DIR__ . '/../../../Resources/views/administration/field/List.php', get_defined_vars());
     }

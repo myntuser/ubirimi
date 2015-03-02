@@ -28,7 +28,8 @@ use Ubirimi\Event\UserEvent;
 
 class UbirimiSubscriber implements EventSubscriberInterface
 {
-    public function onUserCustomer(UserEvent $event) {
+    public function onUserCustomer(UserEvent $event)
+    {
         if (UserEvent::STATUS_NEW == $event->getStatus()) {
 
         }
@@ -36,8 +37,7 @@ class UbirimiSubscriber implements EventSubscriberInterface
 
     public function onUser(UserEvent $event)
     {
-        switch ($event->getStatus())
-        {
+        switch ($event->getStatus()) {
             case UserEvent::STATUS_NEW:
                 switch ($event->getExtra()['isCustomer']) {
                     case true:
@@ -47,7 +47,8 @@ class UbirimiSubscriber implements EventSubscriberInterface
                             $event->getPassword(),
                             $event->getEmail(),
                             $event->getExtra()['clientDomain'],
-                            $event->getExtra()['clientId']);
+                            $event->getExtra()['clientId']
+                        );
                         break;
 
                     case false;
@@ -58,7 +59,8 @@ class UbirimiSubscriber implements EventSubscriberInterface
                             $event->getPassword(),
                             $event->getEmail(),
                             $event->getExtra()['clientDomain'],
-                            $event->getExtra()['clientId']);
+                            $event->getExtra()['clientId']
+                        );
                         break;
                 }
                 break;
@@ -82,7 +84,8 @@ class UbirimiSubscriber implements EventSubscriberInterface
             $event->getData()['like'],
             $event->getData()['improve'],
             $event->getData()['newFeatures'],
-            $event->getData()['experience']);
+            $event->getData()['experience']
+        );
     }
 
     public function onPasswordRecover(UbirimiEvent $event)
@@ -95,6 +98,7 @@ class UbirimiSubscriber implements EventSubscriberInterface
         return array(
             UbirimiEvents::USER => 'onUser',
             UbirimiEvents::FEEDBACK => 'onFeedback',
-            UbirimiEvents::PASSWORD_RECOVER => 'onPasswordRecover');
+            UbirimiEvents::PASSWORD_RECOVER => 'onPasswordRecover'
+        );
     }
 }

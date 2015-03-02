@@ -35,6 +35,8 @@ class DeleteDialogController extends UbirimiController
             return new Response('Are you sure you want to delete this issue security scheme?');
         }
 
-        return new Response('This issue security scheme can not be deleted because it is associated with one or more projects.');
+        return new Response(
+            'This issue security scheme can not be deleted because it is associated with one or more projects.'
+        );
     }
 }

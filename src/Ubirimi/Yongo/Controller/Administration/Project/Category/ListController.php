@@ -35,6 +35,9 @@ class ListController extends UbirimiController
 
         $menuSelectedCategory = 'project';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/project/category/List.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/project/category/List.php',
+            get_defined_vars()
+        );
     }
 }

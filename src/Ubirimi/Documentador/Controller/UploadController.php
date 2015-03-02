@@ -68,7 +68,10 @@ class UploadController extends UbirimiController
                         // add the file to the list of files
                         $fileId = $this->getRepository(Entity::class)->addFile($entityId, $filename, $currentDate);
 
-                        $this->getLogger()->addInfo('ADD Documentador entity file ' . $filename, $this->getLoggerContext());
+                        $this->getLogger()->addInfo(
+                            'ADD Documentador entity file ' . $filename,
+                            $this->getLoggerContext()
+                        );
 
                         $revisionNumber = 1;
 
@@ -84,12 +87,18 @@ class UploadController extends UbirimiController
                     $this->getRepository(Entity::class)->addFileRevision($fileId, $loggedInUserId, $currentDate);
 
                     if ($revisionNumber > 1) {
-                        $this->getLogger()->addInfo('ADD Documentador entity file revision to ' . $filename, $this->getLoggerContext());
+                        $this->getLogger()->addInfo(
+                            'ADD Documentador entity file revision to ' . $filename,
+                            $this->getLoggerContext()
+                        );
                     }
                     $baseFileName = pathinfo($filename, PATHINFO_FILENAME);
                     $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
-                    move_uploaded_file($_FILES["entity_upload_file"]["tmp_name"][$index], $pathBaseAttachments . $entityId . '/' . $fileId . '/' . $revisionNumber . '/' . $baseFileName . '.' . $extension);
+                    move_uploaded_file(
+                        $_FILES["entity_upload_file"]["tmp_name"][$index],
+                        $pathBaseAttachments . $entityId . '/' . $fileId . '/' . $revisionNumber . '/' . $baseFileName . '.' . $extension
+                    );
                     $index++;
                 }
             }

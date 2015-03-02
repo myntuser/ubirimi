@@ -97,10 +97,16 @@ class EditPermissionController extends UbirimiController
         }
 
         $users = $this->getRepository(UbirimiUser::class)->getByClientId($clientId);
-        $groups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId($clientId, SystemProduct::SYS_PRODUCT_DOCUMENTADOR);
+        $groups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId(
+            $clientId,
+            SystemProduct::SYS_PRODUCT_DOCUMENTADOR
+        );
 
         $anonymousAccessSettings = $this->getRepository(Space::class)->getAnonymousAccessSettings($spaceId);
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/spacetools/EditPermission.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/spacetools/EditPermission.php',
+            get_defined_vars()
+        );
     }
 }

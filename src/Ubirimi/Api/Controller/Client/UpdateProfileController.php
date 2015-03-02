@@ -31,7 +31,8 @@ class UpdateProfileController extends UbirimiController
     {
         $parameters = json_decode($request->getContent(), true);
 
-        $this->getRepository(UbirimiClient::class)->updateById($parameters['id'],
+        $this->getRepository(UbirimiClient::class)->updateById(
+            $parameters['id'],
             $parameters['company_name'],
             $parameters['address1'],
             $parameters['address2'],

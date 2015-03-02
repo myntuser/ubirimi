@@ -84,17 +84,24 @@ class EditController extends UbirimiController
             array('remaining_estimate', $previousIssueRemainingEstimate, $remainingTimePost)
         );
 
-        $this->getRepository(Issue::class)->updateHistory($issue['id'], $session->get('user/id'), $fieldChanges, $currentDate);
+        $this->getRepository(Issue::class)->updateHistory(
+            $issue['id'],
+            $session->get('user/id'),
+            $fieldChanges,
+            $currentDate
+        );
 
         // update the date_updated field
         $this->getRepository(Issue::class)->updateById($issueId, array('date_updated' => $currentDate), $currentDate);
 
         $project = $this->getRepository(YongoProject::class)->getById($issue['issue_project_id']);
-        $issueEventData = array('user_id' => $loggedInUserId,
+        $issueEventData = array(
+            'user_id' => $loggedInUserId,
             'comment' => $comment,
             'date_started' => $dateStartedString,
             'remaining_time' => $remainingTimePost,
-            'time_spent' => $timeSpent);
+            'time_spent' => $timeSpent
+        );
         $issueEvent = new IssueEvent($issue, $project, IssueEvent::STATUS_UPDATE, $issueEventData);
 
         UbirimiContainer::get()['dispatcher']->dispatch(YongoEvents::YONGO_ISSUE_WORK_LOG_UPDATED, $issueEvent);

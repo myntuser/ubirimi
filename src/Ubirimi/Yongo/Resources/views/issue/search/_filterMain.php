@@ -7,7 +7,10 @@
                name="query"/>
         <br/>
         <input id="search_summary_flag"
-               type="checkbox" <?php if ((count($_GET) == 0) || (isset($getSearchParameters['summary_flag']) && $getSearchParameters['summary_flag'])) echo 'checked="checked"' ?>
+               type="checkbox" <?php if ((count(
+                    $_GET
+                ) == 0) || (isset($getSearchParameters['summary_flag']) && $getSearchParameters['summary_flag'])
+        ) echo 'checked="checked"' ?>
                value="1" name="summary_flag"/>
         <label for="search_summary_flag">Summary</label>
         <input id="search_description_flag"

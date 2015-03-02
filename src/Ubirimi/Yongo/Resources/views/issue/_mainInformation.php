@@ -17,7 +17,10 @@ $selectedProductId = $session->get('selected_product_id');
                         <div class="textLabel">Priority:</div>
                     </td>
                     <td>
-                        <img title="<?php echo $issue['priority_name'] . ' - ' . $issue['issue_priority_description'] ?>" height="16px" src="/yongo/img/issue_priority/<?php echo $issue['issue_priority_icon_name'] ?>"/>
+                        <img
+                            title="<?php echo $issue['priority_name'] . ' - ' . $issue['issue_priority_description'] ?>"
+                            height="16px"
+                            src="/yongo/img/issue_priority/<?php echo $issue['issue_priority_icon_name'] ?>"/>
                         <?php echo $issue['priority_name'] ?>
                     </td>
                 </tr>
@@ -26,7 +29,8 @@ $selectedProductId = $session->get('selected_product_id');
                         <div class="textLabel">Type:</div>
                     </td>
                     <td>
-                        <img title="<?php echo $issue['type_name'] . ' - ' . $issue['issue_type_description'] ?>" height="16px" src="/yongo/img/issue_type/<?php echo $issue['issue_type_icon_name'] ?>"/>
+                        <img title="<?php echo $issue['type_name'] . ' - ' . $issue['issue_type_description'] ?>"
+                             height="16px" src="/yongo/img/issue_type/<?php echo $issue['issue_type_icon_name'] ?>"/>
                         <?php echo $issue['type_name']; ?>
                     </td>
                 </tr>
@@ -52,12 +56,24 @@ $selectedProductId = $session->get('selected_product_id');
                     </td>
                     <td valign="middle">
                         <?php
-                            if ($issue[Field::FIELD_ASSIGNEE_CODE]) {
-                                echo '<img width="33px" style="vertical-align: middle;" src="' . UbirimiContainer::get()['repository']->get(UbirimiUser::class)->getUserAvatarPicture(array('avatar_picture' => $issue['assignee_avatar_picture'] ,'id' => $issue['assignee']), 'small') . '" />';
-                                echo ' ' . LinkHelper::getUserProfileLink($issue[Field::FIELD_ASSIGNEE_CODE], $selectedProductId, $issue['ua_first_name'], $issue['ua_last_name']);
-                            } else {
-                                echo 'Unassigned';
-                            }
+                        if ($issue[Field::FIELD_ASSIGNEE_CODE]) {
+                            echo '<img width="33px" style="vertical-align: middle;" src="' . UbirimiContainer::get(
+                                )['repository']->get(UbirimiUser::class)->getUserAvatarPicture(
+                                    array(
+                                        'avatar_picture' => $issue['assignee_avatar_picture'],
+                                        'id' => $issue['assignee']
+                                    ),
+                                    'small'
+                                ) . '" />';
+                            echo ' ' . LinkHelper::getUserProfileLink(
+                                    $issue[Field::FIELD_ASSIGNEE_CODE],
+                                    $selectedProductId,
+                                    $issue['ua_first_name'],
+                                    $issue['ua_last_name']
+                                );
+                        } else {
+                            echo 'Unassigned';
+                        }
                         ?>
                     </td>
                 </tr>
@@ -66,26 +82,45 @@ $selectedProductId = $session->get('selected_product_id');
                         <div class="textLabel">Reporter:</div>
                     </td>
                     <td valign="middle">
-                        <img width="33px" style="vertical-align: middle;" src="<?php echo UbirimiContainer::get()['repository']->get(UbirimiUser::class)->getUserAvatarPicture(array('avatar_picture' => $issue['reporter_avatar_picture'] ,'id' => $issue['reporter']), 'small') ?>" />
-                            <?php echo LinkHelper::getUserProfileLink($issue[Field::FIELD_REPORTER_CODE], $selectedProductId, $issue['ur_first_name'], $issue['ur_last_name']) ?>
+                        <img width="33px" style="vertical-align: middle;"
+                             src="<?php echo UbirimiContainer::get()['repository']->get(
+                                 UbirimiUser::class
+                             )->getUserAvatarPicture(
+                                 array(
+                                     'avatar_picture' => $issue['reporter_avatar_picture'],
+                                     'id' => $issue['reporter']
+                                 ),
+                                 'small'
+                             ) ?>"/>
+                        <?php echo LinkHelper::getUserProfileLink(
+                            $issue[Field::FIELD_REPORTER_CODE],
+                            $selectedProductId,
+                            $issue['ur_first_name'],
+                            $issue['ur_last_name']
+                        ) ?>
                     </td>
                 </tr>
                 <tr>
                     <td valign="top" colspan="2">
                         <div class="textLabel">
                             <span>Watchers: </span>
-                            <span style="background-color: #d3d3d3; border-radius: 2em; padding: 0px 2px 2px 6px; cursor: pointer;" id="issueWatcherCount">
-                                <b><?php if (isset($watchers)) echo $watchers->num_rows; else echo '0' ?></b>
+                            <span
+                                style="background-color: #d3d3d3; border-radius: 2em; padding: 0px 2px 2px 6px; cursor: pointer;"
+                                id="issueWatcherCount">
+                                <b><?php if (isset($watchers)) {
+                                        echo $watchers->num_rows;
+                                    } else echo '0' ?></b>
                             </span>
                             &nbsp;
                             <?php if ($loggedInUserId): ?>
                                 <?php $loggedInUserIsWatcher = false; ?>
                                 <?php while ($watchers && $watcher = $watchers->fetch_array(MYSQLI_ASSOC)): ?>
                                     <?php if ($watcher['id'] == $loggedInUserId): ?>
-                                        <a href="#" data="remove" class="toggle_watch_issue">Stop watching this issue</a>
+                                        <a href="#" data="remove" class="toggle_watch_issue">Stop watching this
+                                            issue</a>
                                         <?php
-                                            $loggedInUserIsWatcher = true;
-                                            break;
+                                        $loggedInUserIsWatcher = true;
+                                        break;
                                         ?>
                                     <?php endif ?>
                                 <?php endwhile ?>
@@ -116,13 +151,15 @@ $selectedProductId = $session->get('selected_product_id');
                     </td>
                     <td>
                         <?php
-                            if ($components) {
-                                while ($components && $component = $components->fetch_array(MYSQLI_ASSOC)) {
-                                    UbirimiContainer::get()['repository']->get(YongoProject::class)->renderTreeComponentsInViewIssue($component, '');
-                                }
-                            } else {
-                                echo 'None';
+                        if ($components) {
+                            while ($components && $component = $components->fetch_array(MYSQLI_ASSOC)) {
+                                UbirimiContainer::get()['repository']->get(
+                                    YongoProject::class
+                                )->renderTreeComponentsInViewIssue($component, '');
                             }
+                        } else {
+                            echo 'None';
+                        }
                         ?>
                     </td>
                 </tr>
@@ -136,8 +173,13 @@ $selectedProductId = $session->get('selected_product_id');
                             <?php while ($version = $versionsAffected->fetch_array(MYSQLI_ASSOC)): ?>
                                 <span>
                                     <?php
-                                        echo LinkHelper::getYongoProjectVersionLink($version['project_version_id'], $version['name']);
-                                        if ($indexVersion < $versionsAffected->num_rows) echo ', ';
+                                    echo LinkHelper::getYongoProjectVersionLink(
+                                        $version['project_version_id'],
+                                        $version['name']
+                                    );
+                                    if ($indexVersion < $versionsAffected->num_rows) {
+                                        echo ', ';
+                                    }
                                     ?>
                                 </span>
                                 <?php $indexVersion++ ?>
@@ -157,8 +199,13 @@ $selectedProductId = $session->get('selected_product_id');
                             <?php while ($version = $versionsTargeted->fetch_array(MYSQLI_ASSOC)): ?>
                                 <span>
                                     <?php
-                                        echo LinkHelper::getYongoProjectVersionLink($version['project_version_id'], $version['name']);
-                                        if ($indexVersion < $versionsTargeted->num_rows) echo ', ';
+                                    echo LinkHelper::getYongoProjectVersionLink(
+                                        $version['project_version_id'],
+                                        $version['name']
+                                    );
+                                    if ($indexVersion < $versionsTargeted->num_rows) {
+                                        echo ', ';
+                                    }
                                     ?>
                                 </span>
                                 <?php $indexVersion++ ?>

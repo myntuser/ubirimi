@@ -40,11 +40,16 @@ class AssociateStep2Controller extends UbirimiController
 
         $projectIssueSecuritySchemeId = $project['issue_security_scheme_id'];
         $projectIssueSecurityScheme = null;
-        if ($projectIssueSecuritySchemeId)
-            $projectIssueSecurityScheme = $this->getRepository(IssueSecurityScheme::class)->getMetaDataById($projectIssueSecuritySchemeId);
+        if ($projectIssueSecuritySchemeId) {
+            $projectIssueSecurityScheme = $this->getRepository(IssueSecurityScheme::class)->getMetaDataById(
+                $projectIssueSecuritySchemeId
+            );
+        }
 
         $menuSelectedCategory = 'project';
-        $selectedSchemeLevels = $this->getRepository(IssueSecurityScheme::class)->getLevelsByIssueSecuritySchemeId($schemeId);
+        $selectedSchemeLevels = $this->getRepository(IssueSecurityScheme::class)->getLevelsByIssueSecuritySchemeId(
+            $schemeId
+        );
 
         if ($request->request->has('cancel')) {
             return new RedirectResponse('/yongo/administration/project/issue-security/' . $projectId);
@@ -55,13 +60,21 @@ class AssociateStep2Controller extends UbirimiController
                     $newSecurityLevel = $request->request->get($key);
                     $oldSecurityLevel = str_replace('new_level_', '', $key);
                     if ($oldSecurityLevel == 0) {
-                        $this->getRepository(YongoProject::class)->updateAllIssuesSecurityLevel($projectId, $newSecurityLevel);
+                        $this->getRepository(YongoProject::class)->updateAllIssuesSecurityLevel(
+                            $projectId,
+                            $newSecurityLevel
+                        );
                     } else {
                         $oldNewLevel[] = array($oldSecurityLevel, $newSecurityLevel);
                     }
-                } else if ($key == 'no_level_set') {
-                    $newSecurityLevel = $request->request->get($key);
-                    $this->getRepository(YongoProject::class)->updateIssueSecurityLevelForUnsercuredIssues($projectId, $newSecurityLevel);
+                } else {
+                    if ($key == 'no_level_set') {
+                        $newSecurityLevel = $request->request->get($key);
+                        $this->getRepository(YongoProject::class)->updateIssueSecurityLevelForUnsercuredIssues(
+                            $projectId,
+                            $newSecurityLevel
+                        );
+                    }
                 }
             }
 
@@ -75,8 +88,13 @@ class AssociateStep2Controller extends UbirimiController
             return new RedirectResponse('/yongo/administration/project/issue-security/' . $projectId);
         }
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Associate Issue Security';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Associate Issue Security';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/security_scheme/AssociateStep2.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/issue/security_scheme/AssociateStep2.php',
+            get_defined_vars()
+        );
     }
 }

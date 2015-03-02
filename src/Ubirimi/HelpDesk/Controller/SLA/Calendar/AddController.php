@@ -72,7 +72,14 @@ class AddController extends UbirimiController
 
                     $currentDate = Util::getServerCurrentDateTime();
 
-                    $this->getRepository(SlaCalendar::class)->addCalendar($projectId, $name, $description, $dataCalendar, 0, $currentDate);
+                    $this->getRepository(SlaCalendar::class)->addCalendar(
+                        $projectId,
+                        $name,
+                        $description,
+                        $dataCalendar,
+                        0,
+                        $currentDate
+                    );
 
                     return new RedirectResponse('/helpdesk/sla/calendar/' . $projectId);
                 }

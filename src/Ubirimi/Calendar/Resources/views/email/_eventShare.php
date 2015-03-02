@@ -14,22 +14,26 @@ $source = '/calendar/view/' . $this->event['id'] . '/' . $month . '/' . $year;
 $session = UbirimiContainer::get()['session'];
 ?>
 
-<br />
+    <br/>
 <?php echo $this->userThatShares['first_name'] . ' ' . $this->userThatShares['last_name'] ?> just shared
 
-<a style="text-decoration: none;"
-    href="<?php echo $session->get('client/base_url') ?>/calendar/event/<?php echo $this->event['id'] ?>?source=<?php echo $source ?>">
-    <?php echo $this->event['name'] ?>
-</a> with you
+    <a style="text-decoration: none;"
+       href="<?php echo $session->get(
+           'client/base_url'
+       ) ?>/calendar/event/<?php echo $this->event['id'] ?>?source=<?php echo $source ?>">
+        <?php echo $this->event['name'] ?>
+    </a> with you
 
-<br />
-<br />
-<br />
+    <br/>
+    <br/>
+    <br/>
 
-<div style="background-color: #DDDDDD"><?php echo $this->noteContent ?></div>
-<br />
-<div>
-    <a style="text-decoration: none;" href="<?php echo $session->get('client/base_url') ?>/calendar/event/<?php echo $this->event['id'] ?>?source=<?php echo $source ?>">View Event</a>
-</div>
+    <div style="background-color: #DDDDDD"><?php echo $this->noteContent ?></div>
+    <br/>
+    <div>
+        <a style="text-decoration: none;" href="<?php echo $session->get(
+            'client/base_url'
+        ) ?>/calendar/event/<?php echo $this->event['id'] ?>?source=<?php echo $source ?>">View Event</a>
+    </div>
 
 <?php require '_footer.php' ?>

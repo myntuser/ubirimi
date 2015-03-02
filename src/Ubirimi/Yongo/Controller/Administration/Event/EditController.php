@@ -62,7 +62,9 @@ class EditController extends UbirimiController
             }
         }
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Event';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Event';
 
         return $this->render(__DIR__ . '/../../../Resources/views/administration/event/edit.php', get_defined_vars());
     }

@@ -60,8 +60,13 @@ class EditConfigurationController extends UbirimiController
             return new RedirectResponse('/yongo/administration/attachment-configuration');
         }
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Attachment Configuration';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Attachment Configuration';
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/attachment/edit_configuration.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/attachment/edit_configuration.php',
+            get_defined_vars()
+        );
     }
 }

@@ -36,8 +36,13 @@ class ListController extends UbirimiController
         $linkTypes = $this->getRepository(IssueLinkType::class)->getByClientId($session->get('client/id'));
         $issueLinkingFlag = $session->get('yongo/settings/issue_linking_flag');
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Issue Link Types';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Issue Link Types';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/link/List.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/issue/link/List.php',
+            get_defined_vars()
+        );
     }
 }

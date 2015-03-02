@@ -38,7 +38,10 @@ class DeleteController extends UbirimiController
         $this->getRepository(NotificationScheme::class)->deleteDataByNotificationSchemeId($notificationSchemeId);
         $this->getRepository(NotificationScheme::class)->deleteById($notificationSchemeId);
 
-        $this->getLogger()->addInfo('DELETE Yongo Notification Scheme ' . $notificationScheme['name'], $this->getLoggerContext());
+        $this->getLogger()->addInfo(
+            'DELETE Yongo Notification Scheme ' . $notificationScheme['name'],
+            $this->getLoggerContext()
+        );
 
         return new Response('');
     }

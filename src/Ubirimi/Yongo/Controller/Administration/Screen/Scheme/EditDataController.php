@@ -56,8 +56,13 @@ class EditDataController extends UbirimiController
             return new RedirectResponse('/yongo/administration/screen/configure-scheme/' . $screenSchemeId);
         }
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Screen Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Screen Scheme';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/screen/scheme/EditData.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/screen/scheme/EditData.php',
+            get_defined_vars()
+        );
     }
 }

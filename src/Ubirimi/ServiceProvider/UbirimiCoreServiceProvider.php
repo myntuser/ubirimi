@@ -45,85 +45,120 @@ class UbirimiCoreServiceProvider implements ServiceProviderInterface
 {
     public function register(\Pimple $pimple)
     {
-        $pimple['db.connection'] = $pimple->share(function() {
-            $databaseConnector = new DatabaseConnectorService();
+        $pimple['db.connection'] = $pimple->share(
+            function () {
+                $databaseConnector = new DatabaseConnectorService();
 
-            return $databaseConnector->getConnection();
-        });
+                return $databaseConnector->getConnection();
+            }
+        );
 
-        $pimple['repository'] = $pimple->share(function() {
-            return new RepositoryService();
-        });
+        $pimple['repository'] = $pimple->share(
+            function () {
+                return new RepositoryService();
+            }
+        );
 
-        $pimple['api.auth'] = $pimple->share(function($pimple) {
-            $basicAuthenticationService = new BasicAuthenticationService();
-            $basicAuthenticationService->setPasswordService($pimple['password']);
+        $pimple['api.auth'] = $pimple->share(
+            function ($pimple) {
+                $basicAuthenticationService = new BasicAuthenticationService();
+                $basicAuthenticationService->setPasswordService($pimple['password']);
 
-            return $basicAuthenticationService;
-        });
+                return $basicAuthenticationService;
+            }
+        );
 
-        $pimple['password'] = $pimple->share(function() {
-            return new PasswordService();
-        });
+        $pimple['password'] = $pimple->share(
+            function () {
+                return new PasswordService();
+            }
+        );
 
-        $pimple['dispatcher'] = $pimple->share(function() {
-            return new EventDispatcher();
-        });
+        $pimple['dispatcher'] = $pimple->share(
+            function () {
+                return new EventDispatcher();
+            }
+        );
 
-        $pimple['logger'] = $pimple->share(function() {
+        $pimple['logger'] = $pimple->share(
+            function () {
 
-            $logger = new Logger('ubirimi.activity');
-            $IntrospectionProcessor = new IntrospectionProcessor();
-            $webProcessor = new WebProcessor();
+                $logger = new Logger('ubirimi.activity');
+                $IntrospectionProcessor = new IntrospectionProcessor();
+                $webProcessor = new WebProcessor();
 
-            $logger->pushHandler(new StreamHandler(UbirimiContainer::get()['log.path'], Logger::DEBUG));
-            $logger->pushHandler(new \DbMonologHandler(), Logger::DEBUG);
-            $logger->pushProcessor($IntrospectionProcessor);
-            $logger->pushProcessor($webProcessor);
+                $logger->pushHandler(new StreamHandler(UbirimiContainer::get()['log.path'], Logger::DEBUG));
+                $logger->pushHandler(new \DbMonologHandler(), Logger::DEBUG);
+                $logger->pushProcessor($IntrospectionProcessor);
+                $logger->pushProcessor($webProcessor);
 
-            return $logger;
-        });
+                return $logger;
+            }
+        );
 
-        $pimple['email'] = $pimple->share(function($pimple) {
-            return new EmailService($pimple['session']);
-        });
+        $pimple['email'] = $pimple->share(
+            function ($pimple) {
+                return new EmailService($pimple['session']);
+            }
+        );
 
-        $pimple['client'] = $pimple->share(function($pimple) {
-            return new ClientService();
-        });
+        $pimple['client'] = $pimple->share(
+            function ($pimple) {
+                return new ClientService();
+            }
+        );
 
-        $pimple['user'] = $pimple->share(function($pimple) {
-            return new UserService($pimple['session']);
-        });
+        $pimple['user'] = $pimple->share(
+            function ($pimple) {
+                return new UserService($pimple['session']);
+            }
+        );
 
-        $pimple['login.time'] = $pimple->share(function($pimple) {
-            return new LoginTimeService();
-        });
+        $pimple['login.time'] = $pimple->share(
+            function ($pimple) {
+                return new LoginTimeService();
+            }
+        );
 
-        $pimple['session'] = $pimple->share(function() {
-            $lastDot = strrpos($_SERVER['SERVER_NAME'], '.');
-            $secondToLastDot = strrpos($_SERVER['SERVER_NAME'], '.', $lastDot - strlen($_SERVER['SERVER_NAME']) - 1);
+        $pimple['session'] = $pimple->share(
+            function () {
+                $lastDot = strrpos($_SERVER['SERVER_NAME'], '.');
+                $secondToLastDot = strrpos(
+                    $_SERVER['SERVER_NAME'],
+                    '.',
+                    $lastDot - strlen($_SERVER['SERVER_NAME']) - 1
+                );
 
-            $storage = new NativeSessionStorage(array('cookie_domain' => substr($_SERVER['SERVER_NAME'], $secondToLastDot)), new NativeFileSessionHandler());
+                $storage = new NativeSessionStorage(
+                    array('cookie_domain' => substr($_SERVER['SERVER_NAME'], $secondToLastDot)),
+                    new NativeFileSessionHandler()
+                );
 
-            return new Session($storage, new NamespacedAttributeBag(), new AutoExpireFlashBag());
-        });
+                return new Session($storage, new NamespacedAttributeBag(), new AutoExpireFlashBag());
+            }
+        );
 
-        $pimple['warmup'] = $pimple->share(function($pimple) {
-            return new WarmUpService($pimple['session']);
-        });
+        $pimple['warmup'] = $pimple->share(
+            function ($pimple) {
+                return new WarmUpService($pimple['session']);
+            }
+        );
 
-        $pimple['savant'] = $pimple->share(function() {
-            return new \Savant3(array(
-                    'template_path' => array(
-                        __DIR__ . '/../Yongo/Resources/views/email/',
-                        __DIR__ . '/../GeneralSettings/Resources/views/email/',
-                        __DIR__ . '/../Calendar/Resources/views/email/',
-                        __DIR__ . '/../SvnHosting/Resources/views/email/',
-                        __DIR__ . '/../Resources/views/email'
-                    ))
-            );
-        });
+        $pimple['savant'] = $pimple->share(
+            function () {
+                return new \Savant3(
+                    array(
+                        'template_path' => array(
+                            __DIR__ . '/../Yongo/Resources/views/email/',
+                            __DIR__ . '/../GeneralSettings/Resources/views/email/',
+                            __DIR__ . '/../Calendar/Resources/views/email/',
+                            __DIR__ . '/../SvnHosting/Resources/views/email/',
+                            __DIR__ . '/../Resources/views/email'
+                        )
+                    )
+                );
+            }
+        );
     }
 
     public function boot(\Pimple $pimple)

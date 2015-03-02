@@ -43,9 +43,11 @@ class GetController extends UbirimiController
             $VAT = $amount * PaymentUtil::$VATValuePerCountry[$clientData['sys_country_id']] / 100;
         }
 
-        return new JsonResponse([
-            'amount' => $amount,
-            'VAT' => $VAT,
-        ]);
+        return new JsonResponse(
+            [
+                'amount' => $amount,
+                'VAT' => $VAT,
+            ]
+        );
     }
 }

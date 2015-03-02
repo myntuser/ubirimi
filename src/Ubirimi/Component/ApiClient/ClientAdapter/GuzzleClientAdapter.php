@@ -38,8 +38,7 @@ class GuzzleClientAdapter implements ClientInterface
     {
         try {
             $response = $request->send();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             throw new ApiException($e->getMessage(), $e->getCode(), $e);
         }
 

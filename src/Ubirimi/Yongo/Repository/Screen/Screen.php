@@ -27,13 +27,15 @@ class Screen
     private $description;
     private $clientId;
 
-    function __construct($clientId = null, $name = null, $description = null) {
+    function __construct($clientId = null, $name = null, $description = null)
+    {
         $this->clientId = $clientId;
         $this->name = $name;
         $this->description = $description;
     }
 
-    public function save($currentDate) {
+    public function save($currentDate)
+    {
         $query = "INSERT INTO screen(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -44,7 +46,8 @@ class Screen
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function getAll($clientId) {
+    public function getAll($clientId)
+    {
         $query = "SELECT * " .
             "FROM screen " .
             "where screen.client_id = ?";
@@ -53,26 +56,30 @@ class Screen
         $stmt->bind_param("i", $clientId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function getByClientId($clientId) {
+    public function getByClientId($clientId)
+    {
         $query = "SELECT * FROM screen where client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function addData($screenId, $fieldId, $position, $currentDate) {
+    public function addData($screenId, $fieldId, $position, $currentDate)
+    {
         if ($position == null) {
             $position = UbirimiContainer::get()['repository']->get(Screen::class)->getLastOrderNumber($screenId);
 
@@ -86,7 +93,8 @@ class Screen
         $stmt->execute();
     }
 
-    public function getAllBySchemeId($screenSchemeId) {
+    public function getAllBySchemeId($screenSchemeId)
+    {
         $query = "select screen.id, screen.name, screen.description " .
             "from screen_scheme_data " .
             "left join screen on screen.id = screen_scheme_data.screen_id " .
@@ -96,15 +104,17 @@ class Screen
         $stmt->bind_param("i", $screenSchemeId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function getDataById($Id) {
+    public function getDataById($Id)
+    {
         $query = "select screen_data.id, field.name as field_name, field.code as field_code, field.id as field_id, screen_data.position, field.system_flag, " .
-                 "field.all_issue_type_flag, field.all_project_flag, sys_field_type.code as type_code, field.description " .
+            "field.all_issue_type_flag, field.all_project_flag, sys_field_type.code as type_code, field.description " .
             "from screen_data " .
             "left join field on field.id = screen_data.field_id " .
             "left join sys_field_type on sys_field_type.id = field.sys_field_type_id " .
@@ -114,13 +124,15 @@ class Screen
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function getMetaDataById($Id) {
+    public function getMetaDataById($Id)
+    {
         $query = "select * " .
             "from screen " .
             "where screen.id = ? " .
@@ -130,18 +142,21 @@ class Screen
         $stmt->bind_param("i", $Id);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        else
+        } else {
             return null;
+        }
     }
 
-    public function getByNameAndId($clientId, $name, $screenId = null) {
+    public function getByNameAndId($clientId, $name, $screenId = null)
+    {
         $query = "select id " .
             "from screen " .
             "where screen.client_id = ? and name = ? ";
-        if ($screenId)
+        if ($screenId) {
             $query .= ' and id != ' . $screenId . ' ';
+        }
 
         $query .= "limit 1";
 
@@ -149,23 +164,26 @@ class Screen
         $stmt->bind_param("is", $clientId, $name);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        else
+        } else {
             return null;
+        }
     }
 
-    public function updateMetadataById($screenId, $name, $description, $date) {
+    public function updateMetadataById($screenId, $name, $description, $date)
+    {
         $query = "update screen set name = ?, description = ?, date_updated = ? " .
-                 "where id = ? " .
-                 "limit 1 ";
+            "where id = ? " .
+            "limit 1 ";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("sssi", $name, $description, $date, $screenId);
         $stmt->execute();
     }
 
-    public function getByFieldId($clientId, $fieldId) {
+    public function getByFieldId($clientId, $fieldId)
+    {
         $query = "select screen.id, screen.name " .
             "from screen " .
             "left join screen_data on screen_data.screen_id = screen.id " .
@@ -175,13 +193,15 @@ class Screen
         $stmt->bind_param("ii", $clientId, $fieldId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function deleteDataByScreenIdAndFieldId($screenId, $fieldId) {
+    public function deleteDataByScreenIdAndFieldId($screenId, $fieldId)
+    {
         $query = "delete from screen_data where screen_id = ? and field_id = ? LIMIT 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -189,7 +209,8 @@ class Screen
         $stmt->execute();
     }
 
-    public function deleteDataByFieldId($fieldId) {
+    public function deleteDataByFieldId($fieldId)
+    {
         $query = "delete from screen_data where field_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -197,7 +218,8 @@ class Screen
         $stmt->execute();
     }
 
-    public function checkFieldInScreen($clientId, $screenId, $fieldId) {
+    public function checkFieldInScreen($clientId, $screenId, $fieldId)
+    {
         $query = "select screen.id " .
             "from screen " .
             "left join screen_data on screen_data.screen_id = screen.id " .
@@ -207,13 +229,15 @@ class Screen
         $stmt->bind_param("iii", $clientId, $screenId, $fieldId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function getByName($clientId, $screenName) {
+    public function getByName($clientId, $screenName)
+    {
         $query = "select screen.* " .
             "from screen " .
             "where screen.client_id = ? and screen.name = ? " .
@@ -223,13 +247,15 @@ class Screen
         $stmt->bind_param("is", $clientId, $screenName);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        else
+        } else {
             return null;
+        }
     }
 
-    public function deleteDataById($screenDataId) {
+    public function deleteDataById($screenDataId)
+    {
         $query = "delete from screen_data where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -237,7 +263,8 @@ class Screen
         $stmt->execute();
     }
 
-    public function deleteById($screenId) {
+    public function deleteById($screenId)
+    {
         $query = "delete from screen_data where screen_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -251,7 +278,8 @@ class Screen
         $stmt->execute();
     }
 
-    public function updatePositionForField($screenId, $fieldId, $position) {
+    public function updatePositionForField($screenId, $fieldId, $position)
+    {
         $field = UbirimiContainer::get()['repository']->get(Screen::class)->getFieldById($screenId, $fieldId);
 
         $field2 = UbirimiContainer::get()['repository']->get(Screen::class)->getFieldByOrder($screenId, $position);
@@ -273,7 +301,8 @@ class Screen
         $stmt->execute();
     }
 
-    public function getLastOrderNumber($screenId) {
+    public function getLastOrderNumber($screenId)
+    {
         $query = "select `position` " .
             "from screen_data " .
             "where screen_data.screen_id = ? " .
@@ -287,11 +316,13 @@ class Screen
         if ($result->num_rows) {
             $data = $result->fetch_array(MYSQLI_ASSOC);
             return $data['position'];
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function getFieldById($screenId, $fieldId) {
+    public function getFieldById($screenId, $fieldId)
+    {
         $query = "select screen_data.* " .
             "from screen_data " .
             "where screen_data.screen_id = ? and field_id = ? " .
@@ -303,11 +334,13 @@ class Screen
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function getFieldByOrder($screenId, $position) {
+    public function getFieldByOrder($screenId, $position)
+    {
         $query = "select screen_data.* " .
             "from screen_data " .
             "where screen_data.screen_id = ? and `position` = ? " .
@@ -319,7 +352,8 @@ class Screen
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else
+        } else {
             return null;
+        }
     }
 }

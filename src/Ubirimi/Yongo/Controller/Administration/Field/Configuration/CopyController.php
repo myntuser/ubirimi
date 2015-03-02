@@ -52,13 +52,16 @@ class CopyController extends UbirimiController
                 $emptyName = true;
             }
 
-            $duplicateFieldConfiguration = $this->getRepository(FieldConfiguration::class)->getMetaDataByNameAndClientId(
+            $duplicateFieldConfiguration = $this->getRepository(
+                FieldConfiguration::class
+            )->getMetaDataByNameAndClientId(
                 $session->get('client/id'),
                 mb_strtolower($name)
             );
 
-            if ($duplicateFieldConfiguration)
+            if ($duplicateFieldConfiguration) {
                 $duplicateName = true;
+            }
 
             if (!$emptyName && !$duplicateName) {
                 $copiedFieldConfiguration = new FieldConfiguration($session->get('client/id'), $name, $description);
@@ -66,7 +69,9 @@ class CopyController extends UbirimiController
                 $currentDate = Util::getServerCurrentDateTime();
                 $copiedFieldConfigurationId = $copiedFieldConfiguration->save($currentDate);
 
-                $fieldConfigurationData = $this->getRepository(FieldConfiguration::class)->getDataByConfigurationId($fieldConfigurationId);
+                $fieldConfigurationData = $this->getRepository(FieldConfiguration::class)->getDataByConfigurationId(
+                    $fieldConfigurationId
+                );
 
                 while ($fieldConfigurationData && $data = $fieldConfigurationData->fetch_array(MYSQLI_ASSOC)) {
                     $copiedFieldConfiguration->addCompleteData(
@@ -78,7 +83,10 @@ class CopyController extends UbirimiController
                     );
                 }
 
-                $this->getLogger()->addInfo('Copy Yongo Field Configuration ' . $fieldConfiguration['name'], $this->getLoggerContext());
+                $this->getLogger()->addInfo(
+                    'Copy Yongo Field Configuration ' . $fieldConfiguration['name'],
+                    $this->getLoggerContext()
+                );
 
                 return new RedirectResponse('/yongo/administration/field-configurations');
             }
@@ -86,8 +94,13 @@ class CopyController extends UbirimiController
 
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Field Configuration';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Field Configuration';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/field/configuration/Copy.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/field/configuration/Copy.php',
+            get_defined_vars()
+        );
     }
 }

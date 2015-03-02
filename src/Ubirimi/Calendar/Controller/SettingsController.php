@@ -58,18 +58,28 @@ class SettingsController extends UbirimiController
 
                     // add the reminder
                     if (is_numeric($reminderValue)) {
-                        $this->getRepository(UbirimiCalendar::class)->addReminder($calendarId, $reminderType, $reminderPeriod, $reminderValue);
+                        $this->getRepository(UbirimiCalendar::class)->addReminder(
+                            $calendarId,
+                            $reminderType,
+                            $reminderPeriod,
+                            $reminderValue
+                        );
                     }
                 }
             }
 
-            $this->getLogger()->addInfo('UPDATE Calendar Default Reminders ' . $calendar['name'], $this->getLoggerContext());
+            $this->getLogger()->addInfo(
+                'UPDATE Calendar Default Reminders ' . $calendar['name'],
+                $this->getLoggerContext()
+            );
 
             return new RedirectResponse('/calendar/calendars');
         }
 
         $menuSelectedCategory = 'calendar';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_CALENDAR_NAME . ' / Calendar: ' . $calendar['name'] . ' / Settings';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_CALENDAR_NAME . ' / Calendar: ' . $calendar['name'] . ' / Settings';
 
         return $this->render(__DIR__ . '/../Resources/views/Settings.php', get_defined_vars());
     }

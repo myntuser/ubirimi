@@ -37,16 +37,24 @@ class AssignGroupsConfirmController extends UbirimiController
         $permissionRoleId = $request->get('role_id');
         $role = $this->getRepository(Role::class)->getPermissionRoleById($permissionRoleId);
 
-        $allGroups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId($session->get('client/id'), SystemProduct::SYS_PRODUCT_YONGO);
+        $allGroups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId(
+            $session->get('client/id'),
+            SystemProduct::SYS_PRODUCT_YONGO
+        );
         $roleGroups = $this->getRepository(Role::class)->getDefaultGroups($permissionRoleId);
 
         $role_groups_arr_ids = array();
-        while ($roleGroups && $group = $roleGroups->fetch_array(MYSQLI_ASSOC))
+        while ($roleGroups && $group = $roleGroups->fetch_array(MYSQLI_ASSOC)) {
             $role_groups_arr_ids[] = $group['group_id'];
+        }
 
-        if ($roleGroups)
+        if ($roleGroups) {
             $roleGroups->data_seek(0);
+        }
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/role/AssignGroupsConfirm.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/role/AssignGroupsConfirm.php',
+            get_defined_vars()
+        );
     }
 }

@@ -38,7 +38,13 @@ class UpdateController extends UbirimiController
         $idFrom = $request->request->get('id_from');
         $idTo = $request->request->get('id_to');
 
-        $this->getRepository(Workflow::class)->updateTransitionData($workflowId, $transition_name, $screenId, $idFrom, $idTo);
+        $this->getRepository(Workflow::class)->updateTransitionData(
+            $workflowId,
+            $transition_name,
+            $screenId,
+            $idFrom,
+            $idTo
+        );
 
         return new Response('');
     }

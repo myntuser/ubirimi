@@ -62,8 +62,13 @@ class ViewController extends UbirimiController
 
         $menuSelectedCategory = 'project';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Project Notification Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Project Notification Scheme';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/project/notification_scheme/View.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/project/notification_scheme/View.php',
+            get_defined_vars()
+        );
     }
 }

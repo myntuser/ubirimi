@@ -34,8 +34,13 @@ class AddController extends UbirimiController
     {
         Util::checkUserIsLoggedInAndRedirect();
 
-        $allGroups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId($session->get('client/id'), SystemProduct::SYS_PRODUCT_YONGO);
-        $globalPermissions = $this->getRepository(GlobalPermission::class)->getAllByProductId(SystemProduct::SYS_PRODUCT_YONGO);
+        $allGroups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId(
+            $session->get('client/id'),
+            SystemProduct::SYS_PRODUCT_YONGO
+        );
+        $globalPermissions = $this->getRepository(GlobalPermission::class)->getAllByProductId(
+            SystemProduct::SYS_PRODUCT_YONGO
+        );
 
         if ($request->request->has('confirm_new_permission')) {
             $permissionId = $request->request->get('permission');
@@ -54,9 +59,17 @@ class AddController extends UbirimiController
             );
 
             if (!$permissionData) {
-                $this->getRepository(GlobalPermission::class)->addDataForGroupId($session->get('client/id'), $permissionId, $groupId, $date);
+                $this->getRepository(GlobalPermission::class)->addDataForGroupId(
+                    $session->get('client/id'),
+                    $permissionId,
+                    $groupId,
+                    $date
+                );
 
-                $this->getLogger()->addInfo('ADD Yongo Global Permission ' . $permission['name'] . ' to group ' . $group['name'], $this->getLoggerContext());
+                $this->getLogger()->addInfo(
+                    'ADD Yongo Global Permission ' . $permission['name'] . ' to group ' . $group['name'],
+                    $this->getLoggerContext()
+                );
             }
 
             return new RedirectResponse('/yongo/administration/global-permissions');
@@ -64,8 +77,13 @@ class AddController extends UbirimiController
 
         $menuSelectedCategory = 'user';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Global Permission';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Global Permission';
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/global_permission/Add.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/global_permission/Add.php',
+            get_defined_vars()
+        );
     }
 }

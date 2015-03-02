@@ -1,9 +1,10 @@
 <?php
 
 ?>
-    <table width="100%">
+<table width="100%">
     <tr>
-        <td id="sectWorkflows" width="74%" class="sectionDetail" colspan="3"><span class="headerPageText sectionDetailTitle">Workflows</span></td>
+        <td id="sectWorkflows" width="74%" class="sectionDetail" colspan="3"><span
+                class="headerPageText sectionDetailTitle">Workflows</span></td>
     </tr>
     <tr>
         <td>
@@ -16,10 +17,14 @@
                 <tr>
                     <td valign="top" width="330">
                         <div>Workflow Scheme</div>
-                        <div><a href="/yongo/administration/project/workflows/<?php echo $projectId ?>"><?php echo $workflowScheme['name'] ?></a></div>
+                        <div>
+                            <a href="/yongo/administration/project/workflows/<?php echo $projectId ?>"><?php echo $workflowScheme['name'] ?></a>
+                        </div>
                         <div>Workflows</div>
                         <?php while ($workflow = $workflows->fetch_array(MYSQLI_ASSOC)): ?>
-                            <div><a href="/yongo/administration/workflow/view-as-text/<?php echo $workflow['id'] ?>"><?php echo $workflow['name'] ?></a></div>
+                            <div>
+                                <a href="/yongo/administration/workflow/view-as-text/<?php echo $workflow['id'] ?>"><?php echo $workflow['name'] ?></a>
+                            </div>
                         <?php endwhile ?>
                     </td>
                 </tr>

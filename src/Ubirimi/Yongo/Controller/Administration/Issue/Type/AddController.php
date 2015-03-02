@@ -41,13 +41,21 @@ class AddController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             if (!$emptyName) {
                 $currentDate = Util::getServerCurrentDateTime();
                 $iconName = 'generic.png';
-                $newIssueTypeId = $this->getRepository(IssueSettings::class)->createIssueType($session->get('client/id'), $name, $description, $subTaskFlag, $iconName, $currentDate);
+                $newIssueTypeId = $this->getRepository(IssueSettings::class)->createIssueType(
+                    $session->get('client/id'),
+                    $name,
+                    $description,
+                    $subTaskFlag,
+                    $iconName,
+                    $currentDate
+                );
 
                 $this->getLogger()->addInfo('ADD Yongo Issue Type ' . $name, $this->getLoggerContext());
 
@@ -59,8 +67,13 @@ class AddController extends UbirimiController
             }
         }
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Type';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Type';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/type/Add.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/issue/type/Add.php',
+            get_defined_vars()
+        );
     }
 }

@@ -49,12 +49,19 @@ class SelectSchemeController extends UbirimiController
             return new RedirectResponse('/yongo/administration/project/notifications/' . $projectId);
         }
 
-        $notificationSchemes = $this->getRepository(NotificationScheme::class)->getByClientId($session->get('client/id'));
+        $notificationSchemes = $this->getRepository(NotificationScheme::class)->getByClientId(
+            $session->get('client/id')
+        );
 
         $menuSelectedCategory = 'project';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Select Project Notification Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Select Project Notification Scheme';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/project/notification_scheme/Select.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/project/notification_scheme/Select.php',
+            get_defined_vars()
+        );
     }
 }

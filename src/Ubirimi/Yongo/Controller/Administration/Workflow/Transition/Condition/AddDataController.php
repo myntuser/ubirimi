@@ -58,20 +58,26 @@ class AddDataController extends UbirimiController
                 $definitionData = 'cond_id=' . WorkflowCondition::CONDITION_ONLY_ASSIGNEE;
                 $this->getRepository(WorkflowCondition::class)->addConditionString($workflowDataId, $definitionData);
 
-                $this->getLogger()->addInfo('ADD Yongo Workflow Condition' , $this->getLoggerContext());
+                $this->getLogger()->addInfo('ADD Yongo Workflow Condition', $this->getLoggerContext());
 
                 return new RedirectResponse('/yongo/administration/workflow/transition-conditions/' . $workflowDataId);
-            } else
+            } else {
                 if ($conditionId == WorkflowCondition::CONDITION_ONLY_REPORTER) {
 
                     $definitionData = 'cond_id=' . WorkflowCondition::CONDITION_ONLY_REPORTER;
 
-                    $this->getRepository(WorkflowCondition::class)->addConditionString($workflowDataId, $definitionData);
+                    $this->getRepository(WorkflowCondition::class)->addConditionString(
+                        $workflowDataId,
+                        $definitionData
+                    );
 
-                    $this->getLogger()->addInfo('ADD Yongo Workflow Condition' , $this->getLoggerContext());
+                    $this->getLogger()->addInfo('ADD Yongo Workflow Condition', $this->getLoggerContext());
 
-                    return new RedirectResponse('/yongo/administration/workflow/transition-conditions/' . $workflowDataId);
+                    return new RedirectResponse(
+                        '/yongo/administration/workflow/transition-conditions/' . $workflowDataId
+                    );
                 }
+            }
         } else {
 
         }
@@ -86,14 +92,19 @@ class AddDataController extends UbirimiController
 
                 $this->getRepository(WorkflowCondition::class)->addConditionString($workflowDataId, $conditionString);
 
-                $this->getLogger()->addInfo('ADD Yongo Workflow Condition' , $this->getLoggerContext());
+                $this->getLogger()->addInfo('ADD Yongo Workflow Condition', $this->getLoggerContext());
 
                 return new RedirectResponse('/yongo/administration/workflow/transition-conditions/' . $workflowDataId);
             }
         }
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Workflow / Add Condition Data';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Workflow / Add Condition Data';
 
-        return $this->render(__DIR__ . '/../../../../../Resources/views/administration/workflow/transition/condition/AddData.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../../Resources/views/administration/workflow/transition/condition/AddData.php',
+            get_defined_vars()
+        );
     }
 }

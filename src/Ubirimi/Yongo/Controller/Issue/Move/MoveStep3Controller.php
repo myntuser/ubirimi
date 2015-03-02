@@ -72,7 +72,9 @@ class MoveStep3Controller extends UbirimiController
             return new RedirectResponse('/yongo/issue/move/confirmation/' . $issueId);
         }
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Move Issue - ' . $issue['project_code'] . '-' . $issue['nr'] . ' ' . $issue['summary'];
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Move Issue - ' . $issue['project_code'] . '-' . $issue['nr'] . ' ' . $issue['summary'];
 
         $menuSelectedCategory = 'issue';
 
@@ -80,12 +82,27 @@ class MoveStep3Controller extends UbirimiController
         $targetProjectComponents = $this->getRepository(YongoProject::class)->getComponents($targetProjectId);
         $targetVersions = $this->getRepository(YongoProject::class)->getVersions($targetProjectId);
 
-        $issueComponents = $this->getRepository(IssueComponent::class)->getByIssueIdAndProjectId($issue['id'], $projectId);
-        $issueFixVersions = $this->getRepository(IssueVersion::class)->getByIssueIdAndProjectId($issue['id'], $projectId, Issue::ISSUE_FIX_VERSION_FLAG);
-        $issueAffectedVersions = $this->getRepository(IssueVersion::class)->getByIssueIdAndProjectId($issue['id'], $projectId, Issue::ISSUE_AFFECTED_VERSION_FLAG);
+        $issueComponents = $this->getRepository(IssueComponent::class)->getByIssueIdAndProjectId(
+            $issue['id'],
+            $projectId
+        );
+        $issueFixVersions = $this->getRepository(IssueVersion::class)->getByIssueIdAndProjectId(
+            $issue['id'],
+            $projectId,
+            Issue::ISSUE_FIX_VERSION_FLAG
+        );
+        $issueAffectedVersions = $this->getRepository(IssueVersion::class)->getByIssueIdAndProjectId(
+            $issue['id'],
+            $projectId,
+            Issue::ISSUE_AFFECTED_VERSION_FLAG
+        );
 
         $sourceAssignee = $issue['assignee'];
-        $assignableUsersTargetProjectArray = $this->getRepository(YongoProject::class)->getUsersWithPermission($session->get('move_issue/new_project'), Permission::PERM_ASSIGNABLE_USER, 'array');
+        $assignableUsersTargetProjectArray = $this->getRepository(YongoProject::class)->getUsersWithPermission(
+            $session->get('move_issue/new_project'),
+            Permission::PERM_ASSIGNABLE_USER,
+            'array'
+        );
 
         $assigneeChanged = true;
 
@@ -102,11 +119,19 @@ class MoveStep3Controller extends UbirimiController
         if ((($issueComponents || $issueFixVersions || $issueAffectedVersions) && ($targetProjectComponents || $targetVersions)) || $assigneeChanged) {
             $actionTaken = true;
         }
-        $newStatusName = $this->getRepository(IssueSettings::class)->getById($session->get('move_issue/new_status'), 'status', 'name');
+        $newStatusName = $this->getRepository(IssueSettings::class)->getById(
+            $session->get('move_issue/new_status'),
+            'status',
+            'name'
+        );
 
         $newProject = $this->getRepository(YongoProject::class)->getById($session->get('move_issue/new_project'));
         $newProjectName = $newProject['name'];
-        $newTypeName = $this->getRepository(IssueSettings::class)->getById($session->get('move_issue/new_type'), 'type', 'name');
+        $newTypeName = $this->getRepository(IssueSettings::class)->getById(
+            $session->get('move_issue/new_type'),
+            'type',
+            'name'
+        );
 
         return $this->render(__DIR__ . '/../../../Resources/views/issue/move/MoveStep3.php', get_defined_vars());
     }

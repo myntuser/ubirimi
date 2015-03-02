@@ -47,8 +47,9 @@ class IssuesController extends UbirimiController
         );
 
         $projectsForBrowsing = array();
-        for ($i = 0; $i < count($projectsMenu); $i++)
+        for ($i = 0; $i < count($projectsMenu); $i++) {
             $projectsForBrowsing[$i] = $projectsMenu[$i]['id'];
+        }
 
         $hasCreateIssuePermission = false;
         if (count($projectsForBrowsing)) {

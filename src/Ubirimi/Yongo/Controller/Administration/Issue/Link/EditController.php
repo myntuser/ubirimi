@@ -74,12 +74,19 @@ class EditController extends UbirimiController
                 $linkTypeId
             );
 
-            if ($existingLinkType)
+            if ($existingLinkType) {
                 $linkTypeDuplicateName = true;
+            }
 
             if (!$emptyName && !$emptyOutwardDescription && !$emptyInwardDescription && !$linkTypeDuplicateName) {
                 $currentDate = Util::getServerCurrentDateTime();
-                $this->getRepository(IssueLinkType::class)->update($linkTypeId, $name, $outwardDescription, $inwardDescription, $currentDate);
+                $this->getRepository(IssueLinkType::class)->update(
+                    $linkTypeId,
+                    $name,
+                    $outwardDescription,
+                    $inwardDescription,
+                    $currentDate
+                );
 
                 $this->getLogger()->addInfo('UPDATE Yongo Issue Link Type ' . $name, $this->getLoggerContext());
 
@@ -88,8 +95,13 @@ class EditController extends UbirimiController
         }
 
         $menuSelectedCategory = 'system';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Link Type';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Link Type';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/link/Edit.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/issue/link/Edit.php',
+            get_defined_vars()
+        );
     }
 }

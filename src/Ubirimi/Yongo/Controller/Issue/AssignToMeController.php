@@ -45,7 +45,10 @@ class AssignToMeController extends UbirimiController
         $clientId = $session->get('client/id');
         $loggedInUserId = $session->get('user/id');
 
-        $issueData = $this->getRepository(Issue::class)->getByParameters(array('issue_id' => $issueId), $loggedInUserId);
+        $issueData = $this->getRepository(Issue::class)->getByParameters(
+            array('issue_id' => $issueId),
+            $loggedInUserId
+        );
         $this->getRepository(Issue::class)->updateAssignee($clientId, $issueId, $loggedInUserId, $loggedInUserId);
 
         // update the date_updated field

@@ -56,7 +56,10 @@ class GetActivityStreamChunkController extends UbirimiController
 
         $historyList = null;
         $endDate = $date;
-        $startDate = date_sub(new \DateTime($date, new \DateTimeZone($clientSettings['timezone'])), date_interval_create_from_date_string('2 days'));
+        $startDate = date_sub(
+            new \DateTime($date, new \DateTimeZone($clientSettings['timezone'])),
+            date_interval_create_from_date_string('2 days')
+        );
 
         do {
             $historyList = Util::getProjectHistory($projectIds, 0, null, date_format($startDate, 'Y-m-d'), $endDate);
@@ -75,10 +78,16 @@ class GetActivityStreamChunkController extends UbirimiController
         $userData = array();
 
         while ($historyList && $history = $historyList->fetch_array(MYSQLI_ASSOC)) {
-            $historyData[substr($history['date_created'], 0, 10)][$history['user_id']][$history['date_created']][] = $history;
-            $userData[$history['user_id']] = array('picture' => $history['avatar_picture'],
+            $historyData[substr(
+                $history['date_created'],
+                0,
+                10
+            )][$history['user_id']][$history['date_created']][] = $history;
+            $userData[$history['user_id']] = array(
+                'picture' => $history['avatar_picture'],
                 'first_name' => $history['first_name'],
-                'last_name' => $history['last_name']);
+                'last_name' => $history['last_name']
+            );
         }
 
         $index = 0;

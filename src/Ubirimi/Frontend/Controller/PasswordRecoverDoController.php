@@ -65,8 +65,10 @@ class PasswordRecoverDoController extends UbirimiController
             }
 
             return $this->render(__DIR__ . '/../Resources/views/_passwordRecoverForm.php', get_defined_vars());
-        } else if ($request->request->has('go_back')) {
-            return new RedirectResponse('/');
+        } else {
+            if ($request->request->has('go_back')) {
+                return new RedirectResponse('/');
+            }
         }
     }
 }

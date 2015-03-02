@@ -48,13 +48,20 @@ class EditController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             // check for duplication
-            $type = $this->getRepository(IssueSettings::class)->getByName($session->get('client/id'), 'type', mb_strtolower($name), $Id);
-            if ($type)
+            $type = $this->getRepository(IssueSettings::class)->getByName(
+                $session->get('client/id'),
+                'type',
+                mb_strtolower($name),
+                $Id
+            );
+            if ($type) {
                 $typeExists = true;
+            }
 
             if (!$typeExists && !$emptyName) {
                 $currentDate = Util::getServerCurrentDateTime();
@@ -67,8 +74,13 @@ class EditController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Type';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Type';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/type/Edit.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/issue/type/Edit.php',
+            get_defined_vars()
+        );
     }
 }

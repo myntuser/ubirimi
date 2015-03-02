@@ -16,13 +16,13 @@
                 <input type="radio" name="minute_chooser"
                        id="minute_chooser_every" class="chooser" value="0"
                        checked="checked">
-                <br />
+                <br/>
 
                 <label for="minute_chooser_choose" class="label label-primary">Choose</label>
                 <input type="radio"
                        name="minute_chooser" id="minute_chooser_choose" class="chooser"
                        value="1">
-                <br />
+                <br/>
 
                 <select name="minute" id="cron_minute"
                         multiple="multiple"
@@ -38,7 +38,7 @@
                 <label for="hour_chooser_every" class="label label-primary">Every Hour</label>
                 <input type="radio" name="hour_chooser" id="hour_chooser_every" class="chooser" value="0"
                        checked="checked">
-                <br />
+                <br/>
 
                 <label for="hour_chooser_choose" class="label label-primary">Choose</label>
                 <input type="radio" name="hour_chooser" id="hour_chooser_choose" class="chooser" value="1"><br>
@@ -93,12 +93,12 @@
                 <label for="month_chooser_every" class="label label-primary">Every Month</label>
                 <input type="radio" name="month_chooser" id="month_chooser_every" class="chooser" value="0"
                        checked="checked">
-                <br />
+                <br/>
 
                 <label for="month_chooser_choose" class="label label-primary">Choose</label>
                 <input type="radio" name="month_chooser" id="month_chooser_choose" class="chooser"
                        value="1">
-                <br />
+                <br/>
 
                 <select name="month" id="cron_month" multiple="multiple" disabled="disabled" style="width: 100%"
                         size="8">
@@ -121,12 +121,12 @@
                 <label for="weekday_chooser_every" class="label label-primary">Every Weekday</label>
                 <input type="radio" name="weekday_chooser" id="weekday_chooser_every" class="chooser" value="0"
                        checked="checked">
-                <br />
+                <br/>
 
                 <label for="weekday_chooser_choose" class="label label-primary">Choose</label>
                 <input type="radio" name="weekday_chooser" id="weekday_chooser_choose" class="chooser"
                        value="1">
-                <br />
+                <br/>
 
                 <select name="weekday" id="cron_weekday" multiple="multiple" disabled="disabled" style="width: 100%"
                         size="8">
@@ -142,7 +142,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <input type="checkbox" id="email_when_empty" />
+                <input type="checkbox" id="email_when_empty"/>
                 Email this filter, even if there are no issues found
             </td>
         </tr>

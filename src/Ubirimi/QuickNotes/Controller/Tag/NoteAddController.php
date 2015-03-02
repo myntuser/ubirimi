@@ -40,7 +40,10 @@ class NoteAddController extends UbirimiController
         $noteId = $request->request->get('id');
 
         // check for duplicates in the user space
-        $tagUserExists = $this->getRepository(Tag::class)->getByNameAndUserId($session->get('user/id'), mb_strtolower($value));
+        $tagUserExists = $this->getRepository(Tag::class)->getByNameAndUserId(
+            $session->get('user/id'),
+            mb_strtolower($value)
+        );
 
         if ($tagUserExists) {
             // check if it is already added to the note

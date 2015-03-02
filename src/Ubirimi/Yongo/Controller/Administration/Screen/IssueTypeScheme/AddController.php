@@ -42,8 +42,9 @@ class AddController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             if (!$emptyName) {
                 $issueTypeScreenScheme = new IssueTypeScreenScheme($session->get('client/id'), $name, $description);
@@ -52,7 +53,11 @@ class AddController extends UbirimiController
 
                 $issueTypes = $this->getRepository(IssueType::class)->getAll($session->get('client/id'));
                 while ($issueType = $issueTypes->fetch_array(MYSQLI_ASSOC)) {
-                    $this->getRepository(IssueTypeScreenScheme::class)->addData($issueTypeScreenSchemeId, $issueType['id'], $currentDate);
+                    $this->getRepository(IssueTypeScreenScheme::class)->addData(
+                        $issueTypeScreenSchemeId,
+                        $issueType['id'],
+                        $currentDate
+                    );
                 }
 
                 $this->getLogger()->addInfo('ADD Yongo Issue Type Screen Scheme ' . $name, $this->getLoggerContext());
@@ -60,8 +65,13 @@ class AddController extends UbirimiController
                 return new RedirectResponse('/yongo/administration/screens/issue-types');
             }
         }
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Type Screen Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Type Screen Scheme';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/screen/issue_type_scheme/Add.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/screen/issue_type_scheme/Add.php',
+            get_defined_vars()
+        );
     }
 }

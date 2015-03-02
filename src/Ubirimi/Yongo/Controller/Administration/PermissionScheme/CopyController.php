@@ -47,23 +47,27 @@ class CopyController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             $duplicatePermissionScheme = $this->getRepository(PermissionScheme::class)->getMetaDataByNameAndClientId(
                 $session->get('client/id'),
                 mb_strtolower($name)
             );
 
-            if ($duplicatePermissionScheme)
+            if ($duplicatePermissionScheme) {
                 $duplicateName = true;
+            }
 
             if (!$emptyName && !$duplicateName) {
                 $copiedPermissionScheme = new PermissionScheme($session->get('client/id'), $name, $description);
                 $currentDate = Util::getServerCurrentDateTime();
                 $copiedPermissionSchemeId = $copiedPermissionScheme->save($currentDate);
 
-                $permissionSchemeData = $this->getRepository(PermissionScheme::class)->getDataByPermissionSchemeId($permissionSchemeId);
+                $permissionSchemeData = $this->getRepository(PermissionScheme::class)->getDataByPermissionSchemeId(
+                    $permissionSchemeId
+                );
 
                 while ($permissionSchemeData && $data = $permissionSchemeData->fetch_array(MYSQLI_ASSOC)) {
                     $copiedPermissionScheme->addDataRaw(
@@ -79,7 +83,10 @@ class CopyController extends UbirimiController
                     );
                 }
 
-                $this->getLogger()->addInfo('Copy Yongo Permission Scheme ' . $permissionScheme['name'], $this->getLoggerContext());
+                $this->getLogger()->addInfo(
+                    'Copy Yongo Permission Scheme ' . $permissionScheme['name'],
+                    $this->getLoggerContext()
+                );
 
                 return new RedirectResponse('/yongo/administration/permission-schemes');
             }
@@ -87,8 +94,13 @@ class CopyController extends UbirimiController
 
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Permission Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Permission Scheme';
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/permission_scheme/Copy.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/permission_scheme/Copy.php',
+            get_defined_vars()
+        );
     }
 }

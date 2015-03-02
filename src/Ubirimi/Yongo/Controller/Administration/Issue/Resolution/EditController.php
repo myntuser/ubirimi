@@ -47,8 +47,9 @@ class EditController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             // check for duplication
             $resolution = $this->getRepository(IssueSettings::class)->getByName(
@@ -58,12 +59,20 @@ class EditController extends UbirimiController
                 $Id
             );
 
-            if ($resolution)
+            if ($resolution) {
                 $resolutionExists = true;
+            }
 
             if (!$resolutionExists && !$emptyName) {
                 $currentDate = Util::getServerCurrentDateTime();
-                $this->getRepository(IssueSettings::class)->updateById($Id, 'resolution', $name, $description, null, $currentDate);
+                $this->getRepository(IssueSettings::class)->updateById(
+                    $Id,
+                    'resolution',
+                    $name,
+                    $description,
+                    null,
+                    $currentDate
+                );
 
                 $this->getLogger()->addInfo('UPDATE Yongo Issue Resolution ' . $name, $this->getLoggerContext());
 
@@ -72,8 +81,13 @@ class EditController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Resolution';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Resolution';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/resolution/Edit.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/issue/resolution/Edit.php',
+            get_defined_vars()
+        );
     }
 }

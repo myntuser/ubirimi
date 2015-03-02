@@ -36,18 +36,26 @@ class AddController extends UbirimiController
 
         $emptyName = false;
         $workflowExists = false;
-        $workflowIssueTypeSchemes = $this->getRepository(IssueTypeScheme::class)->getByClientId($session->get('client/id'), 'workflow');
+        $workflowIssueTypeSchemes = $this->getRepository(IssueTypeScheme::class)->getByClientId(
+            $session->get('client/id'),
+            'workflow'
+        );
 
         if ($request->request->has('new_workflow')) {
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
-            $duplicateWorkflow = $this->getRepository(Workflow::class)->getByClientIdAndName($session->get('client/id'), mb_strtolower($name));
-            if ($duplicateWorkflow)
+            $duplicateWorkflow = $this->getRepository(Workflow::class)->getByClientIdAndName(
+                $session->get('client/id'),
+                mb_strtolower($name)
+            );
+            if ($duplicateWorkflow) {
                 $workflowExists = true;
+            }
 
             if (!$emptyName && !$workflowExists) {
                 $workflowIssueTypeSchemeId = $request->request->get('workflow_issue_type_scheme');
@@ -71,7 +79,9 @@ class AddController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Workflow';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Workflow';
 
         return $this->render(__DIR__ . '/../../../Resources/views/administration/workflow/Add.php', get_defined_vars());
     }

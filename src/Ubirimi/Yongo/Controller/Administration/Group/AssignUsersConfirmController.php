@@ -51,6 +51,9 @@ class AssignUsersConfirmController extends UbirimiController
 
         $firstSelected = true;
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/group/AssignUsersConfirm.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/group/AssignUsersConfirm.php',
+            get_defined_vars()
+        );
     }
 }

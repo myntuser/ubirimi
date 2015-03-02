@@ -40,11 +40,21 @@ class QuickSearchController extends UbirimiController
         $clientId = $session->get('client/id');
         $loggedInUserId = $session->get('user/id');
 
-        $projects = $this->getRepository(UbirimiClient::class)->getProjectsByPermission($clientId, $session->get('user/id'), Permission::PERM_BROWSE_PROJECTS, 'array');
+        $projects = $this->getRepository(UbirimiClient::class)->getProjectsByPermission(
+            $clientId,
+            $session->get('user/id'),
+            Permission::PERM_BROWSE_PROJECTS,
+            'array'
+        );
         $projects = Util::array_column($projects, 'id');
 
         // search first for a perfect match
-        $issueResult = $this->getRepository(Issue::class)->getByParameters(array('project' => $projects, 'code_nr' => $searchQuery), $loggedInUserId, null, $loggedInUserId);
+        $issueResult = $this->getRepository(Issue::class)->getByParameters(
+            array('project' => $projects, 'code_nr' => $searchQuery),
+            $loggedInUserId,
+            null,
+            $loggedInUserId
+        );
 
         if ($issueResult) {
             $issue = $issueResult->fetch_array(MYSQLI_ASSOC);

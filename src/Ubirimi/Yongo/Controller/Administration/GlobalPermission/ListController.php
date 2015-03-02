@@ -35,11 +35,18 @@ class ListController extends UbirimiController
 
         $users = $this->getRepository(UbirimiClient::class)->getUsers($session->get('client/id'));
 
-        $globalPermissions = $this->getRepository(GlobalPermission::class)->getAllByProductId(SystemProduct::SYS_PRODUCT_YONGO);
+        $globalPermissions = $this->getRepository(GlobalPermission::class)->getAllByProductId(
+            SystemProduct::SYS_PRODUCT_YONGO
+        );
         $menuSelectedCategory = 'user';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Global Permissions';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Global Permissions';
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/global_permission/List.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/global_permission/List.php',
+            get_defined_vars()
+        );
     }
 }

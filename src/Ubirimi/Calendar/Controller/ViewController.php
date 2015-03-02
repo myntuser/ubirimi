@@ -37,8 +37,16 @@ class ViewController extends UbirimiController
 
         $session->set('selected_product_id', SystemProduct::SYS_PRODUCT_CALENDAR);
 
-        $myCalendarIds = $this->getRepository(UbirimiCalendar::class)->getByUserId($session->get('user/id'), 'array', 'id');
-        $sharedCalendarsIds = $this->getRepository(UbirimiCalendar::class)->getSharedWithUserId($session->get('user/id'), 'array', 'id');
+        $myCalendarIds = $this->getRepository(UbirimiCalendar::class)->getByUserId(
+            $session->get('user/id'),
+            'array',
+            'id'
+        );
+        $sharedCalendarsIds = $this->getRepository(UbirimiCalendar::class)->getSharedWithUserId(
+            $session->get('user/id'),
+            'array',
+            'id'
+        );
         if (!$sharedCalendarsIds) {
             $sharedCalendarsIds = array();
         }
@@ -86,9 +94,15 @@ class ViewController extends UbirimiController
         $dateInMonthSelected = new \DateTime($dateInMonthSelected, new \DateTimeZone($clientSettings['timezone']));
 
         date_sub($dateInMonthSelected, date_interval_create_from_date_string("1 months"));
-        $filterStartDate = new \DateTime("first day of " . date_format($dateInMonthSelected, "F") . " " . $year, new \DateTimeZone($clientSettings['timezone']));
+        $filterStartDate = new \DateTime(
+            "first day of " . date_format($dateInMonthSelected, "F") . " " . $year,
+            new \DateTimeZone($clientSettings['timezone'])
+        );
         date_add($dateInMonthSelected, date_interval_create_from_date_string("2 months"));
-        $filterEndDate = new \DateTime("last day of " . date_format($dateInMonthSelected, "F") . " " . $year, new \DateTimeZone($clientSettings['timezone']));
+        $filterEndDate = new \DateTime(
+            "last day of " . date_format($dateInMonthSelected, "F") . " " . $year,
+            new \DateTimeZone($clientSettings['timezone'])
+        );
 
         $filterStartDate = $filterStartDate->format('Y-m-d');
         $filterEndDate = $filterEndDate->format('Y-m-d');
@@ -103,7 +117,10 @@ class ViewController extends UbirimiController
         );
 
         $calendars = $this->getRepository(UbirimiCalendar::class)->getByUserId($session->get('user/id'), 'array');
-        $calendarsSharedWithMe = $this->getRepository(UbirimiCalendar::class)->getSharedWithUserId($session->get('user/id'), 'array');
+        $calendarsSharedWithMe = $this->getRepository(UbirimiCalendar::class)->getSharedWithUserId(
+            $session->get('user/id'),
+            'array'
+        );
 
         $currentMonthName = date("F", mktime(0, 0, 0, $month, 1, $year));
 
@@ -131,7 +148,9 @@ class ViewController extends UbirimiController
 
         $daysInPreviousMonth = cal_days_in_month(CAL_GREGORIAN, $previousMonth, $year);
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_CALENDAR_NAME . ' / ' . $calendar['name'];
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_CALENDAR_NAME . ' / ' . $calendar['name'];
 
         $dates = array();
         for ($x = 1; $x <= $runningDay; $x++) {
@@ -146,10 +165,12 @@ class ViewController extends UbirimiController
 
         if (count($dates) == 28) {
             $maximumDays = 28;
-        } else if (count($dates) > 35) {
-            $maximumDays = 42;
         } else {
-            $maximumDays = 35;
+            if (count($dates) > 35) {
+                $maximumDays = 42;
+            } else {
+                $maximumDays = 35;
+            }
         }
 
         $daysLeft = $maximumDays - count($dates);

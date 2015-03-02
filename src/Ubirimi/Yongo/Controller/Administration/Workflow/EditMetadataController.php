@@ -37,7 +37,10 @@ class EditMetadataController extends UbirimiController
         $workflowId = $request->get('id');
 
         $workflow = $this->getRepository(Workflow::class)->getMetaDataById($workflowId);
-        $workflowIssueTypeSchemes = $this->getRepository(IssueTypeScheme::class)->getByClientId($session->get('client/id'), 'workflow');
+        $workflowIssueTypeSchemes = $this->getRepository(IssueTypeScheme::class)->getByClientId(
+            $session->get('client/id'),
+            'workflow'
+        );
 
         if ($workflow['client_id'] != $session->get('client/id')) {
             return new RedirectResponse('/general-settings/bad-link-access-denied');
@@ -50,13 +53,20 @@ class EditMetadataController extends UbirimiController
             $description = Util::cleanRegularInputField($request->request->get('description'));
             $workflowIssueTypeSchemeId = $request->request->get('workflow_issue_type_scheme');
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             if (!$emptyName) {
                 $currentDate = Util::getServerCurrentDateTime();
 
-                $this->getRepository(Workflow::class)->updateMetaDataById($workflowId, $name, $description, $workflowIssueTypeSchemeId, $currentDate);
+                $this->getRepository(Workflow::class)->updateMetaDataById(
+                    $workflowId,
+                    $name,
+                    $description,
+                    $workflowIssueTypeSchemeId,
+                    $currentDate
+                );
 
                 $this->getLogger()->addInfo('UPDATE Yongo Workflow ' . $name, $this->getLoggerContext());
 
@@ -65,8 +75,13 @@ class EditMetadataController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Workflow';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Workflow';
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/workflow/EditMetadata.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/workflow/EditMetadata.php',
+            get_defined_vars()
+        );
     }
 }

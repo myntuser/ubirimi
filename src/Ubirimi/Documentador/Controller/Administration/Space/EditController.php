@@ -64,7 +64,14 @@ class EditController extends UbirimiController
 
             if (!$emptyName && !$emptyCode) {
                 $currentDate = Util::getServerCurrentDateTime();
-                $this->getRepository(Space::class)->updateById($spaceId, $name, $code, $homepageId, $description, $currentDate);
+                $this->getRepository(Space::class)->updateById(
+                    $spaceId,
+                    $name,
+                    $code,
+                    $homepageId,
+                    $description,
+                    $currentDate
+                );
 
                 $this->getLogger()->addInfo('UPDATE Documentador space ' . $name, $this->getLoggerContext());
 

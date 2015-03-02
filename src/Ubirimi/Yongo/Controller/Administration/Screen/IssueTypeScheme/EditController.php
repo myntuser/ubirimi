@@ -36,7 +36,9 @@ class EditController extends UbirimiController
 
         $issueTypeScreenSchemeId = $request->get('id');
         $emptyName = false;
-        $issueTypeScreenScheme = $this->getRepository(IssueTypeScreenScheme::class)->getMetaDataById($issueTypeScreenSchemeId);
+        $issueTypeScreenScheme = $this->getRepository(IssueTypeScreenScheme::class)->getMetaDataById(
+            $issueTypeScreenSchemeId
+        );
 
         if ($issueTypeScreenScheme['client_id'] != $session->get('client/id')) {
             return new RedirectResponse('/general-settings/bad-link-access-denied');
@@ -46,21 +48,35 @@ class EditController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             if (!$emptyName) {
                 $currentDate = Util::getServerCurrentDateTime();
-                $this->getRepository(IssueTypeScreenScheme::class)->updateMetaDataById($issueTypeScreenSchemeId, $name, $description, $currentDate);
+                $this->getRepository(IssueTypeScreenScheme::class)->updateMetaDataById(
+                    $issueTypeScreenSchemeId,
+                    $name,
+                    $description,
+                    $currentDate
+                );
 
-                $this->getLogger()->addInfo('UPDATE Yongo Issue Type Screen Scheme ' . $name, $this->getLoggerContext());
+                $this->getLogger()->addInfo(
+                    'UPDATE Yongo Issue Type Screen Scheme ' . $name,
+                    $this->getLoggerContext()
+                );
 
                 return new RedirectResponse('/yongo/administration/screens/issue-types');
             }
         }
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Type Screen Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Type Screen Scheme';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/screen/issue_type_scheme/Edit.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/screen/issue_type_scheme/Edit.php',
+            get_defined_vars()
+        );
     }
 }

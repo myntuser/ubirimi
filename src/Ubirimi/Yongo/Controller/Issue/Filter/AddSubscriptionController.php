@@ -51,11 +51,22 @@ class AddSubscriptionController extends UbirimiController
         } else {
             $groupId = substr($recipientId, 1);
         }
-        $cronExpression = implode(',', $minute) . ' ' . implode(',', $hour) . ' ' . implode(',', $day) . ' ' . implode(',', $month) . ' ' . implode(',', $weekday);
+        $cronExpression = implode(',', $minute) . ' ' . implode(',', $hour) . ' ' . implode(',', $day) . ' ' . implode(
+                ',',
+                $month
+            ) . ' ' . implode(',', $weekday);
 
         $currentDate = Util::getServerCurrentDateTime();
 
-        $this->getRepository(IssueFilter::class)->addSubscription($filterId, $loggedInUserId, $userId, $groupId, $cronExpression, $emailWhenEmptyFlag, $currentDate);
+        $this->getRepository(IssueFilter::class)->addSubscription(
+            $filterId,
+            $loggedInUserId,
+            $userId,
+            $groupId,
+            $cronExpression,
+            $emailWhenEmptyFlag,
+            $currentDate
+        );
 
         return new Response('');
     }

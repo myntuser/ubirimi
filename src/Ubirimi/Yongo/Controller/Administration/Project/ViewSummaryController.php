@@ -44,15 +44,24 @@ class ViewSummaryController extends UbirimiController
 
         $menuSelectedCategory = 'project';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / ' . $project['name'];
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / ' . $project['name'];
 
-        $issueTypeScheme = $this->getRepository(IssueTypeScheme::class)->getMetaDataById($project['issue_type_scheme_id']);
-        $issueTypeSchemeData = $this->getRepository(IssueTypeScheme::class)->getDataById($project['issue_type_scheme_id']);
+        $issueTypeScheme = $this->getRepository(IssueTypeScheme::class)->getMetaDataById(
+            $project['issue_type_scheme_id']
+        );
+        $issueTypeSchemeData = $this->getRepository(IssueTypeScheme::class)->getDataById(
+            $project['issue_type_scheme_id']
+        );
 
         $workflowScheme = $this->getRepository(YongoProject::class)->getWorkflowScheme($projectId);
 
         $workflows = $this->getRepository(WorkflowScheme::class)->getWorkflows($workflowScheme['id']);
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/project/ViewSummary.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/project/ViewSummary.php',
+            get_defined_vars()
+        );
     }
 }

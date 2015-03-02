@@ -42,7 +42,8 @@ use Ubirimi\ConsoleUtils;
  *
  * $Id: SVNLog.php 1231 2007-10-11 16:10:13Z guyoll_o $
  */
-class SVNLog {
+class SVNLog
+{
     /**
      * @param string Path to repository
      * @param int Number of revision (0 = no limit)
@@ -54,7 +55,8 @@ class SVNLog {
      *
      * Date are unix timestamp
      */
-    public static function log($repository, $limit = 25, $start = 0, $end = 0) {
+    public static function log($repository, $limit = 25, $start = 0, $end = 0)
+    {
         $repository = SVNUtils::getRepositoryPath($repository);
         if ($limit) {
             $limit = escapeshellarg($limit);
@@ -72,23 +74,32 @@ class SVNLog {
             $revision = "";
         }
 
-        $message = ConsoleUtils::runCmdCaptureMessageUnsafe(SVNUtils::svnCommand("log --xml $revision $limit $repository"), $return);
+        $message = ConsoleUtils::runCmdCaptureMessageUnsafe(
+            SVNUtils::svnCommand("log --xml $revision $limit $repository"),
+            $return
+        );
         if ($return) {
             throw new Exception("Can't get subversion repository logs: " . $message);
         }
         return SVNLog::parseOutput($message);
     }
 
-    private static function parseOutput($log) {
+    private static function parseOutput($log)
+    {
         $res = array();
         $xml = new SimpleXMLElement($log);
         foreach ($xml->logentry as $revision) {
-            $res[(int)$revision['revision']] = array('author' => (string)$revision->author, 'msg' => (string)$revision->msg, 'date' => strtotime($revision->date));
+            $res[(int)$revision['revision']] = array(
+                'author' => (string)$revision->author,
+                'msg' => (string)$revision->msg,
+                'date' => strtotime($revision->date)
+            );
         }
         return $res;
     }
 
-    public static function formatComment($comment) {
+    public static function formatComment($comment)
+    {
         return nl2br(h_($comment));
     }
 }

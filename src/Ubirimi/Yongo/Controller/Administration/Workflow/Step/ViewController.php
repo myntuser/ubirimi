@@ -44,8 +44,13 @@ class ViewController extends UbirimiController
 
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Workflow Step';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Workflow Step';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/workflow/step/View.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/workflow/step/View.php',
+            get_defined_vars()
+        );
     }
 }

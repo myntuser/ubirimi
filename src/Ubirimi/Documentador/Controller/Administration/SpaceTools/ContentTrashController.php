@@ -46,6 +46,9 @@ class ContentTrashController extends UbirimiController
 
         $deletedPages = $this->getRepository(Space::class)->getDeletedPages($spaceId);
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/spacetools/ContentTrash.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/spacetools/ContentTrash.php',
+            get_defined_vars()
+        );
     }
 }

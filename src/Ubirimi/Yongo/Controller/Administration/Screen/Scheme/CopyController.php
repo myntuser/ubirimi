@@ -47,12 +47,17 @@ class CopyController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
-            $duplicateScreen = $this->getRepository(ScreenScheme::class)->getMetaDataByNameAndClientId($session->get('client/id'), mb_strtolower($name));
-            if ($duplicateScreen)
+            $duplicateScreen = $this->getRepository(ScreenScheme::class)->getMetaDataByNameAndClientId(
+                $session->get('client/id'),
+                mb_strtolower($name)
+            );
+            if ($duplicateScreen) {
                 $duplicateName = true;
+            }
 
             if (!$emptyName && !$duplicateName) {
                 $copiedScreenScheme = new ScreenScheme($session->get('client/id'), $name, $description);
@@ -61,18 +66,31 @@ class CopyController extends UbirimiController
 
                 $screenSchemeData = $this->getRepository(ScreenScheme::class)->getDataByScreenSchemeId($screenSchemeId);
                 while ($data = $screenSchemeData->fetch_array(MYSQLI_ASSOC)) {
-                    $copiedScreenScheme->addData($copiedScreenSchemeId, $data['sys_operation_id'], $data['screen_id'], $currentDate);
+                    $copiedScreenScheme->addData(
+                        $copiedScreenSchemeId,
+                        $data['sys_operation_id'],
+                        $data['screen_id'],
+                        $currentDate
+                    );
                 }
 
-                $this->getLogger()->addInfo('Copy Yongo Screen Scheme ' . $screenScheme['name'], $this->getLoggerContext());
+                $this->getLogger()->addInfo(
+                    'Copy Yongo Screen Scheme ' . $screenScheme['name'],
+                    $this->getLoggerContext()
+                );
 
                 return new RedirectResponse('/yongo/administration/screens/schemes');
             }
         }
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Screen Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Screen Scheme';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/screen/scheme/Copy.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/screen/scheme/Copy.php',
+            get_defined_vars()
+        );
     }
 }

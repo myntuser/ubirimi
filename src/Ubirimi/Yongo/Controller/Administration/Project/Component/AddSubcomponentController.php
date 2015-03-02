@@ -55,19 +55,28 @@ class AddSubcomponentController extends UbirimiController
             $leader = Util::cleanRegularInputField($request->request->get('leader'));
             $postParentComponentId = $request->request->get('parent_component_id');
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             $components_duplicate = $this->getRepository(YongoProject::class)->getComponentByName($projectId, $name);
-            if ($components_duplicate)
+            if ($components_duplicate) {
                 $alreadyExists = true;
+            }
 
             if (!$emptyName && !$alreadyExists) {
                 if ($leader == -1) {
                     $leader = null;
                 }
                 $currentDate = Util::getServerCurrentDateTime();
-                $this->getRepository(YongoProject::class)->addComponent($projectId, $name, $description, $leader, $postParentComponentId, $currentDate);
+                $this->getRepository(YongoProject::class)->addComponent(
+                    $projectId,
+                    $name,
+                    $description,
+                    $leader,
+                    $postParentComponentId,
+                    $currentDate
+                );
 
                 $this->getLogger()->addInfo('ADD Project Sub-Component ' . $name, $this->getLoggerContext());
 
@@ -75,8 +84,13 @@ class AddSubcomponentController extends UbirimiController
             }
         }
         $menuSelectedCategory = 'project';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Project Sub-Component';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Project Sub-Component';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/project/component/AddSubcomponent.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/project/component/AddSubcomponent.php',
+            get_defined_vars()
+        );
     }
 }

@@ -6,7 +6,8 @@ use Ubirimi\Yongo\Repository\Project\YongoProject;
 
 <table width="100%">
     <tr>
-        <td id="sectProjectComponents" width="74%" class="sectionDetail" colspan="3"><span class="headerPageText sectionDetailTitle">Components</span></td>
+        <td id="sectProjectComponents" width="74%" class="sectionDetail" colspan="3"><span
+                class="headerPageText sectionDetailTitle">Components</span></td>
     </tr>
     <tr>
         <td>
@@ -19,22 +20,27 @@ use Ubirimi\Yongo\Repository\Project\YongoProject;
                 <tr>
                     <td valign="top" width="330">
                         <?php
-                            $components = UbirimiContainer::get()['repository']->get(YongoProject::class)->getComponents(array($projectId));
-                            if ($components) {
-                                while ($component = $components->fetch_array(MYSQLI_ASSOC)) {
-                                    echo '<div>' . $component['name'] . '</div>';
-                                }
+                        $components = UbirimiContainer::get()['repository']->get(YongoProject::class)->getComponents(
+                            array($projectId)
+                        );
+                        if ($components) {
+                            while ($component = $components->fetch_array(MYSQLI_ASSOC)) {
+                                echo '<div>' . $component['name'] . '</div>';
                             }
+                        }
                         ?>
                         <?php if (!$components): ?>
                             <div>
                                 <span>This project does not use any components.</span>
-                                <span><a href="/yongo/administration/project/component/add/<?php echo $projectId ?>">Add component</a></span>
+                                <span><a href="/yongo/administration/project/component/add/<?php echo $projectId ?>">Add
+                                        component</a></span>
                             </div>
                         <?php else: ?>
-                            <span><a href="/yongo/administration/project/component/add/<?php echo $projectId ?>">Add component</a></span>
+                            <span><a href="/yongo/administration/project/component/add/<?php echo $projectId ?>">Add
+                                    component</a></span>
                         <?php endif ?>
-                        <span><a href="/yongo/administration/project/components/<?php echo $projectId ?>">More</a></span>
+                        <span><a
+                                href="/yongo/administration/project/components/<?php echo $projectId ?>">More</a></span>
                     </td>
                 </tr>
             </table>

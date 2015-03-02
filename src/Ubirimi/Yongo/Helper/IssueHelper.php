@@ -28,17 +28,24 @@ class IssueHelper
             $inputStyle = 'style="' . $style . '" ';
         }
         return '<input ' . self::convertRequired($required) .
-            '" id="field_type_' . $id . '" ' .
-            $inputStyle .
-            'class="inputTextLarge mousetrap" type="text" value="" name="' . $id . '" />';
+        '" id="field_type_' . $id . '" ' .
+        $inputStyle .
+        'class="inputTextLarge mousetrap" type="text" value="" name="' . $id . '" />';
     }
 
-    public static function renderUserSelect($id, $users, $selectedId, $disabled = false, $required = false, $hasEmpty = false)
+    public static function renderUserSelect(
+        $id,
+        $users,
+        $selectedId,
+        $disabled = false,
+        $required = false,
+        $hasEmpty = false
+    )
     {
         $htmmlSelect = '<select '
             . self::convertDisabled($disabled) . ' '
             . self::convertRequired($required) . ' '
-            . 'id="field_type_' . $id .'"' . ' '
+            . 'id="field_type_' . $id . '"' . ' '
             . 'name="' . $id . '"' . ' '
             . 'class="select2Input mousetrap">';
 
@@ -87,11 +94,11 @@ class IssueHelper
     public static function renderTextarea($id, $rows = 2, $required = false)
     {
         return '<textarea '
-            . self::convertRequired($required)
-            . 'id="field_type_' . $id . '"' . ' '
-            . 'rows="' . $rows . '"' . ' '
-            . 'class="inputTextAreaLarge mousetrap"' . ' '
-            . 'name="' . $id . '"></textarea>';
+        . self::convertRequired($required)
+        . 'id="field_type_' . $id . '"' . ' '
+        . 'rows="' . $rows . '"' . ' '
+        . 'class="inputTextAreaLarge mousetrap"' . ' '
+        . 'name="' . $id . '"></textarea>';
     }
 
     private static function convertRequired($required)

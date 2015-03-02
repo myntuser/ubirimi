@@ -41,7 +41,12 @@ class ShareController extends UbirimiController
         $issueQueryParameters = array('issue_id' => $issueId);
         $issue = $this->getRepository(Issue::class)->getByParameters($issueQueryParameters);
 
-        $issueEvent = new IssueEvent($issue, null, IssueEvent::STATUS_UPDATE, array('userIds' => $userIds, 'noteContent' => $noteContent));
+        $issueEvent = new IssueEvent(
+            $issue,
+            null,
+            IssueEvent::STATUS_UPDATE,
+            array('userIds' => $userIds, 'noteContent' => $noteContent)
+        );
         UbirimiContainer::get()['dispatcher']->dispatch(YongoEvents::YONGO_ISSUE_SHARE_EMAIL, $issueEvent);
     }
 }

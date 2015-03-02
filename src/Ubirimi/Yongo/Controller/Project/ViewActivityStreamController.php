@@ -41,11 +41,18 @@ class ViewActivityStreamController extends UbirimiController
         $clientSettings = $this->getRepository(UbirimiClient::class)->getSettings($clientId);
 
         if (Util::checkUserIsLoggedIn()) {
-            $hasBrowsingPermission = $this->getRepository(YongoProject::class)->userHasPermission(array($projectId), Permission::PERM_BROWSE_PROJECTS, $loggedInUserId);
+            $hasBrowsingPermission = $this->getRepository(YongoProject::class)->userHasPermission(
+                array($projectId),
+                Permission::PERM_BROWSE_PROJECTS,
+                $loggedInUserId
+            );
         } else {
             $loggedInUserId = null;
             $httpHOST = Util::getHttpHost();
-            $hasBrowsingPermission = $this->getRepository(YongoProject::class)->userHasPermission(array($projectId), Permission::PERM_BROWSE_PROJECTS);
+            $hasBrowsingPermission = $this->getRepository(YongoProject::class)->userHasPermission(
+                array($projectId),
+                Permission::PERM_BROWSE_PROJECTS
+            );
         }
 
         if ($hasBrowsingPermission) {
@@ -55,11 +62,20 @@ class ViewActivityStreamController extends UbirimiController
             }
 
             $endDate = Util::getServerCurrentDateTime();
-            $startDate = date_sub(new \DateTime($endDate, new \DateTimeZone($clientSettings['timezone'])), date_interval_create_from_date_string('2 days'));
+            $startDate = date_sub(
+                new \DateTime($endDate, new \DateTimeZone($clientSettings['timezone'])),
+                date_interval_create_from_date_string('2 days')
+            );
 
             $historyList = null;
             do {
-                $historyList = Util::getProjectHistory(array($projectId), $helpDeskFlag, null, date_format($startDate, 'Y-m-d'), $endDate);
+                $historyList = Util::getProjectHistory(
+                    array($projectId),
+                    $helpDeskFlag,
+                    null,
+                    date_format($startDate, 'Y-m-d'),
+                    $endDate
+                );
                 if (null == $historyList && date_format($startDate, 'Y-m-d H:i:s') == $client['date_created']) {
                     break;
                 }
@@ -75,10 +91,16 @@ class ViewActivityStreamController extends UbirimiController
             $historyData = array();
             $userData = array();
             while ($historyList && $history = $historyList->fetch_array(MYSQLI_ASSOC)) {
-                $historyData[substr($history['date_created'], 0, 10)][$history['user_id']][$history['date_created']][] = $history;
-                $userData[$history['user_id']] = array('picture' => $history['avatar_picture'],
+                $historyData[substr(
+                    $history['date_created'],
+                    0,
+                    10
+                )][$history['user_id']][$history['date_created']][] = $history;
+                $userData[$history['user_id']] = array(
+                    'picture' => $history['avatar_picture'],
                     'first_name' => $history['first_name'],
-                    'last_name' => $history['last_name']);
+                    'last_name' => $history['last_name']
+                );
             }
         }
 

@@ -23,7 +23,8 @@ use Ubirimi\Container\UbirimiContainer;
 
 class IssueVersion
 {
-    public function deleteByIssueIdAndFlag($issueId, $flag) {
+    public function deleteByIssueIdAndFlag($issueId, $flag)
+    {
         $query = 'DELETE FROM issue_version WHERE issue_id = ? and affected_targeted_flag = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -31,7 +32,8 @@ class IssueVersion
         $stmt->execute();
     }
 
-    public function deleteByIssueId($issueId) {
+    public function deleteByIssueId($issueId)
+    {
         $query = 'DELETE FROM issue_version WHERE issue_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -39,7 +41,14 @@ class IssueVersion
         $stmt->execute();
     }
 
-    public function getByIssueIdAndProjectId($issueId, $projectId, $versionFlag, $resultType = null, $resultColumn = null) {
+    public function getByIssueIdAndProjectId(
+        $issueId,
+        $projectId,
+        $versionFlag,
+        $resultType = null,
+        $resultColumn = null
+    )
+    {
         $query = 'SELECT issue_version.id, project_version.name, project_version_id ' .
             'FROM issue_version ' .
             'LEFT JOIN project_version on issue_version.project_version_id = project_version.id ' .
@@ -55,17 +64,19 @@ class IssueVersion
             if ($resultType == 'array') {
                 $resultArray = array();
                 while ($version = $result->fetch_array(MYSQLI_ASSOC)) {
-                    if ($resultColumn)
+                    if ($resultColumn) {
                         $resultArray[] = $version[$resultColumn];
-                    else
+                    } else {
                         $resultArray[] = $version;
+                    }
                 }
 
                 return $resultArray;
             }
 
             return $result;
-        } else
+        } else {
             return null;
+        }
     }
 }

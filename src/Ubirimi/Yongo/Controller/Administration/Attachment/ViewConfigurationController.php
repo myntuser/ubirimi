@@ -35,8 +35,13 @@ class ViewConfigurationController extends UbirimiController
         $menuSelectedCategory = 'system';
         $settings = $this->getRepository(UbirimiClient::class)->getYongoSettings($session->get('client/id'));
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Attachment Configuration';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Attachment Configuration';
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/attachment/view_configuration.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/attachment/view_configuration.php',
+            get_defined_vars()
+        );
     }
 }

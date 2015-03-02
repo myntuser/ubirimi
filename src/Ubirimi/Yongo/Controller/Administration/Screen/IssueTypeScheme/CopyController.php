@@ -35,7 +35,9 @@ class CopyController extends UbirimiController
         Util::checkUserIsLoggedInAndRedirect();
 
         $issueTypeScreenSchemeId = $request->get('id');
-        $issueTypeScreenScheme = $this->getRepository(IssueTypeScreenScheme::class)->getMetaDataById($issueTypeScreenSchemeId);
+        $issueTypeScreenScheme = $this->getRepository(IssueTypeScreenScheme::class)->getMetaDataById(
+            $issueTypeScreenSchemeId
+        );
 
         if ($issueTypeScreenScheme['client_id'] != $session->get('client/id')) {
             return new RedirectResponse('/general-settings/bad-link-access-denied');
@@ -52,31 +54,51 @@ class CopyController extends UbirimiController
                 $emptyName = true;
             }
 
-            $duplicateIssueTypeScreenScheme = $this->getRepository(IssueTypeScreenScheme::class)->getMetaDataByNameAndClientId($session->get('client/id'), mb_strtolower($name));
-            if ($duplicateIssueTypeScreenScheme)
+            $duplicateIssueTypeScreenScheme = $this->getRepository(
+                IssueTypeScreenScheme::class
+            )->getMetaDataByNameAndClientId($session->get('client/id'), mb_strtolower($name));
+            if ($duplicateIssueTypeScreenScheme) {
                 $duplicateName = true;
+            }
 
             if (!$emptyName && !$duplicateName) {
-                $copiedIssueTypeScreenScheme = new IssueTypeScreenScheme($session->get('client/id'), $name, $description);
+                $copiedIssueTypeScreenScheme = new IssueTypeScreenScheme(
+                    $session->get('client/id'), $name, $description
+                );
 
                 $currentDate = Util::getServerCurrentDateTime();
                 $copiedIssueTypeScreenSchemeId = $copiedIssueTypeScreenScheme->save($currentDate);
 
-                $issueTypeScreenSchemeData = $this->getRepository(IssueTypeScreenScheme::class)->getDataByIssueTypeScreenSchemeId($issueTypeScreenSchemeId);
+                $issueTypeScreenSchemeData = $this->getRepository(
+                    IssueTypeScreenScheme::class
+                )->getDataByIssueTypeScreenSchemeId($issueTypeScreenSchemeId);
 
                 while ($issueTypeScreenSchemeData && $data = $issueTypeScreenSchemeData->fetch_array(MYSQLI_ASSOC)) {
-                    $copiedIssueTypeScreenScheme->addDataComplete($copiedIssueTypeScreenSchemeId, $data['issue_type_id'], $data['screen_scheme_id'], $currentDate);
+                    $copiedIssueTypeScreenScheme->addDataComplete(
+                        $copiedIssueTypeScreenSchemeId,
+                        $data['issue_type_id'],
+                        $data['screen_scheme_id'],
+                        $currentDate
+                    );
                 }
 
-                $this->getLogger()->addInfo('Copy Yongo Issue Type Scheme ' . $issueTypeScreenScheme['name'], $this->getLoggerContext());
+                $this->getLogger()->addInfo(
+                    'Copy Yongo Issue Type Scheme ' . $issueTypeScreenScheme['name'],
+                    $this->getLoggerContext()
+                );
 
                 return new RedirectResponse('/yongo/administration/screens/issue-types');
             }
         }
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Issue Type Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Issue Type Scheme';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/screen/issue_type_scheme/Copy.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/screen/issue_type_scheme/Copy.php',
+            get_defined_vars()
+        );
     }
 }

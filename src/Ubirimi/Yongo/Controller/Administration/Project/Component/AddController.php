@@ -47,19 +47,28 @@ class AddController extends UbirimiController
             $description = Util::cleanRegularInputField($request->request->get('description'));
             $leader = Util::cleanRegularInputField($request->request->get('leader'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             $components_duplicate = $this->getRepository(YongoProject::class)->getComponentByName($projectId, $name);
-            if ($components_duplicate)
+            if ($components_duplicate) {
                 $alreadyExists = true;
+            }
 
             if (!$emptyName && !$alreadyExists) {
                 if ($leader == -1) {
                     $leader = null;
                 }
                 $currentDate = Util::getServerCurrentDateTime();
-                $this->getRepository(YongoProject::class)->addComponent($projectId, $name, $description, $leader, null, $currentDate);
+                $this->getRepository(YongoProject::class)->addComponent(
+                    $projectId,
+                    $name,
+                    $description,
+                    $leader,
+                    null,
+                    $currentDate
+                );
 
                 $this->getLogger()->addInfo('ADD Project Component ' . $name, $this->getLoggerContext());
 
@@ -67,8 +76,13 @@ class AddController extends UbirimiController
             }
         }
         $menuSelectedCategory = 'project';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Project Component';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Project Component';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/project/component/Add.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/project/component/Add.php',
+            get_defined_vars()
+        );
     }
 }

@@ -45,6 +45,9 @@ class ViewProjectSummaryController extends UbirimiController
 
         $menuProjectCategory = 'summary';
 
-        return $this->render(__DIR__ . '/../../Resources/views/customer_portal/ViewProjectSummary.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../Resources/views/customer_portal/ViewProjectSummary.php',
+            get_defined_vars()
+        );
     }
 }

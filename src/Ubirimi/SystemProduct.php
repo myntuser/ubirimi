@@ -19,7 +19,8 @@
 
 namespace Ubirimi;
 
-class SystemProduct {
+class SystemProduct
+{
     const SYS_PRODUCT_GENERAL_SETTINGS = -1;
 
     const SYS_PRODUCT_YONGO = 1;

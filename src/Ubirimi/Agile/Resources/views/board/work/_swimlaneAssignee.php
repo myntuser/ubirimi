@@ -30,10 +30,15 @@ while ($allAssignees && $user = $allAssignees->fetch_array(MYSQLI_ASSOC)) {
     if ($onlyMyIssuesFlag && $assignee != $loggedInUserId) {
         $issuesOfAssignee = null;
     } else {
-        $queryParameters = array('assignee' => $assignee,
-                                 'sprint' => $sprintId,
-                                 'sort' => 'sprint');
-        $strategyIssue = UbirimiContainer::get()['repository']->get(Issue::class)->getByParameters($queryParameters, $loggedInUserId);
+        $queryParameters = array(
+            'assignee' => $assignee,
+            'sprint' => $sprintId,
+            'sort' => 'sprint'
+        );
+        $strategyIssue = UbirimiContainer::get()['repository']->get(Issue::class)->getByParameters(
+            $queryParameters,
+            $loggedInUserId
+        );
     }
     if ($strategyIssue) {
 
@@ -44,20 +49,23 @@ while ($allAssignees && $user = $allAssignees->fetch_array(MYSQLI_ASSOC)) {
 
 $allUnassignedIssues = null;
 if (!$onlyMyIssuesFlag) {
-    $allUnassignedIssues = UbirimiContainer::get()['repository']->get(Issue::class)->getByParameters(array('assignee' => 0, 'sprint' => $sprintId, 'sort' => 'sprint'), $loggedInUserId);
+    $allUnassignedIssues = UbirimiContainer::get()['repository']->get(Issue::class)->getByParameters(
+        array('assignee' => 0, 'sprint' => $sprintId, 'sort' => 'sprint'),
+        $loggedInUserId
+    );
 }
 
 if ($allUnassignedIssues) {
 
     echo '<table width="100%" cellpadding="0" cellspacing="0px" border="0" class="agile_work_' . $index++ . '">';
-        echo '<tr>';
-            echo '<td colspan="' . (count($columns) + (count($columns) - 1)) . '">';
-                echo '<div style="position: inherit; background-color: #f1f1f1; padding: 3px; border: 1px solid #acacac">';
-                    echo '<img border="0" src="/img/br_down.png" style="padding-bottom: 2px;"/>';
-                    echo 'Unassigned ' . $allUnassignedIssues->num_rows . ' issues';
-                echo '</div>';
-            echo '</td>';
-        echo '</tr>';
+    echo '<tr>';
+    echo '<td colspan="' . (count($columns) + (count($columns) - 1)) . '">';
+    echo '<div style="position: inherit; background-color: #f1f1f1; padding: 3px; border: 1px solid #acacac">';
+    echo '<img border="0" src="/img/br_down.png" style="padding-bottom: 2px;"/>';
+    echo 'Unassigned ' . $allUnassignedIssues->num_rows . ' issues';
+    echo '</div>';
+    echo '</td>';
+    echo '</tr>';
     echo '</table>';
 
     $strategyIssue = $allUnassignedIssues;

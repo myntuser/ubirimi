@@ -34,6 +34,9 @@ class ViewController extends UbirimiController
         $clientYongoSettings = $this->getRepository(UbirimiClient::class)->getYongoSettings($session->get('client/id'));
         $menuSelectedCategory = 'system';
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/general_configuration/View.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/general_configuration/View.php',
+            get_defined_vars()
+        );
     }
 }

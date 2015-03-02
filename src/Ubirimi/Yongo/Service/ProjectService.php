@@ -47,13 +47,26 @@ class ProjectService extends UbirimiService
             $project->getDateCreated()
         );
 
-        UbirimiContainer::get()['repository']->get(YongoProject::class)->addDefaultUsers($project->getClientId(), $projectId, $currentDate);
-        UbirimiContainer::get()['repository']->get(YongoProject::class)->addDefaultGroups($project->getClientId(), $projectId, $currentDate);
+        UbirimiContainer::get()['repository']->get(YongoProject::class)->addDefaultUsers(
+            $project->getClientId(),
+            $projectId,
+            $currentDate
+        );
+        UbirimiContainer::get()['repository']->get(YongoProject::class)->addDefaultGroups(
+            $project->getClientId(),
+            $projectId,
+            $currentDate
+        );
 
         if ($project->getHelpDeskEnabledFlag()) {
 
-            UbirimiContainer::get()['repository']->get(YongoProject::class)->addDefaultInitialDataForHelpDesk($project->getClientId(), $projectId, $userId, $currentDate);
-       }
+            UbirimiContainer::get()['repository']->get(YongoProject::class)->addDefaultInitialDataForHelpDesk(
+                $project->getClientId(),
+                $projectId,
+                $userId,
+                $currentDate
+            );
+        }
 
         return $projectId;
     }

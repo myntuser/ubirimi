@@ -45,10 +45,17 @@ class TransitionDialogController extends UbirimiController
 
         $projectId = $request->get('project_id');
         $issueId = $request->get('issue_id');
-        $assignableUsers = $this->getRepository(YongoProject::class)->getUsersWithPermission($projectId, Permission::PERM_ASSIGNABLE_USER);
+        $assignableUsers = $this->getRepository(YongoProject::class)->getUsersWithPermission(
+            $projectId,
+            Permission::PERM_ASSIGNABLE_USER
+        );
         $projectData = $this->getRepository(YongoProject::class)->getById($projectId);
         $issue = $this->getRepository(Issue::class)->getByIdSimple($issueId);
-        $workflowData = $this->getRepository(Workflow::class)->getDataByStepIdFromAndStepIdTo($workflowId, $stepIdFrom, $stepIdTo);
+        $workflowData = $this->getRepository(Workflow::class)->getDataByStepIdFromAndStepIdTo(
+            $workflowId,
+            $stepIdFrom,
+            $stepIdTo
+        );
         $screenId = $workflowData['screen_id'];
 
         $allUsers = $this->getRepository(UbirimiUser::class)->getByClientId($session->get('client/id'));
@@ -60,10 +67,17 @@ class TransitionDialogController extends UbirimiController
         $htmlOutput = '';
         $htmlOutput .= '<table class="modal-table">';
 
-        $reporterUsers = $this->getRepository(YongoProject::class)->getUsersWithPermission($projectId, Permission::PERM_CREATE_ISSUE);
+        $reporterUsers = $this->getRepository(YongoProject::class)->getUsersWithPermission(
+            $projectId,
+            Permission::PERM_CREATE_ISSUE
+        );
         $fieldCodeNULL = null;
 
-        $fieldData = $this->getRepository(YongoProject::class)->getFieldInformation($projectData['issue_type_field_configuration_id'], $issue['type_id'], 'array');
+        $fieldData = $this->getRepository(YongoProject::class)->getFieldInformation(
+            $projectData['issue_type_field_configuration_id'],
+            $issue['type_id'],
+            'array'
+        );
 
         return $this->render(__DIR__ . '/../../Resources/views/issue/TransitionDialog.php', get_defined_vars());
 

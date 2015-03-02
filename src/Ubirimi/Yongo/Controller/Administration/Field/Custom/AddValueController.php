@@ -41,13 +41,18 @@ class AddValueController extends UbirimiController
 
         if ($request->request->has('new_custom_value')) {
             $value = Util::cleanRegularInputField($request->request->get('value'));
-            if (empty($value))
+            if (empty($value)) {
                 $emptyValue = true;
+            }
 
             if (!$emptyValue) {
-                $customValueExists = $this->getRepository(Field::class)->getDataByFieldIdAndValue($customFieldId, $value);
-                if ($customValueExists)
+                $customValueExists = $this->getRepository(Field::class)->getDataByFieldIdAndValue(
+                    $customFieldId,
+                    $value
+                );
+                if ($customValueExists) {
                     $duplicateValue = true;
+                }
             }
 
             if (!$emptyValue && !$duplicateValue) {
@@ -63,8 +68,13 @@ class AddValueController extends UbirimiController
 
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Add Custom Field Value';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Add Custom Field Value';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/field/custom/AddValue.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/field/custom/AddValue.php',
+            get_defined_vars()
+        );
     }
 }

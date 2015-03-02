@@ -50,10 +50,15 @@ class EditValueController extends UbirimiController
             }
 
             // check for duplication
-            $valueDataExists = $this->getRepository(Field::class)->getDataByFieldIdAndValue($customFieldId, $value, $valueId);
+            $valueDataExists = $this->getRepository(Field::class)->getDataByFieldIdAndValue(
+                $customFieldId,
+                $value,
+                $valueId
+            );
 
-            if ($valueDataExists)
+            if ($valueDataExists) {
                 $duplicateValue = true;
+            }
 
             if (!$duplicateValue && !$emptyValue) {
                 $currentDate = Util::getServerCurrentDateTime();
@@ -66,8 +71,13 @@ class EditValueController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Custom Field Value';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Custom Field Value';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/field/custom/EditValue.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/field/custom/EditValue.php',
+            get_defined_vars()
+        );
     }
 }

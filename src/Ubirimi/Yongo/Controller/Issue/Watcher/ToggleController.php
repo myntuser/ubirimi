@@ -43,8 +43,10 @@ class ToggleController extends UbirimiController
 
         if ($action == 'add') {
             $this->getRepository(Watcher::class)->add($issueId, $loggedInUserId, $currentDate);
-        } else if ($action == 'remove') {
-            $this->getRepository(Watcher::class)->deleteByUserIdAndIssueId($issueId, $loggedInUserId);
+        } else {
+            if ($action == 'remove') {
+                $this->getRepository(Watcher::class)->deleteByUserIdAndIssueId($issueId, $loggedInUserId);
+            }
         }
 
         // update the date_updated field

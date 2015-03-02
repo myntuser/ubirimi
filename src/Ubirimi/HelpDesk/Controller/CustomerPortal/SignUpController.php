@@ -58,26 +58,36 @@ class SignUpController extends UbirimiController
 
             if (empty($email)) {
                 $errors['empty_email'] = true;
-            } else if (!Util::isValidEmail($email)) {
-                $errors['email_not_valid'] = true;
+            } else {
+                if (!Util::isValidEmail($email)) {
+                    $errors['email_not_valid'] = true;
+                }
             }
 
-            $emailData = $this->getRepository(UbirimiUser::class)->getUserByClientIdAndEmailAddress($clientId, mb_strtolower($email));
+            $emailData = $this->getRepository(UbirimiUser::class)->getUserByClientIdAndEmailAddress(
+                $clientId,
+                mb_strtolower($email)
+            );
 
-            if ($emailData)
+            if ($emailData) {
                 $errors['email_already_exists'] = true;
+            }
 
-            if (empty($firstName))
+            if (empty($firstName)) {
                 $errors['empty_first_name'] = true;
+            }
 
-            if (empty($lastName))
+            if (empty($lastName)) {
                 $errors['empty_last_name'] = true;
+            }
 
-            if (empty($password))
+            if (empty($password)) {
                 $errors['empty_password'] = true;
+            }
 
-            if ($password != $passwordAgain)
+            if ($password != $passwordAgain) {
                 $errors['password_mismatch'] = true;
+            }
 
             if (Util::hasNoErrors($errors)) {
 

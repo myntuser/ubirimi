@@ -61,7 +61,10 @@ class AddRepositoryController extends UbirimiController
             if (empty($code)) {
                 $emptyCode = true;
             } else {
-                $svn_repository_exists = $this->getRepository(SvnRepository::class)->getByCode(mb_strtolower($code), $clientId);
+                $svn_repository_exists = $this->getRepository(SvnRepository::class)->getByCode(
+                    mb_strtolower($code),
+                    $clientId
+                );
                 if ($svn_repository_exists) {
                     $duplicateCode = true;
                 }
@@ -69,12 +72,31 @@ class AddRepositoryController extends UbirimiController
 
             if (!$emptyName && !$emptyCode && !$duplicateName && !$duplicateCode) {
                 $currentDate = Util::getServerCurrentDateTime();
-                $repoId = $this->getRepository(SvnRepository::class)->addRepo($clientId, $session->get('user/id'), $name, $description, $code, $currentDate);
+                $repoId = $this->getRepository(SvnRepository::class)->addRepo(
+                    $clientId,
+                    $session->get('user/id'),
+                    $name,
+                    $description,
+                    $code,
+                    $currentDate
+                );
 
-                $repoPath = UbirimiContainer::get()['subversion.path'] . Util::slugify($session->get('client/company_domain')) . '/' . Util::slugify($name);
+                $repoPath = UbirimiContainer::get()['subversion.path'] . Util::slugify(
+                        $session->get('client/company_domain')
+                    ) . '/' . Util::slugify($name);
                 /* create the repository on disk */
-                @mkdir(UbirimiContainer::get()['subversion.path'] . Util::slugify($session->get('client/company_domain')), 0700, true);
-                @mkdir(UbirimiContainer::get()['subversion.path'] . Util::slugify($session->get('client/company_domain')) . '/' . Util::slugify($name), 0700, true);
+                @mkdir(
+                    UbirimiContainer::get()['subversion.path'] . Util::slugify($session->get('client/company_domain')),
+                    0700,
+                    true
+                );
+                @mkdir(
+                    UbirimiContainer::get()['subversion.path'] . Util::slugify(
+                        $session->get('client/company_domain')
+                    ) . '/' . Util::slugify($name),
+                    0700,
+                    true
+                );
 
                 try {
                     $this->getRepository(SvnRepository::class)->createSvn($repoPath);
@@ -82,10 +104,18 @@ class AddRepositoryController extends UbirimiController
 
                     /* add the user */
                     $this->getRepository(SvnRepository::class)->addUser($repoId, $session->get('user/id'));
-                    $this->getRepository(SvnRepository::class)->updateUserPermissions($repoId, $session->get('user/id'), 1, 1);
+                    $this->getRepository(SvnRepository::class)->updateUserPermissions(
+                        $repoId,
+                        $session->get('user/id'),
+                        1,
+                        1
+                    );
 
                     /* apache config */
-                    $this->getRepository(SvnRepository::class)->apacheConfig(Util::slugify($session->get('client/company_domain')), Util::slugify($name));
+                    $this->getRepository(SvnRepository::class)->apacheConfig(
+                        Util::slugify($session->get('client/company_domain')),
+                        Util::slugify($name)
+                    );
                 } catch (\Exception $e) {
 
                 }

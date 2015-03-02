@@ -47,8 +47,13 @@ class ListController extends UbirimiController
         $postFunctions = $this->getRepository(WorkflowFunction::class)->getByWorkflowDataId($workflowDataId);
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Workflow Transition Post Function';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Workflow Transition Post Function';
 
-        return $this->render(__DIR__ . '/../../../../../Resources/views/administration/workflow/transition/post_function/View.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../../Resources/views/administration/workflow/transition/post_function/View.php',
+            get_defined_vars()
+        );
     }
 }

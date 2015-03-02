@@ -31,12 +31,18 @@ class GetController extends UbirimiController
     {
         $clientData = $this->getRepository(UbirimiClient::class)->getById($request->get('id'));
         $users = $this->getRepository(UbirimiClient::class)->getUsers($request->get('id'), null, 'array');
-        $administrators = $this->getRepository(UbirimiClient::class)->getAdministrators($request->get('id'), null, 'array');
+        $administrators = $this->getRepository(UbirimiClient::class)->getAdministrators(
+            $request->get('id'),
+            null,
+            'array'
+        );
 
-        return new JsonResponse([
-            'client' => $clientData,
-            'users' => $users,
-            'administrators' => $administrators
-        ]);
+        return new JsonResponse(
+            [
+                'client' => $clientData,
+                'users' => $users,
+                'administrators' => $administrators
+            ]
+        );
     }
 }

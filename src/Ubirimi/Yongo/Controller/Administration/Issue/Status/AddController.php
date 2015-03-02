@@ -40,13 +40,19 @@ class AddController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
-            $status = $this->getRepository(IssueSettings::class)->getByName($session->get('client/id'), 'status', mb_strtolower($name));
+            $status = $this->getRepository(IssueSettings::class)->getByName(
+                $session->get('client/id'),
+                'status',
+                mb_strtolower($name)
+            );
 
-            if ($status)
+            if ($status) {
                 $statusExists = true;
+            }
 
             if (!$emptyName && !$statusExists) {
                 $currentDate = Util::getServerCurrentDateTime();
@@ -68,8 +74,13 @@ class AddController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Status';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Status';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/status/Add.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/issue/status/Add.php',
+            get_defined_vars()
+        );
     }
 }

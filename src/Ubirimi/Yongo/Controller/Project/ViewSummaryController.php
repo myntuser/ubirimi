@@ -41,7 +41,9 @@ class ViewSummaryController extends UbirimiController
             $loggedInUserId = $session->get('user/id');
             $clientId = $session->get('client/id');
             $project = $this->getRepository(YongoProject::class)->getById($projectId);
-            $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / ' . $project['name'];
+            $sectionPageTitle = $session->get(
+                    'client/settings/title_name'
+                ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / ' . $project['name'];
         } else {
             $httpHOST = Util::getHttpHost();
             $clientId = $this->getRepository(UbirimiClient::class)->getByBaseURL($httpHOST, 'array', 'id');
@@ -52,7 +54,11 @@ class ViewSummaryController extends UbirimiController
             $sectionPageTitle = $clientSettings['title_name'] . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / ' . $project['name'];
         }
 
-        $hasBrowsingPermission = $this->getRepository(YongoProject::class)->userHasPermission(array($projectId), Permission::PERM_BROWSE_PROJECTS, $loggedInUserId);
+        $hasBrowsingPermission = $this->getRepository(YongoProject::class)->userHasPermission(
+            array($projectId),
+            Permission::PERM_BROWSE_PROJECTS,
+            $loggedInUserId
+        );
         if ($project['client_id'] != $clientId || !$hasBrowsingPermission) {
             return new RedirectResponse('/general-settings/bad-link-access-denied');
         }
@@ -60,9 +66,21 @@ class ViewSummaryController extends UbirimiController
         $session->set('selected_project_id', $projectId);
         $menuSelectedCategory = 'project';
 
-        $hasGlobalAdministrationPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission($clientId, $loggedInUserId, GlobalPermission::GLOBAL_PERMISSION_YONGO_ADMINISTRATORS);
-        $hasGlobalSystemAdministrationPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission($clientId, $loggedInUserId, GlobalPermission::GLOBAL_PERMISSION_YONGO_SYSTEM_ADMINISTRATORS);
-        $hasAdministerProjectsPermission = $this->getRepository(UbirimiClient::class)->getProjectsByPermission($clientId, $loggedInUserId, Permission::PERM_ADMINISTER_PROJECTS);
+        $hasGlobalAdministrationPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission(
+            $clientId,
+            $loggedInUserId,
+            GlobalPermission::GLOBAL_PERMISSION_YONGO_ADMINISTRATORS
+        );
+        $hasGlobalSystemAdministrationPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission(
+            $clientId,
+            $loggedInUserId,
+            GlobalPermission::GLOBAL_PERMISSION_YONGO_SYSTEM_ADMINISTRATORS
+        );
+        $hasAdministerProjectsPermission = $this->getRepository(UbirimiClient::class)->getProjectsByPermission(
+            $clientId,
+            $loggedInUserId,
+            Permission::PERM_ADMINISTER_PROJECTS
+        );
         $hasAdministerProject = $hasGlobalSystemAdministrationPermission || $hasGlobalAdministrationPermission || $hasAdministerProjectsPermission;
 
         $menuProjectCategory = 'summary';

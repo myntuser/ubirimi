@@ -7,9 +7,10 @@
                 <div class="clearfix">
 
                     <p>
-                        Simply enter the email address associated with your account below <br />
+                        Simply enter the email address associated with your account below <br/>
                         and a new password will be sent to your email address immediately.
                     </p>
+
                     <div class="align-left">
                         <?php require_once __DIR__ . '/_passwordRecoverForm.php' ?>
                     </div>

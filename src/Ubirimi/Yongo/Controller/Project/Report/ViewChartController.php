@@ -57,15 +57,34 @@ class ViewChartController extends UbirimiController
             $statisticType = Util::cleanRegularInputField($request->request->get('statistic_type'));
             $chartType = Util::cleanRegularInputField($request->request->get('chart_type'));
 
-            return new RedirectResponse('/yongo/project/reports/' . $projectId . '/chart-report/' . $statisticType . '/' . $chartType);
+            return new RedirectResponse(
+                '/yongo/project/reports/' . $projectId . '/chart-report/' . $statisticType . '/' . $chartType
+            );
         }
 
         $issueQueryParameters = array('project' => array($projectId), 'resolution' => array(-2));
-        $issues = $this->getRepository(Issue::class)->getByParameters($issueQueryParameters, $loggedInUserId, null, $loggedInUserId);
+        $issues = $this->getRepository(Issue::class)->getByParameters(
+            $issueQueryParameters,
+            $loggedInUserId,
+            null,
+            $loggedInUserId
+        );
 
-        $hasGlobalAdministrationPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission($clientId, $loggedInUserId, GlobalPermission::GLOBAL_PERMISSION_YONGO_ADMINISTRATORS);
-        $hasGlobalSystemAdministrationPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission($clientId, $loggedInUserId, GlobalPermission::GLOBAL_PERMISSION_YONGO_SYSTEM_ADMINISTRATORS);
-        $hasAdministerProjectsPermission = $this->getRepository(UbirimiClient::class)->getProjectsByPermission($clientId, $loggedInUserId, Permission::PERM_ADMINISTER_PROJECTS);
+        $hasGlobalAdministrationPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission(
+            $clientId,
+            $loggedInUserId,
+            GlobalPermission::GLOBAL_PERMISSION_YONGO_ADMINISTRATORS
+        );
+        $hasGlobalSystemAdministrationPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission(
+            $clientId,
+            $loggedInUserId,
+            GlobalPermission::GLOBAL_PERMISSION_YONGO_SYSTEM_ADMINISTRATORS
+        );
+        $hasAdministerProjectsPermission = $this->getRepository(UbirimiClient::class)->getProjectsByPermission(
+            $clientId,
+            $loggedInUserId,
+            Permission::PERM_ADMINISTER_PROJECTS
+        );
 
         $hasAdministerProject = $hasGlobalSystemAdministrationPermission || $hasGlobalAdministrationPermission || $hasAdministerProjectsPermission;
 

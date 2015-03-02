@@ -5,13 +5,15 @@ use Ubirimi\Yongo\Repository\Workflow\WorkflowFunction;
 
 if ($postFunctions): ?>
     <?php $index = 1 ?>
-    <div>Already added post functions: </div>
+    <div>Already added post functions:</div>
     <?php while ($postFunction = $postFunctions->fetch_array(MYSQLI_ASSOC)): ?>
         <div>
-            <span><?php echo $index++ . '. ' . UbirimiContainer::get()['repository']->get(WorkflowFunction::class)->getFunctionDescription($postFunction); ?></span>
+            <span><?php echo $index++ . '. ' . UbirimiContainer::get()['repository']->get(
+                        WorkflowFunction::class
+                    )->getFunctionDescription($postFunction); ?></span>
         </div>
     <?php endwhile ?>
-    <hr size="1" />
+    <hr size="1"/>
 <?php endif ?>
 <div>
     <?php if ($postFunctions): ?>

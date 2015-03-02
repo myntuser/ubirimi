@@ -23,7 +23,8 @@ use Ubirimi\Container\UbirimiContainer;
 
 class Notebook
 {
-    public function getByUserId($userId, $resultType = null) {
+    public function getByUserId($userId, $resultType = null)
+    {
         $query = "select qn_notebook.id, qn_notebook.default_flag, qn_notebook.name, qn_notebook.description, qn_notebook.date_created " .
             "from qn_notebook " .
             "left join general_user on general_user.id = qn_notebook.user_id " .
@@ -41,12 +42,14 @@ class Notebook
                 }
 
                 return $resultArray;
-            } else
+            } else {
                 return $result;
+            }
         }
     }
 
-    public function getDefaultByUserId($userId) {
+    public function getDefaultByUserId($userId)
+    {
         $query = "select qn_notebook.* " .
             "from qn_notebook " .
             "where user_id = ? and default_flag = 1 " .
@@ -58,11 +61,13 @@ class Notebook
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function getNotesByNotebookId($notebookId, $userId = null, $tagId = null, $resultType = null) {
+    public function getNotesByNotebookId($notebookId, $userId = null, $tagId = null, $resultType = null)
+    {
         $query = "select qn_notebook_note.* " .
             "from qn_notebook_note " .
             "left join qn_notebook_note_tag on qn_notebook_note_tag.qn_notebook_note_id = qn_notebook_note.id ";
@@ -92,13 +97,16 @@ class Notebook
                 }
 
                 return $resultArray;
-            } else
+            } else {
                 return $result;
-        } else
+            }
+        } else {
             return null;
+        }
     }
 
-    public function getNotesByTagId($userId, $tagId, $resultType = null) {
+    public function getNotesByTagId($userId, $tagId, $resultType = null)
+    {
         $query = "select qn_notebook_note.* " .
             "from qn_notebook_note " .
             "left join qn_notebook_note_tag on qn_notebook_note_tag.qn_notebook_note_id = qn_notebook_note.id " .
@@ -123,14 +131,17 @@ class Notebook
                 }
 
                 return $resultArray;
-            } else
+            } else {
                 return $result;
-        } else
+            }
+        } else {
             return null;
+        }
     }
 
 
-    public function save($userId, $name, $description, $defaultFlag = 0, $date) {
+    public function save($userId, $name, $description, $defaultFlag = 0, $date)
+    {
         $query = "INSERT INTO qn_notebook(user_id, name, description, default_flag, date_created) VALUES (?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -143,7 +154,8 @@ class Notebook
         return $notebookId;
     }
 
-    public function getById($notebookId) {
+    public function getById($notebookId)
+    {
         $query = "select qn_notebook.id, qn_notebook.user_id, qn_notebook.name, qn_notebook.description, " .
             "qn_notebook.date_created, qn_notebook.date_updated, " .
             "general_user.client_id " .
@@ -158,35 +170,41 @@ class Notebook
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function getByName($userId, $name, $notebookId = null) {
+    public function getByName($userId, $name, $notebookId = null)
+    {
         $query = 'select id, name, description ' .
             'from qn_notebook ' .
             'where user_id = ? ' .
             'and LOWER(name) = ? ';
 
-        if ($notebookId)
+        if ($notebookId) {
             $query .= 'and id != ? ';
+        }
 
         $query .= 'limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
-        if ($notebookId)
+        if ($notebookId) {
             $stmt->bind_param("isi", $userId, $name, $notebookId);
-        else
+        } else {
             $stmt->bind_param("is", $userId, $name);
+        }
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        else
+        } else {
             return null;
+        }
     }
 
-    public function updateById($notebookId, $name, $description, $date) {
+    public function updateById($notebookId, $name, $description, $date)
+    {
         $query = 'UPDATE qn_notebook SET name = ?, description = ?, date_updated = ? WHERE id = ? LIMIT 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -194,7 +212,8 @@ class Notebook
         $stmt->execute();
     }
 
-    public function deleteById($notebookId) {
+    public function deleteById($notebookId)
+    {
         $query = 'delete from qn_notebook_note where qn_notebook_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -208,7 +227,8 @@ class Notebook
         $stmt->execute();
     }
 
-    public function deleteByUserId($userId) {
+    public function deleteByUserId($userId)
+    {
         $notebooks = Notebook::getByUserId($userId);
 
         while ($notebooks && $notebook = $notebooks->fetch_array(MYSQLI_ASSOC)) {
@@ -216,7 +236,8 @@ class Notebook
         }
     }
 
-    public function addNote($notebookId, $date) {
+    public function addNote($notebookId, $date)
+    {
         $query = "INSERT INTO qn_notebook_note(qn_notebook_id, summary, date_created) VALUES (?, ?, ?)";
         $summary = 'Untitled';
 

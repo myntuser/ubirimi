@@ -36,7 +36,10 @@ class ConfirmImportUsersController extends UbirimiController
 
         $users = $this->getRepository(UbirimiClient::class)->getUsers($clientId, null, 'array', 0);
 
-        $existingUsers = $this->getRepository(SvnRepository::class)->getUserList($session->get('selected_svn_repo_id'), 'array');
+        $existingUsers = $this->getRepository(SvnRepository::class)->getUserList(
+            $session->get('selected_svn_repo_id'),
+            'array'
+        );
         $importableUsers = array();
 
         foreach ($users as $user) {
@@ -55,6 +58,9 @@ class ConfirmImportUsersController extends UbirimiController
             }
         }
 
-        return $this->render(__DIR__ . '/../../Resources/views/administration/ConfirmImportUsers.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../Resources/views/administration/ConfirmImportUsers.php',
+            get_defined_vars()
+        );
     }
 }

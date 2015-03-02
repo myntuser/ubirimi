@@ -37,7 +37,12 @@ class ListUserController extends UbirimiController
         $session->set('selected_product_id', -1);
         $filterGroupId = $request->get('group_id');
 
-        $users = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getUsers($clientId, $filterGroupId, null, 1);
+        $users = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getUsers(
+            $clientId,
+            $filterGroupId,
+            null,
+            1
+        );
         $menuSelectedCategory = 'general_user';
 
         $sectionPageTitle = $session->get('client/settings/title_name') . ' / GeneralSettings Settings / Users';

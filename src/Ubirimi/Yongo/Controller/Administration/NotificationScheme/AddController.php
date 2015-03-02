@@ -40,8 +40,9 @@ class AddController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             if (!$emptyName) {
                 $currentDate = Util::getServerCurrentDateTime();
@@ -53,8 +54,13 @@ class AddController extends UbirimiController
                 return new RedirectResponse('/yongo/administration/notification-schemes');
             }
         }
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Notification Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Notification Scheme';
         $menuSelectedCategory = 'issue';
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/notification_scheme/Add.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/notification_scheme/Add.php',
+            get_defined_vars()
+        );
     }
 }

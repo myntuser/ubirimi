@@ -23,7 +23,8 @@ use Ubirimi\Container\UbirimiContainer;
 
 class Note
 {
-    public function getById($noteId) {
+    public function getById($noteId)
+    {
         $query = "select qn_notebook_note.* " .
             "from qn_notebook_note " .
             "where qn_notebook_note.id = ? " .
@@ -35,11 +36,13 @@ class Note
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function updateById($noteId, $content, $date) {
+    public function updateById($noteId, $content, $date)
+    {
         $query = 'UPDATE qn_notebook_note SET content = ?, date_updated = ? WHERE id = ? LIMIT 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -47,7 +50,8 @@ class Note
         $stmt->execute();
     }
 
-    public function deleteById($noteId) {
+    public function deleteById($noteId)
+    {
         $query = 'delete from qn_notebook_note where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -61,7 +65,8 @@ class Note
         $stmt->execute();
     }
 
-    public function getPreviousNoteInNotebook($notebookId, $noteId) {
+    public function getPreviousNoteInNotebook($notebookId, $noteId)
+    {
         $query = "select qn_notebook_note.* " .
             "from qn_notebook_note " .
             "where qn_notebook_note.id < ? and qn_notebook_id = ? " .
@@ -74,11 +79,13 @@ class Note
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function getFollowingNoteInNotebook($notebookId, $noteId) {
+    public function getFollowingNoteInNotebook($notebookId, $noteId)
+    {
         $query = "select qn_notebook_note.* " .
             "from qn_notebook_note " .
             "where qn_notebook_note.id > ? and qn_notebook_id = ? " .
@@ -91,11 +98,13 @@ class Note
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function getFirstByNotebookId($notebookId) {
+    public function getFirstByNotebookId($notebookId)
+    {
         $query = "select qn_notebook_note.* " .
             "from qn_notebook_note " .
             "where qn_notebook_id = ? " .
@@ -108,11 +117,13 @@ class Note
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function getAllByUserId($userId) {
+    public function getAllByUserId($userId)
+    {
         $query = "select qn_notebook_note.* " .
             "from qn_notebook " .
             "left join qn_notebook_note on qn_notebook_note.qn_notebook_id = qn_notebook.id " .
@@ -129,11 +140,13 @@ class Note
                 $notesArray[] = $data;
             }
             return $notesArray;
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function addTag($noteId, $tagId, $date) {
+    public function addTag($noteId, $tagId, $date)
+    {
         $query = "INSERT INTO qn_notebook_note_tag(qn_notebook_note_id, qn_tag_id, date_created) VALUES (?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -146,7 +159,8 @@ class Note
         return $noteTagId;
     }
 
-    public function getTags($noteId) {
+    public function getTags($noteId)
+    {
         $query = "select qn_tag.id, qn_tag.name " .
             "from qn_notebook_note_tag " .
             "left join qn_tag on qn_tag.id = qn_notebook_note_tag.qn_tag_id " .
@@ -159,11 +173,13 @@ class Note
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result;
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function getTagByNoteIdAndName($noteId, $userId, $value) {
+    public function getTagByNoteIdAndName($noteId, $userId, $value)
+    {
         $query = "select qn_tag.* " .
             "from qn_tag " .
             "where user_id = ? and name = ? " .
@@ -175,11 +191,13 @@ class Note
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result;
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function getFirstNoteByTagId($userId = null, $tagId) {
+    public function getFirstNoteByTagId($userId = null, $tagId)
+    {
         $query = "select qn_notebook_note.* " .
             "from qn_notebook " .
             "left join qn_notebook_note on qn_notebook_note.qn_notebook_id = qn_notebook.id " .
@@ -195,11 +213,13 @@ class Note
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function getTagByTagIdAndNoteId($noteId, $tagId) {
+    public function getTagByTagIdAndNoteId($noteId, $tagId)
+    {
         $query = "select qn_notebook_note_tag.qn_tag_id " .
             "from qn_notebook_note_tag " .
             "where qn_notebook_note_tag.qn_notebook_note_id = ? and qn_tag_id = ? " .
@@ -211,11 +231,13 @@ class Note
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function move($noteId, $targetNotebookId) {
+    public function move($noteId, $targetNotebookId)
+    {
         $query = 'UPDATE qn_notebook_note SET qn_notebook_id = ? WHERE id = ? LIMIT 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -223,7 +245,8 @@ class Note
         $stmt->execute();
     }
 
-    public function deleteTagById($noteId, $tagId) {
+    public function deleteTagById($noteId, $tagId)
+    {
         $query = 'delete from qn_notebook_note_tag WHERE qn_notebook_note_id = ? and qn_tag_id = ? LIMIT 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -231,7 +254,8 @@ class Note
         $stmt->execute();
     }
 
-    public function updateTitleById($id, $summary) {
+    public function updateTitleById($id, $summary)
+    {
         $query = 'UPDATE qn_notebook_note SET summary = ? WHERE id = ? LIMIT 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

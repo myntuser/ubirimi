@@ -41,7 +41,10 @@ class EditController extends UbirimiController
         $workflowId = $step['workflow_id'];
 
         $workflow = $this->getRepository(Workflow::class)->getMetaDataById($workflowId);
-        $statuses = $this->getRepository(IssueSettings::class)->getAllIssueSettings('status', $session->get('client/id'));
+        $statuses = $this->getRepository(IssueSettings::class)->getAllIssueSettings(
+            'status',
+            $session->get('client/id')
+        );
 
         $emptyName = false;
 
@@ -69,8 +72,13 @@ class EditController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Workflow Step';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Workflow Step';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/workflow/step/Edit.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/workflow/step/Edit.php',
+            get_defined_vars()
+        );
     }
 }

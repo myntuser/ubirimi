@@ -57,10 +57,14 @@ class AddController extends UbirimiController
             }
 
             // check for duplication
-            $linkType = $this->getRepository(IssueLinkType::class)->getByNameAndClientId($session->get('client/id'), mb_strtolower($name));
+            $linkType = $this->getRepository(IssueLinkType::class)->getByNameAndClientId(
+                $session->get('client/id'),
+                mb_strtolower($name)
+            );
 
-            if ($linkType)
+            if ($linkType) {
                 $linkTypeDuplicateName = true;
+            }
 
             if (!$emptyName && !$emptyOutwardDescription && !$emptyInwardDescription && !$linkTypeDuplicateName) {
                 $currentDate = Util::getServerCurrentDateTime();
@@ -80,8 +84,13 @@ class AddController extends UbirimiController
         }
 
         $menuSelectedCategory = 'system';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Link Type';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Link Type';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/link/Add.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/issue/link/Add.php',
+            get_defined_vars()
+        );
     }
 }

@@ -23,7 +23,8 @@ use Ubirimi\Container\UbirimiContainer;
 
 class IssueComponent
 {
-    public function deleteByIssueId($issueId) {
+    public function deleteByIssueId($issueId)
+    {
         $query = 'DELETE FROM issue_component WHERE issue_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -31,7 +32,8 @@ class IssueComponent
         $stmt->execute();
     }
 
-    public function getByIssueIdAndProjectId($issueId, $projectId, $resultType = null, $resultColumn = null) {
+    public function getByIssueIdAndProjectId($issueId, $projectId, $resultType = null, $resultColumn = null)
+    {
         $query = 'SELECT issue_component.id, project_component.name, project_component_id, parent_id ' .
             'FROM issue_component ' .
             'LEFT JOIN project_component on issue_component.project_component_id = project_component.id ' .
@@ -55,8 +57,11 @@ class IssueComponent
                 }
 
                 return $resultArray;
-            } else return $result;
-        } else
+            } else {
+                return $result;
+            }
+        } else {
             return null;
+        }
     }
 }

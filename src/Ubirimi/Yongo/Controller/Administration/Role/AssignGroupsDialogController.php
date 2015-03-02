@@ -38,17 +38,24 @@ class AssignGroupsDialogController extends UbirimiController
         $projectId = $request->get('project_id');
         $role = $this->getRepository(Role::class)->getPermissionRoleById($permissionRoleId);
 
-        $all_groups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId($session->get('client/id'), SystemProduct::SYS_PRODUCT_YONGO);
+        $all_groups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId(
+            $session->get('client/id'),
+            SystemProduct::SYS_PRODUCT_YONGO
+        );
         $role_groups = $this->getRepository(YongoProject::class)->getGroupsInRole($projectId, $permissionRoleId);
 
         $role_groups_arr_ids = array();
-        while ($role_groups && $group = $role_groups->fetch_array(MYSQLI_ASSOC))
+        while ($role_groups && $group = $role_groups->fetch_array(MYSQLI_ASSOC)) {
             $role_groups_arr_ids[] = $group['group_id'];
+        }
 
         if ($role_groups) {
             $role_groups->data_seek(0);
         }
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/role/AssignGroupsDialog.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/role/AssignGroupsDialog.php',
+            get_defined_vars()
+        );
     }
 }

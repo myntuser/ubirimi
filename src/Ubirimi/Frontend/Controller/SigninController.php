@@ -78,8 +78,10 @@ class SigninController extends UbirimiController
             } else {
                 $signInError = true;
             }
-        } else if ($request->request->has('create_account')) {
-            return new RedirectResponse('/sign-up');
+        } else {
+            if ($request->request->has('create_account')) {
+                return new RedirectResponse('/sign-up');
+            }
         }
 
         return $this->render(__DIR__ . '/../Resources/views/_main.php', get_defined_vars());

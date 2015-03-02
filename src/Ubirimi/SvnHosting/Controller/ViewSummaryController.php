@@ -50,7 +50,9 @@ class ViewSummaryController extends UbirimiController
         $i = 0;
         $session->set('selected_product_id', SystemProduct::SYS_PRODUCT_SVN_HOSTING);
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_SVN_HOSTING_NAME. ' / ' . $svnRepo['code'] . ' / Summary';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_SVN_HOSTING_NAME . ' / ' . $svnRepo['code'] . ' / Summary';
 
         return $this->render(__DIR__ . '/../Resources/views/ViewSummary.php', get_defined_vars());
     }

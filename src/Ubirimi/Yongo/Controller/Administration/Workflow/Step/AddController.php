@@ -43,8 +43,15 @@ class AddController extends UbirimiController
         }
 
         $workflowSteps = $this->getRepository(Workflow::class)->getSteps($workflowId);
-        $statuses = $this->getRepository(IssueSettings::class)->getAllIssueSettings('status', $session->get('client/id'));
-        $linkedStatuses = $this->getRepository(Workflow::class)->getLinkedStatuses($workflowId, 'array', 'linked_issue_status_id');
+        $statuses = $this->getRepository(IssueSettings::class)->getAllIssueSettings(
+            'status',
+            $session->get('client/id')
+        );
+        $linkedStatuses = $this->getRepository(Workflow::class)->getLinkedStatuses(
+            $workflowId,
+            'array',
+            'linked_issue_status_id'
+        );
 
         $addStepPossible = true;
         if (count($linkedStatuses) == $statuses->num_rows) {
@@ -79,8 +86,13 @@ class AddController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Workflow Step';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Workflow Step';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/workflow/step/Add.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/workflow/step/Add.php',
+            get_defined_vars()
+        );
     }
 }

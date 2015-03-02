@@ -46,12 +46,18 @@ class EditMetadataController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             if (!$emptyName) {
                 $currentDate = Util::getServerCurrentDateTime();
-                $this->getRepository(FieldConfiguration::class)->updateMetadataById($fieldConfigurationId, $name, $description, $currentDate);
+                $this->getRepository(FieldConfiguration::class)->updateMetadataById(
+                    $fieldConfigurationId,
+                    $name,
+                    $description,
+                    $currentDate
+                );
 
                 $this->getLogger()->addInfo('UPDATE Yongo Field Configuration ' . $name, $this->getLoggerContext());
 
@@ -60,8 +66,13 @@ class EditMetadataController extends UbirimiController
         }
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Field Configuration';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Field Configuration';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/field/configuration/EditMetadata.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/field/configuration/EditMetadata.php',
+            get_defined_vars()
+        );
     }
 }

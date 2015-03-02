@@ -35,7 +35,15 @@ class EmailService extends UbirimiService
             EmailRepository::$smtpSettings = Util::getUbirimiSMTPSettings();
         }
 
-        UbirimiContainer::get()['repository']->get(EmailRepository::class)->sendNewUserNotificationEmail($clientId, $firstName, $lastName, $username, $password, $email, $clientDomain);
+        UbirimiContainer::get()['repository']->get(EmailRepository::class)->sendNewUserNotificationEmail(
+            $clientId,
+            $firstName,
+            $lastName,
+            $username,
+            $password,
+            $email,
+            $clientDomain
+        );
     }
 
     public function newUserCustomer($firstName, $lastName, $password, $email, $clientDomain, $clientId)
@@ -48,16 +56,32 @@ class EmailService extends UbirimiService
             EmailRepository::$smtpSettings = Util::getUbirimiSMTPSettings();
         }
 
-        UbirimiContainer::get()['repository']->get(EmailRepository::class)->sendNewCustomerNotificationEmail($clientId, $firstName, $lastName, $email, $password, $clientDomain);
+        UbirimiContainer::get()['repository']->get(EmailRepository::class)->sendNewCustomerNotificationEmail(
+            $clientId,
+            $firstName,
+            $lastName,
+            $email,
+            $password,
+            $clientDomain
+        );
     }
 
     public function feedback($userData, $like, $improve, $newFeatures, $experience)
     {
-        UbirimiContainer::get()['repository']->get(EmailRepository::class)->sendFeedback($userData, $like, $improve, $newFeatures, $experience);
+        UbirimiContainer::get()['repository']->get(EmailRepository::class)->sendFeedback(
+            $userData,
+            $like,
+            $improve,
+            $newFeatures,
+            $experience
+        );
     }
 
     public function passwordRecover($email, $password)
     {
-        UbirimiContainer::get()['repository']->get(EmailRepository::class)->sendEmailRetrievePassword($email, $password);
+        UbirimiContainer::get()['repository']->get(EmailRepository::class)->sendEmailRetrievePassword(
+            $email,
+            $password
+        );
     }
 }

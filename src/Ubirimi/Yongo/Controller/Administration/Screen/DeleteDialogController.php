@@ -34,6 +34,8 @@ class DeleteDialogController extends UbirimiController
             return new Response('Are you sure you want to delete this screen?');
         }
 
-        return new Response('This screen can not be deleted. It is associated with one or more screen schemes, or one or more workflow transitions.');
+        return new Response(
+            'This screen can not be deleted. It is associated with one or more screen schemes, or one or more workflow transitions.'
+        );
     }
 }

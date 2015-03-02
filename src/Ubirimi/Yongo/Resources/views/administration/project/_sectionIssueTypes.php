@@ -3,7 +3,8 @@
 ?>
 <table width="100%">
     <tr>
-        <td id="sectIssueTypes" width="74%" class="sectionDetail" colspan="3"><span class="headerPageText sectionDetailTitle">Issue Types</span></td>
+        <td id="sectIssueTypes" width="74%" class="sectionDetail" colspan="3"><span
+                class="headerPageText sectionDetailTitle">Issue Types</span></td>
     </tr>
     <tr>
         <td>
@@ -19,10 +20,10 @@
                         <div>Scheme:</div>
                         <div>
                             <?php
-                                echo '<a href="/yongo/administration/project/issue-types/' . $project['id'] . '">' . $issueTypeScheme['name'] . '</a>';
-                                while ($issueType = $issueTypeSchemeData->fetch_array(MYSQLI_ASSOC)) {
-                                    echo '<div>' . $issueType['name'] . '</div>';
-                                }
+                            echo '<a href="/yongo/administration/project/issue-types/' . $project['id'] . '">' . $issueTypeScheme['name'] . '</a>';
+                            while ($issueType = $issueTypeSchemeData->fetch_array(MYSQLI_ASSOC)) {
+                                echo '<div>' . $issueType['name'] . '</div>';
+                            }
                             ?>
                         </div>
                     </td>

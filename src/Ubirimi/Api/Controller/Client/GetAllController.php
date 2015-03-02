@@ -32,7 +32,9 @@ class GetAllController extends UbirimiController
         $clientsArray = array();
         $clients = $this->getRepository(UbirimiClient::class)->getAll();
         while ($client = $clients->fetch_array(MYSQLI_ASSOC)) {
-            $client['users'] = count($this->getRepository(UbirimiClient::class)->getUsers($client['id'], null, 'array'));
+            $client['users'] = count(
+                $this->getRepository(UbirimiClient::class)->getUsers($client['id'], null, 'array')
+            );
             $clientsArray[] = $client;
         }
 

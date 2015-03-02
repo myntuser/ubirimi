@@ -9,7 +9,8 @@
     <tr>
         <td>
             <?php if ($recentBoard): ?>
-                <div><a href="/agile/board/plan/<?php echo $recentBoard['id'] ?>" class="linkSubMenu"><?php echo $recentBoard['name'] ?></a></div>
+                <div><a href="/agile/board/plan/<?php echo $recentBoard['id'] ?>"
+                        class="linkSubMenu"><?php echo $recentBoard['name'] ?></a></div>
             <?php else: ?>
                 <div>No board selected</div>
             <?php endif ?>
@@ -17,7 +18,8 @@
     </tr>
     <tr>
         <td>
-            <span style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
+            <span
+                style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
         </td>
     </tr>
 
@@ -31,7 +33,8 @@
     <?php while ($last5Board && $board = $last5Board->fetch_array(MYSQLI_ASSOC)): ?>
         <tr>
             <td>
-                <div><a href="/agile/board/plan/<?php echo $board['id'] ?>" class="linkSubMenu"><?php echo $board['name'] ?></a></div>
+                <div><a href="/agile/board/plan/<?php echo $board['id'] ?>"
+                        class="linkSubMenu"><?php echo $board['name'] ?></a></div>
             </td>
         </tr>
     <?php endwhile ?>
@@ -45,7 +48,8 @@
     <?php if ($clientAdministratorFlag): ?>
         <tr>
             <td>
-                <span style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
+                <span
+                    style="border-bottom: 1px solid #BBBBBB; margin-bottom: 4px; padding-bottom: 4px; display: block;"></span>
             </td>
         </tr>
         <tr>

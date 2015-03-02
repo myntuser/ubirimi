@@ -40,12 +40,14 @@ class AddController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             $role = $this->getRepository(Role::class)->getByName($session->get('client/id'), $name);
-            if ($role)
+            if ($role) {
                 $alreadyExists = true;
+            }
 
             if (!$emptyName && !$alreadyExists) {
                 $date = Util::getServerCurrentDateTime();
@@ -58,7 +60,9 @@ class AddController extends UbirimiController
         }
 
         $menuSelectedCategory = 'user';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Role';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Role';
 
         return $this->render(__DIR__ . '/../../../Resources/views/administration/role/Add.php', get_defined_vars());
     }

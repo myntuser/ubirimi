@@ -40,19 +40,31 @@ class AddController extends UbirimiController
 
         if ($request->request->has('new_group')) {
             $name = Util::cleanRegularInputField($request->request->get('name'));
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             if (!$emptyName) {
-                $groupAlreadyExists = $this->getRepository(UbirimiGroup::class)->getByNameAndProductId($clientId, SystemProduct::SYS_PRODUCT_DOCUMENTADOR, $name);
-                if ($groupAlreadyExists)
+                $groupAlreadyExists = $this->getRepository(UbirimiGroup::class)->getByNameAndProductId(
+                    $clientId,
+                    SystemProduct::SYS_PRODUCT_DOCUMENTADOR,
+                    $name
+                );
+                if ($groupAlreadyExists) {
                     $duplicateName = true;
+                }
             }
 
             if (!$emptyName && !$duplicateName) {
                 $description = Util::cleanRegularInputField($request->request->get('description'));
                 $currentDate = Util::getServerCurrentDateTime();
-                $this->getRepository(UbirimiGroup::class)->add($clientId, SystemProduct::SYS_PRODUCT_DOCUMENTADOR, $name, $description, $currentDate);
+                $this->getRepository(UbirimiGroup::class)->add(
+                    $clientId,
+                    SystemProduct::SYS_PRODUCT_DOCUMENTADOR,
+                    $name,
+                    $description,
+                    $currentDate
+                );
 
                 return new RedirectResponse('/documentador/administration/groups');
             }

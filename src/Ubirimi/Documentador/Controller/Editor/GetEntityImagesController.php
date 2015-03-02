@@ -46,9 +46,13 @@ class GetEntityImagesController extends UbirimiController
                 // todo: check if the attachment is an image
 
                 // get the last revision
-                $attachmentRevisions = $this->getRepository(Entity::class)->getRevisionsByAttachmentId($attachment['id']);
+                $attachmentRevisions = $this->getRepository(Entity::class)->getRevisionsByAttachmentId(
+                    $attachment['id']
+                );
                 $lastRevisionNumber = $attachmentRevisions->num_rows;
-                $html .= '<img data="/assets' . UbirimiContainer::get()['asset.documentador_entity_attachments'] . $entity['space_id'] . '/' . $entityId . '/' . $attachment['id'] . '/' . $lastRevisionNumber . '/' . $attachment['name'] . '" id="entity_existing_image_' . $attachment['id'] . '" style="float: left; padding-right: 10px; width: 240px" src="/assets' . UbirimiContainer::get()['asset.documentador_entity_attachments'] . $entity['space_id'] . '/' . $entityId . '/' . $attachment['id'] . '/' . $lastRevisionNumber . '/' . $attachment['name'] . '" />';
+                $html .= '<img data="/assets' . UbirimiContainer::get(
+                    )['asset.documentador_entity_attachments'] . $entity['space_id'] . '/' . $entityId . '/' . $attachment['id'] . '/' . $lastRevisionNumber . '/' . $attachment['name'] . '" id="entity_existing_image_' . $attachment['id'] . '" style="float: left; padding-right: 10px; width: 240px" src="/assets' . UbirimiContainer::get(
+                    )['asset.documentador_entity_attachments'] . $entity['space_id'] . '/' . $entityId . '/' . $attachment['id'] . '/' . $lastRevisionNumber . '/' . $attachment['name'] . '" />';
                 $index++;
                 if ($index > 4) {
                     $index = 0;

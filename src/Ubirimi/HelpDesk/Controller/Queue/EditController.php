@@ -58,7 +58,13 @@ class EditController extends UbirimiController
             if (!$queueExists && !$emptyName) {
                 $currentDate = Util::getServerCurrentDateTime();
 
-                $this->getRepository(Queue::class)->updateById($queueId, $name, $description, $description, $currentDate);
+                $this->getRepository(Queue::class)->updateById(
+                    $queueId,
+                    $name,
+                    $description,
+                    $description,
+                    $currentDate
+                );
 
                 return new RedirectResponse('/helpdesk/queues/' . $projectId . '/' . $queueId);
             }

@@ -36,17 +36,24 @@ class AddStringController extends UbirimiController
         $type = $request->request->get('type');
 
         $conditionData = $this->getRepository(WorkflowCondition::class)->getByTransitionId($transitionId);
-        if (!$conditionData)
+        if (!$conditionData) {
             $this->getRepository(Workflow::class)->addCondition($transitionId, '');
+        }
 
-        if ($type == 'open_bracket')
+        if ($type == 'open_bracket') {
             $this->getRepository(WorkflowCondition::class)->addConditionString($transitionId, '(');
-        else if ($type == 'closed_bracket')
-            $this->getRepository(WorkflowCondition::class)->addConditionString($transitionId, ')');
-        else if ($type == 'operator_and')
-
-            $this->getRepository(WorkflowCondition::class)->addConditionString($transitionId, '[[AND]]');
-        else if ($type == 'operator_or')
-        $this->getRepository(WorkflowCondition::class)->addConditionString($transitionId, '[[OR]]');
+        } else {
+            if ($type == 'closed_bracket') {
+                $this->getRepository(WorkflowCondition::class)->addConditionString($transitionId, ')');
+            } else {
+                if ($type == 'operator_and') {
+                    $this->getRepository(WorkflowCondition::class)->addConditionString($transitionId, '[[AND]]');
+                } else {
+                    if ($type == 'operator_or') {
+                        $this->getRepository(WorkflowCondition::class)->addConditionString($transitionId, '[[OR]]');
+                    }
+                }
+            }
+        }
     }
 }

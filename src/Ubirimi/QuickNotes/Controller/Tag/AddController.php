@@ -39,7 +39,10 @@ class AddController extends UbirimiController
         $description = $request->request->get('description');
 
         // check for duplicates in the user space
-        $tagUserExists = $this->getRepository(Tag::class)->getByNameAndUserId($session->get('user/id'), mb_strtolower($name));
+        $tagUserExists = $this->getRepository(Tag::class)->getByNameAndUserId(
+            $session->get('user/id'),
+            mb_strtolower($name)
+        );
 
         if (!$tagUserExists) {
             $tagId = $this->getRepository(Tag::class)->add($session->get('user/id'), $name, $date);

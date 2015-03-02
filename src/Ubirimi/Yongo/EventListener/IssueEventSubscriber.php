@@ -36,16 +36,23 @@ class IssueEventSubscriber implements EventSubscriberInterface
     {
         $container = UbirimiContainer::get();
 
-        switch ($event->getStatus())
-        {
+        switch ($event->getStatus()) {
             case IssueEvent::STATUS_NEW:
                 $container['issue.email']->emailIssueNew($event->getIssue());
                 break;
             case IssueEvent::STATUS_DELETE:
-                $container['issue.email']->emailIssueDelete($event->getIssue(), $event->getProject(), $event->getExtra());
+                $container['issue.email']->emailIssueDelete(
+                    $event->getIssue(),
+                    $event->getProject(),
+                    $event->getExtra()
+                );
                 break;
             case IssueEvent::STATUS_UPDATE:
-                $container['issue.email']->emailIssueUpdate($event->getIssue(), $event->getExtra()['oldIssueData'], $event->getExtra()['fieldChanges']);
+                $container['issue.email']->emailIssueUpdate(
+                    $event->getIssue(),
+                    $event->getExtra()['oldIssueData'],
+                    $event->getExtra()['fieldChanges']
+                );
                 break;
         }
     }
@@ -61,14 +68,22 @@ class IssueEventSubscriber implements EventSubscriberInterface
     {
         $container = UbirimiContainer::get();
 
-        $container['issue.email']->emailIssueLink($event->getExtra()['issueId'], $event->getProject(), $event->getExtra()['comment']);
+        $container['issue.email']->emailIssueLink(
+            $event->getExtra()['issueId'],
+            $event->getProject(),
+            $event->getExtra()['comment']
+        );
     }
 
     public function onIssueShareEmail(IssueEvent $event)
     {
         $container = UbirimiContainer::get();
 
-        $container['issue.email']->emailIssueShare($event->getIssue(), $event->getExtra()['userIds'], $event->getExtra()['noteContent']);
+        $container['issue.email']->emailIssueShare(
+            $event->getIssue(),
+            $event->getExtra()['userIds'],
+            $event->getExtra()['noteContent']
+        );
     }
 
     public function onIssueWorkLogged(IssueEvent $event)
@@ -82,21 +97,33 @@ class IssueEventSubscriber implements EventSubscriberInterface
     {
         $container = UbirimiContainer::get();
 
-        $container['issue.email']->emailIssueAddAttachemnt($event->getIssue(), $event->getProject(), $event->getExtra());
+        $container['issue.email']->emailIssueAddAttachemnt(
+            $event->getIssue(),
+            $event->getProject(),
+            $event->getExtra()
+        );
     }
 
     public function onIssueWorkLogUpdated(IssueEvent $event)
     {
         $container = UbirimiContainer::get();
 
-        $container['issue.email']->emailIssueWorkLogUpdated($event->getIssue(), $event->getProject(), $event->getExtra());
+        $container['issue.email']->emailIssueWorkLogUpdated(
+            $event->getIssue(),
+            $event->getProject(),
+            $event->getExtra()
+        );
     }
 
     public function onIssueWorkLogDeleted(IssueEvent $event)
     {
         $container = UbirimiContainer::get();
 
-        $container['issue.email']->emailIssueWorkLogDeleted($event->getIssue(), $event->getProject(), $event->getExtra());
+        $container['issue.email']->emailIssueWorkLogDeleted(
+            $event->getIssue(),
+            $event->getProject(),
+            $event->getExtra()
+        );
     }
 
     public static function getSubscribedEvents()

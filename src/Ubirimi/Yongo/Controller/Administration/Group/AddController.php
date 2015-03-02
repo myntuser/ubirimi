@@ -43,9 +43,14 @@ class AddController extends UbirimiController
             }
 
             if (!$emptyName) {
-                $groupAlreadyExists = $this->getRepository(UbirimiGroup::class)->getByNameAndProductId($session->get('client/id'), SystemProduct::SYS_PRODUCT_YONGO, $name);
-                if ($groupAlreadyExists)
+                $groupAlreadyExists = $this->getRepository(UbirimiGroup::class)->getByNameAndProductId(
+                    $session->get('client/id'),
+                    SystemProduct::SYS_PRODUCT_YONGO,
+                    $name
+                );
+                if ($groupAlreadyExists) {
                     $duplicateName = true;
+                }
             }
 
             if (!$emptyName && !$duplicateName) {
@@ -68,7 +73,9 @@ class AddController extends UbirimiController
 
         $menuSelectedCategory = 'user';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Group';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Group';
 
         return $this->render(__DIR__ . '/../../../Resources/views/administration/group/Add.php', get_defined_vars());
     }

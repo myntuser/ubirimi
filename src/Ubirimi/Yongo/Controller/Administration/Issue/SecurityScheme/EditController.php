@@ -33,7 +33,9 @@ class EditController extends UbirimiController
     {
         Util::checkUserIsLoggedInAndRedirect();
         $issueSecuritySchemeId = $request->get('id');
-        $issueSecurityScheme = $this->getRepository(IssueSecurityScheme::class)->getMetaDataById($issueSecuritySchemeId);
+        $issueSecurityScheme = $this->getRepository(IssueSecurityScheme::class)->getMetaDataById(
+            $issueSecuritySchemeId
+        );
 
         if ($issueSecurityScheme['client_id'] != $session->get('client/id')) {
             return new RedirectResponse('/general-settings/bad-link-access-denied');
@@ -44,19 +46,29 @@ class EditController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
-            if (empty($name))
+            if (empty($name)) {
                 $emptyName = true;
+            }
 
             if (!$emptyName) {
-                $this->getRepository(IssueSecurityScheme::class)->updateMetaDataById($issueSecuritySchemeId, $name, $description);
+                $this->getRepository(IssueSecurityScheme::class)->updateMetaDataById(
+                    $issueSecuritySchemeId,
+                    $name,
+                    $description
+                );
 
                 return new RedirectResponse('/yongo/administration/issue-security-schemes');
             }
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Security Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Update Issue Security Scheme';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/security_scheme/Edit.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/issue/security_scheme/Edit.php',
+            get_defined_vars()
+        );
     }
 }

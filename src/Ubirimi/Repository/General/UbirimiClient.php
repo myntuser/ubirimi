@@ -60,12 +60,14 @@ class UbirimiClient
     const INSTANCE_TYPE_ON_DEMAND = 1;
     const INSTANCE_TYPE_DOWNLOAD = 2;
 
-    public function getClientIdAnonymous() {
+    public function getClientIdAnonymous()
+    {
         $httpHOST = Util::getHttpHost();
         return UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getByBaseURL($httpHOST, 'array', 'id');
     }
 
-    public function deleteGroups($clientId) {
+    public function deleteGroups($clientId)
+    {
         $groups = UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->getByClientId($clientId);
         while ($groups && $group = $groups->fetch_array(MYSQLI_ASSOC)) {
             UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->deleteByIdForYongo($group['id']);
@@ -74,7 +76,8 @@ class UbirimiClient
         }
     }
 
-    public function addProduct($clientId, $productId, $date) {
+    public function addProduct($clientId, $productId, $date)
+    {
         $query = "INSERT INTO client_product(client_id, sys_product_id, date_created) VALUES (?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -83,7 +86,8 @@ class UbirimiClient
         $stmt->execute();
     }
 
-    public function deleteProduct($clientId, $productId) {
+    public function deleteProduct($clientId, $productId)
+    {
         $query = "delete from client_product where client_id = ? and sys_product_id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -92,7 +96,8 @@ class UbirimiClient
         $stmt->execute();
     }
 
-    public function getByBaseURL($httpHOST, $resultType = null, $resultColumn = null) {
+    public function getByBaseURL($httpHOST, $resultType = null, $resultColumn = null)
+    {
         $query = 'SELECT * ' .
             'FROM client ' .
             "WHERE client.base_url = ? " .
@@ -105,17 +110,20 @@ class UbirimiClient
         if ($result->num_rows) {
             if ($resultType == 'array') {
                 while ($data = $result->fetch_array(MYSQLI_ASSOC)) {
-                    if ($resultColumn)
+                    if ($resultColumn) {
                         return $data[$resultColumn];
-                    else
+                    } else {
                         return $data;
+                    }
                 }
-            } else
+            } else {
                 return $result;
+            }
         }
     }
 
-    public function getYongoSetting($clientId, $settingName) {
+    public function getYongoSetting($clientId, $settingName)
+    {
         $query = 'SELECT ' . $settingName . ' from client_yongo_settings where client_id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -126,20 +134,22 @@ class UbirimiClient
         if ($result->num_rows) {
             $data = $result->fetch_array(MYSQLI_ASSOC);
             return $data[$settingName];
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function getLastMonthActiveClients() {
+    public function getLastMonthActiveClients()
+    {
         $date = date("Y-m-d", mktime(0, 0, 0, date("m") - 1, 1, date("Y")));
         $query = 'SELECT count(general_log.id) as log_entries, client.id, client.company_domain, client.company_name, client.contact_email, client.date_created ' .
-                 'FROM general_log ' .
-                 'LEFT JOIN client ON client.id = general_log.client_id ' .
-                 'WHERE general_log.date_created >= ? AND ' .
-                    'client.id IS NOT NULL ' .
-                 'GROUP BY general_log.client_id ' .
-                 'HAVING log_entries > 10 ' .
-                 'ORDER BY log_entries DESC';
+            'FROM general_log ' .
+            'LEFT JOIN client ON client.id = general_log.client_id ' .
+            'WHERE general_log.date_created >= ? AND ' .
+            'client.id IS NOT NULL ' .
+            'GROUP BY general_log.client_id ' .
+            'HAVING log_entries > 10 ' .
+            'ORDER BY log_entries DESC';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("s", $date);
@@ -147,11 +157,13 @@ class UbirimiClient
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result;
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function getSettingsByBaseURL($url) {
+    public function getSettingsByBaseURL($url)
+    {
         $query = 'SELECT client.id, client_settings.operating_mode ' .
             'FROM client ' .
             'LEFT JOIN client_settings on client_settings.client_id = client.id ' .
@@ -163,11 +175,13 @@ class UbirimiClient
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function createDefaultYongoSettings($clientId) {
+    public function createDefaultYongoSettings($clientId)
+    {
         $query = "INSERT INTO client_yongo_settings(client_id, allow_unassigned_issues_flag, issues_per_page, issue_linking_flag, time_tracking_flag,
                   time_tracking_hours_per_day, time_tracking_days_per_week, time_tracking_default_unit)
                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -181,12 +195,23 @@ class UbirimiClient
         $timeTrackingDaysPerWeek = 5;
         $timeTrackingDefaultUnit = 'm';
 
-        $stmt->bind_param("iiiiiiis", $clientId, $allowUnassignedIssuesFlag, $issuesPerPage, $issueLinkingFlag, $timeTrackingFlag, $timeTrackingHoursPerDay, $timeTrackingDaysPerWeek, $timeTrackingDefaultUnit);
+        $stmt->bind_param(
+            "iiiiiiis",
+            $clientId,
+            $allowUnassignedIssuesFlag,
+            $issuesPerPage,
+            $issueLinkingFlag,
+            $timeTrackingFlag,
+            $timeTrackingHoursPerDay,
+            $timeTrackingDaysPerWeek,
+            $timeTrackingDefaultUnit
+        );
 
         $stmt->execute();
     }
 
-    public function setInstalledFlag($clientId, $installedFlag) {
+    public function setInstalledFlag($clientId, $installedFlag)
+    {
         $query = "update client set installed_flag = ? where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -195,7 +220,8 @@ class UbirimiClient
         $stmt->execute();
     }
 
-    public function createDefaultScreenData($clientId, $currentDate) {
+    public function createDefaultScreenData($clientId, $currentDate)
+    {
 
         $screenRepository = UbirimiContainer::get()['repository']->get(Screen::class);
         $fieldRepository = UbirimiContainer::get()['repository']->get(Field::class);
@@ -252,7 +278,8 @@ class UbirimiClient
         $screenRepository->addData($screen['id'], $assigneeField['id'], 1, $currentDate);
     }
 
-    public function createDefaultNotificationScheme($clientId, $currentDate) {
+    public function createDefaultNotificationScheme($clientId, $currentDate)
+    {
         $query = "INSERT INTO notification_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -266,7 +293,8 @@ class UbirimiClient
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function createDefaultPermissionScheme($clientId, $currentDate) {
+    public function createDefaultPermissionScheme($clientId, $currentDate)
+    {
         $query = "INSERT INTO permission_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -280,7 +308,13 @@ class UbirimiClient
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function createDefaultIssueTypeFieldConfigurationData($clientId, $issueTypeFieldConfigurationId, $fieldConfigurationId, $currentDate) {
+    public function createDefaultIssueTypeFieldConfigurationData(
+        $clientId,
+        $issueTypeFieldConfigurationId,
+        $fieldConfigurationId,
+        $currentDate
+    )
+    {
         $issueTypes = UbirimiContainer::get()['repository']->get(IssueType::class)->getAll($clientId);
         $query = "INSERT INTO  issue_type_field_configuration_data(issue_type_field_configuration_id, issue_type_id, field_configuration_id, date_created) VALUES ";
         while ($issueType = $issueTypes->fetch_array(MYSQLI_ASSOC)) {
@@ -291,7 +325,8 @@ class UbirimiClient
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function createDefaultIssueTypeSchemeData($clientId, $issueTypeSchemeId, $currentDate) {
+    public function createDefaultIssueTypeSchemeData($clientId, $issueTypeSchemeId, $currentDate)
+    {
         $issueTypes = UbirimiContainer::get()['repository']->get(IssueType::class)->getAll($clientId);
         $query = "INSERT INTO issue_type_scheme_data(issue_type_scheme_id, issue_type_id, date_created) VALUES ";
         while ($issueType = $issueTypes->fetch_array(MYSQLI_ASSOC)) {
@@ -302,20 +337,23 @@ class UbirimiClient
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function getAllIssueSettings($type, $clientId) {
+    public function getAllIssueSettings($type, $clientId)
+    {
         $query = "SELECT id, name, description FROM issue_" . $type . ' WHERE client_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function createDefaultIssueTypes($clientId, $currentDate) {
+    public function createDefaultIssueTypes($clientId, $currentDate)
+    {
         $query = "INSERT INTO issue_type(client_id, name, description, sub_task_flag, icon_name, date_created) VALUES " .
             "(" . $clientId . ", 'Bug', 'A problem which impairs or prevents the functions of the product.', 0, 'bug.png', '" . $currentDate . "'), (" . $clientId . ", 'New feature', 'A new feature of the product, which has yet to be developed.', 0, 'new_feature.png', '" . $currentDate . "'), " .
             "(" . $clientId . ", 'Task', 'A task that needs to be done.', 0, 'task.png', '" . $currentDate . "'), (" . $clientId . " , 'Improvement', 'An improvement or enhancement to an existing feature or task.', 0, 'improvement.png', '" . $currentDate . "'), " .
@@ -324,7 +362,8 @@ class UbirimiClient
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public  function createDefaultIssueTypeScheme($clientId, $type, $currentDate) {
+    public function createDefaultIssueTypeScheme($clientId, $type, $currentDate)
+    {
         $query = "INSERT INTO issue_type_scheme(client_id, name, description, type, date_created) VALUES (?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -337,7 +376,8 @@ class UbirimiClient
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function createDefaultIssueTypeScreenScheme($clientId, $currentDate) {
+    public function createDefaultIssueTypeScreenScheme($clientId, $currentDate)
+    {
         $query = "INSERT INTO issue_type_screen_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -351,7 +391,8 @@ class UbirimiClient
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function createDefaultIssuePriorities($clientId, $currentDate) {
+    public function createDefaultIssuePriorities($clientId, $currentDate)
+    {
         $query = "INSERT INTO issue_priority(client_id, name, icon_name, color, description, date_created) VALUES " .
             "(" . $clientId . ", 'Minor', 'minor.png', '#006600', 'Minor loss of function, or other problem where easy workaround is present.', '" . $currentDate . "'), " .
             "(" . $clientId . ", 'Major', 'major.png', '#009900', 'Major loss of function.', '" . $currentDate . "'), " .
@@ -361,7 +402,8 @@ class UbirimiClient
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function createDefaultIssueStatuses($clientId, $currentDate) {
+    public function createDefaultIssueStatuses($clientId, $currentDate)
+    {
         $query = "INSERT INTO issue_status(client_id, name, description, date_created) VALUES " .
             "(" . $clientId . ", 'Open', 'The issue is open and ready for the assignee to start work on it.', '" . $currentDate . "'), " .
             "(" . $clientId . ", 'Resolved', 'A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.', '" . $currentDate . "'), " .
@@ -371,7 +413,8 @@ class UbirimiClient
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function createDefaultIssueResolutions($clientId, $currentDate) {
+    public function createDefaultIssueResolutions($clientId, $currentDate)
+    {
         $query = "INSERT INTO issue_resolution(client_id, name, description, date_created) VALUES " .
             "(" . $clientId . ", 'Fixed', 'A fix for this issue is checked into the tree and tested.', '" . $currentDate . "'), (" . $clientId . ", 'Cannot Reproduce', 'All attempts at reproducing this issue failed, or not enough information was available to reproduce the issue. Reading the code produces no clues as to why this behavior would occur. If more information appears later, please reopen the issue.', '" . $currentDate . "'), " .
             "(" . $clientId . ", 'Won\'t Fix', 'The problem described is an issue which will never be fixed.', '" . $currentDate . "'), (" . $clientId . " , 'Duplicate', 'The problem is a duplicate of an existing issue.', '" . $currentDate . "'), " .
@@ -379,12 +422,34 @@ class UbirimiClient
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function create($company_name, $companyDomain, $baseURL, $companyEmail, $countryId, $vatNumber = null, $paymillId, $instanceType, $date) {
+    public function create(
+        $company_name,
+        $companyDomain,
+        $baseURL,
+        $companyEmail,
+        $countryId,
+        $vatNumber = null,
+        $paymillId,
+        $instanceType,
+        $date
+    )
+    {
         $query = "INSERT INTO client(company_name, company_domain, base_url, contact_email, date_created, instance_type, sys_country_id, vat_number, paymill_id) " .
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
-        $stmt->bind_param("ssssssiis", $company_name, $companyDomain, $baseURL, $companyEmail, $date, $instanceType, $countryId, $vatNumber, $paymillId);
+        $stmt->bind_param(
+            "ssssssiis",
+            $company_name,
+            $companyDomain,
+            $baseURL,
+            $companyEmail,
+            $date,
+            $instanceType,
+            $countryId,
+            $vatNumber,
+            $paymillId
+        );
 
         $stmt->execute();
 
@@ -404,7 +469,8 @@ class UbirimiClient
         return $clientId;
     }
 
-    public function deleteById($clientId) {
+    public function deleteById($clientId)
+    {
 
         $clientData = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getById($clientId);
         $query = "SET FOREIGN_KEY_CHECKS = 0;";
@@ -446,9 +512,13 @@ class UbirimiClient
 
         // delete issue security schemes
 
-        $issueSecuritySchemes = UbirimiContainer::get()['repository']->get(IssueSecurityScheme::class)->getByClientId($clientId);
+        $issueSecuritySchemes = UbirimiContainer::get()['repository']->get(IssueSecurityScheme::class)->getByClientId(
+            $clientId
+        );
         while ($issueSecuritySchemes && $issueSecurityScheme = $issueSecuritySchemes->fetch_array(MYSQLI_ASSOC)) {
-            UbirimiContainer::get()['repository']->get(IssueSecurityScheme::class)->deleteById($issueSecurityScheme['id']);
+            UbirimiContainer::get()['repository']->get(IssueSecurityScheme::class)->deleteById(
+                $issueSecurityScheme['id']
+            );
         }
 
         $users = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getUsers($clientId);
@@ -535,12 +605,13 @@ class UbirimiClient
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function getAll($filters = array()) {
+    public function getAll($filters = array())
+    {
         $query = 'select client.id, company_name, company_domain, address_1, address_2, city, district, contact_email, ' .
-                 'date_created, installed_flag, last_login, is_payable, paymill_id, ' .
-                 'sys_country.name as country_name, sys_country_id ' .
-                 'from client ' .
-                 'left join sys_country on sys_country.id = client.sys_country_id
+            'date_created, installed_flag, last_login, is_payable, paymill_id, ' .
+            'sys_country.name as country_name, sys_country_id ' .
+            'from client ' .
+            'left join sys_country on sys_country.id = client.sys_country_id
                  where 1 = 1';
 
         if (!empty($filters['today'])) {
@@ -560,25 +631,27 @@ class UbirimiClient
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return false;
+        }
     }
 
-    public function getProjects($clientId, $resultType = null, $resultColumn = null, $onlyHelpDeskFlag = false) {
+    public function getProjects($clientId, $resultType = null, $resultColumn = null, $onlyHelpDeskFlag = false)
+    {
         $partQuery = '';
         if ($onlyHelpDeskFlag) {
             $partQuery = ' AND project.help_desk_enabled_flag = 1 ';
         }
         $query = 'SELECT project.id, code, project.name, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
-                 'project_category.name as category_name, project_category_id as category_id ' .
-                 'FROM project ' .
-                 'LEFT join general_user ON project.lead_id = general_user.id ' .
-                 'left join project_category on project_category.id = project.project_category_id ' .
-                 'WHERE project.client_id = ? ' .
-                 $partQuery .
-                 'ORDER BY project.name ASC';
+            'project_category.name as category_name, project_category_id as category_id ' .
+            'FROM project ' .
+            'LEFT join general_user ON project.lead_id = general_user.id ' .
+            'left join project_category on project_category.id = project.project_category_id ' .
+            'WHERE project.client_id = ? ' .
+            $partQuery .
+            'ORDER BY project.name ASC';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -589,23 +662,28 @@ class UbirimiClient
             if ($resultType == 'array') {
                 $resultArray = array();
                 while ($prj = $result->fetch_array(MYSQLI_ASSOC)) {
-                    if ($resultColumn)
+                    if ($resultColumn) {
                         $resultArray[] = $prj[$resultColumn];
-                    else
+                    } else {
                         $resultArray[] = $prj;
+                    }
                 }
 
                 return $resultArray;
-            } else return $result;
-        } else
+            } else {
+                return $result;
+            }
+        } else {
             return null;
+        }
     }
 
-    public function getUsers($clientId, $filterGroupId = null, $resultType = null, $includeHelpdeskCustomerUsers = 1) {
+    public function getUsers($clientId, $filterGroupId = null, $resultType = null, $includeHelpdeskCustomerUsers = 1)
+    {
         $query = 'select general_user.* ' .
-                 'from general_user ' .
-                 'left join general_group_data on general_group_data.user_id = general_user.id ' .
-                 'WHERE general_user.client_id = ? ';
+            'from general_user ' .
+            'left join general_group_data on general_group_data.user_id = general_user.id ' .
+            'WHERE general_user.client_id = ? ';
 
         if (!$includeHelpdeskCustomerUsers) {
             $query .= ' AND customer_service_desk_flag = 0';
@@ -624,39 +702,63 @@ class UbirimiClient
         $query .= ' group by general_user.id';
         $query .= ' order by general_user.first_name, general_user.last_name';
 
-        foreach ($paramValue as $key => $value)
+        foreach ($paramValue as $key => $value) {
             $paramValueRef[$key] = &$paramValue[$key];
+        }
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         call_user_func_array(array($stmt, "bind_param"), array_merge(array($paramType), $paramValueRef));
 
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             if ($resultType == 'array') {
                 $resultArray = array();
                 while ($user = $result->fetch_array(MYSQLI_ASSOC)) {
                     $resultArray[] = $user;
                 }
                 return $resultArray;
-            } else return $result;
-
-        else
+            } else {
+                return $result;
+            }
+        } else {
             return null;
+        }
     }
 
-    public function updateById($clientId, $company_name, $address_1, $address_2, $city, $district, $contact_email, $countryId) {
+    public function updateById(
+        $clientId,
+        $company_name,
+        $address_1,
+        $address_2,
+        $city,
+        $district,
+        $contact_email,
+        $countryId
+    )
+    {
         $query = 'UPDATE client SET ' .
             'company_name = ?, address_1 = ?, address_2 = ?, city = ?, district = ?, contact_email = ?, sys_country_id = ? ' .
             'WHERE id = ? ' .
             'LIMIT 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
-        $stmt->bind_param("ssssssii", $company_name, $address_1, $address_2, $city, $district, $contact_email, $countryId, $clientId);
+        $stmt->bind_param(
+            "ssssssii",
+            $company_name,
+            $address_1,
+            $address_2,
+            $city,
+            $district,
+            $contact_email,
+            $countryId,
+            $clientId
+        );
         $stmt->execute();
     }
 
-    public function getById($clientId) {
+    public function getById($clientId)
+    {
         $query = 'select * from client where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -664,13 +766,15 @@ class UbirimiClient
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        else
+        } else {
             return false;
+        }
     }
 
-    public function createDefaultScreens($clientId, $currentDate) {
+    public function createDefaultScreens($clientId, $currentDate)
+    {
         $query = "INSERT INTO screen(client_id, name, description, date_created) VALUES " .
             "(" . $clientId . ",'Default Screen', 'Allows to update all system fields.', '" . $currentDate . "'), " .
             "(" . $clientId . ",'Resolve Issue Screen', 'Allows to set resolution, change fix versions and assign an issue.', '" . $currentDate . "'), " .
@@ -678,7 +782,8 @@ class UbirimiClient
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function createDefaultScreenScheme($clientId, $currentDate) {
+    public function createDefaultScreenScheme($clientId, $currentDate)
+    {
         $query = "INSERT INTO screen_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -692,7 +797,8 @@ class UbirimiClient
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function createDefaultWorkflowScheme($clientId, $currentDate) {
+    public function createDefaultWorkflowScheme($clientId, $currentDate)
+    {
         $query = "INSERT INTO workflow_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -706,7 +812,8 @@ class UbirimiClient
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function createDefaultFieldConfiguration($clientId, $currentDate) {
+    public function createDefaultFieldConfiguration($clientId, $currentDate)
+    {
         $query = "INSERT INTO field_configuration(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -720,7 +827,8 @@ class UbirimiClient
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function createDefaultIssueTypeFieldConfiguration($clientId, $currentDate) {
+    public function createDefaultIssueTypeFieldConfiguration($clientId, $currentDate)
+    {
         $query = "INSERT INTO  issue_type_field_configuration(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -734,7 +842,8 @@ class UbirimiClient
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function createDefaultWorkflowSchemeData($workflowSchemeId, $workflowId, $currentDate) {
+    public function createDefaultWorkflowSchemeData($workflowSchemeId, $workflowId, $currentDate)
+    {
         $query = "INSERT INTO workflow_scheme_data(workflow_scheme_id, workflow_id, date_created) VALUES (?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -743,8 +852,12 @@ class UbirimiClient
         $stmt->execute();
     }
 
-    public function createDefaultScreenSchemeData($clientId, $screenSchemeId, $currentDate) {
-        $defaultScreenData = UbirimiContainer::get()['repository']->get(Screen::class)->getByName($clientId, 'Default Screen');
+    public function createDefaultScreenSchemeData($clientId, $screenSchemeId, $currentDate)
+    {
+        $defaultScreenData = UbirimiContainer::get()['repository']->get(Screen::class)->getByName(
+            $clientId,
+            'Default Screen'
+        );
         $defaultScreenId = $defaultScreenData['id'];
 
         $query = "INSERT INTO screen_scheme_data(screen_scheme_id, sys_operation_id, screen_id, date_created) VALUES " .
@@ -754,7 +867,13 @@ class UbirimiClient
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function createDefaultIssueTypeScreenSchemeData($clientId, $issueTypeScreenSchemeId, $screenSchemeId, $currentDate) {
+    public function createDefaultIssueTypeScreenSchemeData(
+        $clientId,
+        $issueTypeScreenSchemeId,
+        $screenSchemeId,
+        $currentDate
+    )
+    {
         $issueTypes = UbirimiContainer::get()['repository']->get(IssueType::class)->getAll($clientId);
         $query = "INSERT INTO issue_type_screen_scheme_data(issue_type_screen_scheme_id, issue_type_id, screen_scheme_id, date_created) VALUES ";
         while ($issueType = $issueTypes->fetch_array(MYSQLI_ASSOC)) {
@@ -765,7 +884,8 @@ class UbirimiClient
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function createDefaultWorkflow($clientId, $issueTypeSchemeId, $currentDate) {
+    public function createDefaultWorkflow($clientId, $issueTypeSchemeId, $currentDate)
+    {
         $query = "INSERT INTO workflow(client_id, issue_type_scheme_id, name, description, date_created) VALUES (?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -784,10 +904,16 @@ class UbirimiClient
         $workflowRepository = UbirimiContainer::get()['repository']->get(Workflow::class);
         $issueSettingsRepository = UbirimiContainer::get()['repository']->get(IssueSettings::class);
 
-        $screenResolutionData = UbirimiContainer::get()['repository']->get(Screen::class)->getByName($clientId, 'Resolve Issue Screen');
+        $screenResolutionData = UbirimiContainer::get()['repository']->get(Screen::class)->getByName(
+            $clientId,
+            'Resolve Issue Screen'
+        );
         $screenResolutionId = $screenResolutionData['id'];
 
-        $screenWorkflowData = UbirimiContainer::get()['repository']->get(Screen::class)->getByName($clientId, 'Workflow Screen');
+        $screenWorkflowData = UbirimiContainer::get()['repository']->get(Screen::class)->getByName(
+            $clientId,
+            'Workflow Screen'
+        );
         $screenWorkflowId = $screenWorkflowData['id'];
         $createStepId = $workflowRepository->createDefaultStep($workflowId, null, 'Create Issue', 1);
 
@@ -812,151 +938,438 @@ class UbirimiClient
         $statusReopenedId = $statusReopenedIdData['id'];
         $reopenedStepId = $workflowRepository->createDefaultStep($workflowId, $statusReopenedId, 'Reopened', 0);
 
-        $eventIssueWorkStoppedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_WORK_STOPPED_CODE, 'id');
-        $eventIssueCreatedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_CREATED_CODE, 'id');
-        $eventIssueWorkStartedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_WORK_STARTED_CODE, 'id');
-        $eventIssueClosedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_CLOSED_CODE, 'id');
+        $eventIssueWorkStoppedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_WORK_STOPPED_CODE,
+            'id'
+        );
+        $eventIssueCreatedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_CREATED_CODE,
+            'id'
+        );
+        $eventIssueWorkStartedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_WORK_STARTED_CODE,
+            'id'
+        );
+        $eventIssueClosedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_CLOSED_CODE,
+            'id'
+        );
 
-        $eventIssueResolvedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_RESOLVED_CODE, 'id');
+        $eventIssueResolvedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_RESOLVED_CODE,
+            'id'
+        );
 
-        $eventIssueReopenedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode($clientId, IssueEvent::EVENT_ISSUE_REOPENED_CODE, 'id');
+        $eventIssueReopenedId = UbirimiContainer::get()['repository']->get(IssueEvent::class)->getByClientIdAndCode(
+            $clientId,
+            IssueEvent::EVENT_ISSUE_REOPENED_CODE,
+            'id'
+        );
 
         // create issue -----> open
-        $transitionId = $workflowRepository->addTransition($workflowId, null, $createStepId, $openStepId, 'Create Issue', '');
+        $transitionId = $workflowRepository->addTransition(
+            $workflowId,
+            null,
+            $createStepId,
+            $openStepId,
+            'Create Issue',
+            ''
+        );
 
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_CREATE_ISSUE, 'create_issue');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_FIRE_EVENT, 'event=' . $eventIssueCreatedId);
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_CREATE_ISSUE,
+            'create_issue'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_FIRE_EVENT,
+            'event=' . $eventIssueCreatedId
+        );
 
         // open ------> in progress
-        $transitionId = $workflowRepository->addTransition($workflowId, null, $openStepId, $inProgressStepId, 'Start Progress', '');
+        $transitionId = $workflowRepository->addTransition(
+            $workflowId,
+            null,
+            $openStepId,
+            $inProgressStepId,
+            'Start Progress',
+            ''
+        );
 
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_SET_ISSUE_FIELD_VALUE, 'field_name=resolution###field_value=-1');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP, 'set_issue_status');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY, 'update_issue_history');
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_SET_ISSUE_FIELD_VALUE,
+            'field_name=resolution###field_value=-1'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP,
+            'set_issue_status'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY,
+            'update_issue_history'
+        );
 
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_FIRE_EVENT, 'event=' . $eventIssueWorkStartedId);
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_FIRE_EVENT,
+            'event=' . $eventIssueWorkStartedId
+        );
 
         $definitionData = '(cond_id=' . WorkflowCondition::CONDITION_ONLY_ASSIGNEE . ')';
         $workflowRepository->addCondition($transitionId, $definitionData);
 
         // open ------> closed
-        $transitionId = $workflowRepository->addTransition($workflowId, $screenResolutionId, $openStepId, $closedStepId, 'Close Issue', '');
+        $transitionId = $workflowRepository->addTransition(
+            $workflowId,
+            $screenResolutionId,
+            $openStepId,
+            $closedStepId,
+            'Close Issue',
+            ''
+        );
 
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP, 'set_issue_status');
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP,
+            'set_issue_status'
+        );
 
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY, 'update_issue_history');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_FIRE_EVENT, 'event=' . $eventIssueClosedId);
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY,
+            'update_issue_history'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_FIRE_EVENT,
+            'event=' . $eventIssueClosedId
+        );
         $definitionData = '(perm_id=' . Permission::PERM_RESOLVE_ISSUE . '[[AND]]perm_id=' . Permission::PERM_CLOSE_ISSUE . ')';
         $workflowRepository->addCondition($transitionId, $definitionData);
 
         // open ------> resolved
 
-        $transitionId = $workflowRepository->addTransition($workflowId, $screenResolutionId, $openStepId, $resolvedStepId, 'Resolve Issue', '');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP, 'set_issue_status');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY, 'update_issue_history');
+        $transitionId = $workflowRepository->addTransition(
+            $workflowId,
+            $screenResolutionId,
+            $openStepId,
+            $resolvedStepId,
+            'Resolve Issue',
+            ''
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP,
+            'set_issue_status'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY,
+            'update_issue_history'
+        );
 
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_FIRE_EVENT, 'event=' . $eventIssueResolvedId);
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_FIRE_EVENT,
+            'event=' . $eventIssueResolvedId
+        );
         $definitionData = '(perm_id=' . Permission::PERM_RESOLVE_ISSUE . ')';
 
         $workflowRepository->addCondition($transitionId, $definitionData);
 
         // in progress ------> open
-        $transitionId = $workflowRepository->addTransition($workflowId, null, $inProgressStepId, $openStepId, 'Stop Progress', '');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_SET_ISSUE_FIELD_VALUE, 'field_name=resolution###field_value=-1');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP, 'set_issue_status');
+        $transitionId = $workflowRepository->addTransition(
+            $workflowId,
+            null,
+            $inProgressStepId,
+            $openStepId,
+            'Stop Progress',
+            ''
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_SET_ISSUE_FIELD_VALUE,
+            'field_name=resolution###field_value=-1'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP,
+            'set_issue_status'
+        );
 
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY, 'update_issue_history');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_FIRE_EVENT, 'event=' . $eventIssueWorkStoppedId);
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY,
+            'update_issue_history'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_FIRE_EVENT,
+            'event=' . $eventIssueWorkStoppedId
+        );
 
         $definitionData = '(cond_id=' . WorkflowCondition::CONDITION_ONLY_ASSIGNEE . ')';
         $workflowRepository->addCondition($transitionId, $definitionData);
 
         // in progress ------> resolved
-        $transitionId = $workflowRepository->addTransition($workflowId, $screenResolutionId, $inProgressStepId, $resolvedStepId, 'Resolve Issue', '');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP, 'set_issue_status');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY, 'update_issue_history');
+        $transitionId = $workflowRepository->addTransition(
+            $workflowId,
+            $screenResolutionId,
+            $inProgressStepId,
+            $resolvedStepId,
+            'Resolve Issue',
+            ''
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP,
+            'set_issue_status'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY,
+            'update_issue_history'
+        );
 
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_FIRE_EVENT, 'event=' . $eventIssueResolvedId);
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_FIRE_EVENT,
+            'event=' . $eventIssueResolvedId
+        );
         $definitionData = '(perm_id=' . Permission::PERM_RESOLVE_ISSUE . ')';
         $workflowRepository->addCondition($transitionId, $definitionData);
 
         // in progress ------> closed
-        $transitionId = $workflowRepository->addTransition($workflowId, $screenResolutionId, $inProgressStepId, $closedStepId, 'Close Issue', '');
+        $transitionId = $workflowRepository->addTransition(
+            $workflowId,
+            $screenResolutionId,
+            $inProgressStepId,
+            $closedStepId,
+            'Close Issue',
+            ''
+        );
 
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP, 'set_issue_status');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY, 'update_issue_history');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_FIRE_EVENT, 'event=' . $eventIssueClosedId);
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP,
+            'set_issue_status'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY,
+            'update_issue_history'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_FIRE_EVENT,
+            'event=' . $eventIssueClosedId
+        );
 
         $definitionData = '(perm_id=' . Permission::PERM_RESOLVE_ISSUE . '[[AND]]perm_id=' . Permission::PERM_CLOSE_ISSUE . ')';
 
         $workflowRepository->addCondition($transitionId, $definitionData);
 
         // resolved ------> closed
-        $transitionId = $workflowRepository->addTransition($workflowId, $screenWorkflowId, $resolvedStepId, $closedStepId, 'Close Issue', '');
+        $transitionId = $workflowRepository->addTransition(
+            $workflowId,
+            $screenWorkflowId,
+            $resolvedStepId,
+            $closedStepId,
+            'Close Issue',
+            ''
+        );
 
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP, 'set_issue_status');
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP,
+            'set_issue_status'
+        );
 
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY, 'update_issue_history');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_FIRE_EVENT, 'event=' . $eventIssueClosedId);
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY,
+            'update_issue_history'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_FIRE_EVENT,
+            'event=' . $eventIssueClosedId
+        );
 
         $definitionData = '(perm_id=' . Permission::PERM_CLOSE_ISSUE . ')';
 
         $workflowRepository->addCondition($transitionId, $definitionData);
 
         // resolved ------> reopened
-        $transitionId = $workflowRepository->addTransition($workflowId, $screenWorkflowId, $resolvedStepId, $reopenedStepId, 'Reopen Issue', '');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_SET_ISSUE_FIELD_VALUE, 'field_name=resolution###field_value=-1');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP, 'set_issue_status');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY, 'update_issue_history');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_FIRE_EVENT, 'event=' . $eventIssueReopenedId);
+        $transitionId = $workflowRepository->addTransition(
+            $workflowId,
+            $screenWorkflowId,
+            $resolvedStepId,
+            $reopenedStepId,
+            'Reopen Issue',
+            ''
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_SET_ISSUE_FIELD_VALUE,
+            'field_name=resolution###field_value=-1'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP,
+            'set_issue_status'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY,
+            'update_issue_history'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_FIRE_EVENT,
+            'event=' . $eventIssueReopenedId
+        );
 
         $definitionData = '(perm_id=' . Permission::PERM_RESOLVE_ISSUE . ')';
         $workflowRepository->addCondition($transitionId, $definitionData);
 
         // reopened ------> resolved
-        $transitionId = $workflowRepository->addTransition($workflowId, $screenResolutionId, $reopenedStepId, $resolvedStepId, 'Resolve Issue', '');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP, 'set_issue_status');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY, 'update_issue_history');
+        $transitionId = $workflowRepository->addTransition(
+            $workflowId,
+            $screenResolutionId,
+            $reopenedStepId,
+            $resolvedStepId,
+            'Resolve Issue',
+            ''
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP,
+            'set_issue_status'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY,
+            'update_issue_history'
+        );
 
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_FIRE_EVENT, 'event=' . $eventIssueResolvedId);
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_FIRE_EVENT,
+            'event=' . $eventIssueResolvedId
+        );
 
         $definitionData = '(perm_id=' . Permission::PERM_RESOLVE_ISSUE . ')';
 
         $workflowRepository->addCondition($transitionId, $definitionData);
 
         // reopened ------> closed
-        $transitionId = $workflowRepository->addTransition($workflowId, $screenResolutionId, $reopenedStepId, $closedStepId, 'Close Issue', '');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP, 'set_issue_status');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY, 'update_issue_history');
+        $transitionId = $workflowRepository->addTransition(
+            $workflowId,
+            $screenResolutionId,
+            $reopenedStepId,
+            $closedStepId,
+            'Close Issue',
+            ''
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP,
+            'set_issue_status'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY,
+            'update_issue_history'
+        );
 
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_FIRE_EVENT, 'event=' . $eventIssueClosedId);
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_FIRE_EVENT,
+            'event=' . $eventIssueClosedId
+        );
         $definitionData = '(perm_id=' . Permission::PERM_RESOLVE_ISSUE . '[[AND]]perm_id=' . Permission::PERM_CLOSE_ISSUE . ')';
 
         $workflowRepository->addCondition($transitionId, $definitionData);
 
         // reopened ------> In progress
 
-        $transitionId = $workflowRepository->addTransition($workflowId, null, $reopenedStepId, $inProgressStepId, 'Start Progress', '');
+        $transitionId = $workflowRepository->addTransition(
+            $workflowId,
+            null,
+            $reopenedStepId,
+            $inProgressStepId,
+            'Start Progress',
+            ''
+        );
 
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_SET_ISSUE_FIELD_VALUE, 'field_name=resolution###field_value=-1');
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_SET_ISSUE_FIELD_VALUE,
+            'field_name=resolution###field_value=-1'
+        );
 
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP, 'set_issue_status');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY, 'update_issue_history');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_FIRE_EVENT, 'event=' . $eventIssueWorkStartedId);
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP,
+            'set_issue_status'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY,
+            'update_issue_history'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_FIRE_EVENT,
+            'event=' . $eventIssueWorkStartedId
+        );
 
         $definitionData = '(cond_id=' . WorkflowCondition::CONDITION_ONLY_ASSIGNEE . ')';
 
         $workflowRepository->addCondition($transitionId, $definitionData);
 
         // closed ------> reopened
-        $transitionId = $workflowRepository->addTransition($workflowId, $screenWorkflowId, $closedStepId, $reopenedStepId, 'Reopen Issue', '');
+        $transitionId = $workflowRepository->addTransition(
+            $workflowId,
+            $screenWorkflowId,
+            $closedStepId,
+            $reopenedStepId,
+            'Reopen Issue',
+            ''
+        );
 
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_SET_ISSUE_FIELD_VALUE, 'field_name=resolution###field_value=-1');
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_SET_ISSUE_FIELD_VALUE,
+            'field_name=resolution###field_value=-1'
+        );
 
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP, 'set_issue_status');
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY, 'update_issue_history');
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_SET_ISSUE_STATUS_AS_IN_WORKFLOW_STEP,
+            'set_issue_status'
+        );
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_UPDATE_ISSUE_CHANGE_HISTORY,
+            'update_issue_history'
+        );
 
-        $workflowRepository->addPostFunctionToTransition($transitionId, WorkflowFunction::FUNCTION_FIRE_EVENT, 'event=' . $eventIssueReopenedId);
+        $workflowRepository->addPostFunctionToTransition(
+            $transitionId,
+            WorkflowFunction::FUNCTION_FIRE_EVENT,
+            'event=' . $eventIssueReopenedId
+        );
 
         $definitionData = '(perm_id=' . Permission::PERM_RESOLVE_ISSUE . ')';
 
@@ -994,7 +1407,8 @@ class UbirimiClient
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function createDefaultEvents($clientId, $currentDate) {
+    public function createDefaultEvents($clientId, $currentDate)
+    {
         $query = "INSERT INTO event(client_id, name, code, description, system_flag, date_created) VALUES " .
             "(" . $clientId . ",'Issue Created', 1, 'This is the \'issue created\' event.', 1, '" . $currentDate . "'), " .
             "(" . $clientId . ",'Issue Updated', 2, 'This is the \'issue updated\' event.', 1, '" . $currentDate . "'), " .
@@ -1015,7 +1429,8 @@ class UbirimiClient
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function getYongoSettings($clientId) {
+    public function getYongoSettings($clientId)
+    {
         $query = 'select * from client_yongo_settings where client_id = ' . $clientId;
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1023,13 +1438,15 @@ class UbirimiClient
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        else
+        } else {
             return false;
+        }
     }
 
-    public function getSettings($clientId) {
+    public function getSettings($clientId)
+    {
         $query = 'select * from client_settings where client_id = ' . $clientId;
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1037,13 +1454,15 @@ class UbirimiClient
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        else
+        } else {
             return false;
+        }
     }
 
-    public function getDocumentadorSettings($clientId) {
+    public function getDocumentadorSettings($clientId)
+    {
         $query = 'select * from client_documentator_settings where client_id = ' . $clientId;
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1051,21 +1470,27 @@ class UbirimiClient
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        else
+        } else {
             return false;
+        }
     }
 
-    public function updateProductSettings($clientId, $targetProduct, $parameters) {
+    public function updateProductSettings($clientId, $targetProduct, $parameters)
+    {
         $tableName = '';
 
-        if ($targetProduct == SystemProduct::SYS_PRODUCT_YONGO)
+        if ($targetProduct == SystemProduct::SYS_PRODUCT_YONGO) {
             $tableName = 'client_yongo_settings';
-        else if ($targetProduct == SystemProduct::SYS_PRODUCT_DOCUMENTADOR) {
-            $tableName = 'client_documentator_settings';
-        } else if ($targetProduct == 'client_settings') {
-            $tableName = 'client_settings';
+        } else {
+            if ($targetProduct == SystemProduct::SYS_PRODUCT_DOCUMENTADOR) {
+                $tableName = 'client_documentator_settings';
+            } else {
+                if ($targetProduct == 'client_settings') {
+                    $tableName = 'client_settings';
+                }
+            }
         }
 
         $query = 'UPDATE ' . $tableName . ' SET ';
@@ -1078,60 +1503,63 @@ class UbirimiClient
             $values[] = $parameters[$i]['value'];
             $valuesType .= $parameters[$i]['type'];
         }
-        $query = substr($query, 0, strlen($query) - 2) . ' ' ;
+        $query = substr($query, 0, strlen($query) - 2) . ' ';
 
         $query .= 'WHERE client_id = ? ' .
-                  'LIMIT 1';
+            'LIMIT 1';
         $values[] = $clientId;
         $valuesType .= 'i';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
-        foreach ($values as $key => $value)
+        foreach ($values as $key => $value) {
             $values_ref[$key] = &$values[$key];
+        }
 
-        if ($valuesType != '')
+        if ($valuesType != '') {
             call_user_func_array(array($stmt, "bind_param"), array_merge(array($valuesType), $values_ref));
+        }
         $stmt->execute();
 
         $result = $stmt->get_result();
     }
 
-    public function getProjectsByPermission($clientId, $userId, $permissionId, $resultType = null) {
+    public function getProjectsByPermission($clientId, $userId, $permissionId, $resultType = null)
+    {
 
         // 1. user in permission scheme
 
         $queryLoggedInUser = '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
-             'project.issue_type_field_configuration_id, project.lead_id, project.issue_security_scheme_id, project_category.name as category_name, project_category.id as category_id, ' .
-             'user_lead.first_name as lead_first_name, user_lead.last_name as lead_last_name ' .
-        'from permission_scheme ' .
-        'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-        'left join project on project.permission_scheme_id = permission_scheme.id ' .
-        'left join general_user on general_user.id = permission_scheme_data.user_id ' .
-        'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
-        'left join project_category on project_category.id = project.project_category_id ' .
-        'where permission_scheme.client_id = ? and ' .
+            'project.issue_type_field_configuration_id, project.lead_id, project.issue_security_scheme_id, project_category.name as category_name, project_category.id as category_id, ' .
+            'user_lead.first_name as lead_first_name, user_lead.last_name as lead_last_name ' .
+            'from permission_scheme ' .
+            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
+            'left join project on project.permission_scheme_id = permission_scheme.id ' .
+            'left join general_user on general_user.id = permission_scheme_data.user_id ' .
+            'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
+            'left join project_category on project_category.id = project.project_category_id ' .
+            'where permission_scheme.client_id = ? and ' .
             'permission_scheme_data.user_id = ? and ' .
             'permission_scheme_data.sys_permission_id = ? and ' .
             'project.id is not null and ' .
             'general_user.id is not null) ' .
 
-        // 2. group in permission scheme
+            // 2. group in permission scheme
 
-        'UNION DISTINCT ' .
+            'UNION DISTINCT ' .
 
-        '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
-             'project.issue_type_field_configuration_id, project.lead_id, project.issue_security_scheme_id, project_category.name as category_name, project_category.id as category_id, ' .
-             'user_lead.first_name as lead_first_name, user_lead.last_name as lead_last_name ' .
-        'from permission_scheme ' .
-        'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-        'left join project on project.permission_scheme_id = permission_scheme.id ' .
-        'left join `general_group` on general_group.id = permission_scheme_data.group_id ' .
-        'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
-        'left join general_user on general_user.id = general_group_data.user_id ' .
-        'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
-        'left join project_category on project_category.id = project.project_category_id ' .
-        'where permission_scheme.client_id = ? and ' .
+            '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
+            'project.issue_type_field_configuration_id, project.lead_id, project.issue_security_scheme_id, project_category.name as category_name, project_category.id as category_id, ' .
+            'user_lead.first_name as lead_first_name, user_lead.last_name as lead_last_name ' .
+            'from permission_scheme ' .
+            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
+            'left join project on project.permission_scheme_id = permission_scheme.id ' .
+            'left join `general_group` on general_group.id = permission_scheme_data.group_id ' .
+            'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
+            'left join general_user on general_user.id = general_group_data.user_id ' .
+            'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
+            'left join project_category on project_category.id = project.project_category_id ' .
+            'where permission_scheme.client_id = ? and ' .
             'permission_scheme_data.group_id is not null and ' .
             'permission_scheme_data.sys_permission_id = ? and ' .
             'general_user.id = ? and ' .
@@ -1140,35 +1568,35 @@ class UbirimiClient
 
             // 2.1 group Anyone
 
-        'UNION ' .
+            'UNION ' .
 
-        '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, null as first_name, null as last_name, null as user_id, ' .
+            '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, null as first_name, null as last_name, null as user_id, ' .
             'project.issue_type_field_configuration_id, project.lead_id, project.issue_security_scheme_id, project_category.name as category_name, project_category.id as category_id, ' .
             'user_lead.first_name as lead_first_name, user_lead.last_name as lead_last_name ' .
-        'from permission_scheme ' .
-        'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-        'left join project on project.permission_scheme_id = permission_scheme.id ' .
-        'left join project_category on project_category.id = project.project_category_id ' .
-        'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
-        'where permission_scheme.client_id = ? and ' .
+            'from permission_scheme ' .
+            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
+            'left join project on project.permission_scheme_id = permission_scheme.id ' .
+            'left join project_category on project_category.id = project.project_category_id ' .
+            'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
+            'where permission_scheme.client_id = ? and ' .
             'permission_scheme_data.sys_permission_id = ? and ' .
             'permission_scheme_data.group_id = 0) ' .
 
             // 3. permission role in permission scheme - user
 
-        'UNION DISTINCT ' .
+            'UNION DISTINCT ' .
 
-        '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
+            '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
             'project.issue_type_field_configuration_id, project.lead_id, project.issue_security_scheme_id, project_category.name as category_name, project_category.id as category_id, ' .
             'user_lead.first_name as lead_first_name, user_lead.last_name as lead_last_name ' .
-        'from permission_scheme ' .
-        'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-        'left join project on project.permission_scheme_id = permission_scheme.id ' .
-        'left join project_role_data on project_role_data.permission_role_id = permission_scheme_data.permission_role_id ' .
-        'left join general_user on general_user.id = project_role_data.user_id ' .
-        'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
-        'left join project_category on project_category.id = project.project_category_id ' .
-        'where permission_scheme.client_id = ? and ' .
+            'from permission_scheme ' .
+            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
+            'left join project on project.permission_scheme_id = permission_scheme.id ' .
+            'left join project_role_data on project_role_data.permission_role_id = permission_scheme_data.permission_role_id ' .
+            'left join general_user on general_user.id = project_role_data.user_id ' .
+            'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
+            'left join project_category on project_category.id = project.project_category_id ' .
+            'where permission_scheme.client_id = ? and ' .
             'project_role_data.user_id is not null and ' .
             'permission_scheme_data.sys_permission_id = ? and ' .
             'general_user.id = ? and ' .
@@ -1178,21 +1606,21 @@ class UbirimiClient
 
             // 4. permission role in permission scheme - group
 
-        'UNION DISTINCT ' .
+            'UNION DISTINCT ' .
 
-        '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
+            '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
             'project.issue_type_field_configuration_id, project.lead_id, project.issue_security_scheme_id, project_category.name as category_name, project_category.id as category_id, ' .
             'user_lead.first_name as lead_first_name, user_lead.last_name as lead_last_name ' .
-        'from permission_scheme ' .
-        'left join project on project.permission_scheme_id = permission_scheme.id ' .
-        'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-        'left join project_role_data on project_role_data.permission_role_id = permission_scheme_data.permission_role_id ' .
-        'left join `general_group` on general_group.id = project_role_data.group_id ' .
-        'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
-        'left join general_user on general_user.id = general_group_data.user_id ' .
-        'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
-        'left join project_category on project_category.id = project.project_category_id ' .
-        'where permission_scheme.client_id = ? and ' .
+            'from permission_scheme ' .
+            'left join project on project.permission_scheme_id = permission_scheme.id ' .
+            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
+            'left join project_role_data on project_role_data.permission_role_id = permission_scheme_data.permission_role_id ' .
+            'left join `general_group` on general_group.id = project_role_data.group_id ' .
+            'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
+            'left join general_user on general_user.id = general_group_data.user_id ' .
+            'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
+            'left join project_category on project_category.id = project.project_category_id ' .
+            'where permission_scheme.client_id = ? and ' .
             'project_role_data.group_id is not null and ' .
             'permission_scheme_data.sys_permission_id = ? and ' .
             'general_user.id = ? and ' .
@@ -1201,19 +1629,19 @@ class UbirimiClient
 
             // 5. reporter
 
-        'UNION DISTINCT ' .
+            'UNION DISTINCT ' .
 
-        '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
+            '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
             'project.issue_type_field_configuration_id, project.lead_id, project.issue_security_scheme_id, project_category.name as category_name, project_category.id as category_id, ' .
             'user_lead.first_name as lead_first_name, user_lead.last_name as lead_last_name ' .
-        'from permission_scheme ' .
-        'left join project on project.permission_scheme_id = permission_scheme.id ' .
-        'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-        'left join yongo_issue on yongo_issue.project_id = project.id ' .
-        'left join general_user on general_user.id = yongo_issue.user_reported_id ' .
-        'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
-        'left join project_category on project_category.id = project.project_category_id ' .
-        'where permission_scheme.client_id = ? and ' .
+            'from permission_scheme ' .
+            'left join project on project.permission_scheme_id = permission_scheme.id ' .
+            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
+            'left join yongo_issue on yongo_issue.project_id = project.id ' .
+            'left join general_user on general_user.id = yongo_issue.user_reported_id ' .
+            'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
+            'left join project_category on project_category.id = project.project_category_id ' .
+            'where permission_scheme.client_id = ? and ' .
             'permission_scheme_data.sys_permission_id = ? and ' .
             'permission_scheme_data.reporter = 1 and ' .
             'general_user.id = ? and ' .
@@ -1222,26 +1650,26 @@ class UbirimiClient
 
             // 6. current assignee
 
-        'UNION DISTINCT ' .
+            'UNION DISTINCT ' .
 
-        '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
+            '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
             'project.issue_type_field_configuration_id, project.lead_id, project.issue_security_scheme_id, project_category.name as category_name, project_category.id as category_id, ' .
             'user_lead.first_name as lead_first_name, user_lead.last_name as lead_last_name ' .
-        'from permission_scheme ' .
-        'left join project on project.permission_scheme_id = permission_scheme.id ' .
-        'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-        'left join yongo_issue on yongo_issue.project_id = project.id ' .
-        'left join general_user on general_user.id = yongo_issue.user_assigned_id ' .
-        'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
-        'left join project_category on project_category.id = project.project_category_id ' .
-        'where permission_scheme.client_id = ? and ' .
+            'from permission_scheme ' .
+            'left join project on project.permission_scheme_id = permission_scheme.id ' .
+            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
+            'left join yongo_issue on yongo_issue.project_id = project.id ' .
+            'left join general_user on general_user.id = yongo_issue.user_assigned_id ' .
+            'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
+            'left join project_category on project_category.id = project.project_category_id ' .
+            'where permission_scheme.client_id = ? and ' .
             'permission_scheme_data.sys_permission_id = ? and ' .
             'permission_scheme_data.current_assignee = 1 and ' .
             'general_user.id = ? and ' .
             'project.id is not null and ' .
             'general_user.id is not null) ' .
 
-        'order by name';
+            'order by name';
 
         // check to see if group 'Anyone' is in the permission. This is for the case of Anonymous access
         if (!$userId) {
@@ -1253,17 +1681,39 @@ class UbirimiClient
                 'left join project on project.permission_scheme_id = permission_scheme.id ' .
                 'left join project_category on project_category.id = project.project_category_id ' .
                 'where permission_scheme.client_id = ? and ' .
-                    'permission_scheme_data.sys_permission_id = ? and ' .
-                    'permission_scheme_data.group_id = 0 ' .
+                'permission_scheme_data.sys_permission_id = ? and ' .
+                'permission_scheme_data.group_id = 0 ' .
                 'order by project.name';
 
-                $stmt = UbirimiContainer::get()['db.connection']->prepare($queryAnonymousUser);
+            $stmt = UbirimiContainer::get()['db.connection']->prepare($queryAnonymousUser);
             $stmt->bind_param("ii", $clientId, $permissionId);
             $stmt->execute();
             $result = $stmt->get_result();
         } else {
             $stmt = UbirimiContainer::get()['db.connection']->prepare($queryLoggedInUser);
-            $stmt->bind_param("iiiiiiiiiiiiiiiiiiii", $clientId, $userId, $permissionId, $clientId, $permissionId, $userId, $clientId, $permissionId, $clientId, $permissionId, $userId, $clientId, $permissionId, $userId, $clientId, $permissionId, $userId, $clientId, $permissionId, $userId);
+            $stmt->bind_param(
+                "iiiiiiiiiiiiiiiiiiii",
+                $clientId,
+                $userId,
+                $permissionId,
+                $clientId,
+                $permissionId,
+                $userId,
+                $clientId,
+                $permissionId,
+                $clientId,
+                $permissionId,
+                $userId,
+                $clientId,
+                $permissionId,
+                $userId,
+                $clientId,
+                $permissionId,
+                $userId,
+                $clientId,
+                $permissionId,
+                $userId
+            );
             $stmt->execute();
             $result = $stmt->get_result();
         }
@@ -1275,13 +1725,16 @@ class UbirimiClient
                     $resultArray[] = $user;
                 }
                 return $resultArray;
-            } else return $result;
+            } else {
+                return $result;
+            }
         } else {
             return null;
         }
     }
 
-    public function hasProduct($clientId, $productId) {
+    public function hasProduct($clientId, $productId)
+    {
         $query = 'SELECT * ' .
             'from client_product ' .
             'WHERE client_product.client_id = ? and sys_product_id = ?';
@@ -1291,64 +1744,118 @@ class UbirimiClient
         $stmt->bind_param("ii", $clientId, $productId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
-    public function createDefaultFieldConfigurationData($clientId, $fieldConfigurationId) {
-        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode($clientId, Field::FIELD_AFFECTS_VERSION_CODE);
+    public function createDefaultFieldConfigurationData($clientId, $fieldConfigurationId)
+    {
+        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode(
+            $clientId,
+            Field::FIELD_AFFECTS_VERSION_CODE
+        );
 
         $fieldConfigurationRepository = UbirimiContainer::get()['repository']->get(FieldConfiguration::class);
         $fieldConfigurationRepository->addCompleteData($fieldConfigurationId, $field['id'], 1, 0, '');
 
-        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode($clientId, Field::FIELD_ASSIGNEE_CODE);
+        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode(
+            $clientId,
+            Field::FIELD_ASSIGNEE_CODE
+        );
         $fieldConfigurationRepository->addCompleteData($fieldConfigurationId, $field['id'], 1, 0, '');
 
-        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode($clientId, Field::FIELD_ATTACHMENT_CODE);
+        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode(
+            $clientId,
+            Field::FIELD_ATTACHMENT_CODE
+        );
         $fieldConfigurationRepository->addCompleteData($fieldConfigurationId, $field['id'], 1, 0, '');
 
-        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode($clientId, Field::FIELD_COMMENT_CODE);
+        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode(
+            $clientId,
+            Field::FIELD_COMMENT_CODE
+        );
         $fieldConfigurationRepository->addCompleteData($fieldConfigurationId, $field['id'], 1, 0, '');
-        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode($clientId, Field::FIELD_COMPONENT_CODE);
+        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode(
+            $clientId,
+            Field::FIELD_COMPONENT_CODE
+        );
         $fieldConfigurationRepository->addCompleteData($fieldConfigurationId, $field['id'], 1, 0, '');
-        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode($clientId, Field::FIELD_DESCRIPTION_CODE);
+        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode(
+            $clientId,
+            Field::FIELD_DESCRIPTION_CODE
+        );
         $fieldConfigurationRepository->addCompleteData($fieldConfigurationId, $field['id'], 1, 0, '');
-        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode($clientId, Field::FIELD_DUE_DATE_CODE);
+        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode(
+            $clientId,
+            Field::FIELD_DUE_DATE_CODE
+        );
 
         $fieldConfigurationRepository->addCompleteData($fieldConfigurationId, $field['id'], 1, 0, '');
-        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode($clientId, Field::FIELD_ENVIRONMENT_CODE);
+        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode(
+            $clientId,
+            Field::FIELD_ENVIRONMENT_CODE
+        );
 
         $fieldConfigurationRepository->addCompleteData($fieldConfigurationId, $field['id'], 1, 0, '');
 
-        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode($clientId, Field::FIELD_FIX_VERSION_CODE);
+        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode(
+            $clientId,
+            Field::FIELD_FIX_VERSION_CODE
+        );
 
         $fieldConfigurationRepository->addCompleteData($fieldConfigurationId, $field['id'], 1, 0, '');
 
-        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode($clientId, Field::FIELD_ISSUE_TYPE_CODE);
+        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode(
+            $clientId,
+            Field::FIELD_ISSUE_TYPE_CODE
+        );
         $fieldConfigurationRepository->addCompleteData($fieldConfigurationId, $field['id'], 1, 1, '');
-        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode($clientId, Field::FIELD_PRIORITY_CODE);
+        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode(
+            $clientId,
+            Field::FIELD_PRIORITY_CODE
+        );
         $fieldConfigurationRepository->addCompleteData($fieldConfigurationId, $field['id'], 1, 0, '');
 
-        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode($clientId, Field::FIELD_REPORTER_CODE);
+        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode(
+            $clientId,
+            Field::FIELD_REPORTER_CODE
+        );
 
         $fieldConfigurationRepository->addCompleteData($fieldConfigurationId, $field['id'], 1, 1, '');
 
-        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode($clientId, Field::FIELD_RESOLUTION_CODE);
+        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode(
+            $clientId,
+            Field::FIELD_RESOLUTION_CODE
+        );
 
         $fieldConfigurationRepository->addCompleteData($fieldConfigurationId, $field['id'], 1, 0, '');
 
-        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode($clientId, Field::FIELD_SUMMARY_CODE);
+        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode(
+            $clientId,
+            Field::FIELD_SUMMARY_CODE
+        );
 
         $fieldConfigurationRepository->addCompleteData($fieldConfigurationId, $field['id'], 1, 1, '');
-        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode($clientId, Field::FIELD_ISSUE_TIME_TRACKING_CODE);
+        $field = UbirimiContainer::get()['repository']->get(Field::class)->getByCode(
+            $clientId,
+            Field::FIELD_ISSUE_TIME_TRACKING_CODE
+        );
         $fieldConfigurationRepository->addCompleteData($fieldConfigurationId, $field['id'], 1, 0, '');
     }
 
-    public function addDefaultDocumentadorGlobalPermissionData($clientId) {
-        $groupAdministrators = UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->getByName($clientId, 'Documentador Administrators');
-        $groupUsers = UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->getByName($clientId, 'Documentador Users');
+    public function addDefaultDocumentadorGlobalPermissionData($clientId)
+    {
+        $groupAdministrators = UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->getByName(
+            $clientId,
+            'Documentador Administrators'
+        );
+        $groupUsers = UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->getByName(
+            $clientId,
+            'Documentador Users'
+        );
 
         $groupAdministratorsId = $groupAdministrators['id'];
         $groupUsersId = $groupUsers['id'];
@@ -1382,7 +1889,8 @@ class UbirimiClient
         $stmt->execute();
     }
 
-    public function addYongoGlobalPermissionData($clientId, $groupAdministrators, $groupUsers) {
+    public function addYongoGlobalPermissionData($clientId, $groupAdministrators, $groupUsers)
+    {
         $query = "INSERT INTO sys_permission_global_data(client_id, sys_permission_global_id, group_id) VALUES (?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1410,7 +1918,8 @@ class UbirimiClient
         $stmt->execute();
     }
 
-    public function createDefaultFields($clientId, $date) {
+    public function createDefaultFields($clientId, $date)
+    {
         $query = "INSERT INTO field(client_id, code, name, description, system_flag, date_created) VALUES " .
             "(" . $clientId . ", 'resolution', 'Resolution', 'Resolution', 1, '" . $date . "'), " .
             "(" . $clientId . ", 'comment', 'Comment', 'Comment', 1, '" . $date . "'), " .
@@ -1431,7 +1940,8 @@ class UbirimiClient
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function checkAvailableDomain($companyDomain) {
+    public function checkAvailableDomain($companyDomain)
+    {
         $query = 'SELECT id from client where company_domain = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1441,11 +1951,13 @@ class UbirimiClient
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return false;
-        } else
+        } else {
             return true;
+        }
     }
 
-    public function getProducts($clientId, $resultType = null, $resultColumn = null) {
+    public function getProducts($clientId, $resultType = null, $resultColumn = null)
+    {
         $query = 'SELECT * from client_product where client_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1457,21 +1969,25 @@ class UbirimiClient
             if ($resultType == 'array') {
                 $resultArray = array();
                 while ($data = $result->fetch_array(MYSQLI_ASSOC)) {
-                    if ($resultColumn)
+                    if ($resultColumn) {
                         $resultArray[] = $data[$resultColumn];
-                    else
+                    } else {
                         $resultArray[] = $data;
+                    }
                 }
 
                 return $resultArray;
-            } else
+            } else {
                 return $result;
+            }
 
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function createDatabase($sqlDatabaseCreation) {
+    public function createDatabase($sqlDatabaseCreation)
+    {
         UbirimiContainer::get()['db.connection']->multi_query($sqlDatabaseCreation);
         do {
 
@@ -1481,7 +1997,8 @@ class UbirimiClient
         } while (UbirimiContainer::get()['db.connection']->next_result());
     }
 
-    public function installYongoProduct($clientId, $userId, $clientCreatedDate) {
+    public function installYongoProduct($clientId, $userId, $clientCreatedDate)
+    {
         $clientRepository = UbirimiContainer::get()['repository']->get(UbirimiClient::class);
 
         // set default YONGO Product Settings
@@ -1504,18 +2021,31 @@ class UbirimiClient
         $clientRepository->createDefaultIssueTypeSchemeData($clientId, $issueTypeSchemeId, $clientCreatedDate);
 
         // create default workflow issue type scheme
-        $workflowIssueTypeSchemeId = $clientRepository->createDefaultIssueTypeScheme($clientId, 'workflow', $clientCreatedDate);
+        $workflowIssueTypeSchemeId = $clientRepository->createDefaultIssueTypeScheme(
+            $clientId,
+            'workflow',
+            $clientCreatedDate
+        );
         $clientRepository->createDefaultIssueTypeSchemeData($clientId, $workflowIssueTypeSchemeId, $clientCreatedDate);
 
         // create default issue type screen scheme
         $issueTypeScreenSchemeId = $clientRepository->createDefaultIssueTypeScreenScheme($clientId, $clientCreatedDate);
-        $clientRepository->createDefaultIssueTypeScreenSchemeData($clientId, $issueTypeScreenSchemeId, $screenSchemeId, $clientCreatedDate);
+        $clientRepository->createDefaultIssueTypeScreenSchemeData(
+            $clientId,
+            $issueTypeScreenSchemeId,
+            $screenSchemeId,
+            $clientCreatedDate
+        );
 
         // create default events
         $clientRepository->createDefaultEvents($clientId, $clientCreatedDate);
 
         // create default workflow
-        $workflowId = $clientRepository->createDefaultWorkflow($clientId, $workflowIssueTypeSchemeId, $clientCreatedDate);
+        $workflowId = $clientRepository->createDefaultWorkflow(
+            $clientId,
+            $workflowIssueTypeSchemeId,
+            $clientCreatedDate
+        );
         $clientRepository->createDefaultWorkflowData($clientId, $workflowId, $clientCreatedDate);
 
         // create default workflow scheme
@@ -1531,52 +2061,109 @@ class UbirimiClient
         // create default field configurations
         $fieldConfigurationId = $clientRepository->createDefaultFieldConfiguration($clientId, $clientCreatedDate);
         $clientRepository->createDefaultFieldConfigurationData($clientId, $fieldConfigurationId, $clientCreatedDate);
-        $issueTypeFieldConfigurationId = $clientRepository->createDefaultIssueTypeFieldConfiguration($clientId, $clientCreatedDate);
-        $clientRepository->createDefaultIssueTypeFieldConfigurationData($clientId, $issueTypeFieldConfigurationId, $fieldConfigurationId, $clientCreatedDate);
+        $issueTypeFieldConfigurationId = $clientRepository->createDefaultIssueTypeFieldConfiguration(
+            $clientId,
+            $clientCreatedDate
+        );
+        $clientRepository->createDefaultIssueTypeFieldConfigurationData(
+            $clientId,
+            $issueTypeFieldConfigurationId,
+            $fieldConfigurationId,
+            $clientCreatedDate
+        );
 
         $clientRepository->createDefaultScreenData($clientId, $clientCreatedDate);
 
         // create default permission roles
-        UbirimiContainer::get()['repository']->get(Role::class)->addDefaultPermissionRoles($clientId, $clientCreatedDate);
+        UbirimiContainer::get()['repository']->get(Role::class)->addDefaultPermissionRoles(
+            $clientId,
+            $clientCreatedDate
+        );
 
         // create default group names
-        UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->addDefaultYongoGroups($clientId, $clientCreatedDate);
+        UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->addDefaultYongoGroups(
+            $clientId,
+            $clientCreatedDate
+        );
 
-        $roleAdministrators = UbirimiContainer::get()['repository']->get(Role::class)->getByName($clientId, 'Administrators');
+        $roleAdministrators = UbirimiContainer::get()['repository']->get(Role::class)->getByName(
+            $clientId,
+            'Administrators'
+        );
 
         $roleDevelopers = UbirimiContainer::get()['repository']->get(Role::class)->getByName($clientId, 'Developers');
         $roleUsers = UbirimiContainer::get()['repository']->get(Role::class)->getByName($clientId, 'Users');
 
-        $groupAdministrators = UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->getByName($clientId, 'Administrators');
+        $groupAdministrators = UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->getByName(
+            $clientId,
+            'Administrators'
+        );
 
-        $groupDevelopers = UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->getByName($clientId, 'Developers');
+        $groupDevelopers = UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->getByName(
+            $clientId,
+            'Developers'
+        );
         $groupUsers = UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->getByName($clientId, 'Users');
 
-        UbirimiContainer::get()['repository']->get(Role::class)->addDefaultGroups($roleAdministrators['id'], array($groupAdministrators['id']), $clientCreatedDate);
-        UbirimiContainer::get()['repository']->get(Role::class)->addDefaultGroups($roleDevelopers['id'], array($groupDevelopers['id']), $clientCreatedDate);
+        UbirimiContainer::get()['repository']->get(Role::class)->addDefaultGroups(
+            $roleAdministrators['id'],
+            array($groupAdministrators['id']),
+            $clientCreatedDate
+        );
+        UbirimiContainer::get()['repository']->get(Role::class)->addDefaultGroups(
+            $roleDevelopers['id'],
+            array($groupDevelopers['id']),
+            $clientCreatedDate
+        );
 
-        UbirimiContainer::get()['repository']->get(Role::class)->addDefaultGroups($roleUsers['id'], array($groupUsers['id']), $clientCreatedDate);
+        UbirimiContainer::get()['repository']->get(Role::class)->addDefaultGroups(
+            $roleUsers['id'],
+            array($groupUsers['id']),
+            $clientCreatedDate
+        );
 
         // add in Administrators group the current user
-        UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->addData($groupAdministrators['id'], array($userId), $clientCreatedDate);
+        UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->addData(
+            $groupAdministrators['id'],
+            array($userId),
+            $clientCreatedDate
+        );
 
-        UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->addData($groupDevelopers['id'], array($userId), $clientCreatedDate);
-        UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->addData($groupUsers['id'], array($userId), $clientCreatedDate);
+        UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->addData(
+            $groupDevelopers['id'],
+            array($userId),
+            $clientCreatedDate
+        );
+        UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->addData(
+            $groupUsers['id'],
+            array($userId),
+            $clientCreatedDate
+        );
 
         // create default permission scheme
         $permissionSchemeId = $clientRepository->createDefaultPermissionScheme($clientId, $clientCreatedDate);
 
-        UbirimiContainer::get()['repository']->get(PermissionScheme::class)->addDefaultPermissions($permissionSchemeId, $roleAdministrators['id'], $roleDevelopers['id'], $roleUsers['id'], $clientCreatedDate);
+        UbirimiContainer::get()['repository']->get(PermissionScheme::class)->addDefaultPermissions(
+            $permissionSchemeId,
+            $roleAdministrators['id'],
+            $roleDevelopers['id'],
+            $roleUsers['id'],
+            $clientCreatedDate
+        );
 
         // create default notification scheme
         $notificationSchemeId = $clientRepository->createDefaultNotificationScheme($clientId, $clientCreatedDate);
-        UbirimiContainer::get()['repository']->get(NotificationScheme::class)->addDefaultNotifications($clientId, $notificationSchemeId);
+        UbirimiContainer::get()['repository']->get(NotificationScheme::class)->addDefaultNotifications(
+            $clientId,
+            $notificationSchemeId
+        );
 
         // add global permission
         $clientRepository->addYongoGlobalPermissionData($clientId, $groupAdministrators, $groupUsers);
     }
 
-    public function toggleIssueLinkingFeature($clientId) {
+    public function toggleIssueLinkingFeature($clientId)
+    {
         $query = 'UPDATE client_yongo_settings SET issue_linking_flag = 1 - issue_linking_flag where client_id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1584,7 +2171,8 @@ class UbirimiClient
         $stmt->execute();
     }
 
-    public function toggleTimeTrackingFeature($clientId) {
+    public function toggleTimeTrackingFeature($clientId)
+    {
         $query = 'UPDATE client_yongo_settings SET time_tracking_flag = 1 - time_tracking_flag where client_id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1592,7 +2180,8 @@ class UbirimiClient
         $stmt->execute();
     }
 
-    public function createDefaultLinkIssueOptions($clientId, $currentDate) {
+    public function createDefaultLinkIssueOptions($clientId, $currentDate)
+    {
         $linkTypeRepository = UbirimiContainer::get()['repository']->get(IssueLinkType::class);
         $linkTypeRepository->add($clientId, 'Relates', 'relates to', 'relates to', $currentDate);
         $linkTypeRepository->add($clientId, 'Duplicate', 'duplicates', 'is duplicated by', $currentDate);
@@ -1600,7 +2189,8 @@ class UbirimiClient
         $linkTypeRepository->add($clientId, 'Cloners', 'clones', 'is cloned by', $currentDate);
     }
 
-    public function updateTimeTrackingSettings($clientId, $hoursPerDay, $daysPerWeek, $defaultUnit) {
+    public function updateTimeTrackingSettings($clientId, $hoursPerDay, $daysPerWeek, $defaultUnit)
+    {
         $query = 'UPDATE client_yongo_settings SET time_tracking_hours_per_day = ?, time_tracking_days_per_week = ?, time_tracking_default_unit = ? where client_id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1608,7 +2198,8 @@ class UbirimiClient
         $stmt->execute();
     }
 
-    public function updateSettings($clientId, $parameters) {
+    public function updateSettings($clientId, $parameters)
+    {
         $query = 'UPDATE client SET ';
 
         $values = array();
@@ -1619,7 +2210,7 @@ class UbirimiClient
             $values[] = $parameters[$i]['value'];
             $valuesType .= $parameters[$i]['type'];
         }
-        $query = substr($query, 0, strlen($query) - 2) . ' ' ;
+        $query = substr($query, 0, strlen($query) - 2) . ' ';
 
         $query .= 'WHERE id = ? ' .
             'LIMIT 1';
@@ -1639,7 +2230,8 @@ class UbirimiClient
         $result = $stmt->get_result();
     }
 
-    public function getByContactEmailAddress($emailAddress) {
+    public function getByContactEmailAddress($emailAddress)
+    {
         $query = 'select contact_email from client where LOWER(contact_email) = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1647,13 +2239,15 @@ class UbirimiClient
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result->num_rows;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function install($clientId) {
+    public function install($clientId)
+    {
 
         $clientRepository = UbirimiContainer::get()['repository']->get(UbirimiClient::class);
         $clientData = $clientRepository->getById($clientId);
@@ -1696,7 +2290,8 @@ class UbirimiClient
         $clientRepository->setInstalledFlag($clientId, 1);
     }
 
-    public function addDefaultDocumentadorUserGroups($clientId, $date) {
+    public function addDefaultDocumentadorUserGroups($clientId, $date)
+    {
         $query = "INSERT INTO `general_group`(client_id, sys_product_id, name, description, date_created) VALUES (?, ?, ?, ?, ?), (?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1707,12 +2302,25 @@ class UbirimiClient
         $group_descr_2 = 'Documentador Users';
 
         $productId = SystemProduct::SYS_PRODUCT_DOCUMENTADOR;
-        $stmt->bind_param("iisssiisss", $clientId, $productId, $group_name_1, $group_descr_1, $date, $clientId, $productId, $group_name_2, $group_descr_2, $date);
+        $stmt->bind_param(
+            "iisssiisss",
+            $clientId,
+            $productId,
+            $group_name_1,
+            $group_descr_1,
+            $date,
+            $clientId,
+            $productId,
+            $group_name_2,
+            $group_descr_2,
+            $date
+        );
 
         $stmt->execute();
     }
 
-    public function addDefaultDocumentadorSettings($clientId) {
+    public function addDefaultDocumentadorSettings($clientId)
+    {
         $query = "INSERT INTO client_documentator_settings(client_id, anonymous_use_flag, anonymous_view_user_profile_flag) VALUES (?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1724,7 +2332,8 @@ class UbirimiClient
         $stmt->execute();
     }
 
-    public function getProductById($clientId, $productId) {
+    public function getProductById($clientId, $productId)
+    {
         $query = 'SELECT * ' .
             'FROM client_product ' .
             "WHERE client_product.client_id = ? and sys_product_id = ? " .
@@ -1736,11 +2345,13 @@ class UbirimiClient
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function getByProductIdId($clientId, $productId) {
+    public function getByProductIdId($clientId, $productId)
+    {
         $query = 'SELECT * ' .
             'FROM client_product ' .
             "WHERE client_product.client_id = ? and sys_product_id = ? " .
@@ -1752,11 +2363,13 @@ class UbirimiClient
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function getAdministrators($clientId, $userId = null, $resultType = null) {
+    public function getAdministrators($clientId, $userId = null, $resultType = null)
+    {
         $query = "select general_user.* " .
             "from general_user " .
             "WHERE client_id = ? and client_administrator_flag = 1";
@@ -1783,27 +2396,32 @@ class UbirimiClient
         }
     }
 
-    public function deleteYongoIssueTypes($clientId) {
+    public function deleteYongoIssueTypes($clientId)
+    {
         $query = 'delete from issue_type where client_id = ' . $clientId;
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function deleteYongoIssueStatuses($clientId) {
+    public function deleteYongoIssueStatuses($clientId)
+    {
         $query = 'delete from issue_status where client_id = ' . $clientId;
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function deleteYongoIssueResolutions($clientId) {
+    public function deleteYongoIssueResolutions($clientId)
+    {
         $query = 'delete from issue_resolution where client_id = ' . $clientId;
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function deleteYongoIssuePriorities($clientId) {
+    public function deleteYongoIssuePriorities($clientId)
+    {
         $query = 'delete from issue_priority where client_id = ' . $clientId;
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function deleteCalendars($clientId) {
+    public function deleteCalendars($clientId)
+    {
         $calendars = UbirimiContainer::get()['repository']->get(UbirimiCalendar::class)->getByClientId($clientId);
         if ($calendars) {
             while ($calendar = $calendars->fetch_array(MYSQLI_ASSOC)) {
@@ -1813,7 +2431,8 @@ class UbirimiClient
         }
     }
 
-    public function deleteSVNRepositories($clientId) {
+    public function deleteSVNRepositories($clientId)
+    {
         $repositories = UbirimiContainer::get()['repository']->get(SvnRepository::class)->getAllByClientId($clientId);
         if ($repositories) {
             while ($repository = $repositories->fetch_array(MYSQLI_ASSOC)) {
@@ -1822,7 +2441,8 @@ class UbirimiClient
         }
     }
 
-    public function deleteSpaces($clientId) {
+    public function deleteSpaces($clientId)
+    {
         $spaces = UbirimiContainer::get()['repository']->get(Space::class)->getByClientId($clientId);
         if ($spaces) {
             while ($space = $spaces->fetch_array(MYSQLI_ASSOC)) {
@@ -1831,40 +2451,81 @@ class UbirimiClient
         }
     }
 
-    public function installDocumentadorProduct($clientId, $userId, $clientCreatedDate) {
-        UbirimiContainer::get()['repository']->get(UbirimiClient::class)->addDefaultDocumentadorUserGroups($clientId, $clientCreatedDate);
+    public function installDocumentadorProduct($clientId, $userId, $clientCreatedDate)
+    {
+        UbirimiContainer::get()['repository']->get(UbirimiClient::class)->addDefaultDocumentadorUserGroups(
+            $clientId,
+            $clientCreatedDate
+        );
 
-        $groupAdministrators = UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->getByName($clientId, 'Documentador Administrators');
-        $groupUsers = UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->getByName($clientId, 'Documentador Users');
+        $groupAdministrators = UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->getByName(
+            $clientId,
+            'Documentador Administrators'
+        );
+        $groupUsers = UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->getByName(
+            $clientId,
+            'Documentador Users'
+        );
 
         // add in Administrators/Users groups the current user
-        UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->addData($groupAdministrators['id'], array($userId), $clientCreatedDate);
+        UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->addData(
+            $groupAdministrators['id'],
+            array($userId),
+            $clientCreatedDate
+        );
 
-        UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->addData($groupUsers['id'], array($userId), $clientCreatedDate);
+        UbirimiContainer::get()['repository']->get(UbirimiGroup::class)->addData(
+            $groupUsers['id'],
+            array($userId),
+            $clientCreatedDate
+        );
 
         UbirimiContainer::get()['repository']->get(UbirimiClient::class)->addDefaultDocumentadorSettings($clientId);
-        UbirimiContainer::get()['repository']->get(UbirimiClient::class)->addDefaultDocumentadorGlobalPermissionData($clientId);
+        UbirimiContainer::get()['repository']->get(UbirimiClient::class)->addDefaultDocumentadorGlobalPermissionData(
+            $clientId
+        );
     }
 
-    public function installCalendarProduct($clientId, $userId, $clientCreatedDate) {
+    public function installCalendarProduct($clientId, $userId, $clientCreatedDate)
+    {
 
         // create default calendar for the first user
         $userData = UbirimiContainer::get()['repository']->get(UbirimiUser::class)->getById($userId);
 
-        $calendarId = UbirimiContainer::get()['repository']->get(UbirimiCalendar::class)->save($userData['id'], $userData['first_name'] . ' ' . $userData['last_name'], 'My default calendar', '#A1FF9E', $clientCreatedDate, 1);
+        $calendarId = UbirimiContainer::get()['repository']->get(UbirimiCalendar::class)->save(
+            $userData['id'],
+            $userData['first_name'] . ' ' . $userData['last_name'],
+            'My default calendar',
+            '#A1FF9E',
+            $clientCreatedDate,
+            1
+        );
 
         // add default reminders
-        UbirimiContainer::get()['repository']->get(UbirimiCalendar::class)->addReminder($calendarId, \Ubirimi\Calendar\Repository\Reminder\ReminderType::REMINDER_EMAIL, ReminderPeriod::PERIOD_MINUTE, 30);
+        UbirimiContainer::get()['repository']->get(UbirimiCalendar::class)->addReminder(
+            $calendarId,
+            \Ubirimi\Calendar\Repository\Reminder\ReminderType::REMINDER_EMAIL,
+            ReminderPeriod::PERIOD_MINUTE,
+            30
+        );
     }
 
-    public function installQuickNotesProduct($clientId, $userId, $clientCreatedDate) {
+    public function installQuickNotesProduct($clientId, $userId, $clientCreatedDate)
+    {
 
         // create default notebook for the first user
         $userData = UbirimiContainer::get()['repository']->get(UbirimiUser::class)->getById($userId);
-        UbirimiContainer::get()['repository']->get(Notebook::class)->save($userData['id'], 'Default Notebook', 'My default notebook', 1, $clientCreatedDate);
+        UbirimiContainer::get()['repository']->get(Notebook::class)->save(
+            $userData['id'],
+            'Default Notebook',
+            'My default notebook',
+            1,
+            $clientCreatedDate
+        );
     }
 
-    public function getCurrentMonthAndDayPayingCustomers() {
+    public function getCurrentMonthAndDayPayingCustomers()
+    {
         $query = "SELECT client.company_domain,
                          client.contact_email,
                          client.base_url,
@@ -1881,13 +2542,15 @@ class UbirimiClient
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
-    public function getCountryById($countryId) {
+    public function getCountryById($countryId)
+    {
         $query = 'SELECT * ' .
             'FROM sys_country ' .
             "WHERE id = ? " .
@@ -1899,11 +2562,13 @@ class UbirimiClient
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function getUsersByClientIdAndProductIdAndFilters($clientId, $productId, $filters) {
+    public function getUsersByClientIdAndProductIdAndFilters($clientId, $productId, $filters)
+    {
         $query = 'select general_user.* ' .
             'from general_user ' .
             'left join general_group_data on general_group_data.user_id = general_user.id ' .
@@ -1931,11 +2596,13 @@ class UbirimiClient
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result;
-        } else
+        } else {
             return null;
+        }
     }
 
-    public function getGroupsByClientIdAndProductIdAndFilters($clientId, $productId, $filters) {
+    public function getGroupsByClientIdAndProductIdAndFilters($clientId, $productId, $filters)
+    {
         $query = 'SELECT `general_group`.* ' .
             'FROM `general_group` ' .
             'left join general_group_data on general_group_data.group_id = `general_group`.id ' .
@@ -1954,8 +2621,9 @@ class UbirimiClient
         $result = $stmt->get_result();
         if ($result->num_rows) {
             return $result;
-        } else
+        } else {
             return null;
+        }
     }
 
     public function updateLoginTime($clientId, $datetime)
@@ -1967,7 +2635,8 @@ class UbirimiClient
         $stmt->execute();
     }
 
-    public function updatePaymillId($clientPaymillId, $clientId) {
+    public function updatePaymillId($clientPaymillId, $clientId)
+    {
         $query = "UPDATE client SET paymill_id = ? WHERE id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

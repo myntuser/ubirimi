@@ -40,7 +40,9 @@ class AddDialogController extends UbirimiController
         $sysOperationId = SystemOperation::OPERATION_CREATE;
 
         if (0 == $request->get('can_create')) {
-            return new Response('<div class="infoBox">You do not have any projects with the permission to create an issue.</div>');
+            return new Response(
+                '<div class="infoBox">You do not have any projects with the permission to create an issue.</div>'
+            );
         }
 
         if ($session->get('selected_product_id') == SystemProduct::SYS_PRODUCT_YONGO) {
@@ -50,7 +52,12 @@ class AddDialogController extends UbirimiController
                 Permission::PERM_CREATE_ISSUE
             );
         } else {
-            $projects = $this->getRepository(UbirimiClient::class)->getProjects($session->get('client/id'), null, null, true);
+            $projects = $this->getRepository(UbirimiClient::class)->getProjects(
+                $session->get('client/id'),
+                null,
+                null,
+                true
+            );
         }
 
         $projectData = $this->getRepository(YongoProject::class)->getById($selectedProjectId);

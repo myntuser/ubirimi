@@ -43,8 +43,13 @@ class ViewBrowserController extends UbirimiController
         }
 
         $menuSelectedCategory = 'issue';
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Workflow Transition Browser';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Workflow Transition Browser';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/workflow/transition/ViewBrowser.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/workflow/transition/ViewBrowser.php',
+            get_defined_vars()
+        );
     }
 }

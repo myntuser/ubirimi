@@ -40,7 +40,10 @@ class CompleteConfirmController extends UbirimiController
         $completeStatuses = $this->getRepository(Board::class)->getColumnStatuses($lastColumn['id'], 'array', 'id');
 
         $issuesInSprintCount = $this->getRepository(Sprint::class)->getSprintIssuesCount($sprintId);
-        $completedIssuesInSprint = $this->getRepository(Sprint::class)->getCompletedIssuesCountBySprintId($sprintId, $completeStatuses);
+        $completedIssuesInSprint = $this->getRepository(Sprint::class)->getCompletedIssuesCountBySprintId(
+            $sprintId,
+            $completeStatuses
+        );
 
         return $this->render(__DIR__ . '/../../Resources/views/sprint/CompleteConfirm.php', get_defined_vars());
     }

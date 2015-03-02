@@ -24,7 +24,8 @@ use Ubirimi\Util;
 
 class WorkLog
 {
-    public function getByIssueId($issueId) {
+    public function getByIssueId($issueId)
+    {
         $query = 'select issue_work_log.id, issue_work_log.time_spent, issue_work_log.date_started, issue_work_log.comment, general_user.id as user_id, general_user.first_name, general_user.last_name, edited_flag
                   from issue_work_log
                   left join general_user on issue_work_log.user_id = general_user.id
@@ -35,13 +36,15 @@ class WorkLog
         $stmt->bind_param("i", $issueId);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return false;
+        }
     }
 
-    public function getById($Id) {
+    public function getById($Id)
+    {
         $query = 'select *
                   from issue_work_log
                   where issue_work_log.id = ?
@@ -51,13 +54,15 @@ class WorkLog
         $stmt->bind_param("i", $Id);
         $stmt->execute();
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result->fetch_array(MYSQLI_ASSOC);
-        else
+        } else {
             return false;
+        }
     }
 
-    public function addLog($issueId, $loggedInUserId, $timeSpent, $dateStarted, $comment, $currentDate) {
+    public function addLog($issueId, $loggedInUserId, $timeSpent, $dateStarted, $comment, $currentDate)
+    {
         $query = "INSERT INTO issue_work_log(issue_id, user_id, time_spent, comment, date_started, date_created) VALUES (?, ?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -65,7 +70,8 @@ class WorkLog
         $stmt->execute();
     }
 
-    public function updateLogById($workLogId, $timeSpent, $dateStartedString, $comment) {
+    public function updateLogById($workLogId, $timeSpent, $dateStartedString, $comment)
+    {
         $query = "update issue_work_log set time_spent = ?, comment = ?, date_started = ?, edited_flag = 1 where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -73,7 +79,8 @@ class WorkLog
         $stmt->execute();
     }
 
-    public function deleteById($Id) {
+    public function deleteById($Id)
+    {
         $query = "delete from issue_work_log where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -81,7 +88,8 @@ class WorkLog
         $stmt->execute();
     }
 
-    public function deleteByIssueId($issueId) {
+    public function deleteByIssueId($issueId)
+    {
         $query = 'delete from issue_work_log where issue_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -89,7 +97,15 @@ class WorkLog
         $stmt->execute();
     }
 
-    public function adjustRemainingEstimate($issueData, $timeSpent, $remainingTime, $hoursPerDay, $daysPerWeek, $loggedInUserId) {
+    public function adjustRemainingEstimate(
+        $issueData,
+        $timeSpent,
+        $remainingTime,
+        $hoursPerDay,
+        $daysPerWeek,
+        $loggedInUserId
+    )
+    {
         $issueRemainingTime = $issueData['remaining_estimate'];
         $issueRemainingMinutes = Util::transformLogTimeToMinutes($issueRemainingTime, $hoursPerDay, $daysPerWeek);
 
@@ -105,39 +121,63 @@ class WorkLog
                 $remainingTime = 0;
             }
 
-        } else if ($remainingTime == 'existing') {
-            $timeSpentMinutes = 0;
-            $difference = $issueRemainingMinutes - $timeSpentMinutes;
+        } else {
+            if ($remainingTime == 'existing') {
+                $timeSpentMinutes = 0;
+                $difference = $issueRemainingMinutes - $timeSpentMinutes;
 
-            if ($difference < 0) {
-                $difference = 0;
+                if ($difference < 0) {
+                    $difference = 0;
+                }
+                $remainingTime = Util::transformTimeToString($difference, $hoursPerDay, $daysPerWeek);
+            } else {
+                if ($remainingTime == 'estimate_unset') {
+                    $remainingTime = null;
+                } else {
+                    if ($remainingTime[0] == '=') {
+                        $remainingTime = str_replace("=", '', $remainingTime);
+                        $remainingTimeMinutes = Util::transformLogTimeToMinutes(
+                            $remainingTime,
+                            $hoursPerDay,
+                            $daysPerWeek
+                        );
+                        $difference = $remainingTimeMinutes;
+
+                        if ($difference < 0) {
+                            $difference = 0;
+                        }
+                        $remainingTime = Util::transformTimeToString($difference, $hoursPerDay, $daysPerWeek);
+
+                    } else {
+                        if ($remainingTime[0] == "-") {
+                            $remainingTime = str_replace("-", '', $remainingTime);
+                            $remainingTimeMinutes = Util::transformLogTimeToMinutes(
+                                $remainingTime,
+                                $hoursPerDay,
+                                $daysPerWeek
+                            );
+                            $difference = $issueRemainingMinutes - $remainingTimeMinutes;
+
+                            if ($difference < 0) {
+                                $difference = 0;
+                            }
+                            $remainingTime = Util::transformTimeToString($difference, $hoursPerDay, $daysPerWeek);
+                        } else {
+                            if ($remainingTime[0] == "+") {
+                                $remainingTime = str_replace("+", '', $remainingTime);
+                                $remainingTimeMinutes = Util::transformLogTimeToMinutes(
+                                    $remainingTime,
+                                    $hoursPerDay,
+                                    $daysPerWeek
+                                );
+                                $sum = $issueRemainingMinutes + $remainingTimeMinutes;
+
+                                $remainingTime = Util::transformTimeToString($sum, $hoursPerDay, $daysPerWeek);
+                            }
+                        }
+                    }
+                }
             }
-            $remainingTime = Util::transformTimeToString($difference, $hoursPerDay, $daysPerWeek);
-        } else if ($remainingTime == 'estimate_unset') {
-            $remainingTime = null;
-        } else if ($remainingTime[0] == '=') {
-            $remainingTime = str_replace("=", '', $remainingTime);
-            $remainingTimeMinutes = Util::transformLogTimeToMinutes($remainingTime, $hoursPerDay, $daysPerWeek);
-            $difference = $remainingTimeMinutes;
-
-            if ($difference < 0)
-                $difference = 0;
-            $remainingTime = Util::transformTimeToString($difference, $hoursPerDay, $daysPerWeek);
-
-        } else if ($remainingTime[0] == "-") {
-            $remainingTime = str_replace("-", '', $remainingTime);
-            $remainingTimeMinutes = Util::transformLogTimeToMinutes($remainingTime, $hoursPerDay, $daysPerWeek);
-            $difference = $issueRemainingMinutes - $remainingTimeMinutes;
-
-            if ($difference < 0)
-                $difference = 0;
-            $remainingTime = Util::transformTimeToString($difference, $hoursPerDay, $daysPerWeek);
-        } else if ($remainingTime[0] == "+") {
-            $remainingTime = str_replace("+", '', $remainingTime);
-            $remainingTimeMinutes = Util::transformLogTimeToMinutes($remainingTime, $hoursPerDay, $daysPerWeek);
-            $sum = $issueRemainingMinutes + $remainingTimeMinutes;
-
-            $remainingTime = Util::transformTimeToString($sum, $hoursPerDay, $daysPerWeek);
         }
 
         // transform it to string
@@ -161,7 +201,8 @@ class WorkLog
         return $remainingTime;
     }
 
-    public function updateRemainingEstimate($issueId, $remainingTime) {
+    public function updateRemainingEstimate($issueId, $remainingTime)
+    {
         $query = 'update yongo_issue SET remaining_estimate = ? where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -169,7 +210,8 @@ class WorkLog
         $stmt->execute();
     }
 
-    public function clearRemainingEstimate($issueId) {
+    public function clearRemainingEstimate($issueId)
+    {
         $query = 'update yongo_issue SET remaining_estimate = NULL where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

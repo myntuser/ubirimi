@@ -2,32 +2,33 @@
 
 <div style="font: Trebuchet MS, sans-serif; white-space: nowrap; padding-top: 5px;text-align: left;padding-left: 2px;">
     Thank you for registering an account on ubirimi.com
-    <br />
+    <br/>
     This email confirms that your instance has just been prepared for you.
-    <br />
-    <br />
+    <br/>
+    <br/>
     You can use Ubirimi product suite at:
-    <br />
-    <a href="https://<?php echo $this->companyDomain ?>.ubirimi.net">https://<?php echo $this->companyDomain ?>.ubirimi.net</a>
-    <br /><br />
+    <br/>
+    <a href="https://<?php echo $this->companyDomain ?>.ubirimi.net">https://<?php echo $this->companyDomain ?>
+        .ubirimi.net</a>
+    <br/><br/>
 
     You can manage your Ubirimi account at:
-    <br />
+    <br/>
     <a href="https://my.ubirimi.com/sign-in">https://www.ubirimi.com/sign-in</a>
-    <br />
-    <br />
+    <br/>
+    <br/>
 
     The credentials are:
-    <br /><br />
+    <br/><br/>
     Username: <?php echo $this->username ?>
-    <br />
+    <br/>
     Password: provided during the sign up process.
-    <br /><br /><br />
+    <br/><br/><br/>
 
     For reference, the email address provided during sign up is:
-    <br />
+    <br/>
     <?php echo $this->emailAddress ?>
-    <br /><br />
+    <br/><br/>
     Thank you for your interest in Ubirimi and our products.
 </div>
 

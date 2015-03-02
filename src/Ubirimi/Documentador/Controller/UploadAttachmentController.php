@@ -48,7 +48,10 @@ class UploadAttachmentController extends UbirimiController
         foreach ($_FILES['entity_upload_attachment']['name'] as $filename) {
             if (!empty($filename)) {
                 // check if this file already exists
-                $attachmentExists = $this->getRepository(EntityAttachment::class)->getByEntityIdAndName($entityId, $filename);
+                $attachmentExists = $this->getRepository(EntityAttachment::class)->getByEntityIdAndName(
+                    $entityId,
+                    $filename
+                );
 
                 if ($attachmentExists) {
                     // get the last revision and increment it by one
@@ -57,12 +60,21 @@ class UploadAttachmentController extends UbirimiController
                     $revisionNumber = $revisions->num_rows + 1;
 
                     // create the revision folder
-                    mkdir($pathBaseAttachments . $entity['space_id'] . '/' . $entityId . '/' . $attachmentId . '/' . $revisionNumber);
+                    mkdir(
+                        $pathBaseAttachments . $entity['space_id'] . '/' . $entityId . '/' . $attachmentId . '/' . $revisionNumber
+                    );
                 } else {
                     // add the file to the list of files
-                    $attachmentId = $this->getRepository(EntityAttachment::class)->add($entityId, $filename, $currentDate);
+                    $attachmentId = $this->getRepository(EntityAttachment::class)->add(
+                        $entityId,
+                        $filename,
+                        $currentDate
+                    );
 
-                    $this->getLogger()->addInfo('ADD Documentador entity attachment ' . $filename, $this->getLoggerContext());
+                    $this->getLogger()->addInfo(
+                        'ADD Documentador entity attachment ' . $filename,
+                        $this->getLoggerContext()
+                    );
 
                     $revisionNumber = 1;
 
@@ -77,21 +89,33 @@ class UploadAttachmentController extends UbirimiController
 
                     // create the folder for the first revision
                     mkdir($pathBaseAttachments . $entity['space_id'] . '/' . $entityId . '/' . $attachmentId);
-                    mkdir($pathBaseAttachments . $entity['space_id'] . '/' . $entityId . '/' . $attachmentId . '/' . $revisionNumber);
+                    mkdir(
+                        $pathBaseAttachments . $entity['space_id'] . '/' . $entityId . '/' . $attachmentId . '/' . $revisionNumber
+                    );
                 }
 
                 // add revision to the file
 
-                $this->getRepository(EntityAttachment::class)->addRevision($attachmentId, $loggedInUserId, $currentDate);
+                $this->getRepository(EntityAttachment::class)->addRevision(
+                    $attachmentId,
+                    $loggedInUserId,
+                    $currentDate
+                );
 
                 if ($revisionNumber > 1) {
-                    $this->getLogger()->addInfo('ADD Documentador entity attachment revision to ' . $filename, $this->getLoggerContext());
+                    $this->getLogger()->addInfo(
+                        'ADD Documentador entity attachment revision to ' . $filename,
+                        $this->getLoggerContext()
+                    );
                 }
 
                 $baseFileName = pathinfo($filename, PATHINFO_FILENAME);
                 $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
-                move_uploaded_file($_FILES["entity_upload_attachment"]["tmp_name"][$index], $pathBaseAttachments . $entity['space_id'] . '/' . $entityId . '/' . $attachmentId . '/' . $revisionNumber . '/' . $baseFileName . '.' . $extension);
+                move_uploaded_file(
+                    $_FILES["entity_upload_attachment"]["tmp_name"][$index],
+                    $pathBaseAttachments . $entity['space_id'] . '/' . $entityId . '/' . $attachmentId . '/' . $revisionNumber . '/' . $baseFileName . '.' . $extension
+                );
 
                 if ($revisionNumber > 1) {
                     // update all existing links to this attachment

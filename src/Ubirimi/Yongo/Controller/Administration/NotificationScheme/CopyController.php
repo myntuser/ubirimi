@@ -51,20 +51,25 @@ class CopyController extends UbirimiController
                 $emptyName = true;
             }
 
-            $duplicateNotificationScheme = $this->getRepository(NotificationScheme::class)->getMetaDataByNameAndClientId(
+            $duplicateNotificationScheme = $this->getRepository(
+                NotificationScheme::class
+            )->getMetaDataByNameAndClientId(
                 $session->get('client/id'),
                 mb_strtolower($name)
             );
 
-            if ($duplicateNotificationScheme)
+            if ($duplicateNotificationScheme) {
                 $duplicateName = true;
+            }
 
             if (!$emptyName && !$duplicateName) {
                 $copiedNotificationScheme = new NotificationScheme($session->get('client/id'), $name, $description);
                 $currentDate = Util::getServerCurrentDateTime();
                 $copiedNotificationSchemeId = $copiedNotificationScheme->save($currentDate);
 
-                $notificationSchemeData = $this->getRepository(NotificationScheme::class)->getDataByNotificationSchemeId($notificationSchemeId);
+                $notificationSchemeData = $this->getRepository(
+                    NotificationScheme::class
+                )->getDataByNotificationSchemeId($notificationSchemeId);
                 while ($notificationSchemeData && $data = $notificationSchemeData->fetch_array(MYSQLI_ASSOC)) {
                     $copiedNotificationScheme->addDataRaw(
                         $copiedNotificationSchemeId,
@@ -83,15 +88,23 @@ class CopyController extends UbirimiController
                     );
                 }
 
-                $this->getLogger()->addInfo('Copy Yongo Notification Scheme ' . $notificationScheme['name'], $this->getLoggerContext());
+                $this->getLogger()->addInfo(
+                    'Copy Yongo Notification Scheme ' . $notificationScheme['name'],
+                    $this->getLoggerContext()
+                );
 
                 return new RedirectResponse('/yongo/administration/notification-schemes');
             }
         }
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Notification Scheme';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Copy Notification Scheme';
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/notification_scheme/Copy.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../Resources/views/administration/notification_scheme/Copy.php',
+            get_defined_vars()
+        );
     }
 }

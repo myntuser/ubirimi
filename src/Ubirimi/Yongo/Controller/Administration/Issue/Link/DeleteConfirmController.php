@@ -36,6 +36,9 @@ class DeleteConfirmController extends UbirimiController
         $issues = $this->getRepository(IssueLinkType::class)->getByLinkTypeId($linkTypeId);
         $linkTypes = $this->getRepository(IssueLinkType::class)->getByClientId($session->get('client/id'));
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/link/DeleteConfirm.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/issue/link/DeleteConfirm.php',
+            get_defined_vars()
+        );
     }
 }

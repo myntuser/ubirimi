@@ -51,7 +51,9 @@ class HistoryController extends UbirimiController
 
         $revisionCount = ($revisions) ? $revisions->num_rows + 1 : 1;
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME. ' / ' . $page['name'] . ' / History';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME . ' / ' . $page['name'] . ' / History';
 
         return $this->render(__DIR__ . '/../../Resources/views/page/History.php', get_defined_vars());
     }

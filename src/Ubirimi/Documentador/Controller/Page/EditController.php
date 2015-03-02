@@ -57,7 +57,12 @@ class EditController extends UbirimiController
         $name = $page['name'];
 
         $now = date('Y-m-d H:i:s');
-        $activeSnapshots = $this->getRepository(Entity::class)->getOtherActiveSnapshots($entityId, $loggedInUserId, $now, 'array');
+        $activeSnapshots = $this->getRepository(Entity::class)->getOtherActiveSnapshots(
+            $entityId,
+            $loggedInUserId,
+            $now,
+            'array'
+        );
         $textWarningMultipleEdits = null;
         if ($activeSnapshots) {
             $textWarningMultipleEdits = 'This page is being edited by ';
@@ -90,7 +95,9 @@ class EditController extends UbirimiController
             return new RedirectResponse('/documentador/page/view/' . $entityId);
         }
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME. ' / Update ' . $page['name'];
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME . ' / Update ' . $page['name'];
 
         return $this->render(__DIR__ . '/../../Resources/views/page/Edit.php', get_defined_vars());
     }

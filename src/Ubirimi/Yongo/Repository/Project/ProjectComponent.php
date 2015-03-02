@@ -23,7 +23,8 @@ use Ubirimi\Container\UbirimiContainer;
 
 class ProjectComponent
 {
-    public function getByIds($Ids) {
+    public function getByIds($Ids)
+    {
         $query = 'SELECT project_component.* ' .
             'FROM project_component ' .
             'WHERE id IN (' . implode(', ', $Ids) . ') ' .
@@ -33,10 +34,11 @@ class ProjectComponent
         $stmt->execute();
 
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
     public function getAll()

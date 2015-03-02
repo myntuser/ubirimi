@@ -33,6 +33,8 @@ class RestoreRevisionDialogController extends UbirimiController
 
         $revisionNR = $request->get('rev_nr');
 
-        return new Response('Are you sure you want to revert the page content back to this previous version (v. ' . $revisionNR . ')?');
+        return new Response(
+            'Are you sure you want to revert the page content back to this previous version (v. ' . $revisionNR . ')?'
+        );
     }
 }

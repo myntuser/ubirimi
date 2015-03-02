@@ -33,10 +33,11 @@ class ProjectVersion
         $stmt->execute();
 
         $result = $stmt->get_result();
-        if ($result->num_rows)
+        if ($result->num_rows) {
             return $result;
-        else
+        } else {
             return null;
+        }
     }
 
     public function deleteByProjectId($projectId)

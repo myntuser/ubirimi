@@ -40,14 +40,19 @@ class AddLevelDataController extends UbirimiController
         $levelId = $request->get('id');
 
         $level = $this->getRepository(IssueSecurityScheme::class)->getLevelById($levelId);
-        $issueSecurityScheme = $this->getRepository(IssueSecurityScheme::class)->getMetaDataById($level['issue_security_scheme_id']);
+        $issueSecurityScheme = $this->getRepository(IssueSecurityScheme::class)->getMetaDataById(
+            $level['issue_security_scheme_id']
+        );
 
         if ($issueSecurityScheme['client_id'] != $session->get('client/id')) {
             return new RedirectResponse('/general-settings/bad-link-access-denied');
         }
 
         $users = $this->getRepository(UbirimiUser::class)->getByClientId($session->get('client/id'));
-        $groups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId($session->get('client/id'), SystemProduct::SYS_PRODUCT_YONGO);
+        $groups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId(
+            $session->get('client/id'),
+            SystemProduct::SYS_PRODUCT_YONGO
+        );
         $roles = $this->getRepository(Role::class)->getByClient($session->get('client/id'));
 
         if ($request->request->has('confirm_new_data')) {
@@ -68,38 +73,64 @@ class AddLevelDataController extends UbirimiController
                 if ($dataLevel) {
 
                     while ($data = $dataLevel->fetch_array(MYSQLI_ASSOC)) {
-                        if ($data['group_id'] && $data['group_id'] == $group)
+                        if ($data['group_id'] && $data['group_id'] == $group) {
                             $duplication = true;
-                        if ($data['user_id'] && $data['user_id'] == $user)
+                        }
+                        if ($data['user_id'] && $data['user_id'] == $user) {
                             $duplication = true;
-                        if ($data['permission_role_id'] && $data['permission_role_id'] && $role)
+                        }
+                        if ($data['permission_role_id'] && $data['permission_role_id'] && $role) {
                             $duplication = true;
+                        }
 
-                        if ($levelDataType == IssueSecurityScheme::SECURITY_SCHEME_DATA_TYPE_PROJECT_LEAD)
-                            if ($data['project_lead'])
+                        if ($levelDataType == IssueSecurityScheme::SECURITY_SCHEME_DATA_TYPE_PROJECT_LEAD) {
+                            if ($data['project_lead']) {
                                 $duplication = true;
-                        if ($levelDataType == IssueSecurityScheme::SECURITY_SCHEME_DATA_TYPE_CURRENT_ASSIGNEE)
-                            if ($data['current_assignee'])
+                            }
+                        }
+                        if ($levelDataType == IssueSecurityScheme::SECURITY_SCHEME_DATA_TYPE_CURRENT_ASSIGNEE) {
+                            if ($data['current_assignee']) {
                                 $duplication = true;
-                        if ($levelDataType == IssueSecurityScheme::SECURITY_SCHEME_DATA_TYPE_REPORTER)
-                            if ($data['reporter'])
+                            }
+                        }
+                        if ($levelDataType == IssueSecurityScheme::SECURITY_SCHEME_DATA_TYPE_REPORTER) {
+                            if ($data['reporter']) {
                                 $duplication = true;
+                            }
+                        }
                     }
                 }
                 if (!$duplication) {
-                    $this->getRepository(IssueSecurityScheme::class)->addLevelData($levelId, $levelDataType, $user, $group, $role, $currentDate);
+                    $this->getRepository(IssueSecurityScheme::class)->addLevelData(
+                        $levelId,
+                        $levelDataType,
+                        $user,
+                        $group,
+                        $role,
+                        $currentDate
+                    );
 
-                    $this->getLogger()->addInfo('UPDATE Yongo Issue Security Scheme Level ' . $level['name'], $this->getLoggerContext());
+                    $this->getLogger()->addInfo(
+                        'UPDATE Yongo Issue Security Scheme Level ' . $level['name'],
+                        $this->getLoggerContext()
+                    );
                 }
             }
 
-            return new RedirectResponse('/yongo/administration/issue-security-scheme-levels/' . $issueSecurityScheme['id']);
+            return new RedirectResponse(
+                '/yongo/administration/issue-security-scheme-levels/' . $issueSecurityScheme['id']
+            );
         }
 
         $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Security Scheme Level Data';
+        $sectionPageTitle = $session->get(
+                'client/settings/title_name'
+            ) . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Security Scheme Level Data';
 
-        return $this->render(__DIR__ . '/../../../../Resources/views/administration/issue/security_scheme/AddLevelData.php', get_defined_vars());
+        return $this->render(
+            __DIR__ . '/../../../../Resources/views/administration/issue/security_scheme/AddLevelData.php',
+            get_defined_vars()
+        );
     }
 }

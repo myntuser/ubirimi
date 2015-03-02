@@ -30,5 +30,5 @@ use Ubirimi\Container\UbirimiContainer;
     Version: <?php echo UbirimiContainer::get()['app.version'] ?>
 </div>
 <div align="center">
-    <img src="/img/site/bg.logo.png" style="margin-bottom: 18px; opacity: 0.5" />
+    <img src="/img/site/bg.logo.png" style="margin-bottom: 18px; opacity: 0.5"/>
 </div>
