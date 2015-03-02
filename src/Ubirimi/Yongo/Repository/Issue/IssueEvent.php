@@ -75,9 +75,9 @@ class IssueEvent
     }
 
     public function getByClient($clientId) {
-        $query = "SELECT event.* " .
+        $query = "select yongo_event.* " .
             "from yongo_event " .
-            "WHERE event.client_id = ? " .
+            "where yongo_event.client_id = ? " .
             "order by system_flag desc, name";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -92,9 +92,9 @@ class IssueEvent
     }
 
     public function getById($Id) {
-        $query = "SELECT event.* " .
+        $query = "select yongo_event.* " .
             "from yongo_event " .
-            "WHERE event.id = ? " .
+            "where yongo_event.id = ? " .
             "limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -108,9 +108,9 @@ class IssueEvent
     }
 
     public function getByClientIdAndCode($clientId, $code, $returnedField = null) {
-        $query = "SELECT event.* " .
+        $query = "select yongo_event.* " .
             "from yongo_event " .
-            "WHERE event.client_id = ? and code = ? " .
+            "where yongo_event.client_id = ? and code = ? " .
             "limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

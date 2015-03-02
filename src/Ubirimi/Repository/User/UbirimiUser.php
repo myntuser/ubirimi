@@ -102,10 +102,10 @@ class UbirimiUser
 
     public function deleteById($userId) {
         // delete yongo related entities
-        $query = 'delete from issue_comment where user_id = ' . $userId;
+        $query = 'delete from yongo_issue_comment where user_id = ' . $userId;
         UbirimiContainer::get()['db.connection']->query($query);
 
-        $query = 'delete from issue_attachment where user_id = ' . $userId;
+        $query = 'delete from yongo_issue_attachment where user_id = ' . $userId;
         UbirimiContainer::get()['db.connection']->query($query);
 
         $query = 'delete from yongo_permission_scheme_data where user_id = ' . $userId;

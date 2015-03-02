@@ -189,7 +189,7 @@ class Workflow
             $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
             $stmt->execute();
 
-            $query = "delete from workflow_condition_data where workflow_data_id IN (" . implode(", ", $arrWorkflowDataIds) . ")";
+            $query = "delete from yongo_workflow_condition_data where workflow_data_id IN (" . implode(", ", $arrWorkflowDataIds) . ")";
             $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
             $stmt->execute();
         }
@@ -618,7 +618,7 @@ class Workflow
     }
 
     public function addCondition($transitionId, $definitionData = null) {
-        $query = "INSERT INTO workflow_condition_data(workflow_data_id, definition_data) VALUES (?, ?)";
+        $query = "INSERT INTO yongo_workflow_condition_data(workflow_data_id, definition_data) VALUES (?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $transitionId, $definitionData);
@@ -628,9 +628,9 @@ class Workflow
     }
 
     public function getConditionByTransitionId($workflowDataId) {
-        $query = "select workflow_condition_data.* " .
-            "from workflow_condition_data " .
-            "where workflow_condition_data.workflow_data_id = ? " .
+        $query = "select yongo_workflow_condition_data.* " .
+            "from yongo_workflow_condition_data " .
+            "where yongo_workflow_condition_data.workflow_data_id = ? " .
             "limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

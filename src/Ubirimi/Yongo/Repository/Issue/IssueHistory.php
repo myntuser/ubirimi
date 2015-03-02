@@ -98,7 +98,7 @@ class IssueHistory
 
         $query .= ' UNION (select ' .
         "'event_commented' as source, " .
-        'issue_comment.date_created as date_created, ' .
+        'yongo_issue_comment.date_created as date_created, ' .
         'null as field, ' .
         'null as old_value, ' .
         'null as new_value, ' .
@@ -110,11 +110,11 @@ class IssueHistory
         'yongo_project.code as code, ' .
         'yongo_issue.id as issue_id ' .
         'from yongo_issue ' .
-        'left join issue_comment on yongo_issue.id = issue_comment.issue_id ' .
-        'left join general_user on general_user.id = issue_comment.user_id ' .
+        'left join yongo_issue_comment on yongo_issue.id = yongo_issue_comment.issue_id ' .
+        'left join general_user on general_user.id = yongo_issue_comment.user_id ' .
         'left join yongo_project on yongo_project.id = yongo_issue.project_id ' .
         'where yongo_issue.id = ' . $issueId . ' ' .
-        'and issue_comment.issue_id is not null ' .
+        'and yongo_issue_comment.issue_id is not null ' .
 
         'order by date_created ' . $order . ', user_id) ';
 

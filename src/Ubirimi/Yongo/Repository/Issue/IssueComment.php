@@ -25,7 +25,7 @@ class IssueComment
 {
 
     public static function deleteById($commentId) {
-        $query = 'delete from issue_comment where id = ? limit 1';
+        $query = 'delete from yongo_issue_comment where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $commentId);
@@ -33,7 +33,7 @@ class IssueComment
     }
 
     public function deleteByIssueId($issueId) {
-        $query = 'DELETE FROM issue_comment WHERE issue_id = ?';
+        $query = 'DELETE FROM yongo_issue_comment WHERE issue_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $issueId);
@@ -41,11 +41,11 @@ class IssueComment
     }
 
     public function getById($commentId) {
-        $query = 'select issue_comment.id, issue_comment.content, issue_comment.date_created, ' .
+        $query = 'select yongo_issue_comment.id, yongo_issue_comment.content, yongo_issue_comment.date_created, ' .
                  'general_user.first_name, general_user.last_name, general_user.id as user_id ' .
-                 'from issue_comment ' .
-                 'left join general_user on general_user.id = issue_comment.user_id ' .
-                 'where issue_comment.id = ? ' .
+                 'from yongo_issue_comment ' .
+                 'left join general_user on general_user.id = yongo_issue_comment.user_id ' .
+                 'where yongo_issue_comment.id = ? ' .
                  'limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -59,16 +59,16 @@ class IssueComment
     }
 
     public function getByIssueId($issueId, $order = false) {
-        $query = 'SELECT issue_comment.id, user_id, content, issue_comment.date_created, ' .
+        $query = 'SELECT yongo_issue_comment.id, user_id, content, yongo_issue_comment.date_created, ' .
             'general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.avatar_picture, general_user.email ' .
-            'FROM issue_comment ' .
-            'LEFT join general_user on issue_comment.user_id = general_user.id ' .
+            'FROM yongo_issue_comment ' .
+            'LEFT join general_user on yongo_issue_comment.user_id = general_user.id ' .
             'WHERE issue_id = ? ';
 
         if ($order) {
             $query .= 'order by id ' . $order;
         } else {
-            $query .= 'ORDER BY issue_comment.date_created ASC';
+            $query .= 'ORDER BY yongo_issue_comment.date_created ASC';
         }
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -83,13 +83,13 @@ class IssueComment
     }
 
     public function getByIssueIdAndUserId($issueId, $userId) {
-        $query = 'SELECT issue_comment.id, user_id, content, issue_comment.date_created, ' .
+        $query = 'SELECT yongo_issue_comment.id, user_id, content, yongo_issue_comment.date_created, ' .
             'general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.avatar_picture ' .
-            'FROM issue_comment ' .
-            'LEFT join general_user on issue_comment.user_id = general_user.id ' .
+            'FROM yongo_issue_comment ' .
+            'LEFT join general_user on yongo_issue_comment.user_id = general_user.id ' .
             'WHERE issue_id = ? ' .
             'and user_id = ? ' .
-            'order by issue_comment.id asc';
+            'order by yongo_issue_comment.id asc';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $issueId, $userId);
@@ -103,7 +103,7 @@ class IssueComment
     }
 
     public function updateById($commentId, $content, $userId, $date) {
-        $query = 'update issue_comment set content = ?, user_id = ?, date_updated = ? where id = ? limit 1';
+        $query = 'update yongo_issue_comment set content = ?, user_id = ?, date_updated = ? where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("sisi", $content, $userId, $date, $commentId);
@@ -111,7 +111,7 @@ class IssueComment
     }
 
     public function add($issueId, $userId, $content, $date_created) {
-        $query = "INSERT INTO issue_comment(issue_id, user_id, content, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_issue_comment(issue_id, user_id, content, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iiss", $issueId, $userId, $content, $date_created);
@@ -119,17 +119,17 @@ class IssueComment
     }
 
     public function getByAssigneeFromHistoryAfterDate($issueId, $date) {
-        $query = 'SELECT issue_comment.id, user_id, content, issue_comment.date_created ' .
+        $query = 'SELECT yongo_issue_comment.id, user_id, content, yongo_issue_comment.date_created ' .
             'from issue_history ' .
-            'LEFT JOIN issue_comment on (issue_comment.issue_id = issue_history.issue_id and (issue_comment.user_id = issue_history.old_value_id or issue_comment.user_id = issue_history.new_value_id)) ' .
+            'LEFT JOIN yongo_issue_comment on (yongo_issue_comment.issue_id = issue_history.issue_id and (yongo_issue_comment.user_id = issue_history.old_value_id or yongo_issue_comment.user_id = issue_history.new_value_id)) ' .
             'WHERE issue_history.issue_id = ? ' .
             "and issue_history.field = 'assignee' " .
-            "and issue_comment.id is not null ";
+            "and yongo_issue_comment.id is not null ";
         if ($date) {
-            $query .= "and issue_comment.date_created >= ? ";
+            $query .= "and yongo_issue_comment.date_created >= ? ";
         }
 
-        $query .= 'order by issue_comment.id asc';
+        $query .= 'order by yongo_issue_comment.id asc';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         if ($date) {
@@ -148,12 +148,12 @@ class IssueComment
     }
 
     public function getByUserIdAfterDate($issueId, $userId, $date) {
-        $query = 'SELECT issue_comment.id, user_id, content, issue_comment.date_created ' .
-            'from issue_comment ' .
-            'WHERE issue_comment.user_id = ? ' .
-            "and issue_comment.issue_id = ? " .
-            "and issue_comment.date_created >= ? " .
-            "order by issue_comment.id asc";
+        $query = 'SELECT yongo_issue_comment.id, user_id, content, yongo_issue_comment.date_created ' .
+            'from yongo_issue_comment ' .
+            'WHERE yongo_issue_comment.user_id = ? ' .
+            "and yongo_issue_comment.issue_id = ? " .
+            "and yongo_issue_comment.date_created >= ? " .
+            "order by yongo_issue_comment.id asc";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iis", $userId, $issueId, $date);
