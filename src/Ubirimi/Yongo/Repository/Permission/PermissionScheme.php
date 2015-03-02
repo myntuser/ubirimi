@@ -86,10 +86,10 @@ class PermissionScheme
     public function getDataByPermissionId($permissionSchemeId, $permissionId) {
         $query = "select yongo_permission_scheme_data.id, general_user.id as user_id, general_user.first_name, general_user.last_name, yongo_permission_scheme_data.reporter, " .
                     "yongo_permission_scheme_data.group_id as group_id, general_group.name as group_name, " .
-                    "permission_role.id as permission_role_id, permission_role.name as permission_role_name, " .
+                    "yongo_permission_role.id as permission_role_id, yongo_permission_role.name as permission_role_name, " .
                     "yongo_permission_scheme_data.current_assignee, yongo_permission_scheme_data.reporter, yongo_permission_scheme_data.project_lead " .
             "from yongo_permission_scheme_data " .
-            "left join permission_role on permission_role.id = yongo_permission_scheme_data.permission_role_id " .
+            "left join yongo_permission_role on yongo_permission_role.id = yongo_permission_scheme_data.permission_role_id " .
             "left join `general_group` on general_group.id = yongo_permission_scheme_data.group_id " .
             "left join general_user on general_user.id = yongo_permission_scheme_data.user_id " .
             "where yongo_permission_scheme_data.permission_scheme_id = ? " .
@@ -256,9 +256,9 @@ class PermissionScheme
     }
 
     public function getPermissionRolesForPermissionId($permissionSchemeId, $permissionId) {
-        $query = "select permission_role.id as permission_role_id, permission_role.name as permission_role_name " .
+        $query = "select yongo_permission_role.id as permission_role_id, yongo_permission_role.name as permission_role_name " .
             "from yongo_permission_scheme_data " .
-            "left join permission_role on permission_role.id = yongo_permission_scheme_data.permission_role_id " .
+            "left join yongo_permission_role on yongo_permission_role.id = yongo_permission_scheme_data.permission_role_id " .
             "where yongo_permission_scheme_data.permission_scheme_id = ? and yongo_permission_scheme_data.sys_permission_id = ? and permission_role_id is not null";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

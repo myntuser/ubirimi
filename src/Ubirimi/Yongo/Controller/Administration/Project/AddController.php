@@ -67,7 +67,7 @@ class AddController extends UbirimiController
             $description = Util::cleanRegularInputField($request->request->get('description'));
 
             $issueTypeSchemeId = $request->request->get('issue_type_scheme');
-            $issueTypeScreenSchemeId = $request->request->get('issue_type_screen_scheme');
+            $issueTypeScreenSchemeId = $request->request->get('yongo_issue_type_screen_scheme');
             $issueTypeFieldConfigurationSchemeId = $request->request->get('field_configuration_scheme');
             $workflowSchemeId = $request->request->get('workflow_scheme');
             $permissionSchemeId = $request->request->get('permission_scheme');

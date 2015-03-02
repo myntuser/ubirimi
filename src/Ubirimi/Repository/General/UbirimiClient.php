@@ -253,7 +253,7 @@ class UbirimiClient
     }
 
     public function createDefaultNotificationScheme($clientId, $currentDate) {
-        $query = "INSERT INTO notification_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_notification_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $name = 'Default Notification Scheme';
@@ -282,7 +282,7 @@ class UbirimiClient
 
     public function createDefaultIssueTypeFieldConfigurationData($clientId, $issueTypeFieldConfigurationId, $fieldConfigurationId, $currentDate) {
         $issueTypes = UbirimiContainer::get()['repository']->get(IssueType::class)->getAll($clientId);
-        $query = "INSERT INTO  issue_type_field_configuration_data(issue_type_field_configuration_id, issue_type_id, field_configuration_id, date_created) VALUES ";
+        $query = "INSERT INTO yongo_issue_type_field_configuration_data(issue_type_field_configuration_id, issue_type_id, field_configuration_id, date_created) VALUES ";
         while ($issueType = $issueTypes->fetch_array(MYSQLI_ASSOC)) {
             $query .= "(" . $issueTypeFieldConfigurationId . "," . $issueType['id'] . ", " . $fieldConfigurationId . ", '" . $currentDate . "'), ";
         }
@@ -303,7 +303,7 @@ class UbirimiClient
     }
 
     public function getAllIssueSettings($type, $clientId) {
-        $query = "SELECT id, name, description FROM issue_" . $type . ' WHERE client_id = ?';
+        $query = "SELECT id, name, description FROM yongo_issue_" . $type . ' WHERE client_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
@@ -316,7 +316,7 @@ class UbirimiClient
     }
 
     public function createDefaultIssueTypes($clientId, $currentDate) {
-        $query = "INSERT INTO issue_type(client_id, name, description, sub_task_flag, icon_name, date_created) VALUES " .
+        $query = "INSERT INTO yongo_issue_type(client_id, name, description, sub_task_flag, icon_name, date_created) VALUES " .
             "(" . $clientId . ", 'Bug', 'A problem which impairs or prevents the functions of the product.', 0, 'bug.png', '" . $currentDate . "'), (" . $clientId . ", 'New feature', 'A new feature of the product, which has yet to be developed.', 0, 'new_feature.png', '" . $currentDate . "'), " .
             "(" . $clientId . ", 'Task', 'A task that needs to be done.', 0, 'task.png', '" . $currentDate . "'), (" . $clientId . ", 'Improvement', 'An improvement or enhancement to an existing feature or task.', 0, 'improvement.png', '" . $currentDate . "'), " .
             "(" . $clientId . ", 'Story', 'A user story', 0, 'story.png', '" . $currentDate . "'), (" . $clientId . ", 'Epic', 'A big user story that needs to be broken down.', 0, 'epic.png', '" . $currentDate . "'), " .
@@ -338,7 +338,7 @@ class UbirimiClient
     }
 
     public function createDefaultIssueTypeScreenScheme($clientId, $currentDate) {
-        $query = "INSERT INTO issue_type_screen_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_issue_type_screen_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $name = 'Default Issue Type Screen Scheme';
@@ -474,7 +474,7 @@ class UbirimiClient
 
         UbirimiContainer::get()['repository']->get(UbirimiClient::class)->deleteGroups($clientId);
 
-        $query = 'delete from permission_role where client_id = ' . $clientId;
+        $query = 'delete from yongo_permission_role where client_id = ' . $clientId;
         UbirimiContainer::get()['db.connection']->query($query);
 
         $query = 'delete from general_user where client_id = ' . $clientId;
@@ -707,7 +707,7 @@ class UbirimiClient
     }
 
     public function createDefaultFieldConfiguration($clientId, $currentDate) {
-        $query = "INSERT INTO field_configuration(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_field_configuration(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $name = 'Default Field Configuration';
@@ -721,7 +721,7 @@ class UbirimiClient
     }
 
     public function createDefaultIssueTypeFieldConfiguration($clientId, $currentDate) {
-        $query = "INSERT INTO  issue_type_field_configuration(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_issue_type_field_configuration(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $name = 'Default Field Configuration Scheme';
@@ -766,7 +766,7 @@ class UbirimiClient
     }
 
     public function createDefaultWorkflow($clientId, $issueTypeSchemeId, $currentDate) {
-        $query = "INSERT INTO workflow(client_id, issue_type_scheme_id, name, description, date_created) VALUES (?, ?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_workflow(client_id, issue_type_scheme_id, name, description, date_created) VALUES (?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $name = 'Default Yongo Workflow';
@@ -1784,7 +1784,7 @@ class UbirimiClient
     }
 
     public function deleteYongoIssueTypes($clientId) {
-        $query = 'delete from issue_type where client_id = ' . $clientId;
+        $query = 'delete from yongo_issue_type where client_id = ' . $clientId;
         UbirimiContainer::get()['db.connection']->query($query);
     }
 

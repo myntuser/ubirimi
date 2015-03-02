@@ -77,7 +77,7 @@ require_once __DIR__ . '/../_header.php';
                 <tr>
                     <td>Issue Type Screen Scheme</td>
                     <td>
-                        <select name="issue_type_screen_scheme" class="select2InputSmall">
+                        <select name="yongo_issue_type_screen_scheme" class="select2InputSmall">
                             <?php while ($screenScheme = $issueTypeScreenScheme->fetch_array(MYSQLI_ASSOC)): ?>
                                 <option value="<?php echo $screenScheme['id'] ?>"><?php echo $screenScheme['name']; ?></option>
                             <?php endwhile ?>

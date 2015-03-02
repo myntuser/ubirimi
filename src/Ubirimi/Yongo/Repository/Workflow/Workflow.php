@@ -37,12 +37,12 @@ class Workflow
     }
 
     public function getAllByClientId($clientId) {
-        $query = "select yongo_workflow.id, yongo_workflow.name, workflow.description, yongo_workflow_scheme.name as scheme_name, yongo_issue_type_scheme.name as issue_type_scheme_name " .
+        $query = "select yongo_workflow.id, yongo_workflow.name, yongo_workflow.description, yongo_workflow_scheme.name as scheme_name, yongo_issue_type_scheme.name as issue_type_scheme_name " .
                  "from yongo_workflow " .
                  "left join yongo_workflow_scheme_data on yongo_workflow_scheme_data.workflow_id = yongo_workflow.id " .
                  "left join yongo_workflow_scheme on yongo_workflow_scheme.id = yongo_workflow_scheme_data.workflow_scheme_id " .
                  "left join yongo_issue_type_scheme on yongo_issue_type_scheme.id = yongo_workflow.issue_type_scheme_id " .
-                 "where workflow.client_id = ?";
+                 "where yongo_workflow.client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
@@ -109,7 +109,7 @@ class Workflow
     }
 
     public function createNewMetaData($clientId, $workflowIssueTypeSchemeId, $name, $description, $currentDate) {
-        $q = 'insert into workflow(client_id, issue_type_scheme_id, name, description, date_created) ' .
+        $q = 'insert into yongo_workflow(client_id, issue_type_scheme_id, name, description, date_created) ' .
              'values(?, ?, ?, ?, ?)';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
@@ -290,7 +290,7 @@ class Workflow
             "left join yongo_issue_type_scheme_data on yongo_issue_type_scheme_data.issue_type_scheme_id = yongo_workflow.issue_type_scheme_id " .
             "left join yongo_issue_type on yongo_issue_type.id = yongo_issue_type_scheme_data.issue_type_id " .
             "where yongo_issue_type.id = ? " .
-            "and workflow.client_id = ? " .
+            "and yongo_workflow.client_id = ? " .
             "group by yongo_workflow.id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -603,7 +603,7 @@ class Workflow
         $query = "select yongo_workflow.id, yongo_workflow.name, yongo_workflow_data.transition_name, yongo_workflow_data.id as workflow_data_id " .
             "from yongo_workflow " .
             "left join yongo_workflow_data on yongo_workflow_data.workflow_id = yongo_workflow.id " .
-            "where workflow.client_id = ? " .
+            "where yongo_workflow.client_id = ? " .
             "and yongo_workflow_data.screen_id = ? " .
             "group by transition_name";
 

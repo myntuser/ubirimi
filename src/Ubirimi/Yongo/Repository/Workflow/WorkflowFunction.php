@@ -272,7 +272,7 @@ class WorkflowFunction
 
     public function getDataById($workflowPostFunctionDataId) {
         $query = "SELECT sys_workflow_post_function.id as function_id, sys_workflow_post_function.name, yongo_workflow_post_function_data.workflow_data_id, yongo_workflow_post_function_data.definition_data, " .
-                    "workflow.name as workflow_name, yongo_workflow.id as workflow_id, yongo_workflow_data.transition_name " .
+                    "yongo_workflow.name as workflow_name, yongo_workflow.id as workflow_id, yongo_workflow_data.transition_name " .
                  "from yongo_workflow_post_function_data " .
                  "left join sys_workflow_post_function on sys_workflow_post_function.id = yongo_workflow_post_function_data.sys_workflow_post_function_id " .
                  "left join yongo_workflow_data on yongo_workflow_data.id = yongo_workflow_post_function_data.workflow_data_id " .

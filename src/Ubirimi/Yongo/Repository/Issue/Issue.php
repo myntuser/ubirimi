@@ -781,7 +781,7 @@ class Issue
             $new_value = 'NULL';
         }
 
-        $query = "INSERT INTO issue_history(issue_id, by_user_id, field, old_value, new_value, old_value_id, new_value_id, date_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_issue_history(issue_id, by_user_id, field, old_value, new_value, old_value_id, new_value_id, date_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iissssss", $issueId, $userId, $field, $old_value, $new_value, $oldValueId, $newValueId, $now_date);
@@ -2095,12 +2095,12 @@ class Issue
     }
 
     public function getAssigneeOnDate($issueId, $date) {
-        $query = 'SELECT issue_history.new_value_id ' .
-            'from issue_history ' .
-            'WHERE issue_history.issue_id = ? ' .
-            "and issue_history.field = 'assignee' " .
-            "and issue_history.date_created <= ? " .
-            "order by issue_history.id desc " .
+        $query = 'SELECT yongo_issue_history.new_value_id ' .
+            'from yongo_issue_history ' .
+            'WHERE yongo_issue_history.issue_id = ? ' .
+            "and yongo_issue_history.field = 'assignee' " .
+            "and yongo_issue_history.date_created <= ? " .
+            "order by yongo_issue_history.id desc " .
             "limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -2112,12 +2112,12 @@ class Issue
             $data = $result->fetch_array(MYSQLI_ASSOC);
             return $data['new_value_id'];
         } else {
-            $query = 'SELECT issue_history.old_value_id ' .
-                'from issue_history ' .
-                'WHERE issue_history.issue_id = ? ' .
-                "and issue_history.field = 'assignee' " .
-                "and issue_history.date_created > ? " .
-                "order by issue_history.id asc " .
+            $query = 'SELECT yongo_issue_history.old_value_id ' .
+                'from yongo_issue_history ' .
+                'WHERE yongo_issue_history.issue_id = ? ' .
+                "and yongo_issue_history.field = 'assignee' " .
+                "and yongo_issue_history.date_created > ? " .
+                "order by yongo_issue_history.id asc " .
                 "limit 1";
 
             $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

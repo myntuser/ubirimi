@@ -164,7 +164,7 @@ class IssueEvent
             "from yongo_workflow " .
             "left join yongo_workflow_data on yongo_workflow_data.workflow_id = yongo_workflow.id " .
             "left join yongo_workflow_post_function_data on yongo_workflow_post_function_data.workflow_data_id = yongo_workflow_data.id " .
-            "WHERE workflow.client_id = ? " .
+            "WHERE yongo_workflow.client_id = ? " .
             "and yongo_workflow_post_function_data.definition_data = ? " .
             "group by yongo_workflow.id";
 
@@ -181,12 +181,12 @@ class IssueEvent
     }
 
     public function getNotificationSchemesByEventId($clientId, $eventId) {
-        $query = "SELECT notification_scheme.id, notification_scheme.name " .
-            "FROM notification_scheme " .
-            "left join yongo_notification_scheme_data on yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id " .
-            "WHERE notification_scheme.client_id = ? " .
+        $query = "SELECT yongo_notification_scheme.id, yongo_notification_scheme.name " .
+            "FROM yongo_notification_scheme " .
+            "left join yongo_notification_scheme_data on yongo_notification_scheme_data.notification_scheme_id = yongo_notification_scheme.id " .
+            "WHERE yongo_notification_scheme.client_id = ? " .
             "and yongo_notification_scheme_data.event_id = ? " .
-            "group by notification_scheme.id";
+            "group by yongo_notification_scheme.id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
             $stmt->bind_param("ii", $clientId, $eventId);

@@ -25,7 +25,7 @@ class IssueType
 {
     public function getAll($clientId) {
         $query = "SELECT yongo_issue_type.* " .
-                 "FROM issue_type " .
+                 "FROM yongo_issue_type " .
                  "where yongo_issue_type.client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -40,7 +40,7 @@ class IssueType
 
     public function getAllSubTasks($clientId) {
         $query = "SELECT yongo_issue_type.* " .
-                 "FROM issue_type " .
+                 "FROM yongo_issue_type " .
                  "where yongo_issue_type.client_id = ? and sub_task_flag = 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -54,7 +54,7 @@ class IssueType
     }
 
     public function getById($Id) {
-        $query = "SELECT id, name, description, client_id FROM issue_type WHERE id = ? LIMIT 1";
+        $query = "SELECT id, name, description, client_id FROM yongo_issue_type WHERE id = ? LIMIT 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -67,7 +67,7 @@ class IssueType
     }
 
     public function updateById($Id, $name, $description, $date) {
-        $query = 'UPDATE issue_type SET ' .
+        $query = 'UPDATE yongo_issue_type SET ' .
                  'name = ?, description = ?, date_updated = ? ' .
                  'WHERE id = ? ' .
                  'LIMIT 1';
@@ -79,7 +79,7 @@ class IssueType
 
     public function getSchemesForIssueTypeId($typeId, $type) {
         $query = "select yongo_issue_type_scheme.name, yongo_issue_type_scheme.description, yongo_issue_type_scheme.id " .
-            "from issue_type " .
+            "from yongo_issue_type " .
             "left join yongo_issue_type_scheme_data on yongo_issue_type_scheme_data.issue_type_id = yongo_issue_type.id " .
             "left join yongo_issue_type_scheme on yongo_issue_type_scheme.id = yongo_issue_type_scheme_data.issue_type_scheme_id " .
             "where yongo_issue_type.id = ? " .
@@ -112,7 +112,7 @@ class IssueType
     }
 
     public function deleteById($Id) {
-        $query = 'delete from issue_type where id = ? limit 1';
+        $query = 'delete from yongo_issue_type where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -123,7 +123,7 @@ class IssueType
         $stmt->bind_param("i", $Id);
         $stmt->execute();
 
-        $query = 'delete from issue_type_field_configuration_data where issue_type_id = ?';
+        $query = 'delete from yongo_issue_type_field_configuration_data where issue_type_id = ?';
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
         $stmt->execute();

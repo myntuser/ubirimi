@@ -38,7 +38,7 @@ class NotificationScheme
 
     public function getAll() {
         $query = "select * " .
-                 "from notification_scheme ";
+                 "from yongo_notification_scheme ";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
@@ -50,7 +50,7 @@ class NotificationScheme
     }
 
     public function save($currentDate) {
-        $query = "INSERT INTO notification_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_notification_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -62,7 +62,7 @@ class NotificationScheme
 
     public function getByClientId($clientId) {
         $query = "select * " .
-            "from notification_scheme " .
+            "from yongo_notification_scheme " .
             "where client_id = ? ";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -77,7 +77,7 @@ class NotificationScheme
 
     public function getMetaDataById($Id) {
         $query = "select * " .
-            "from notification_scheme " .
+            "from yongo_notification_scheme " .
             "where id = ? " .
             "limit 1";
 
@@ -92,7 +92,7 @@ class NotificationScheme
     }
 
     public function getMetaDataByNameAndClientId($clientId, $name) {
-        $query = "select * from notification_scheme where client_id = ? and LOWER(name) = ?";
+        $query = "select * from yongo_notification_scheme where client_id = ? and LOWER(name) = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $clientId, $name);
@@ -105,7 +105,7 @@ class NotificationScheme
     }
 
     public function updateMetaDataById($Id, $name, $description, $date) {
-        $query = "update notification_scheme set name = ?, description = ?, date_updated = ? where id = ? limit 1";
+        $query = "update yongo_notification_scheme set name = ?, description = ?, date_updated = ? where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("sssi", $name, $description, $date, $Id);
@@ -213,13 +213,13 @@ class NotificationScheme
         $query = "select yongo_notification_scheme_data.id, general_user.first_name, general_user.last_name, general_user.id as user_id, general_group.id as group_id, general_group.name as group_name, yongo_notification_scheme_data.current_assignee, yongo_notification_scheme_data.reporter,  " .
             "yongo_notification_scheme_data.all_watchers, yongo_field.name as custom_field_name, yongo_field.id as custom_field_id, " .
             "yongo_notification_scheme_data.current_user, yongo_notification_scheme_data.permission_role_id, yongo_notification_scheme_data.project_lead, yongo_notification_scheme_data.component_lead, " .
-            "permission_role.name as role_name, " .
-            "event.id as event_id, event.name as event_name " .
+            "yongo_permission_role.name as role_name, " .
+            "yongo_event.id as event_id, yongo_event.name as event_name " .
             "from yongo_notification_scheme_data " .
-            "left join event on event.id = yongo_notification_scheme_data.event_id " .
+            "left join yongo_event on yongo_event.id = yongo_notification_scheme_data.event_id " .
             "left join general_user on general_user.id = yongo_notification_scheme_data.user_id " .
             "left join `general_group` on  `general_group`.id = yongo_notification_scheme_data.group_id " .
-            "left join permission_role on permission_role.id = yongo_notification_scheme_data.permission_role_id " .
+            "left join yongo_permission_role on yongo_permission_role.id = yongo_notification_scheme_data.permission_role_id " .
             "left join yongo_field on yongo_field.id = yongo_notification_scheme_data.user_picker_multiple_selection " .
             "where yongo_notification_scheme_data.notification_scheme_id = ? and " .
                 "yongo_notification_scheme_data.event_id = ?";
@@ -339,7 +339,7 @@ class NotificationScheme
     }
 
     public function deleteById($notificationSchemeId) {
-        $query = "delete from notification_scheme where id = ? limit 1";
+        $query = "delete from yongo_notification_scheme where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 

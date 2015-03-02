@@ -80,7 +80,7 @@ class WorkflowScheme {
     }
 
     public function getDataById($Id) {
-        $query = "select yongo_workflow_scheme_data.id, yongo_workflow_scheme_data.workflow_id, yongo_workflow.name, workflow.description, " .
+        $query = "select yongo_workflow_scheme_data.id, yongo_workflow_scheme_data.workflow_id, yongo_workflow.name, yongo_workflow.description, " .
                  "yongo_workflow_scheme_data.workflow_scheme_id " .
                  "from yongo_workflow_scheme_data " .
                  "left join yongo_workflow on yongo_workflow.id = yongo_workflow_scheme_data.workflow_id " .
@@ -126,7 +126,7 @@ class WorkflowScheme {
     }
 
     public function getWorkflows($workflowSchemeId) {
-        $query = "select workflow.* " .
+        $query = "select yongo_workflow.* " .
             "from yongo_workflow_scheme " .
             "left join yongo_workflow_scheme_data on yongo_workflow_scheme_data.workflow_scheme_id = yongo_workflow_scheme.id " .
             "left join yongo_workflow on yongo_workflow.id = yongo_workflow_scheme_data.workflow_id " .

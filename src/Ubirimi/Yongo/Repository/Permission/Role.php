@@ -24,7 +24,7 @@ use Ubirimi\Container\UbirimiContainer;
 class Role
 {
     public function addDefaultPermissionRoles($clientId, $date) {
-        $query = 'insert into permission_role(client_id, name, description, date_created) values ';
+        $query = 'insert into yongo_permission_role(client_id, name, description, date_created) values ';
 
         $query .= "(" . $clientId . ", 'Administrators', 'The Administrator has all the privileges set', '" . $date . "')";
         $query .= ",(" . $clientId . ", 'Developers', 'The Developer has a basic set of privileges, mainly related to issues', '" . $date . "')";
@@ -35,7 +35,7 @@ class Role
 
     public function getByClient($clientId) {
         $query = 'SELECT * ' .
-            'FROM permission_role ' .
+            'FROM yongo_permission_role ' .
             'WHERE client_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -51,7 +51,7 @@ class Role
 
     public function getById($Id) {
         $query = 'SELECT * ' .
-            'FROM permission_role ' .
+            'FROM yongo_permission_role ' .
             'WHERE id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -85,7 +85,7 @@ class Role
 
     public function getPermissionRoleById($permissionRoleId) {
         $query = 'select id, client_id, name, description ' .
-                 'from permission_role ' .
+                 'from yongo_permission_role ' .
                  'where id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -115,7 +115,7 @@ class Role
     }
 
     public function add($clientId, $name, $description, $date) {
-        $query = "INSERT INTO permission_role(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_permission_role(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("isss", $clientId, $name, $description, $date);
@@ -123,7 +123,7 @@ class Role
     }
 
     public function updateById($permissionRoleId, $name, $description, $date) {
-        $query = 'update permission_role set name = ?, description = ?, date_updated = ? where id = ?';
+        $query = 'update yongo_permission_role set name = ?, description = ?, date_updated = ? where id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("sssi", $name, $description, $date, $permissionRoleId);
@@ -194,14 +194,14 @@ class Role
         $stmt->bind_param("i", $permissionRoleId);
         $stmt->execute();
 
-        $query = 'delete from permission_role where id = ? limit 1';
+        $query = 'delete from yongo_permission_role where id = ? limit 1';
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $permissionRoleId);
         $stmt->execute();
     }
 
     public function getByName($clientId, $name, $roleId = null) {
-        $query = 'select id, name from permission_role where client_id = ? and LOWER(name)= LOWER(?) ';
+        $query = 'select id, name from yongo_permission_role where client_id = ? and LOWER(name)= LOWER(?) ';
         if ($roleId) $query .= 'and id != ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

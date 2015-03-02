@@ -151,11 +151,11 @@ class IssueSecurityScheme
         $query = "select yongo_issue_security_scheme_level_data.id, yongo_issue_security_scheme_level_data.issue_security_scheme_level_id, " .
                  "yongo_issue_security_scheme_level_data.permission_role_id, yongo_issue_security_scheme_level_data.group_id, yongo_issue_security_scheme_level_data.user_id, " .
                  "yongo_issue_security_scheme_level_data.current_assignee, yongo_issue_security_scheme_level_data.reporter, yongo_issue_security_scheme_level_data.project_lead, yongo_issue_security_scheme_level_data.date_created, " .
-                 "general_user.first_name, general_user.last_name, general_user.id as user_id, general_group.id as group_id, general_group.name as group_name, permission_role.name as role_name " .
+                 "general_user.first_name, general_user.last_name, general_user.id as user_id, general_group.id as group_id, general_group.name as group_name, yongo_permission_role.name as role_name " .
                  "from yongo_issue_security_scheme_level_data " .
                  "left join general_user on general_user.id = yongo_issue_security_scheme_level_data.user_id " .
                  "left join `general_group` on  `general_group`.id = yongo_issue_security_scheme_level_data.group_id " .
-                 "left join permission_role on permission_role.id = yongo_issue_security_scheme_level_data.permission_role_id " .
+                 "left join yongo_permission_role on yongo_permission_role.id = yongo_issue_security_scheme_level_data.permission_role_id " .
                  "where issue_security_scheme_level_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

@@ -46,7 +46,7 @@ class SelectSchemeController extends UbirimiController
 
         if ($request->request->has('associate')) {
 
-            $issueTypeScreenSchemeId = $request->request->get('issue_type_screen_scheme');
+            $issueTypeScreenSchemeId = $request->request->get('yongo_issue_type_screen_scheme');
             $this->getRepository(YongoProject::class)->updateIssueTypeScreenScheme($projectId, $issueTypeScreenSchemeId);
 
             return new RedirectResponse('/yongo/administration/project/screens/' . $projectId);

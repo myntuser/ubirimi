@@ -717,8 +717,8 @@ class YongoProject
     public function addDefaultUsers($clientId, $projectId, $currentDate) {
         $query = 'SELECT permission_role_data.default_user_id, permission_role_data.permission_role_id ' .
             'FROM permission_role_data ' .
-            'left join permission_role on permission_role.id = permission_role_data.permission_role_id ' .
-            'where permission_role.client_id = ? ' .
+            'left join yongo_permission_role on yongo_permission_role.id = permission_role_data.permission_role_id ' .
+            'where yongo_permission_role.client_id = ? ' .
             'and permission_role_data.default_user_id is not null';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -740,8 +740,8 @@ class YongoProject
     public function addDefaultGroups($clientId, $projectId, $currentDate) {
         $query = 'SELECT permission_role_data.default_group_id, permission_role_data.permission_role_id ' .
             'FROM permission_role_data ' .
-            'left join permission_role on permission_role.id = permission_role_data.permission_role_id ' .
-            'where permission_role.client_id = ? ' .
+            'left join yongo_permission_role on yongo_permission_role.id = permission_role_data.permission_role_id ' .
+            'where yongo_permission_role.client_id = ? ' .
             'and permission_role_data.default_group_id is not null';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -964,8 +964,8 @@ class YongoProject
             // 1. user in permission scheme
         $query = 'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
             'from yongo_project ' .
-            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
-            'left join yongo_notification_scheme_data on yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id ' .
+            'left join yongo_notification_scheme on yongo_notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on yongo_notification_scheme_data.notification_scheme_id = yongo_notification_scheme.id ' .
             'left join general_user on general_user.id = yongo_notification_scheme_data.user_id ' .
             'where yongo_project.id  IN ' . $projectsSQL . ' and ' .
                 'yongo_notification_scheme_data.event_id = ? and ' .
@@ -977,8 +977,8 @@ class YongoProject
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
             'from yongo_project ' .
-            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
-            'left join yongo_notification_scheme_data on yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id ' .
+            'left join yongo_notification_scheme on yongo_notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on yongo_notification_scheme_data.notification_scheme_id = yongo_notification_scheme.id ' .
             'left join `general_group` on general_group.id = yongo_notification_scheme_data.group_id ' .
             'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
             'left join general_user on general_user.id = general_group_data.user_id ' .
@@ -992,8 +992,8 @@ class YongoProject
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
             'from yongo_project ' .
-            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
-            'left join yongo_notification_scheme_data on yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id ' .
+            'left join yongo_notification_scheme on yongo_notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on yongo_notification_scheme_data.notification_scheme_id = yongo_notification_scheme.id ' .
             'left join yongo_project_role_data on yongo_project_role_data.permission_role_id = yongo_notification_scheme_data.permission_role_id ' .
             'left join general_user on general_user.id = yongo_project_role_data.user_id ' .
             'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
@@ -1006,8 +1006,8 @@ class YongoProject
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
             'from yongo_project ' .
-            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
-            'left join yongo_notification_scheme_data on yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id ' .
+            'left join yongo_notification_scheme on yongo_notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on yongo_notification_scheme_data.notification_scheme_id = yongo_notification_scheme.id ' .
             'left join yongo_project_role_data on yongo_project_role_data.permission_role_id = yongo_notification_scheme_data.permission_role_id ' .
             'left join `general_group` on general_group.id = yongo_project_role_data.group_id ' .
             'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
@@ -1022,8 +1022,8 @@ class YongoProject
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
             'from yongo_project ' .
-            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
-            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
+            'left join yongo_notification_scheme on yongo_notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = yongo_notification_scheme.id and ' .
                        'yongo_notification_scheme_data.current_assignee is not null) ' .
             'left join yongo_issue on yongo_issue.id = ? ' .
             'left join general_user on general_user.id = yongo_issue.user_assigned_id ' .
@@ -1038,8 +1038,8 @@ class YongoProject
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
             'from yongo_project ' .
-            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
-            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
+            'left join yongo_notification_scheme on yongo_notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = yongo_notification_scheme.id and ' .
                        'yongo_notification_scheme_data.reporter is not null) ' .
             'left join yongo_issue on yongo_issue.id = ? ' .
             'left join general_user on general_user.id = yongo_issue.user_reported_id ' .
@@ -1054,8 +1054,8 @@ class YongoProject
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
             'from yongo_project ' .
-            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
-            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
+            'left join yongo_notification_scheme on yongo_notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = yongo_notification_scheme.id and ' .
             'yongo_notification_scheme_data.current_user is not null) ' .
             'left join general_user on general_user.id = ? ' .
             'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
@@ -1068,8 +1068,8 @@ class YongoProject
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
             'from yongo_project ' .
-            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
-            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
+            'left join yongo_notification_scheme on yongo_notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = yongo_notification_scheme.id and ' .
             'yongo_notification_scheme_data.all_watchers is not null) ' .
             'left join yongo_issue on yongo_issue.id = ? ' .
             'left join yongo_issue_watch on yongo_issue_watch.yongo_issue_id = yongo_issue.id ' .
@@ -1083,8 +1083,8 @@ class YongoProject
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
             'from yongo_project ' .
-            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
-            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
+            'left join yongo_notification_scheme on yongo_notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = yongo_notification_scheme.id and ' .
             'yongo_notification_scheme_data.project_lead is not null) ' .
             'left join general_user on general_user.id = yongo_project.lead_id ' .
             'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
@@ -1098,8 +1098,8 @@ class YongoProject
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
             'from yongo_project ' .
-            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
-            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
+            'left join yongo_notification_scheme on yongo_notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = yongo_notification_scheme.id and ' .
                        'yongo_notification_scheme_data.component_lead is not null) ' .
             'left join yongo_issue on yongo_issue.id = ? ' .
             'left join yongo_issue_component on yongo_issue_component.issue_id = yongo_issue.id ' .
@@ -1116,8 +1116,8 @@ class YongoProject
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
             'from yongo_project ' .
-            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
-            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
+            'left join yongo_notification_scheme on yongo_notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = yongo_notification_scheme.id and ' .
             'yongo_notification_scheme_data.user_picker_multiple_selection is not null) ' .
             'left join yongo_issue on yongo_issue.id = ? ' .
             'left join yongo_issue_custom_field_data on (yongo_issue_custom_field_data.issue_id = yongo_issue.id and yongo_issue_custom_field_data.field_id = yongo_notification_scheme_data.user_picker_multiple_selection) ' .
@@ -1381,12 +1381,12 @@ class YongoProject
 
     public function getFieldInformation($issueTypeFieldConfigurationId, $issueTypeId, $resultType = null) {
         $query = "SELECT yongo_field_configuration_data.field_id, yongo_field_configuration_data.visible_flag, yongo_field_configuration_data.required_flag, yongo_field_configuration_data.field_description, " .
-                 "field.code as field_code " .
-            "FROM issue_type_field_configuration_data " .
-            "LEFT JOIN yongo_field_configuration_data on yongo_field_configuration_data.field_configuration_id = issue_type_field_configuration_data.field_configuration_id " .
+                 "yongo_field.code as field_code " .
+            "FROM yongo_issue_type_field_configuration_data " .
+            "LEFT JOIN yongo_field_configuration_data on yongo_field_configuration_data.field_configuration_id = yongo_issue_type_field_configuration_data.field_configuration_id " .
             "left join yongo_field on yongo_field.id = yongo_field_configuration_data.field_id " .
-            "WHERE issue_type_field_configuration_data.issue_type_field_configuration_id = ? and " .
-            "issue_type_field_configuration_data.issue_type_id = ?";
+            "WHERE yongo_issue_type_field_configuration_data.issue_type_field_configuration_id = ? and " .
+            "yongo_issue_type_field_configuration_data.issue_type_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $issueTypeFieldConfigurationId, $issueTypeId);
@@ -1516,8 +1516,8 @@ class YongoProject
                  'from yongo_workflow ' .
                  'left join yongo_workflow_scheme_data on yongo_workflow_scheme_data.workflow_id = yongo_workflow.id ' .
                  'left join yongo_project on yongo_project.workflow_scheme_id = yongo_workflow_scheme_data.workflow_scheme_id ' .
-                 'where workflow.client_id = ? and ' .
-                 'workflow.issue_type_scheme_id = ? and ' .
+                 'where yongo_workflow.client_id = ? and ' .
+                 'yongo_workflow.issue_type_scheme_id = ? and ' .
                  'yongo_project.id is not null ' .
                  'group by yongo_project.id ';
 

@@ -67,8 +67,8 @@ class Permission {
     const PERM_MANAGE_WATCHERS = 28;
 
     public function getAll() {
-        $query = "select sys_permission.id, sys_permission.name, sys_permission.description " .
-            "from sys_permission";
+        $query = "select yongo_permission.id, yongo_permission.name, yongo_permission.description " .
+            "from yongo_permission";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
@@ -80,8 +80,8 @@ class Permission {
     }
 
     public function getByCategory($categoryId) {
-        $query = "select sys_permission.id, sys_permission.name, sys_permission.description " .
-            "from sys_permission " .
+        $query = "select yongo_permission.id, yongo_permission.name, yongo_permission.description " .
+            "from yongo_permission " .
             "where sys_permission_category_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -95,8 +95,8 @@ class Permission {
     }
 
     public function getCategories() {
-        $query = "select sys_permission_category.* " .
-            "from sys_permission_category";
+        $query = "select yongo_permission_category.* " .
+            "from yongo_permission_category";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();

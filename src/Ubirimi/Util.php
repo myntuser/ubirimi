@@ -327,7 +327,7 @@ class Util {
         if ($startDate) {
             $queryWherePartDateIssueCreated = " and yongo_issue.date_created >= '" . $startDate . "' and yongo_issue.date_created <= '" . $endDate . "' ";
             $queryWherePartDateIssueCommented = " and yongo_issue_comment.date_created >= '" . $startDate . "' and yongo_issue_comment.date_created <= '" . $endDate . "' ";
-            $queryWherePartDateIssueHistory = " and issue_history.date_created >= '" . $startDate . "' and issue_history.date_created <= '" . $endDate . "' ";
+            $queryWherePartDateIssueHistory = " and yongo_issue_history.date_created >= '" . $startDate . "' and yongo_issue_history.date_created <= '" . $endDate . "' ";
         }
 
         // issue created events
@@ -379,9 +379,9 @@ class Util {
 
             '(select ' .
             "'event_history' as event, " .
-            'issue_history.date_created as date_created, ' .
-            'issue_history.field as field, ' .
-            'issue_history.new_value, ' .
+            'yongo_issue_history.date_created as date_created, ' .
+            'yongo_issue_history.field as field, ' .
+            'yongo_issue_history.new_value, ' .
             'general_user.id as user_id, general_user.first_name as first_name, general_user.last_name as last_name, ' .
             'yongo_issue.nr as nr, ' .
             'yongo_project.code as code, ' .
@@ -389,13 +389,13 @@ class Util {
             'null as comment_content, ' .
             'general_user.avatar_picture ' .
             'from yongo_issue ' .
-            'left join issue_history on issue_history.issue_id = yongo_issue.id ' .
-            'left join general_user on general_user.id = issue_history.by_user_id ' .
+            'left join yongo_issue_history on yongo_issue_history.issue_id = yongo_issue.id ' .
+            'left join general_user on general_user.id = yongo_issue_history.by_user_id ' .
             'left join yongo_project on yongo_project.id = yongo_issue.project_id ' .
             'where yongo_project.id  IN (' . implode(', ', $projectIds) . ') ' .
             $queryWherePart .
             $queryWherePartDateIssueHistory .
-            'and issue_history.issue_id is not null ' .
+            'and yongo_issue_history.issue_id is not null ' .
             'order by date_created desc, user_id) ' .
             'order by date_created desc';
 

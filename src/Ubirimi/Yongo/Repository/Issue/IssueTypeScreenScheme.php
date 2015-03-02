@@ -37,7 +37,7 @@ class IssueTypeScreenScheme
     }
 
     public function save($currentDate) {
-        $query = "INSERT INTO issue_type_screen_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_issue_type_screen_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -48,9 +48,9 @@ class IssueTypeScreenScheme
     }
 
     public function getByClientId($clientId) {
-        $query = "select issue_type_screen_scheme.id, issue_type_screen_scheme.name, issue_type_screen_scheme.description " .
-            "from issue_type_screen_scheme " .
-            "where issue_type_screen_scheme.client_id = ?";
+        $query = "select yongo_issue_type_screen_scheme.id, yongo_issue_type_screen_scheme.name, yongo_issue_type_screen_scheme.description " .
+            "from yongo_issue_type_screen_scheme " .
+            "where yongo_issue_type_screen_scheme.client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
@@ -64,7 +64,7 @@ class IssueTypeScreenScheme
 
     public function getMetaDataById($Id) {
         $query = "select * " .
-            "from issue_type_screen_scheme " .
+            "from yongo_issue_type_screen_scheme " .
             "where id = ? " .
             "limit 1";
 
@@ -137,7 +137,7 @@ class IssueTypeScreenScheme
     }
 
     public function updateMetaDataById($Id, $name, $description, $date) {
-        $query = "update issue_type_screen_scheme set name = ?, description = ?, date_updated = ? where id = ? limit 1";
+        $query = "update yongo_issue_type_screen_scheme set name = ?, description = ?, date_updated = ? where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("sssi", $name, $description, $date, $Id);
@@ -222,7 +222,7 @@ class IssueTypeScreenScheme
     }
 
     public function deleteById($issueTypeScreenSchemeId) {
-        $query = "delete from issue_type_screen_scheme where id = ? limit 1";
+        $query = "delete from yongo_issue_type_screen_scheme where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $issueTypeScreenSchemeId);
@@ -240,9 +240,9 @@ class IssueTypeScreenScheme
     }
 
     public function getByScreenSchemeId($screenSchemeId) {
-        $query = "select issue_type_screen_scheme.id, issue_type_screen_scheme.name " .
+        $query = "select yongo_issue_type_screen_scheme.id, yongo_issue_type_screen_scheme.name " .
             "from yongo_issue_type_screen_scheme_data " .
-            "left join issue_type_screen_scheme on issue_type_screen_scheme.id = yongo_issue_type_screen_scheme_data.issue_type_screen_scheme_id " .
+            "left join yongo_issue_type_screen_scheme on yongo_issue_type_screen_scheme.id = yongo_issue_type_screen_scheme_data.issue_type_screen_scheme_id " .
             "where yongo_issue_type_screen_scheme_data.screen_scheme_id = ? " .
             "group by yongo_issue_type_screen_scheme_data.screen_scheme_id";
 
@@ -258,7 +258,7 @@ class IssueTypeScreenScheme
     }
 
     public function getMetaDataByNameAndClientId($clientId, $name) {
-        $query = "select * from issue_type_screen_scheme where client_id = ? and LOWER(name) = ?";
+        $query = "select * from yongo_issue_type_screen_scheme where client_id = ? and LOWER(name) = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $clientId, $name);

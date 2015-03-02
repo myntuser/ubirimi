@@ -120,10 +120,10 @@ class IssueComment
 
     public function getByAssigneeFromHistoryAfterDate($issueId, $date) {
         $query = 'SELECT yongo_issue_comment.id, user_id, content, yongo_issue_comment.date_created ' .
-            'from issue_history ' .
-            'LEFT JOIN yongo_issue_comment on (yongo_issue_comment.issue_id = issue_history.issue_id and (yongo_issue_comment.user_id = issue_history.old_value_id or yongo_issue_comment.user_id = issue_history.new_value_id)) ' .
-            'WHERE issue_history.issue_id = ? ' .
-            "and issue_history.field = 'assignee' " .
+            'from yongo_issue_history ' .
+            'LEFT JOIN yongo_issue_comment on (yongo_issue_comment.issue_id = yongo_issue_history.issue_id and (yongo_issue_comment.user_id = yongo_issue_history.old_value_id or yongo_issue_comment.user_id = yongo_issue_history.new_value_id)) ' .
+            'WHERE yongo_issue_history.issue_id = ? ' .
+            "and yongo_issue_history.field = 'assignee' " .
             "and yongo_issue_comment.id is not null ";
         if ($date) {
             $query .= "and yongo_issue_comment.date_created >= ? ";

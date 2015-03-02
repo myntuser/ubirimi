@@ -37,7 +37,7 @@ class FieldConfigurationScheme {
 
     public function getByClient($clientId) {
         $query = "SELECT * " .
-            "FROM issue_type_field_configuration " .
+            "FROM yongo_issue_type_field_configuration " .
             "where client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -51,7 +51,7 @@ class FieldConfigurationScheme {
     }
 
     public function save($currentDate) {
-        $query = "INSERT INTO issue_type_field_configuration(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_issue_type_field_configuration(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -62,7 +62,7 @@ class FieldConfigurationScheme {
     }
 
     public function addData($issueTypeFieldConfigurationId, $fieldConfigurationId, $issueTypeId, $currentDate) {
-        $query = "INSERT INTO issue_type_field_configuration_data(issue_type_field_configuration_id, field_configuration_id, issue_type_id, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_issue_type_field_configuration_data(issue_type_field_configuration_id, field_configuration_id, issue_type_id, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iiis", $issueTypeFieldConfigurationId, $fieldConfigurationId, $issueTypeId, $currentDate);
@@ -70,7 +70,7 @@ class FieldConfigurationScheme {
     }
 
     public function deleteDataById($Id) {
-        $query = "delete from issue_type_field_configuration_data where id = ? limit 1";
+        $query = "delete from yongo_issue_type_field_configuration_data where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -78,7 +78,7 @@ class FieldConfigurationScheme {
     }
 
     public function deleteDataByFieldConfigurationSchemeId($Id) {
-        $query = "delete from issue_type_field_configuration_data where issue_type_field_configuration_id = ?";
+        $query = "delete from yongo_issue_type_field_configuration_data where issue_type_field_configuration_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -86,7 +86,7 @@ class FieldConfigurationScheme {
     }
 
     public function updateDataById($fieldConfigurationId, $issueTypeFieldConfigurationId, $issueTypeId) {
-        $query = "update issue_type_field_configuration_data
+        $query = "update yongo_issue_type_field_configuration_data
                     set field_configuration_id = ?
                     where issue_type_field_configuration_id = ?
                       and issue_type_id = ? limit 1";
@@ -97,7 +97,7 @@ class FieldConfigurationScheme {
     }
 
     public function updateMetaDataById($Id, $name, $description, $date) {
-        $query = "update issue_type_field_configuration
+        $query = "update yongo_issue_type_field_configuration
                     set name = ?, description = ?, date_updated = ?
                     where id = ? limit 1";
 
@@ -108,7 +108,7 @@ class FieldConfigurationScheme {
 
     public function getMetaDataById($Id) {
         $query = "select * " .
-            "from issue_type_field_configuration " .
+            "from yongo_issue_type_field_configuration " .
             "where id = ? " .
             "limit 1";
 
@@ -123,12 +123,12 @@ class FieldConfigurationScheme {
     }
 
     public function getDataByFieldConfigurationSchemeId($Id) {
-        $query = "select issue_type_field_configuration_data.id, issue_type_field_configuration_data.issue_type_id, " .
-            "field_configuration.name as field_configuration_name, yongo_issue_type.name as issue_type_name, issue_type_field_configuration_data.field_configuration_id " .
-            "from issue_type_field_configuration_data " .
-            "left join yongo_issue_type on yongo_issue_type.id = issue_type_field_configuration_data.issue_type_id " .
-            "left join field_configuration on field_configuration.id = issue_type_field_configuration_data.field_configuration_id " .
-            "where issue_type_field_configuration_data.issue_type_field_configuration_id = ? ";
+        $query = "select yongo_issue_type_field_configuration_data.id, yongo_issue_type_field_configuration_data.issue_type_id, " .
+            "field_configuration.name as field_configuration_name, yongo_issue_type.name as issue_type_name, yongo_issue_type_field_configuration_data.field_configuration_id " .
+            "from yongo_issue_type_field_configuration_data " .
+            "left join yongo_issue_type on yongo_issue_type.id = yongo_issue_type_field_configuration_data.issue_type_id " .
+            "left join yongo_field_configuration on yongo_field_configuration.id = yongo_issue_type_field_configuration_data.field_configuration_id " .
+            "where yongo_issue_type_field_configuration_data.issue_type_field_configuration_id = ? ";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -142,13 +142,13 @@ class FieldConfigurationScheme {
     }
 
     public function getDataById($Id) {
-        $query = "select issue_type_field_configuration_data.id, issue_type_field_configuration_data.field_configuration_id, " .
-                    "issue_type_field_configuration_data.issue_type_id, " .
-                    "issue_type.name as issue_type_name, field_configuration.name as field_configuration_name, issue_type_field_configuration_data.issue_type_field_configuration_id " .
-                 "from issue_type_field_configuration_data " .
-                 "left join yongo_issue_type on yongo_issue_type.id = issue_type_field_configuration_data.issue_type_id " .
-                 "left join field_configuration on field_configuration.id = issue_type_field_configuration_data.field_configuration_id " .
-                 "where issue_type_field_configuration_data.id = ? ";
+        $query = "select yongo_issue_type_field_configuration_data.id, yongo_issue_type_field_configuration_data.field_configuration_id, " .
+                    "yongo_issue_type_field_configuration_data.issue_type_id, " .
+                    "issue_type.name as issue_type_name, yongo_field_configuration.name as field_configuration_name, yongo_issue_type_field_configuration_data.issue_type_field_configuration_id " .
+                 "from yongo_issue_type_field_configuration_data " .
+                 "left join yongo_issue_type on yongo_issue_type.id = yongo_issue_type_field_configuration_data.issue_type_id " .
+                 "left join yongo_field_configuration on yongo_field_configuration.id = yongo_issue_type_field_configuration_data.field_configuration_id " .
+                 "where yongo_issue_type_field_configuration_data.id = ? ";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -162,11 +162,11 @@ class FieldConfigurationScheme {
     }
 
     public function getFieldConfigurations($issueTypeFieldConfigurationId) {
-        $query = "select field_configuration.id, field_configuration.name " .
-            "from issue_type_field_configuration_data " .
-            "left join field_configuration on field_configuration.id = issue_type_field_configuration_data.field_configuration_id " .
-            "where issue_type_field_configuration_data.issue_type_field_configuration_id = ? " .
-            "group by field_configuration.id";
+        $query = "select yongo_field_configuration.id, yongo_field_configuration.name " .
+            "from yongo_issue_type_field_configuration_data " .
+            "left join yongo_field_configuration on yongo_field_configuration.id = yongo_issue_type_field_configuration_data.field_configuration_id " .
+            "where yongo_issue_type_field_configuration_data.issue_type_field_configuration_id = ? " .
+            "group by yongo_field_configuration.id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $issueTypeFieldConfigurationId);
@@ -180,12 +180,12 @@ class FieldConfigurationScheme {
     }
 
     public function getFieldConfigurationsSchemesByFieldConfigurationId($clientId, $fieldConfigurationId) {
-        $query = "select issue_type_field_configuration.id, issue_type_field_configuration.name " .
-            "from issue_type_field_configuration_data " .
-            "left join issue_type_field_configuration on issue_type_field_configuration.id = issue_type_field_configuration_data.issue_type_field_configuration_id " .
-            "where issue_type_field_configuration_data.field_configuration_id = ? and " .
-            "issue_type_field_configuration.client_id = ? " .
-            "group by issue_type_field_configuration_data.field_configuration_id";
+        $query = "select yongo_issue_type_field_configuration.id, yongo_issue_type_field_configuration.name " .
+            "from yongo_issue_type_field_configuration_data " .
+            "left join yongo_issue_type_field_configuration on yongo_issue_type_field_configuration.id = yongo_issue_type_field_configuration_data.issue_type_field_configuration_id " .
+            "where yongo_issue_type_field_configuration_data.field_configuration_id = ? and " .
+            "yongo_issue_type_field_configuration.client_id = ? " .
+            "group by yongo_issue_type_field_configuration_data.field_configuration_id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $fieldConfigurationId, $clientId);
@@ -200,9 +200,9 @@ class FieldConfigurationScheme {
 
     public function getIssueTypesForFieldConfiguration($issueTypeFieldConfigurationId, $fieldConfigurationId) {
         $query = "select yongo_issue_type.id, yongo_issue_type.name " .
-            "from issue_type_field_configuration_data " .
-            "left join yongo_issue_type on yongo_issue_type.id = issue_type_field_configuration_data.issue_type_id " .
-            "where issue_type_field_configuration_data.issue_type_field_configuration_id = ? and field_configuration_id = ?";
+            "from yongo_issue_type_field_configuration_data " .
+            "left join yongo_issue_type on yongo_issue_type.id = yongo_issue_type_field_configuration_data.issue_type_id " .
+            "where yongo_issue_type_field_configuration_data.issue_type_field_configuration_id = ? and field_configuration_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $issueTypeFieldConfigurationId, $fieldConfigurationId);
@@ -216,7 +216,7 @@ class FieldConfigurationScheme {
     }
 
     public function deleteById($Id) {
-        $query = "delete from issue_type_field_configuration where id = ? limit 1";
+        $query = "delete from yongo_issue_type_field_configuration where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -233,7 +233,7 @@ class FieldConfigurationScheme {
     }
 
     public function getMetaDataByNameAndClientId($clientId, $name) {
-        $query = "select * from issue_type_field_configuration where client_id = ? and LOWER(name) = ?";
+        $query = "select * from yongo_issue_type_field_configuration where client_id = ? and LOWER(name) = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $clientId, $name);
@@ -247,10 +247,10 @@ class FieldConfigurationScheme {
     }
 
     public function getByIssueTypeFieldConfigurationIdAndIssueTypeId($issueTypeFieldConfigurationId, $issueTypeId) {
-        $query = "select issue_type_field_configuration.id, issue_type_field_configuration.name " .
-            "from issue_type_field_configuration_data " .
-            "where issue_type_field_configuration_data.issue_type_field_configuration_id = ? and " .
-            "issue_type_field_configuration_data.issue_type_id = ?";
+        $query = "select yongo_issue_type_field_configuration.id, yongo_issue_type_field_configuration.name " .
+            "from yongo_issue_type_field_configuration_data " .
+            "where yongo_issue_type_field_configuration_data.issue_type_field_configuration_id = ? and " .
+            "yongo_issue_type_field_configuration_data.issue_type_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $issueTypeFieldConfigurationId, $issueTypeId);

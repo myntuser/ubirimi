@@ -24,7 +24,7 @@ use Ubirimi\Container\UbirimiContainer;
 class IssueSettings
 {
     public function createIssueType($clientId, $name, $description, $subTaskFlag, $iconName, $currentDate) {
-        $query = "INSERT INTO issue_type(client_id, name, description, sub_task_flag, icon_name, date_created) VALUES (?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_issue_type(client_id, name, description, sub_task_flag, icon_name, date_created) VALUES (?, ?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ississ", $clientId, $name, $description, $subTaskFlag, $iconName, $currentDate);
@@ -34,7 +34,7 @@ class IssueSettings
     }
 
     public function getAllIssueSettings($type, $clientId, $resultType = null) {
-        $query = "SELECT * FROM issue_" . $type . ' where client_id = ?';
+        $query = "SELECT * FROM yongo_issue_" . $type . ' where client_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);

@@ -24,14 +24,14 @@ use Ubirimi\Container\UbirimiContainer;
 class IssueHistory
 {
     public function deleteByIssueId($issueId) {
-        $query = 'DELETE FROM issue_history WHERE issue_id = ?';
+        $query = 'DELETE FROM yongo_issue_history WHERE issue_id = ?';
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $issueId);
         $stmt->execute();
     }
 
     public function getAll() {
-        $query = 'select * from issue_history';
+        $query = 'select * from yongo_issue_history';
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
 
@@ -39,7 +39,7 @@ class IssueHistory
         return $result;
     }
     public function getByAssigneeNewChangedAfterDate($issueId, $userAssigneeId, $date) {
-        $query = "select * from issue_history where issue_id = ? and new_value_id = ? and field = 'assignee' ";
+        $query = "select * from yongo_issue_history where issue_id = ? and new_value_id = ? and field = 'assignee' ";
         if ($date) {
             $query .= ' and date_created >= ? ';
         }
@@ -58,7 +58,7 @@ class IssueHistory
     }
 
     public function updateChangedIds($Id, $oldValueId, $newValueId) {
-        $queryUpdate = 'update issue_history set old_value_id = ?, new_value_id = ? where id = ? limit 1';
+        $queryUpdate = 'update yongo_issue_history set old_value_id = ?, new_value_id = ? where id = ? limit 1';
 
         if ($stmtUpdate = UbirimiContainer::get()['db.connection']->prepare($queryUpdate)) {
 
@@ -71,25 +71,25 @@ class IssueHistory
     {
 
         $query = '(select \'history_event\' as source, ' .
-            'issue_history.date_created, ' .
-            'issue_history.field as field, ' .
-            'issue_history.old_value as old_value, ' .
-            'issue_history.new_value as new_value, ' .
-            'issue_history.old_value_id as old_value_id, ' .
-            'issue_history.new_value_id as new_value_id, ' .
+            'yongo_issue_history.date_created, ' .
+            'yongo_issue_history.field as field, ' .
+            'yongo_issue_history.old_value as old_value, ' .
+            'yongo_issue_history.new_value as new_value, ' .
+            'yongo_issue_history.old_value_id as old_value_id, ' .
+            'yongo_issue_history.new_value_id as new_value_id, ' .
             'null as content, ' .
             'general_user.id as user_id, general_user.first_name, general_user.last_name, ' .
             'yongo_issue.nr as nr, ' .
             'yongo_project.code as code, ' .
             'yongo_issue.id as issue_id ' .
-            'from issue_history ' .
-            'left join general_user on general_user.id = issue_history.by_user_id ' .
-            'left join yongo_issue on yongo_issue.id = issue_history.issue_id ' .
+            'from yongo_issue_history ' .
+            'left join general_user on general_user.id = yongo_issue_history.by_user_id ' .
+            'left join yongo_issue on yongo_issue.id = yongo_issue_history.issue_id ' .
             'left join yongo_project on yongo_project.id = yongo_issue.project_id ' .
             'where ';
 
-        if ($issueId) $query .= ' issue_history.issue_id = ' . $issueId . ' ';
-        if ($userId) $query .= ' issue_history.by_user_id = ' . $userId . ' ';
+        if ($issueId) $query .= ' yongo_issue_history.issue_id = ' . $issueId . ' ';
+        if ($userId) $query .= ' yongo_issue_history.by_user_id = ' . $userId . ' ';
 
         if (!$order) {
             $order = 'desc';
