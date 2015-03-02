@@ -117,7 +117,7 @@ class UbirimiUser
         $query = 'update yongo_project  lead_id = NULL where lead_id = ' . $userId;
         UbirimiContainer::get()['db.connection']->query($query);
 
-        $query = 'update project_component set leader_id = NULL where leader_id = ' . $userId;
+        $query = 'update yongo_project_component set leader_id = NULL where leader_id = ' . $userId;
         UbirimiContainer::get()['db.connection']->query($query);
 
         $query = 'delete from general_group_data where user_id = ' . $userId;

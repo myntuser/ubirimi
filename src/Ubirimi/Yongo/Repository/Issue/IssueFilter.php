@@ -32,7 +32,7 @@ class IssueFilter
     }
 
     public function getById($Id) {
-        $query = 'SELECT id, user_id, description, definition, name from filter where id = ? ';
+        $query = 'SELECT id, user_id, description, definition, name from yongo_filter where id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -57,7 +57,7 @@ class IssueFilter
     }
 
     public function getAllByUser($loggedInUserId) {
-        $query = 'SELECT id, user_id, name, description, definition, date_created from filter where user_id = ? ';
+        $query = 'SELECT id, user_id, name, description, definition, date_created from yongo_filter where user_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -72,7 +72,7 @@ class IssueFilter
 
     public function getAllByClientId($clientId) {
         $query = 'SELECT filter.id, user_id, filter.name, description, definition, filter.date_created ' .
-                 'from filter ' .
+                 'from yongo_filter ' .
                  'left join general_user on general_user.id = filter.user_id ' .
                  'WHERE general_user.client_id = ?';
 
@@ -87,7 +87,7 @@ class IssueFilter
     }
 
     public function deleteById($filterId) {
-        $query = 'delete from filter where id = ? limit 1 ';
+        $query = 'delete from yongo_filter where id = ? limit 1 ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 

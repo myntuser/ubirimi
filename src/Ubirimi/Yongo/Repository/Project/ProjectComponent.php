@@ -24,7 +24,7 @@ use Ubirimi\Container\UbirimiContainer;
 class ProjectComponent
 {
     public function getByIds($Ids) {
-        $query = 'SELECT project_component.* ' .
+        $query = 'SELECT yongo_project_component.* ' .
             'from yongo_project_component ' .
             'WHERE id IN (' . implode(', ', $Ids) . ') ' .
             'order by id asc';
@@ -41,9 +41,9 @@ class ProjectComponent
 
     public function getAll()
     {
-        $query = 'SELECT project_component.*, yongo_project.name as project_name
+        $query = 'SELECT yongo_project_component.*, yongo_project.name as project_name
             from yongo_project_component
-            LEFT join yongo_project on yongo_project.id = project_component.project_id
+            LEFT join yongo_project on yongo_project.id = yongo_project_component.project_id
             order by id asc';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

@@ -693,7 +693,7 @@ class UbirimiClient
     }
 
     public function createDefaultWorkflowScheme($clientId, $currentDate) {
-        $query = "INSERT INTO workflow_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_workflow_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $name = 'Default Workflow Scheme';
@@ -735,7 +735,7 @@ class UbirimiClient
     }
 
     public function createDefaultWorkflowSchemeData($workflowSchemeId, $workflowId, $currentDate) {
-        $query = "INSERT INTO workflow_scheme_data(workflow_scheme_id, workflow_id, date_created) VALUES (?, ?, ?)";
+        $query = "INSERT INTO yongo_workflow_scheme_data(workflow_scheme_id, workflow_id, date_created) VALUES (?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iis", $workflowSchemeId, $workflowId, $currentDate);

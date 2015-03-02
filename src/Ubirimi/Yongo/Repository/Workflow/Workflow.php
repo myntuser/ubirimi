@@ -37,11 +37,11 @@ class Workflow
     }
 
     public function getAllByClientId($clientId) {
-        $query = "select workflow.id, workflow.name, workflow.description, workflow_scheme.name as scheme_name, yongo_issue_type_scheme.name as issue_type_scheme_name " .
-                 "from workflow " .
-                 "left join workflow_scheme_data on workflow_scheme_data.workflow_id = workflow.id " .
-                 "left join workflow_scheme on workflow_scheme.id = workflow_scheme_data.workflow_scheme_id " .
-                 "left join yongo_issue_type_scheme on yongo_issue_type_scheme.id = workflow.issue_type_scheme_id " .
+        $query = "select yongo_workflow.id, yongo_workflow.name, workflow.description, yongo_workflow_scheme.name as scheme_name, yongo_issue_type_scheme.name as issue_type_scheme_name " .
+                 "from yongo_workflow " .
+                 "left join yongo_workflow_scheme_data on yongo_workflow_scheme_data.workflow_id = yongo_workflow.id " .
+                 "left join yongo_workflow_scheme on yongo_workflow_scheme.id = yongo_workflow_scheme_data.workflow_scheme_id " .
+                 "left join yongo_issue_type_scheme on yongo_issue_type_scheme.id = yongo_workflow.issue_type_scheme_id " .
                  "where workflow.client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -55,7 +55,7 @@ class Workflow
     }
 
     public function updateDataById($workflowDataId, $transitionName, $transitionDescription, $screenId, $workflowStepIdTo) {
-        $q = 'update workflow_data set screen_id = ?, transition_name = ?, ' .
+        $q = 'update yongo_workflow_data set screen_id = ?, transition_name = ?, ' .
                 'transition_description = ?, workflow_step_id_to = ? ' .
                 'where id = ? ' .
                 'limit 1';
@@ -66,7 +66,7 @@ class Workflow
     }
 
     public function updateTransitionData($workflowId, $transition_name, $screenId, $idFrom, $idTo) {
-        $q = 'update workflow_data set screen_id = ?, transition_name = ? ' .
+        $q = 'update yongo_workflow_data set screen_id = ?, transition_name = ? ' .
              'where workflow_id = ? and workflow_step_id_from = ? and workflow_step_id_to = ? ' .
              'limit 1';
 
@@ -76,11 +76,11 @@ class Workflow
     }
 
     public function getStepsForStatus($workflowId, $StatusId) {
-        $query = "select workflow_data.id, " .
-            "workflow_data.transition_name, workflow_data.screen_id " .
-            "from workflow " .
-            "left join workflow_data on workflow_data.workflow_id = workflow.id " .
-            "where workflow.id = ? and workflow_data.issue_status_from_id = ?";
+        $query = "select yongo_workflow_data.id, " .
+            "yongo_workflow_data.transition_name, yongo_workflow_data.screen_id " .
+            "from yongo_workflow " .
+            "left join yongo_workflow_data on yongo_workflow_data.workflow_id = yongo_workflow.id " .
+            "where yongo_workflow.id = ? and yongo_workflow_data.issue_status_from_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $workflowId, $StatusId);
@@ -93,9 +93,9 @@ class Workflow
     }
 
     public function getDataByStepIdFromAndStepIdTo($workflowId, $IdFrom, $IdTo) {
-        $query = "select workflow_data.* " .
-                "from workflow_data " .
-                "where workflow_data.workflow_id = ? and workflow_step_id_from = ? and workflow_step_id_to = ? " .
+        $query = "select yongo_workflow_data.* " .
+                "from yongo_workflow_data " .
+                "where yongo_workflow_data.workflow_id = ? and workflow_step_id_from = ? and workflow_step_id_to = ? " .
                 "limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -121,7 +121,7 @@ class Workflow
     }
 
     public function deleteRecord($workflowId, $idFrom, $idTo) {
-        $q = 'delete from workflow_data where workflow_id = ? and workflow_step_id_from = ? and workflow_step_id_to = ? limit 1 ';
+        $q = 'delete from yongo_workflow_data where workflow_id = ? and workflow_step_id_from = ? and workflow_step_id_to = ? limit 1 ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
         $stmt->bind_param("iii", $workflowId, $idFrom, $idTo);
@@ -129,7 +129,7 @@ class Workflow
     }
 
     public function createNewSingleDataRecord($projectWorkflowId, $idFrom, $idTo, $name) {
-        $q = 'insert into workflow_data (workflow_id, workflow_step_id_from, workflow_step_id_to, transition_name) values(?, ?, ?, ?)';
+        $q = 'insert into yongo_workflow_data (workflow_id, workflow_step_id_from, workflow_step_id_to, transition_name) values(?, ?, ?, ?)';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
         $stmt->bind_param("iiis", $projectWorkflowId, $idFrom, $idTo, $name);
@@ -140,7 +140,7 @@ class Workflow
 
         $arrWorkflowDataIds = array();
         $query = "select id " .
-            "from workflow_data " .
+            "from yongo_workflow_data " .
             "where workflow_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -152,7 +152,7 @@ class Workflow
                 $arrWorkflowDataIds[] = $data['id'];
         }
 
-        $query = "delete from workflow_data where workflow_id = ?";
+        $query = "delete from yongo_workflow_data where workflow_id = ?";
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
         $stmt->execute();
@@ -162,7 +162,7 @@ class Workflow
         $stmt->bind_param("i", $Id);
         $stmt->execute();
 
-        $query = "delete from workflow where id = ? limit 1";
+        $query = "delete from yongo_workflow where id = ? limit 1";
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
         $stmt->execute();
@@ -170,7 +170,7 @@ class Workflow
         $steps = UbirimiContainer::get()['repository']->get(Workflow::class)->getSteps($Id);
         if ($steps) {
             while ($step = $steps->fetch_array(MYSQLI_ASSOC)) {
-                $query = "delete from workflow_step_property where workflow_step_id = ?";
+                $query = "delete from yongo_workflow_step_property_data where workflow_step_id = ?";
 
                 $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
                 $stmt->bind_param("i", $step['id']);
@@ -178,13 +178,13 @@ class Workflow
             }
         }
 
-        $query = "delete from workflow_step where workflow_id = ?";
+        $query = "delete from yongo_workflow_step where workflow_id = ?";
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
         $stmt->execute();
 
         if (count($arrWorkflowDataIds)) {
-            $query = "delete from workflow_post_function_data where workflow_data_id IN (" . implode(", ", $arrWorkflowDataIds) . ")";
+            $query = "delete from yongo_workflow_post_function_data where workflow_data_id IN (" . implode(", ", $arrWorkflowDataIds) . ")";
 
             $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
             $stmt->execute();
@@ -197,7 +197,7 @@ class Workflow
 
     public function getMetaDataById($Id) {
         $query = "select * " .
-            "from workflow " .
+            "from yongo_workflow " .
             "where id = " . $Id;
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -210,15 +210,15 @@ class Workflow
     }
 
     public function getDataById($Id) {
-        $query = "select workflow_data.id, is1.name as isn1, is1.id as isi1, is2.name as isn2, is2.id as isi2, transition_name, transition_description, workflow_data.workflow_id, " .
+        $query = "select yongo_workflow_data.id, is1.name as isn1, is1.id as isi1, is2.name as isn2, is2.id as isi2, transition_name, transition_description, yongo_workflow_data.workflow_id, " .
                  "screen.name as screen_name, screen.id as screen_id, ws2.name as destination_step_name, ws2.id as destination_step_id " .
-            "from workflow_data " .
-            "left join workflow_step ws1 on ws1.id = workflow_data.workflow_step_id_from " .
-            "left join workflow_step ws2 on ws2.id = workflow_data.workflow_step_id_to " .
+            "from yongo_workflow_data " .
+            "left join yongo_workflow_step ws1 on ws1.id = yongo_workflow_data.workflow_step_id_from " .
+            "left join yongo_workflow_step ws2 on ws2.id = yongo_workflow_data.workflow_step_id_to " .
             "left join yongo_issue_status is1 on ws1.linked_issue_status_id = is1.id " .
             "left join yongo_issue_status is2 on ws2.linked_issue_status_id = is2.id " .
-            "left join screen on screen.id = workflow_data.screen_id " .
-            "where workflow_data.id = " . $Id . ' ' .
+            "left join screen on screen.id = yongo_workflow_data.screen_id " .
+            "where yongo_workflow_data.id = " . $Id . ' ' .
             "limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -231,13 +231,13 @@ class Workflow
     }
 
     public function getDataByWorkflowId($workflowId) {
-        $query = "select workflow_data.id, workflow_data.screen_id, ws1.id as ws1id, ws2.id as ws2id, is1.name as isn1, is1.id as isi1, is2.name as isn2, is2.id as isi2, transition_name, transition_description, workflow_data.workflow_id " .
-            "from workflow_data " .
-            "left join workflow_step ws1 on ws1.id = workflow_data.workflow_step_id_from " .
-            "left join workflow_step ws2 on ws2.id = workflow_data.workflow_step_id_to " .
+        $query = "select yongo_workflow_data.id, yongo_workflow_data.screen_id, ws1.id as ws1id, ws2.id as ws2id, is1.name as isn1, is1.id as isi1, is2.name as isn2, is2.id as isi2, transition_name, transition_description, yongo_workflow_data.workflow_id " .
+            "from yongo_workflow_data " .
+            "left join yongo_workflow_step ws1 on ws1.id = yongo_workflow_data.workflow_step_id_from " .
+            "left join yongo_workflow_step ws2 on ws2.id = yongo_workflow_data.workflow_step_id_to " .
             "left join yongo_issue_status is1 on ws1.linked_issue_status_id = is1.id " .
             "left join yongo_issue_status is2 on ws2.linked_issue_status_id = is2.id " .
-            "where workflow_data.workflow_id = ?";
+            "where yongo_workflow_data.workflow_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $workflowId);
@@ -250,10 +250,10 @@ class Workflow
     }
 
     public function getInitialStep($workflowId) {
-        $query = "select workflow_step.* " .
-            "from workflow_step " .
-            "where workflow_step.workflow_id = " . $workflowId . ' ' .
-                "and workflow_step.initial_step_flag = 1 " .
+        $query = "select yongo_workflow_step.* " .
+            "from yongo_workflow_step " .
+            "where yongo_workflow_step.workflow_id = " . $workflowId . ' ' .
+                "and yongo_workflow_step.initial_step_flag = 1 " .
             "limit 1 ";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -268,11 +268,11 @@ class Workflow
     public function getDataForCreation($workflowId) {
         $initialStep = UbirimiContainer::get()['repository']->get(Workflow::class)->getInitialStep($workflowId);
 
-        $query = "select workflow_data.id, workflow_step.linked_issue_status_id " .
-            "from workflow_data " .
-            "left join workflow_step on workflow_step.id = workflow_data.workflow_step_id_to " .
-            "where workflow_data.workflow_id = " . $workflowId . ' ' .
-                "and workflow_data.workflow_step_id_from = " . $initialStep['id'] . " " .
+        $query = "select yongo_workflow_data.id, yongo_workflow_step.linked_issue_status_id " .
+            "from yongo_workflow_data " .
+            "left join yongo_workflow_step on yongo_workflow_step.id = yongo_workflow_data.workflow_step_id_to " .
+            "where yongo_workflow_data.workflow_id = " . $workflowId . ' ' .
+                "and yongo_workflow_data.workflow_step_id_from = " . $initialStep['id'] . " " .
             "limit 1 ";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -285,13 +285,13 @@ class Workflow
     }
 
     public function getByIssueType($issueTypeId, $clientId) {
-        $query = "select workflow.name, workflow.id " .
-            "from workflow " .
-            "left join yongo_issue_type_scheme_data on yongo_issue_type_scheme_data.issue_type_scheme_id = workflow.issue_type_scheme_id " .
+        $query = "select yongo_workflow.name, yongo_workflow.id " .
+            "from yongo_workflow " .
+            "left join yongo_issue_type_scheme_data on yongo_issue_type_scheme_data.issue_type_scheme_id = yongo_workflow.issue_type_scheme_id " .
             "left join yongo_issue_type on yongo_issue_type.id = yongo_issue_type_scheme_data.issue_type_id " .
             "where yongo_issue_type.id = ? " .
             "and workflow.client_id = ? " .
-            "group by workflow.id";
+            "group by yongo_workflow.id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $issueTypeId, $clientId);
@@ -304,11 +304,11 @@ class Workflow
     }
 
     public function getTransitions($workflowId) {
-        $query = "select workflow_data.transition_name " .
-            "from workflow_data " .
-            "where workflow_data.workflow_id = " . $workflowId . ' ' .
+        $query = "select yongo_workflow_data.transition_name " .
+            "from yongo_workflow_data " .
+            "where yongo_workflow_data.workflow_id = " . $workflowId . ' ' .
             "group by transition_name " .
-            "order by workflow_data.id";
+            "order by yongo_workflow_data.id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
@@ -320,14 +320,14 @@ class Workflow
     }
 
     public function getTransitionsForStepId($workflowId, $stepId) {
-        $query = "select workflow_data.transition_name, workflow_data.screen_id, yongo_issue_status.id as status, yongo_issue_status.name, workflow_data.id, workflow_data.workflow_id, " .
-                 "workflow_data.workflow_step_id_to " .
-            "from workflow_data " .
-            "left join workflow_step on workflow_step.id = workflow_data.workflow_step_id_to " .
-            "left join yongo_issue_status on yongo_issue_status.id = workflow_step.linked_issue_status_id " .
-            "where workflow_data.workflow_id = ? " .
-            "and workflow_data.workflow_step_id_from = ? " .
-            "order by workflow_data.id";
+        $query = "select yongo_workflow_data.transition_name, yongo_workflow_data.screen_id, yongo_issue_status.id as status, yongo_issue_status.name, yongo_workflow_data.id, yongo_workflow_data.workflow_id, " .
+                 "yongo_workflow_data.workflow_step_id_to " .
+            "from yongo_workflow_data " .
+            "left join yongo_workflow_step on yongo_workflow_step.id = yongo_workflow_data.workflow_step_id_to " .
+            "left join yongo_issue_status on yongo_issue_status.id = yongo_workflow_step.linked_issue_status_id " .
+            "where yongo_workflow_data.workflow_id = ? " .
+            "and yongo_workflow_data.workflow_step_id_from = ? " .
+            "order by yongo_workflow_data.id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $workflowId, $stepId);
@@ -340,13 +340,13 @@ class Workflow
     }
 
     public function getOriginatingStepsForTransition($workflowId, $transitionName) {
-        $query = "select workflow_data.transition_name, workflow_step.id, workflow_step.name as step_name, " .
-                    "workflow_data.id, workflow_data.workflow_id " .
-                "from workflow_data " .
-                "left join workflow_step on workflow_step.id = workflow_data.workflow_step_id_from " .
-                "where workflow_data.workflow_id = ? " .
-                    "and workflow_data.transition_name = ? " .
-                    "order by workflow_data.id";
+        $query = "select yongo_workflow_data.transition_name, yongo_workflow_step.id, yongo_workflow_step.name as step_name, " .
+                    "yongo_workflow_data.id, yongo_workflow_data.workflow_id " .
+                "from yongo_workflow_data " .
+                "left join yongo_workflow_step on yongo_workflow_step.id = yongo_workflow_data.workflow_step_id_from " .
+                "where yongo_workflow_data.workflow_id = ? " .
+                    "and yongo_workflow_data.transition_name = ? " .
+                    "order by yongo_workflow_data.id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $workflowId, $transitionName);
@@ -359,13 +359,13 @@ class Workflow
     }
 
     public function getDestinationStepsForTransition($workflowId, $transitionName) {
-        $query = "select distinct workflow_data.transition_name, workflow_step.id, workflow_step.name as step_name, " .
-            "workflow_data.workflow_id " .
-            "from workflow_data " .
-            "left join workflow_step on workflow_step.id = workflow_data.workflow_step_id_to " .
-            "where workflow_data.workflow_id = ? " .
-                 "and workflow_data.transition_name = ? " .
-                 "order by workflow_data.id";
+        $query = "select distinct yongo_workflow_data.transition_name, yongo_workflow_step.id, yongo_workflow_step.name as step_name, " .
+            "yongo_workflow_data.workflow_id " .
+            "from yongo_workflow_data " .
+            "left join yongo_workflow_step on yongo_workflow_step.id = yongo_workflow_data.workflow_step_id_to " .
+            "where yongo_workflow_data.workflow_id = ? " .
+                 "and yongo_workflow_data.transition_name = ? " .
+                 "order by yongo_workflow_data.id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $workflowId, $transitionName);
@@ -378,13 +378,13 @@ class Workflow
     }
 
     public function deleteDataById($Id) {
-        $q = 'delete from workflow_data where id = ? limit 1 ';
+        $q = 'delete from yongo_workflow_data where id = ? limit 1 ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
         $stmt->bind_param("i", $Id);
         $stmt->execute();
 
-        $q = 'delete from workflow_post_function_data where workflow_data_id = ? ';
+        $q = 'delete from yongo_workflow_post_function_data where workflow_data_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
         $stmt->bind_param("i", $Id);
@@ -394,7 +394,7 @@ class Workflow
     public function createInitialData($clientId, $workflowId) {
         $statusOpen = UbirimiContainer::get()['repository']->get(IssueSettings::class)->getByName($clientId, 'status', 'Open');
 
-        $q = 'insert into workflow_step(workflow_id, linked_issue_status_id, name, initial_step_flag) ' .
+        $q = 'insert into yongo_workflow_step(workflow_id, linked_issue_status_id, name, initial_step_flag) ' .
              'values(?, ?, ?, ?)';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
@@ -412,7 +412,7 @@ class Workflow
         $stmt->execute();
         $stepOpenId = UbirimiContainer::get()['db.connection']->insert_id;
 
-        $q = 'insert into workflow_data(workflow_id, workflow_step_id_from, workflow_step_id_to, transition_name) ' .
+        $q = 'insert into yongo_workflow_data(workflow_id, workflow_step_id_from, workflow_step_id_to, transition_name) ' .
             'values(?, ?, ?, ?)';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
@@ -433,13 +433,13 @@ class Workflow
     }
 
     public function getSteps($workflowId, $allFlag = null) {
-        $query = "select workflow_step.id, workflow_step.name as step_name, workflow_step.initial_step_flag, yongo_issue_status.id as status_id, yongo_issue_status.name as status_name, " .
-            "workflow_step.workflow_id " .
-            "from workflow_step " .
-            "left join yongo_issue_status on yongo_issue_status.id = workflow_step.linked_issue_status_id " .
-            "where workflow_step.workflow_id = ? ";
+        $query = "select yongo_workflow_step.id, yongo_workflow_step.name as step_name, yongo_workflow_step.initial_step_flag, yongo_issue_status.id as status_id, yongo_issue_status.name as status_name, " .
+            "yongo_workflow_step.workflow_id " .
+            "from yongo_workflow_step " .
+            "left join yongo_issue_status on yongo_issue_status.id = yongo_workflow_step.linked_issue_status_id " .
+            "where yongo_workflow_step.workflow_id = ? ";
         if ($allFlag == null) {
-            $query .= " and (workflow_step.initial_step_flag = 0 or workflow_step.initial_step_flag is null)";
+            $query .= " and (yongo_workflow_step.initial_step_flag = 0 or yongo_workflow_step.initial_step_flag is null)";
         }
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $workflowId);
@@ -453,7 +453,7 @@ class Workflow
     }
 
     public function addStep($workflowId, $name, $StatusId, $initialStepFlag, $date) {
-        $q = 'insert into workflow_step(workflow_id, linked_issue_status_id, name, initial_step_flag, date_created) ' .
+        $q = 'insert into yongo_workflow_step(workflow_id, linked_issue_status_id, name, initial_step_flag, date_created) ' .
             'values(?, ?, ?, ?, ?)';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
@@ -464,10 +464,10 @@ class Workflow
     }
 
     public function getStepById($workflowStepId, $fieldName = null) {
-        $query = "select workflow_step.id, workflow_step.workflow_id, workflow_step.name, yongo_issue_status.name as status_name, workflow_step.linked_issue_status_id " .
-            "from workflow_step " .
-            "left join yongo_issue_status on yongo_issue_status.id = workflow_step.linked_issue_status_id " .
-            "where workflow_step.id = ? " .
+        $query = "select yongo_workflow_step.id, yongo_workflow_step.workflow_id, yongo_workflow_step.name, yongo_issue_status.name as status_name, yongo_workflow_step.linked_issue_status_id " .
+            "from yongo_workflow_step " .
+            "left join yongo_issue_status on yongo_issue_status.id = yongo_workflow_step.linked_issue_status_id " .
+            "where yongo_workflow_step.id = ? " .
             "limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -487,7 +487,7 @@ class Workflow
     }
 
     public function addTransition($workflowId, $screenId, $stepIdFrom, $stepIdTo, $name, $description) {
-        $q = 'insert into workflow_data(workflow_id, screen_id, workflow_step_id_from, workflow_step_id_to, transition_name, transition_description) ' .
+        $q = 'insert into yongo_workflow_data(workflow_id, screen_id, workflow_step_id_from, workflow_step_id_to, transition_name, transition_description) ' .
              'values(?, ?, ?, ?, ?, ?)';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
@@ -498,13 +498,13 @@ class Workflow
     }
 
     public function getIncomingTransitionsForStep($workflowId, $stepId) {
-        $query = "select workflow_data.transition_name, workflow_step.id, workflow_step.name as step_name, " .
-            "workflow_data.id, workflow_data.workflow_id " .
-            "from workflow_data " .
-            "left join workflow_step on workflow_step.id = workflow_data.workflow_step_id_to " .
-            "where workflow_data.workflow_id = ? " .
-                "and workflow_data.workflow_step_id_to = ? " .
-                "order by workflow_data.id";
+        $query = "select yongo_workflow_data.transition_name, yongo_workflow_step.id, yongo_workflow_step.name as step_name, " .
+            "yongo_workflow_data.id, yongo_workflow_data.workflow_id " .
+            "from yongo_workflow_data " .
+            "left join yongo_workflow_step on yongo_workflow_step.id = yongo_workflow_data.workflow_step_id_to " .
+            "where yongo_workflow_data.workflow_id = ? " .
+                "and yongo_workflow_data.workflow_step_id_to = ? " .
+                "order by yongo_workflow_data.id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $workflowId, $stepId);
@@ -517,13 +517,13 @@ class Workflow
     }
 
     public function  getOutgoingTransitionsForStep($workflowId, $stepId, $resultType = null) {
-        $query = "select workflow_data.transition_name, workflow_step.id, workflow_step.name as step_name, workflow_step.linked_issue_status_id, " .
-            "workflow_data.id, workflow_data.workflow_id " .
-            "from workflow_data " .
-            "left join workflow_step on workflow_step.id = workflow_data.workflow_step_id_to " .
-            "where workflow_data.workflow_id = ? " .
-                "and workflow_data.workflow_step_id_from = ? " .
-                "order by workflow_data.id";
+        $query = "select yongo_workflow_data.transition_name, yongo_workflow_step.id, yongo_workflow_step.name as step_name, yongo_workflow_step.linked_issue_status_id, " .
+            "yongo_workflow_data.id, yongo_workflow_data.workflow_id " .
+            "from yongo_workflow_data " .
+            "left join yongo_workflow_step on yongo_workflow_step.id = yongo_workflow_data.workflow_step_id_to " .
+            "where yongo_workflow_data.workflow_id = ? " .
+                "and yongo_workflow_data.workflow_step_id_from = ? " .
+                "order by yongo_workflow_data.id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $workflowId, $stepId);
@@ -543,10 +543,10 @@ class Workflow
     }
 
     public function getStepByWorkflowIdAndStatusId($workflowId, $issueStatusId) {
-        $query = "select workflow_step.* " .
-            "from workflow_step " .
-            "where workflow_step.linked_issue_status_id = ? " .
-            "and workflow_step.workflow_id = ? " .
+        $query = "select yongo_workflow_step.* " .
+            "from yongo_workflow_step " .
+            "where yongo_workflow_step.linked_issue_status_id = ? " .
+            "and yongo_workflow_step.workflow_id = ? " .
             "limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -560,7 +560,7 @@ class Workflow
     }
 
     public function createDefaultStep($workflowId, $linkedIssueStatusId, $stepName, $initialStepFlag) {
-        $query = "INSERT INTO workflow_step(workflow_id, linked_issue_status_id, name, initial_step_flag) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_workflow_step(workflow_id, linked_issue_status_id, name, initial_step_flag) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iiss", $workflowId, $linkedIssueStatusId, $stepName, $initialStepFlag);
@@ -570,7 +570,7 @@ class Workflow
     }
 
     public function updateStepById($stepId, $name, $StatusId, $date) {
-        $q = 'update workflow_step set name = ?, linked_issue_status_id = ?, date_updated = ? ' .
+        $q = 'update yongo_workflow_step set name = ?, linked_issue_status_id = ?, date_updated = ? ' .
             'where id = ? ' .
             'limit 1';
 
@@ -580,7 +580,7 @@ class Workflow
     }
 
     public function addPostFunctionToTransition($transitionId, $functionId, $definitionData) {
-        $query = "INSERT INTO workflow_post_function_data(workflow_data_id, sys_workflow_post_function_id, definition_data) VALUES (?, ?, ?)";
+        $query = "INSERT INTO yongo_workflow_post_function_data(workflow_data_id, sys_workflow_post_function_id, definition_data) VALUES (?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iis", $transitionId, $functionId, $definitionData);
@@ -590,7 +590,7 @@ class Workflow
     }
 
     public function deleteTransitions($workflowId, $transitionsPosted) {
-        $q = 'delete from workflow_data where workflow_id = ? and id = ?';
+        $q = 'delete from yongo_workflow_data where workflow_id = ? and id = ?';
 
         for ($i = 0; $i < count($transitionsPosted); $i++) {
             $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
@@ -600,11 +600,11 @@ class Workflow
     }
 
     public function getByScreen($clientId, $screenId) {
-        $query = "select workflow.id, workflow.name, workflow_data.transition_name, workflow_data.id as workflow_data_id " .
-            "from workflow " .
-            "left join workflow_data on workflow_data.workflow_id = workflow.id " .
+        $query = "select yongo_workflow.id, yongo_workflow.name, yongo_workflow_data.transition_name, yongo_workflow_data.id as workflow_data_id " .
+            "from yongo_workflow " .
+            "left join yongo_workflow_data on yongo_workflow_data.workflow_id = yongo_workflow.id " .
             "where workflow.client_id = ? " .
-            "and workflow_data.screen_id = ? " .
+            "and yongo_workflow_data.screen_id = ? " .
             "group by transition_name";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -733,10 +733,10 @@ class Workflow
     }
 
     public function getByIssueStatusId($StatusId) {
-        $query = "select workflow.id, workflow.name " .
-            "from workflow_step " .
-            "left join workflow on workflow.id = workflow_step.workflow_id " .
-            "where workflow_step.linked_issue_status_id = ? ";
+        $query = "select yongo_workflow.id, yongo_workflow.name " .
+            "from yongo_workflow_step " .
+            "left join yongo_workflow on yongo_workflow.id = yongo_workflow_step.workflow_id " .
+            "where yongo_workflow_step.linked_issue_status_id = ? ";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $StatusId);
@@ -749,7 +749,7 @@ class Workflow
     }
 
     public function getByClientId($clientId) {
-        $query = "select * from workflow where client_id = " . $clientId;
+        $query = "select * from yongo_workflow where client_id = " . $clientId;
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
@@ -761,7 +761,7 @@ class Workflow
     }
 
     public function getByClientIdAndName($clientId, $name) {
-        $query = "select * from workflow where client_id = ? and LOWER(name) = ? limit 1";
+        $query = "select * from yongo_workflow where client_id = ? and LOWER(name) = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $clientId, $name);
@@ -818,7 +818,7 @@ class Workflow
     }
 
     public function getStepByWorkflowIdAndName($workflowId, $name) {
-        $query = "select * from workflow_step where workflow_id = ? and LOWER(name) = ?";
+        $query = "select * from yongo_workflow_step where workflow_id = ? and LOWER(name) = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $workflowId, $name);
@@ -832,8 +832,8 @@ class Workflow
 
     public function getLinkedStatuses($workflowId, $resultType = null, $field = null) {
         $query = "select linked_issue_status_id, yongo_issue_status.name
-                    from workflow_step
-                    left join yongo_issue_status on yongo_issue_status.id = workflow_step.linked_issue_status_id
+                    from yongo_workflow_step
+                    left join yongo_issue_status on yongo_issue_status.id = yongo_workflow_step.linked_issue_status_id
                     where workflow_id = ? and
                         linked_issue_status_id is not null";
 
@@ -857,19 +857,19 @@ class Workflow
     }
 
     public function deleteStepById($stepId) {
-        $q = 'delete from workflow_data where workflow_step_id_from = ?';
+        $q = 'delete from yongo_workflow_data where workflow_step_id_from = ?';
         $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
         $stmt->bind_param("i", $stepId);
         $stmt->execute();
 
-        $q = 'delete from workflow_step where id = ? limit 1';
+        $q = 'delete from yongo_workflow_step where id = ? limit 1';
         $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
         $stmt->bind_param("i", $stepId);
         $stmt->execute();
     }
 
     public function deleteOutgoingTransitionsForStepId($workflowId, $stepId) {
-        $q = 'delete from workflow_data where workflow_step_id_from = ? and workflow_id = ?';
+        $q = 'delete from yongo_workflow_data where workflow_step_id_from = ? and workflow_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
         $stmt->bind_param("ii", $stepId, $workflowId);
@@ -877,7 +877,7 @@ class Workflow
     }
 
     public function getStepKeyByStepIdAndKeyId($stepId, $keyId, $stepPropertyId = null) {
-        $query = "select * from workflow_step_property where workflow_step_id = ? and sys_workflow_step_property_id = ? ";
+        $query = "select * from yongo_workflow_step_property_data where workflow_step_id = ? and sys_workflow_step_property_id = ? ";
 
         if ($stepPropertyId)
             $query .= 'and id != ' . $stepPropertyId;
@@ -893,7 +893,7 @@ class Workflow
     }
 
     public function addStepProperty($stepId, $keyId, $value, $date) {
-        $q = 'insert into workflow_step_property(workflow_step_id, sys_workflow_step_property_id, value, date_created) ' .
+        $q = 'insert into yongo_workflow_step_property_data(workflow_step_id, sys_workflow_step_property_id, value, date_created) ' .
             'values(?, ?, ?, ?)';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
@@ -905,9 +905,9 @@ class Workflow
     }
 
     public function getStepProperties($stepId, $resultType = null, $field = null) {
-        $query = "select workflow_step_property.id, workflow_step_property.value, sys_workflow_step_property.name " .
-                 "from workflow_step_property " .
-                 "left join sys_workflow_step_property on sys_workflow_step_property.id = workflow_step_property.sys_workflow_step_property_id " .
+        $query = "select yongo_workflow_step_property_data.id, yongo_workflow_step_property_data.value, yongo_workflow_step_property.name " .
+                 "from yongo_workflow_step_property_data " .
+                 "left join yongo_workflow_step_property on yongo_workflow_step_property.id = yongo_workflow_step_property_data.sys_workflow_step_property_id " .
                  "where workflow_step_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -931,7 +931,7 @@ class Workflow
     }
 
     public function getSystemWorkflowProperties() {
-        $query = "select * from sys_workflow_step_property";
+        $query = "select * from yongo_workflow_step_property";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
@@ -943,7 +943,7 @@ class Workflow
     }
 
     public function deleteStepPropertyById($propertyId) {
-        $q = 'delete from workflow_step_property where id = ? limit 1 ';
+        $q = 'delete from yongo_workflow_step_property_data where id = ? limit 1 ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
         $stmt->bind_param("i", $propertyId);
@@ -951,7 +951,7 @@ class Workflow
     }
 
     public function getStepPropertyById($stepPropertyId) {
-        $query = "select * from workflow_step_property where id = ? limit 1";
+        $query = "select * from yongo_workflow_step_property_data where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $stepPropertyId);
@@ -964,7 +964,7 @@ class Workflow
     }
 
     public function updateStepPropertyById($stepPropertyId, $keyId, $value, $date) {
-        $q = 'update workflow_step_property set sys_workflow_step_property_id = ?, value = ?, date_updated = ? ' .
+        $q = 'update yongo_workflow_step_property_data set sys_workflow_step_property_id = ?, value = ?, date_updated = ? ' .
              'where id = ? ' .
              'limit 1';
 
@@ -974,7 +974,7 @@ class Workflow
     }
 
     public function getAllSteps() {
-        $query = "select * from workflow_step";
+        $query = "select * from yongo_workflow_step";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();

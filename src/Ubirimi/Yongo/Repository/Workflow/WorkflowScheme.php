@@ -36,7 +36,7 @@ class WorkflowScheme {
     }
 
     public function save($currentDate) {
-        $query = "INSERT INTO workflow_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_workflow_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -47,7 +47,7 @@ class WorkflowScheme {
     }
 
     public function addData($workflowSchemeId, $workflowId, $currentDate) {
-        $query = "INSERT INTO workflow_scheme_data(workflow_scheme_id, workflow_id, date_created) VALUES (?, ?, ?)";
+        $query = "INSERT INTO yongo_workflow_scheme_data(workflow_scheme_id, workflow_id, date_created) VALUES (?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -56,7 +56,7 @@ class WorkflowScheme {
     }
 
     public function deleteDataByWorkflowSchemeId($Id) {
-        $query = "delete from workflow_scheme_data where workflow_scheme_id = ?";
+        $query = "delete from yongo_workflow_scheme_data where workflow_scheme_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -64,7 +64,7 @@ class WorkflowScheme {
     }
 
     public function deleteById($Id) {
-        $query = "delete from workflow_scheme where id = ? limit 1";
+        $query = "delete from yongo_workflow_scheme where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -72,7 +72,7 @@ class WorkflowScheme {
     }
 
     public function updateMetaDataById($Id, $name, $description) {
-        $query = "update workflow_scheme set name = ?, description = ? where id = ? limit 1";
+        $query = "update yongo_workflow_scheme set name = ?, description = ? where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ssi", $name, $description, $Id);
@@ -80,10 +80,10 @@ class WorkflowScheme {
     }
 
     public function getDataById($Id) {
-        $query = "select workflow_scheme_data.id, workflow_scheme_data.workflow_id, workflow.name, workflow.description, " .
-                 "workflow_scheme_data.workflow_scheme_id " .
-                 "from workflow_scheme_data " .
-                 "left join workflow on workflow.id = workflow_scheme_data.workflow_id " .
+        $query = "select yongo_workflow_scheme_data.id, yongo_workflow_scheme_data.workflow_id, yongo_workflow.name, workflow.description, " .
+                 "yongo_workflow_scheme_data.workflow_scheme_id " .
+                 "from yongo_workflow_scheme_data " .
+                 "left join yongo_workflow on yongo_workflow.id = yongo_workflow_scheme_data.workflow_id " .
                  "where workflow_scheme_id = ? ";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -98,7 +98,7 @@ class WorkflowScheme {
 
     public function getMetaDataById($Id) {
         $query = "select * " .
-            "from workflow_scheme " .
+            "from yongo_workflow_scheme " .
             "where id = ? " .
             "limit 1";
 
@@ -113,7 +113,7 @@ class WorkflowScheme {
     }
 
     public function getMetaDataByClientId($clientId) {
-        $query = "select * from workflow_scheme where client_id = ?";
+        $query = "select * from yongo_workflow_scheme where client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
@@ -127,10 +127,10 @@ class WorkflowScheme {
 
     public function getWorkflows($workflowSchemeId) {
         $query = "select workflow.* " .
-            "from workflow_scheme " .
-            "left join workflow_scheme_data on workflow_scheme_data.workflow_scheme_id = workflow_scheme.id " .
-            "left join workflow on workflow.id = workflow_scheme_data.workflow_id " .
-            "where workflow_scheme.id = ? ";
+            "from yongo_workflow_scheme " .
+            "left join yongo_workflow_scheme_data on yongo_workflow_scheme_data.workflow_scheme_id = yongo_workflow_scheme.id " .
+            "left join yongo_workflow on yongo_workflow.id = yongo_workflow_scheme_data.workflow_id " .
+            "where yongo_workflow_scheme.id = ? ";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $workflowSchemeId);
@@ -143,11 +143,11 @@ class WorkflowScheme {
     }
 
     public function getByWorkflowId($workflowId) {
-        $query = "select workflow_scheme.id, workflow_scheme.name " .
-            "from workflow_scheme_data " .
-            "left join workflow_scheme on workflow_scheme.id = workflow_scheme_data.workflow_scheme_id " .
-            "where workflow_scheme_data.workflow_id = ? " .
-            "group by workflow_scheme_data.workflow_scheme_id";
+        $query = "select yongo_workflow_scheme.id, yongo_workflow_scheme.name " .
+            "from yongo_workflow_scheme_data " .
+            "left join yongo_workflow_scheme on yongo_workflow_scheme.id = yongo_workflow_scheme_data.workflow_scheme_id " .
+            "where yongo_workflow_scheme_data.workflow_id = ? " .
+            "group by yongo_workflow_scheme_data.workflow_scheme_id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $workflowId);
@@ -170,7 +170,7 @@ class WorkflowScheme {
     }
 
     public function getByClientIdAndName($clientId, $name) {
-        $query = "select * from workflow_scheme where client_id = ? and LOWER(name) = ? limit 1";
+        $query = "select * from yongo_workflow_scheme where client_id = ? and LOWER(name) = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $clientId, $name);

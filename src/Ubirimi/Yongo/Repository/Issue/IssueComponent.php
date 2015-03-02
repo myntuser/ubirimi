@@ -32,10 +32,10 @@ class IssueComponent
     }
 
     public function getByIssueIdAndProjectId($issueId, $projectId, $resultType = null, $resultColumn = null) {
-        $query = 'SELECT yongo_issue_component.id, project_component.name, project_component_id, parent_id ' .
+        $query = 'SELECT yongo_issue_component.id, yongo_project_component.name, project_component_id, parent_id ' .
             'FROM yongo_issue_component ' .
-            'LEFT JOIN project_component on yongo_issue_component.project_component_id = project_component.id ' .
-            'WHERE issue_id = ? and project_component.project_id = ? ' .
+            'LEFT JOIN yongo_project_component on yongo_issue_component.project_component_id = yongo_project_component.id ' .
+            'WHERE issue_id = ? and yongo_project_component.project_id = ? ' .
             'order by id asc';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

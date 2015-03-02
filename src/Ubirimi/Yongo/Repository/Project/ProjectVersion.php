@@ -25,7 +25,7 @@ class ProjectVersion
 {
     public function getByIds($Ids)
     {
-        $query = 'SELECT project_version.* ' .
+        $query = 'SELECT yongo_project_version.* ' .
             'from yongo_project_version ' .
             'WHERE id IN (' . implode(', ', $Ids) . ') ';
 

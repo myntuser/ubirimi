@@ -40,10 +40,10 @@ class IssueVersion
     }
 
     public function getByIssueIdAndProjectId($issueId, $projectId, $versionFlag, $resultType = null, $resultColumn = null) {
-        $query = 'SELECT yongo_issue_version.id, project_version.name, project_version_id ' .
+        $query = 'SELECT yongo_issue_version.id, yongo_project_version.name, project_version_id ' .
             'FROM yongo_issue_version ' .
-            'LEFT JOIN project_version on yongo_issue_version.project_version_id = project_version.id ' .
-            'WHERE issue_id = ? and project_version.project_id = ? ' .
+            'LEFT JOIN yongo_project_version on yongo_issue_version.project_version_id = yongo_project_version.id ' .
+            'WHERE issue_id = ? and yongo_project_version.project_id = ? ' .
             'AND affected_targeted_flag = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

@@ -139,7 +139,7 @@ class IssueEvent
 
     public function getEventByWorkflowDataId($workflowDataId) {
         $query = "SELECT definition_data " .
-            "FROM workflow_post_function_data " .
+            "FROM yongo_workflow_post_function_data " .
             "WHERE workflow_data_id = ? " .
             "and definition_data like 'event=%' " .
             "limit 1";
@@ -160,13 +160,13 @@ class IssueEvent
     }
 
     public function getWorkflowsByEventId($clientId, $eventId) {
-        $query = "SELECT workflow.id, workflow.name " .
-            "FROM workflow " .
-            "left join workflow_data on workflow_data.workflow_id = workflow.id " .
-            "left join workflow_post_function_data on workflow_post_function_data.workflow_data_id = workflow_data.id " .
+        $query = "SELECT yongo_workflow.id, yongo_workflow.name " .
+            "from yongo_workflow " .
+            "left join yongo_workflow_data on yongo_workflow_data.workflow_id = yongo_workflow.id " .
+            "left join yongo_workflow_post_function_data on yongo_workflow_post_function_data.workflow_data_id = yongo_workflow_data.id " .
             "WHERE workflow.client_id = ? " .
-            "and workflow_post_function_data.definition_data = ? " .
-            "group by workflow.id";
+            "and yongo_workflow_post_function_data.definition_data = ? " .
+            "group by yongo_workflow.id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $eventString = 'event=' . $eventId;

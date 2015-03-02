@@ -69,9 +69,9 @@ class YongoProject
     }
 
     public function getWorkflowScheme($projectId) {
-        $query = "select workflow_scheme.*  " .
+        $query = "select yongo_workflow_scheme.*  " .
             'from yongo_project ' .
-            'left join workflow_scheme on workflow_scheme.id = yongo_project.workflow_scheme_id ' .
+            'left join yongo_workflow_scheme on yongo_workflow_scheme.id = yongo_project.workflow_scheme_id ' .
             'where yongo_project.id  = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -150,12 +150,12 @@ class YongoProject
     }
 
     public function getWorkflowUsedForType($projectId, $issueTypeId) {
-        $query = "select workflow.id, workflow.name  " .
+        $query = "select yongo_workflow.id, yongo_workflow.name  " .
             'from yongo_project ' .
-            'left join workflow_scheme on workflow_scheme.id = yongo_project.workflow_scheme_id ' .
-            'left join workflow_scheme_data on workflow_scheme_data.workflow_scheme_id = workflow_scheme.id ' .
-            'left join workflow on workflow.id = workflow_scheme_data.workflow_id ' .
-            'left join yongo_issue_type_scheme on yongo_issue_type_scheme.id = workflow.issue_type_scheme_id ' .
+            'left join yongo_workflow_scheme on yongo_workflow_scheme.id = yongo_project.workflow_scheme_id ' .
+            'left join yongo_workflow_scheme_data on yongo_workflow_scheme_data.workflow_scheme_id = yongo_workflow_scheme.id ' .
+            'left join yongo_workflow on yongo_workflow.id = yongo_workflow_scheme_data.workflow_id ' .
+            'left join yongo_issue_type_scheme on yongo_issue_type_scheme.id = yongo_workflow.issue_type_scheme_id ' .
             'left join yongo_issue_type_scheme_data on yongo_issue_type_scheme_data.issue_type_scheme_id = yongo_issue_type_scheme.id ' .
             'left join yongo_issue_type on yongo_issue_type.id = yongo_issue_type_scheme_data.issue_type_id ' .
             'where yongo_project.id  = ? ' .
@@ -337,16 +337,16 @@ class YongoProject
         if (!$leaderId) $leaderId = 'NULL';
         if (!$parentComponentId) $parentComponentId = 'NULL';
 
-        $query = "INSERT INTO project_component(project_id, leader_id, parent_id, name, description, date_created) " .
+        $query = "INSERT INTO yongo_project_component(project_id, leader_id, parent_id, name, description, date_created) " .
                  "VALUES (" . $projectId . ", " . $leaderId . ", " . $parentComponentId . ", '" . $name . "','" . $description . "', '" . $date . "')";
 
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
     public function getSubComponents($parentComponentId) {
-        $query = 'SELECT project_component.id, project_component.project_id, project_component.name, project_component.description, general_user.id as user_id, general_user.first_name, general_user.last_name ' .
+        $query = 'SELECT yongo_project_component.id, yongo_project_component.project_id, yongo_project_component.name, yongo_project_component.description, general_user.id as user_id, general_user.first_name, general_user.last_name ' .
             'from yongo_project_component ' .
-            'left join general_user on general_user.id = project_component.leader_id ' .
+            'left join general_user on general_user.id = yongo_project_component.leader_id ' .
             'where parent_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -432,22 +432,22 @@ class YongoProject
     }
 
     public function getComponents($projectIdOrArray = null, $resultType = null, $onlyParents = null) {
-        $query = 'SELECT project_component.id, project_component.project_id, project_component.name, project_component.description, general_user.id as user_id, general_user.first_name, general_user.last_name, ' .
+        $query = 'SELECT yongo_project_component.id, yongo_project_component.project_id, yongo_project_component.name, yongo_project_component.description, general_user.id as user_id, general_user.first_name, general_user.last_name, ' .
                     'pc_parent.name as parent_name ' .
                  'from yongo_project_component ' .
-                 'left join project_component as pc_parent on pc_parent.id = project_component.parent_id ' .
-                 'left join general_user on general_user.id = project_component.leader_id ' .
+                 'left join yongo_project_component as pc_parent on pc_parent.id = yongo_project_component.parent_id ' .
+                 'left join general_user on general_user.id = yongo_project_component.leader_id ' .
                  'where 1 = 1 ';
 
         if (isset($projectIdOrArray)) {
             if (is_array($projectIdOrArray))
-                $query .= ' AND project_component.project_id IN ( ' . implode(', ', $projectIdOrArray) . ')';
+                $query .= ' AND yongo_project_component.project_id IN ( ' . implode(', ', $projectIdOrArray) . ')';
             else
-                $query .= ' AND project_component.project_id = ' . $projectIdOrArray;
+                $query .= ' AND yongo_project_component.project_id = ' . $projectIdOrArray;
         }
 
         if (isset($onlyParents)) {
-            $query .= ' AND project_component.parent_id IS NULL';
+            $query .= ' AND yongo_project_component.parent_id IS NULL';
         }
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1103,12 +1103,12 @@ class YongoProject
                        'yongo_notification_scheme_data.component_lead is not null) ' .
             'left join yongo_issue on yongo_issue.id = ? ' .
             'left join yongo_issue_component on yongo_issue_component.issue_id = yongo_issue.id ' .
-            'left join project_component on project_component.id = yongo_issue_component.project_component_id ' .
-            'left join general_user on general_user.id = project_component.leader_id ' .
+            'left join yongo_project_component on yongo_project_component.id = yongo_issue_component.project_component_id ' .
+            'left join general_user on general_user.id = yongo_project_component.leader_id ' .
             'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
                 'yongo_notification_scheme_data.event_id = ? and ' .
                 'yongo_notification_scheme_data.component_lead is not null and ' .
-                'project_component.leader_id is not null and ' .
+                'yongo_project_component.leader_id is not null and ' .
                 'general_user.id is not null ' .
 
             // 11. user picker multiple selection
@@ -1312,10 +1312,10 @@ class YongoProject
     }
 
     public function getComponentById($componentId) {
-        $query = "SELECT project_component.id, leader_id, project_id, name, description, general_user.id as user_id, general_user.first_name, general_user.last_name " .
+        $query = "SELECT yongo_project_component.id, leader_id, project_id, name, description, general_user.id as user_id, general_user.first_name, general_user.last_name " .
             "from yongo_project_component " .
-            "LEFT join general_user on general_user.id = project_component.leader_id " .
-            "WHERE project_component.id = ? " .
+            "LEFT join general_user on general_user.id = yongo_project_component.leader_id " .
+            "WHERE yongo_project_component.id = ? " .
             "LIMIT 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1329,7 +1329,7 @@ class YongoProject
     }
 
     public function addVersion($projectId, $name, $description, $date) {
-        $query = "INSERT INTO project_version(project_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_project_version(project_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         if ($projectId) {
@@ -1340,7 +1340,7 @@ class YongoProject
     }
 
     public function updateComponentById($componentId, $name, $description, $leader, $date) {
-        $query = 'UPDATE project_component SET ' .
+        $query = 'UPDATE yongo_project_component SET ' .
                  'name = ?, description = ?, leader_id = ?, date_updated = ? ' .
                  'WHERE id = ? ' .
                  'LIMIT 1';
@@ -1351,7 +1351,7 @@ class YongoProject
     }
 
     public function updateVersionById($versionId, $name, $description, $date) {
-        $query = 'UPDATE project_version SET ' .
+        $query = 'UPDATE yongo_project_version SET ' .
                     'name = ?, description = ?, date_updated = ? ' .
                     'WHERE id = ? ' .
                     'LIMIT 1';
@@ -1513,9 +1513,9 @@ class YongoProject
 
     public function getByWorkflowIssueTypeScheme($clientId, $workflowIssueTypeSchemeId) {
         $query = 'select yongo_project.id, yongo_project.name ' .
-                 'from workflow ' .
-                 'left join workflow_scheme_data on workflow_scheme_data.workflow_id = workflow.id ' .
-                 'left join yongo_project on yongo_project.workflow_scheme_id = workflow_scheme_data.workflow_scheme_id ' .
+                 'from yongo_workflow ' .
+                 'left join yongo_workflow_scheme_data on yongo_workflow_scheme_data.workflow_id = yongo_workflow.id ' .
+                 'left join yongo_project on yongo_project.workflow_scheme_id = yongo_workflow_scheme_data.workflow_scheme_id ' .
                  'where workflow.client_id = ? and ' .
                  'workflow.issue_type_scheme_id = ? and ' .
                  'yongo_project.id is not null ' .
@@ -1674,9 +1674,9 @@ class YongoProject
     public function getByWorkflowId($workflowId) {
         $query = 'select yongo_project.id  ' .
                  'from yongo_project ' .
-                 'left join workflow_scheme on workflow_scheme.id = yongo_project.workflow_scheme_id ' .
-                 'left join workflow_scheme_data on workflow_scheme_data.workflow_scheme_id = workflow_scheme.id ' .
-                 'where workflow_scheme_data.workflow_id = ?';
+                 'left join yongo_workflow_scheme on yongo_workflow_scheme.id = yongo_project.workflow_scheme_id ' .
+                 'left join yongo_workflow_scheme_data on yongo_workflow_scheme_data.workflow_scheme_id = yongo_workflow_scheme.id ' .
+                 'where yongo_workflow_scheme_data.workflow_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $workflowId);
