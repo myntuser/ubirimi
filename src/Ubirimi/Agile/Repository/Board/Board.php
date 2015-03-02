@@ -218,9 +218,9 @@ class Board
     }
 
     public function getColumnStatuses($columnId, $resultType = null, $column = null) {
-        $query = "select issue_status.id, issue_status.name " .
+        $query = "select yongo_issue_status.id, yongo_issue_status.name " .
             "from agile_board_column_status " .
-            "left join issue_status on issue_status.id = agile_board_column_status.issue_status_id " .
+            "left join yongo_issue_status on yongo_issue_status.id = agile_board_column_status.issue_status_id " .
             "where agile_board_column_status.agile_board_column_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -261,11 +261,11 @@ class Board
     public function getUnmappedStatuses($clientId, $boardId, $resultType = null) {
         $clientStatuses = UbirimiContainer::get()['repository']->get(IssueSettings::class)->getAllIssueSettings('status', $clientId, 'array');
 
-        $query = "select issue_status.id, issue_status.name " .
+        $query = "select yongo_issue_status.id, yongo_issue_status.name " .
             "from agile_board " .
             "left join agile_board_column on agile_board_column.agile_board_id = agile_board.id " .
             "left join agile_board_column_status on agile_board_column_status.agile_board_column_id = agile_board_column.id " .
-            "left join issue_status on issue_status.id = agile_board_column_status.issue_status_id " .
+            "left join yongo_issue_status on yongo_issue_status.id = agile_board_column_status.issue_status_id " .
             "where agile_board.id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -369,7 +369,7 @@ class Board
     }
 
     public function getIssuesBySprintAndStatusIdAndParentId($sprintId, $parentId = null, $statuses, $onlyMyIssuesFlag, $loggedInUserId) {
-        $query = 'select yongo_issue.id, nr, yongo_issue.parent_id, yongo_issue_priority.name as priority_name, issue_status.name as status_name, issue_status.id as status, summary, yongo_issue.description, environment, ' .
+        $query = 'select yongo_issue.id, nr, yongo_issue.parent_id, yongo_issue_priority.name as priority_name, yongo_issue_status.name as status_name, yongo_issue_status.id as status, summary, yongo_issue.description, environment, ' .
             'yongo_issue_type.name as type, ' .
             'yongo_project.code as project_code, yongo_project.name as project_name, yongo_issue.project_id as issue_project_id, ' .
             'yongo_issue_type.id as type, yongo_issue_type.description as issue_type_description, yongo_issue_type.icon_name as issue_type_icon_name, ' .
@@ -378,7 +378,7 @@ class Board
             "left join yongo_issue on yongo_issue.id = agile_board_sprint_issue.issue_id " .
             'LEFT join yongo_issue_priority on yongo_issue.priority_id = yongo_issue_priority.id ' .
             'LEFT join yongo_issue_type on yongo_issue.type_id = yongo_issue_type.id ' .
-            'LEFT JOIN issue_status on yongo_issue.status_id = yongo_issue_status.id ' .
+            'LEFT JOIN yongo_issue_status on yongo_issue.status_id = yongo_issue_status.id ' .
             'LEFT join yongo_project on yongo_issue.project_id = yongo_project.id ' .
             "where agile_board_sprint_issue.agile_board_sprint_id = ? " .
             "and yongo_issue.status_id IN (" . implode(", ", $statuses) . ") ";

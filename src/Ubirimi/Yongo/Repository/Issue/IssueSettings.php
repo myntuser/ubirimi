@@ -142,7 +142,7 @@ class IssueSettings
     }
 
     public function deleteStatusById($Id) {
-        $query = 'delete from issue_status where id = ? limit 1';
+        $query = 'delete from yongo_issue_status where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -150,7 +150,7 @@ class IssueSettings
     }
 
     public function deleteResolutionById($Id) {
-        $query = 'delete from issue_resolution where id = ? limit 1';
+        $query = 'delete from yongo_issue_resolution where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);

@@ -46,6 +46,7 @@ class AuthenticateController extends UbirimiController
                 UbirimiContainer::get()['warmup']->warmUpClient($userData);
                 UbirimiContainer::get()['login.time']->clientSaveLoginTime($userData['client_id']);
 
+
                 $clientData = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getById($userData['client_id']);
                 $clientSettings = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->getSettings($userData['client_id']);
 

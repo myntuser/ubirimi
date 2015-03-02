@@ -111,14 +111,14 @@ class IssueLinkType
             'yongo_issue_type.id as issue_type_id, yongo_issue_type.icon_name as issue_type_icon_name, yongo_issue_type.description as issue_type_description, yongo_issue_type.name as type, ' .
             'yongo_issue_priority.id as priority_id, yongo_issue_priority.color as priority_color, yongo_issue_priority.icon_name as issue_priority_icon_name, ' .
             'yongo_issue_priority.description as issue_priority_description, yongo_issue_priority.name as priority, ' .
-            'issue_status.id as status, issue_status.name as status_name, ' .
+            'yongo_issue_status.id as status, yongo_issue_status.name as status_name, ' .
             'issue_link.id as issue_link_id, issue_link.link_type, "parent" as view ' .
             'from issue_link ' .
             'left join issue_link_type on issue_link_type.id = issue_link.issue_link_type_id ' .
             'left join yongo_issue on yongo_issue.id = issue_link.child_issue_id ' .
             'LEFT join yongo_issue_priority on yongo_issue.priority_id = yongo_issue_priority.id ' .
             'LEFT join yongo_issue_type on yongo_issue.type_id = yongo_issue_type.id ' .
-            'LEFT JOIN issue_status on yongo_issue.status_id = yongo_issue_status.id ' .
+            'LEFT JOIN yongo_issue_status on yongo_issue.status_id = yongo_issue_status.id ' .
             'where parent_issue_id = ? ' .
 
             'UNION ' .
@@ -127,14 +127,14 @@ class IssueLinkType
             'yongo_issue_type.id as issue_type_id, yongo_issue_type.icon_name as issue_type_icon_name, yongo_issue_type.description as issue_type_description, yongo_issue_type.name as type, ' .
             'yongo_issue_priority.id as priority_id, yongo_issue_priority.color as priority_color, yongo_issue_priority.icon_name as issue_priority_icon_name, ' .
             'yongo_issue_priority.description as issue_priority_description, yongo_issue_priority.name as priority, ' .
-            'issue_status.id as status, issue_status.name as status_name, ' .
+            'yongo_issue_status.id as status, yongo_issue_status.name as status_name, ' .
             'issue_link.id as issue_link_id, issue_link.link_type, "child" as view ' .
             'from issue_link ' .
             'left join issue_link_type on issue_link_type.id = issue_link.issue_link_type_id ' .
             'left join yongo_issue on yongo_issue.id = issue_link.parent_issue_id ' .
             'LEFT join yongo_issue_priority on yongo_issue.priority_id = yongo_issue_priority.id ' .
             'LEFT join yongo_issue_type on yongo_issue.type_id = yongo_issue_type.id ' .
-            'LEFT JOIN issue_status on yongo_issue.status_id = yongo_issue_status.id ' .
+            'LEFT JOIN yongo_issue_status on yongo_issue.status_id = yongo_issue_status.id ' .
             'where child_issue_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

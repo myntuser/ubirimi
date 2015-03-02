@@ -215,8 +215,8 @@ class Workflow
             "from workflow_data " .
             "left join workflow_step ws1 on ws1.id = workflow_data.workflow_step_id_from " .
             "left join workflow_step ws2 on ws2.id = workflow_data.workflow_step_id_to " .
-            "left join issue_status is1 on ws1.linked_issue_status_id = is1.id " .
-            "left join issue_status is2 on ws2.linked_issue_status_id = is2.id " .
+            "left join yongo_issue_status is1 on ws1.linked_issue_status_id = is1.id " .
+            "left join yongo_issue_status is2 on ws2.linked_issue_status_id = is2.id " .
             "left join screen on screen.id = workflow_data.screen_id " .
             "where workflow_data.id = " . $Id . ' ' .
             "limit 1";
@@ -235,8 +235,8 @@ class Workflow
             "from workflow_data " .
             "left join workflow_step ws1 on ws1.id = workflow_data.workflow_step_id_from " .
             "left join workflow_step ws2 on ws2.id = workflow_data.workflow_step_id_to " .
-            "left join issue_status is1 on ws1.linked_issue_status_id = is1.id " .
-            "left join issue_status is2 on ws2.linked_issue_status_id = is2.id " .
+            "left join yongo_issue_status is1 on ws1.linked_issue_status_id = is1.id " .
+            "left join yongo_issue_status is2 on ws2.linked_issue_status_id = is2.id " .
             "where workflow_data.workflow_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -320,11 +320,11 @@ class Workflow
     }
 
     public function getTransitionsForStepId($workflowId, $stepId) {
-        $query = "select workflow_data.transition_name, workflow_data.screen_id, issue_status.id as status, issue_status.name, workflow_data.id, workflow_data.workflow_id, " .
+        $query = "select workflow_data.transition_name, workflow_data.screen_id, yongo_issue_status.id as status, yongo_issue_status.name, workflow_data.id, workflow_data.workflow_id, " .
                  "workflow_data.workflow_step_id_to " .
             "from workflow_data " .
             "left join workflow_step on workflow_step.id = workflow_data.workflow_step_id_to " .
-            "left join issue_status on issue_status.id = workflow_step.linked_issue_status_id " .
+            "left join yongo_issue_status on yongo_issue_status.id = workflow_step.linked_issue_status_id " .
             "where workflow_data.workflow_id = ? " .
             "and workflow_data.workflow_step_id_from = ? " .
             "order by workflow_data.id";
@@ -433,10 +433,10 @@ class Workflow
     }
 
     public function getSteps($workflowId, $allFlag = null) {
-        $query = "select workflow_step.id, workflow_step.name as step_name, workflow_step.initial_step_flag, issue_status.id as status_id, issue_status.name as status_name, " .
+        $query = "select workflow_step.id, workflow_step.name as step_name, workflow_step.initial_step_flag, yongo_issue_status.id as status_id, yongo_issue_status.name as status_name, " .
             "workflow_step.workflow_id " .
             "from workflow_step " .
-            "left join issue_status on issue_status.id = workflow_step.linked_issue_status_id " .
+            "left join yongo_issue_status on yongo_issue_status.id = workflow_step.linked_issue_status_id " .
             "where workflow_step.workflow_id = ? ";
         if ($allFlag == null) {
             $query .= " and (workflow_step.initial_step_flag = 0 or workflow_step.initial_step_flag is null)";
@@ -464,9 +464,9 @@ class Workflow
     }
 
     public function getStepById($workflowStepId, $fieldName = null) {
-        $query = "select workflow_step.id, workflow_step.workflow_id, workflow_step.name, issue_status.name as status_name, workflow_step.linked_issue_status_id " .
+        $query = "select workflow_step.id, workflow_step.workflow_id, workflow_step.name, yongo_issue_status.name as status_name, workflow_step.linked_issue_status_id " .
             "from workflow_step " .
-            "left join issue_status on issue_status.id = workflow_step.linked_issue_status_id " .
+            "left join yongo_issue_status on yongo_issue_status.id = workflow_step.linked_issue_status_id " .
             "where workflow_step.id = ? " .
             "limit 1";
 
@@ -831,9 +831,9 @@ class Workflow
     }
 
     public function getLinkedStatuses($workflowId, $resultType = null, $field = null) {
-        $query = "select linked_issue_status_id, issue_status.name
+        $query = "select linked_issue_status_id, yongo_issue_status.name
                     from workflow_step
-                    left join issue_status on issue_status.id = workflow_step.linked_issue_status_id
+                    left join yongo_issue_status on yongo_issue_status.id = workflow_step.linked_issue_status_id
                     where workflow_id = ? and
                         linked_issue_status_id is not null";
 

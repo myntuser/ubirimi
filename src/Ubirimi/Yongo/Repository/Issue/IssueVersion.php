@@ -24,7 +24,7 @@ use Ubirimi\Container\UbirimiContainer;
 class IssueVersion
 {
     public function deleteByIssueIdAndFlag($issueId, $flag) {
-        $query = 'DELETE FROM issue_version WHERE issue_id = ? and affected_targeted_flag = ?';
+        $query = 'DELETE FROM yongo_issue_version WHERE issue_id = ? and affected_targeted_flag = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $issueId, $flag);
@@ -32,7 +32,7 @@ class IssueVersion
     }
 
     public function deleteByIssueId($issueId) {
-        $query = 'DELETE FROM issue_version WHERE issue_id = ?';
+        $query = 'DELETE FROM yongo_issue_version WHERE issue_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $issueId);
@@ -40,9 +40,9 @@ class IssueVersion
     }
 
     public function getByIssueIdAndProjectId($issueId, $projectId, $versionFlag, $resultType = null, $resultColumn = null) {
-        $query = 'SELECT issue_version.id, project_version.name, project_version_id ' .
-            'FROM issue_version ' .
-            'LEFT JOIN project_version on issue_version.project_version_id = project_version.id ' .
+        $query = 'SELECT yongo_issue_version.id, project_version.name, project_version_id ' .
+            'FROM yongo_issue_version ' .
+            'LEFT JOIN project_version on yongo_issue_version.project_version_id = project_version.id ' .
             'WHERE issue_id = ? and project_version.project_id = ? ' .
             'AND affected_targeted_flag = ?';
 

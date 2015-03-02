@@ -24,7 +24,7 @@ use Ubirimi\Container\UbirimiContainer;
 class IssueComponent
 {
     public function deleteByIssueId($issueId) {
-        $query = 'DELETE FROM issue_component WHERE issue_id = ?';
+        $query = 'DELETE FROM yongo_issue_component WHERE issue_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $issueId);
@@ -32,9 +32,9 @@ class IssueComponent
     }
 
     public function getByIssueIdAndProjectId($issueId, $projectId, $resultType = null, $resultColumn = null) {
-        $query = 'SELECT issue_component.id, project_component.name, project_component_id, parent_id ' .
-            'FROM issue_component ' .
-            'LEFT JOIN project_component on issue_component.project_component_id = project_component.id ' .
+        $query = 'SELECT yongo_issue_component.id, project_component.name, project_component_id, parent_id ' .
+            'FROM yongo_issue_component ' .
+            'LEFT JOIN project_component on yongo_issue_component.project_component_id = project_component.id ' .
             'WHERE issue_id = ? and project_component.project_id = ? ' .
             'order by id asc';
 

@@ -362,7 +362,7 @@ class UbirimiClient
     }
 
     public function createDefaultIssueStatuses($clientId, $currentDate) {
-        $query = "INSERT INTO issue_status(client_id, name, description, date_created) VALUES " .
+        $query = "INSERT INTO yongo_issue_status(client_id, name, description, date_created) VALUES " .
             "(" . $clientId . ", 'Open', 'The issue is open and ready for the assignee to start work on it.', '" . $currentDate . "'), " .
             "(" . $clientId . ", 'Resolved', 'A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.', '" . $currentDate . "'), " .
             "(" . $clientId . ", 'Closed', 'The issue is considered finished, the resolution is correct. Issues which are closed can be reopened.', '" . $currentDate . "'), " .
@@ -372,7 +372,7 @@ class UbirimiClient
     }
 
     public function createDefaultIssueResolutions($clientId, $currentDate) {
-        $query = "INSERT INTO issue_resolution(client_id, name, description, date_created) VALUES " .
+        $query = "INSERT INTO yongo_issue_resolution(client_id, name, description, date_created) VALUES " .
             "(" . $clientId . ", 'Fixed', 'A fix for this issue is checked into the tree and tested.', '" . $currentDate . "'), (" . $clientId . ", 'Cannot Reproduce', 'All attempts at reproducing this issue failed, or not enough information was available to reproduce the issue. Reading the code produces no clues as to why this behavior would occur. If more information appears later, please reopen the issue.', '" . $currentDate . "'), " .
             "(" . $clientId . ", 'Won\'t Fix', 'The problem described is an issue which will never be fixed.', '" . $currentDate . "'), (" . $clientId . ", 'Duplicate', 'The problem is a duplicate of an existing issue.', '" . $currentDate . "'), " .
             "(" . $clientId . ", 'No Change Required', 'The problems does not require a change.', '" . $currentDate . "')";
@@ -569,7 +569,7 @@ class UbirimiClient
     public function getProjects($clientId, $resultType = null, $resultColumn = null, $onlyHelpDeskFlag = false) {
         $partQuery = '';
         if ($onlyHelpDeskFlag) {
-            $partQuery = ' AND project.help_desk_enabled_flag = 1 ';
+            $partQuery = ' AND yongo_project.help_desk_enabled_flag = 1 ';
         }
         $query = 'SELECT yongo_project.id, code, yongo_project.name, yongo_project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
                  'yongo_project_category.name as category_name, project_category_id as category_id ' .
@@ -1789,12 +1789,12 @@ class UbirimiClient
     }
 
     public function deleteYongoIssueStatuses($clientId) {
-        $query = 'delete from issue_status where client_id = ' . $clientId;
+        $query = 'delete from yongo_issue_status where client_id = ' . $clientId;
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
     public function deleteYongoIssueResolutions($clientId) {
-        $query = 'delete from issue_resolution where client_id = ' . $clientId;
+        $query = 'delete from yongo_issue_resolution where client_id = ' . $clientId;
         UbirimiContainer::get()['db.connection']->query($query);
     }
 

@@ -51,7 +51,7 @@ class ProjectVersion
 
     public function deleteById($versionId)
     {
-        $query = 'delete from issue_version where project_version_id = ?';
+        $query = 'delete from yongo_issue_version where project_version_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $versionId);

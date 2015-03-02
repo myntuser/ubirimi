@@ -49,9 +49,9 @@ class Sprint
     }
 
     public function getIssuesBySprintId($sprintId, $onlyMyIssuesFlag, $loggedInUserId, $searchText = null) {
-        $query = 'select yongo_issue.id, parent_id, nr, yongo_issue_priority.name as priority, issue_status.name as status, summary, yongo_issue.description, environment, ' .
+        $query = 'select yongo_issue.id, parent_id, nr, yongo_issue_priority.name as priority, yongo_issue_status.name as status, summary, yongo_issue.description, environment, ' .
             'yongo_issue_type.name as type, ' .
-            'issue_status.id as status, ' .
+            'yongo_issue_status.id as status, ' .
             'yongo_project.code as project_code, yongo_project.name as project_name, yongo_issue.project_id as issue_project_id, yongo_issue_type.id as type, ' .
             'yongo_issue_type.description as issue_type_description, yongo_issue_type.icon_name as issue_type_icon_name, ' .
             'yongo_issue_priority.description as issue_priority_description, yongo_issue_priority.icon_name as issue_priority_icon_name, yongo_issue_priority.color as priority_color, ' .
@@ -60,9 +60,9 @@ class Sprint
             "left join yongo_issue on yongo_issue.id = agile_board_sprint_issue.issue_id " .
             'LEFT join yongo_issue_priority on yongo_issue.priority_id = yongo_issue_priority.id ' .
             'LEFT join yongo_issue_type on yongo_issue.type_id = yongo_issue_type.id ' .
-            'LEFT JOIN issue_status on yongo_issue.status_id = yongo_issue_status.id ' .
+            'LEFT JOIN yongo_issue_status on yongo_issue.status_id = yongo_issue_status.id ' .
             'LEFT join yongo_project on yongo_issue.project_id = yongo_project.id ' .
-            'left join issue_security_scheme_level on issue_security_scheme_level.id = yongo_issue.security_scheme_level_id ' .
+            'left join yongo_issue_security_scheme_level on yongo_issue_security_scheme_level.id = yongo_issue.security_scheme_level_id ' .
             "where agile_board_sprint_issue.agile_board_sprint_id = ? and yongo_issue.parent_id is null ";
 
         if ($searchText)
@@ -84,7 +84,7 @@ class Sprint
     }
 
     public function getIssuesBySprintIdWithChildren($sprintId, $onlyMyIssuesFlag, $loggedInUserId) {
-        $query = 'select yongo_issue.id, parent_id, nr, yongo_issue_priority.name as priority, issue_status.name as status, summary, yongo_issue.description, environment, ' .
+        $query = 'select yongo_issue.id, parent_id, nr, yongo_issue_priority.name as priority, yongo_issue_status.name as status, summary, yongo_issue.description, environment, ' .
             'yongo_issue_type.name as type, ' .
             'yongo_project.code as project_code, yongo_project.name as project_name, yongo_issue.project_id as issue_project_id, yongo_issue_type.id as issue_type_id, ' .
             'yongo_issue_type.description as issue_type_description, yongo_issue_type.icon_name as issue_type_icon_name, ' .
@@ -93,7 +93,7 @@ class Sprint
             "left join yongo_issue on yongo_issue.id = agile_board_sprint_issue.issue_id " .
             'LEFT join yongo_issue_priority on yongo_issue.priority_id = yongo_issue_priority.id ' .
             'LEFT join yongo_issue_type on yongo_issue.type_id = yongo_issue_type.id ' .
-            'LEFT JOIN issue_status on yongo_issue.status_id = yongo_issue_status.id ' .
+            'LEFT JOIN yongo_issue_status on yongo_issue.status_id = yongo_issue_status.id ' .
             'LEFT join yongo_project on yongo_issue.project_id = yongo_project.id ' .
             "where agile_board_sprint_issue.agile_board_sprint_id = ? and yongo_issue.parent_id is not null ";
 
@@ -119,9 +119,9 @@ class Sprint
     }
 
     public function getIssuesBySprintIdWithoutChildren($sprintId, $onlyMyIssuesFlag, $loggedInUserId, $parentChildrenIssueIds) {
-        $query = 'select yongo_issue.id, parent_id, nr, yongo_issue_priority.name as priority, issue_status.name as status, summary, yongo_issue.description, environment, ' .
+        $query = 'select yongo_issue.id, parent_id, nr, yongo_issue_priority.name as priority, yongo_issue_status.name as status, summary, yongo_issue.description, environment, ' .
             'yongo_issue_type.name as type_name, yongo_issue_type.id as type, ' .
-            'issue_status.id as status, ' .
+            'yongo_issue_status.id as status, ' .
             'yongo_project.code as project_code, yongo_project.name as project_name, yongo_issue.project_id as issue_project_id, ' .
             'yongo_issue_type.description as issue_type_description, yongo_issue_type.icon_name as issue_type_icon_name, ' .
             'yongo_issue_priority.description as issue_priority_description, yongo_issue_priority.icon_name as issue_priority_icon_name, yongo_issue_priority.color as priority_color, ' .
@@ -130,7 +130,7 @@ class Sprint
             "left join yongo_issue on yongo_issue.id = agile_board_sprint_issue.issue_id " .
             'LEFT join yongo_issue_priority on yongo_issue.priority_id = yongo_issue_priority.id ' .
             'LEFT join yongo_issue_type on yongo_issue.type_id = yongo_issue_type.id ' .
-            'LEFT JOIN issue_status on yongo_issue.status_id = yongo_issue_status.id ' .
+            'LEFT JOIN yongo_issue_status on yongo_issue.status_id = yongo_issue_status.id ' .
             'LEFT join yongo_project on yongo_issue.project_id = yongo_project.id ' .
             'left join general_user on general_user.id = yongo_issue.user_assigned_id ' .
             "where agile_board_sprint_issue.agile_board_sprint_id = ? and yongo_issue.parent_id is null ";
@@ -414,13 +414,13 @@ class Sprint
         $query = 'select yongo_issue.id, nr, summary, yongo_issue.description, environment, ' .
             'yongo_issue_priority.name as priority_name, ' .
             'yongo_issue_type.name as type_name, yongo_issue_type.id as type, ' .
-            'issue_status.name as status_name, issue_status.id as status, ' .
+            'yongo_issue_status.name as status_name, yongo_issue_status.id as status, ' .
             'yongo_project.code as project_code, yongo_project.name as project_name, yongo_issue.project_id as issue_project_id ' .
             "from agile_board_sprint_issue " .
             "left join yongo_issue on yongo_issue.id = agile_board_sprint_issue.issue_id " .
             'LEFT join yongo_issue_priority on yongo_issue.priority_id = yongo_issue_priority.id ' .
             'LEFT join yongo_issue_type on yongo_issue.type_id = yongo_issue_type.id ' .
-            'LEFT JOIN issue_status on yongo_issue.status_id = yongo_issue_status.id ' .
+            'LEFT JOIN yongo_issue_status on yongo_issue.status_id = yongo_issue_status.id ' .
             'LEFT join yongo_project on yongo_issue.project_id = yongo_project.id ' .
             "where agile_board_sprint_id = ? and done_flag = ?";
 

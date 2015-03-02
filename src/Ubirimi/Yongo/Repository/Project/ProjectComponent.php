@@ -55,7 +55,7 @@ class ProjectComponent
 
     public function deleteById($componentId)
     {
-        $query = 'delete from issue_component where project_component_id = ?';
+        $query = 'delete from yongo_issue_component where project_component_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $componentId);

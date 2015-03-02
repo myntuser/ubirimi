@@ -52,10 +52,10 @@ class Issue
             'user_assigned.first_name as ua_first_name, user_assigned.last_name as ua_last_name, user_assigned.id as assignee, user_assigned.avatar_picture as assignee_avatar_picture, ' .
             'yongo_project.code as project_code, yongo_project.name as project_name, issue_main_table.project_id as issue_project_id, yongo_issue_type.id as issue_type_id, yongo_issue_type.icon_name as issue_type_icon_name, yongo_issue_type.description as issue_type_description, ' .
             'yongo_issue_priority.id as priority, yongo_issue_priority.color as priority_color, yongo_issue_priority.icon_name as issue_priority_icon_name, yongo_issue_priority.description as issue_priority_description, yongo_issue_priority.name as priority_name, ' .
-            'issue_status.id as status, issue_status.name as status_name, ' .
+            'yongo_issue_status.id as status, yongo_issue_status.name as status_name, ' .
             'yongo_issue_type.id as type, yongo_issue_type.name as type_name, ' .
-            'issue_resolution.name as resolution_name, issue_main_table.resolution_id as resolution, issue_main_table.parent_id, issue_main_table.security_scheme_level_id as security_level, ' .
-            'issue_security_scheme_level.name as security_level_name, ' .
+            'yongo_issue_resolution.name as resolution_name, issue_main_table.resolution_id as resolution, issue_main_table.parent_id, issue_main_table.security_scheme_level_id as security_level, ' .
+            'yongo_issue_security_scheme_level.name as security_level_name, ' .
             'issue_main_table.user_assigned_id as issue_assignee, ' .
             'issue_main_table.original_estimate, issue_main_table.remaining_estimate, issue_main_table.user_reported_ip, ';
 
@@ -142,7 +142,7 @@ class Issue
             // 7. project_lead in security scheme level data
 
             $query .= '(SELECT max(yongo_issue_security_scheme_level_data.id) ' .
-                'from yongo_issue_security_scheme_level_data, project, general_user ' .
+                'from yongo_issue_security_scheme_level_data, yongo_project, general_user ' .
                 'where yongo_issue_security_scheme_level_data.issue_security_scheme_level_id = issue_main_table.security_scheme_level_id and ' .
                 'yongo_project.id = issue_main_table.project_id and ' .
                 'yongo_project.lead_id = general_user.id and ' .
@@ -159,15 +159,15 @@ class Issue
             'from yongo_issue as issue_main_table ' .
             'LEFT join yongo_issue_priority ON issue_main_table.priority_id = yongo_issue_priority.id ' .
             'LEFT join yongo_issue_type ON issue_main_table.type_id = yongo_issue_type.id ' .
-            'LEFT JOIN issue_status ON issue_main_table.status_id = yongo_issue_status.id ' .
-            'LEFT JOIN issue_resolution ON issue_main_table.resolution_id = issue_resolution.id ' .
-            'LEFT JOIN issue_component ON issue_main_table.id = issue_component.issue_id ' .
-            'LEFT JOIN issue_version ON issue_main_table.id = issue_version.issue_id ' .
+            'LEFT JOIN yongo_issue_status ON issue_main_table.status_id = yongo_issue_status.id ' .
+            'LEFT JOIN yongo_issue_resolution ON issue_main_table.resolution_id = yongo_issue_resolution.id ' .
+            'LEFT JOIN yongo_issue_component ON issue_main_table.id = yongo_issue_component.issue_id ' .
+            'LEFT JOIN yongo_issue_version ON issue_main_table.id = yongo_issue_version.issue_id ' .
             'LEFT join yongo_project ON issue_main_table.project_id = yongo_project.id ' .
             'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_project.permission_scheme_id ' .
             'LEFT join general_user AS user_reported ON issue_main_table.user_reported_id = user_reported.id ' .
             'LEFT join general_user AS user_assigned ON issue_main_table.user_assigned_id = user_assigned.id ' .
-            'LEFT JOIN issue_security_scheme_level ON issue_security_scheme_level.id = issue_main_table.security_scheme_level_id ' .
+            'LEFT JOIN yongo_issue_security_scheme_level ON yongo_issue_security_scheme_level.id = issue_main_table.security_scheme_level_id ' .
             'LEFT JOIN yongo_issue_sla ON yongo_issue_sla.yongo_issue_id = issue_main_table.id ';
 
         if (isset($parameters['backlog'])) {
@@ -293,7 +293,7 @@ class Issue
 
         if (isset($parameters['code_nr'])) {
 
-            $queryWhere .= " CONCAT(project.code, '-', issue_main_table.nr) = ? AND ";
+            $queryWhere .= " CONCAT(yongo_project.code, '-', issue_main_table.nr) = ? AND ";
             $parameterType .= 's';
             $parameterArray[] = $parameters['code_nr'];
         }
@@ -341,14 +341,14 @@ class Issue
         if (isset($parameters['component'])) {
             if (is_array($parameters['component'])) {
                 if (!in_array(-1, $parameters['component']))
-                    $queryWhere .= ' issue_component.project_component_id IN (' . implode(',', $parameters['component']) . ') AND ';
+                    $queryWhere .= ' yongo_issue_component.project_component_id IN (' . implode(',', $parameters['component']) . ') AND ';
             } else {
                 if ($parameters['component'] != -1) {
-                    $queryWhere .= ' issue_component.project_component_id = ? AND ';
+                    $queryWhere .= ' yongo_issue_component.project_component_id = ? AND ';
                     $parameterType .= 'i';
                     $parameterArray[] = $parameters['component'];
                 } else {
-                    $queryWhere .= ' issue_component.project_component_id is null and ';
+                    $queryWhere .= ' yongo_issue_component.project_component_id is null and ';
                 }
             }
         }
@@ -356,9 +356,9 @@ class Issue
         if (isset($parameters['version'])) {
             if (is_array($parameters['version'])) {
                 if (!in_array(-1, $parameters['version']))
-                    $queryWhere .= ' issue_version.project_version_id IN (' . implode(',', $parameters['version']) . ') AND ';
+                    $queryWhere .= ' yongo_issue_version.project_version_id IN (' . implode(',', $parameters['version']) . ') AND ';
             } else {
-                $queryWhere .= ' issue_version.project_version_id = ? AND ';
+                $queryWhere .= ' yongo_issue_version.project_version_id = ? AND ';
                 $parameterType .= 'i';
                 $parameterArray[] = $parameters['version'];
             }
@@ -367,9 +367,9 @@ class Issue
         if (isset($parameters['fix_version'])) {
             if (is_array($parameters['fix_version'])) {
                 if (!in_array(-1, $parameters['fix_version']))
-                    $queryWhere .= ' issue_version.project_version_id IN (' . implode(',', $parameters['fix_version']) . ') AND issue_version.affected_targeted_flag = ' . Issue::ISSUE_FIX_VERSION_FLAG . ' AND ';
+                    $queryWhere .= ' yongo_issue_version.project_version_id IN (' . implode(',', $parameters['fix_version']) . ') AND yongo_issue_version.affected_targeted_flag = ' . Issue::ISSUE_FIX_VERSION_FLAG . ' AND ';
             } else {
-                $queryWhere .= ' issue_version.project_version_id = ? AND issue_version.affected_targeted_flag = ' . Issue::ISSUE_FIX_VERSION_FLAG . ' AND ';
+                $queryWhere .= ' yongo_issue_version.project_version_id = ? AND yongo_issue_version.affected_targeted_flag = ' . Issue::ISSUE_FIX_VERSION_FLAG . ' AND ';
                 $parameterType .= 'i';
                 $parameterArray[] = $parameters['fix_version'];
             }
@@ -378,9 +378,9 @@ class Issue
         if (isset($parameters['affects_version'])) {
             if (is_array($parameters['affects_version'])) {
                 if (!in_array(-1, $parameters['affects_version']))
-                    $queryWhere .= ' issue_version.project_version_id IN (' . implode(',', $parameters['affects_version']) . ') AND issue_version.affected_targeted_flag = ' . Issue::ISSUE_AFFECTED_VERSION_FLAG . ' AND ';
+                    $queryWhere .= ' yongo_issue_version.project_version_id IN (' . implode(',', $parameters['affects_version']) . ') AND yongo_issue_version.affected_targeted_flag = ' . Issue::ISSUE_AFFECTED_VERSION_FLAG . ' AND ';
             } else {
-                $queryWhere .= ' issue_version.project_version_id = ? AND issue_version.affected_targeted_flag = ' . Issue::ISSUE_FIX_VERSION_FLAG . ' AND ';
+                $queryWhere .= ' yongo_issue_version.project_version_id = ? AND yongo_issue_version.affected_targeted_flag = ' . Issue::ISSUE_FIX_VERSION_FLAG . ' AND ';
                 $parameterType .= 'i';
                 $parameterArray[] = $parameters['affects_version'];
             }
@@ -630,7 +630,7 @@ class Issue
 //        for ($p = 0; $p < count($parameterArray); $p++) {
 //            $queryTest = preg_replace('/\?/', $parameterArray[$p], $queryTest, 1);
 //        }
-//        echo $querytest;
+//        echo $queryTest;
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -962,9 +962,9 @@ class Issue
     public function addComponentVersion($issueId, $values, $table, $versionFlag = null) {
         $query = '';
         if ($table == 'issue_component')
-            $query = "INSERT INTO issue_component(issue_id, project_component_id) VALUES ";
+            $query = "INSERT INTO yongo_issue_component(issue_id, project_component_id) VALUES ";
         else if ($table == 'issue_version')
-            $query = "INSERT INTO issue_version(issue_id, project_version_id, affected_targeted_flag) VALUES ";
+            $query = "INSERT INTO yongo_issue_version(issue_id, project_version_id, affected_targeted_flag) VALUES ";
         $bind_param_str = '';
         $bind_param_arr = array();
         if (!is_array($values))
@@ -1475,7 +1475,7 @@ class Issue
     }
 
     public function setAffectedVersion($issueId, $projectVersionId) {
-        $query = "INSERT INTO issue_version(issue_id, project_version_id, affected_targeted_flag) VALUES (?, ?, ?)";
+        $query = "INSERT INTO yongo_issue_version(issue_id, project_version_id, affected_targeted_flag) VALUES (?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 

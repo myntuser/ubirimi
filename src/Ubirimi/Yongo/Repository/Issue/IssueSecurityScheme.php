@@ -97,7 +97,7 @@ class IssueSecurityScheme
             $stmt->execute();
         }
 
-        $query = "delete from issue_security_scheme_level where issue_security_scheme_id = ?";
+        $query = "delete from yongo_issue_security_scheme_level where issue_security_scheme_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -111,7 +111,7 @@ class IssueSecurityScheme
     }
 
     public function getLevelsByIssueSecuritySchemeId($issueSecuritySchemeId) {
-        $query = "select * from issue_security_scheme_level where issue_security_scheme_id = ? order by id";
+        $query = "select * from yongo_issue_security_scheme_level where issue_security_scheme_id = ? order by id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $issueSecuritySchemeId);
@@ -124,7 +124,7 @@ class IssueSecurityScheme
     }
 
     public function addLevel($issueSecuritySchemeId, $name, $description, $currentDate) {
-        $query = "INSERT INTO issue_security_scheme_level(issue_security_scheme_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_issue_security_scheme_level(issue_security_scheme_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -135,7 +135,7 @@ class IssueSecurityScheme
     }
 
     public function getLevelById($levelId) {
-        $query = "select * from issue_security_scheme_level where id = ? limit 1";
+        $query = "select * from yongo_issue_security_scheme_level where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $levelId);
@@ -223,7 +223,7 @@ class IssueSecurityScheme
     }
 
     public function updateLevelById($issueSecuritySchemeLevelId, $name, $description, $date) {
-        $query = "update issue_security_scheme_level set name = ?, description = ?, date_updated = ? where id = ? limit 1";
+        $query = "update yongo_issue_security_scheme_level set name = ?, description = ?, date_updated = ? where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("sssi", $name, $description, $date, $issueSecuritySchemeLevelId);
@@ -237,7 +237,7 @@ class IssueSecurityScheme
         $stmt->bind_param("i", $issueSecuritySchemeLevelId);
         $stmt->execute();
 
-        $query = "delete from issue_security_scheme_level where id = ? limit 1";
+        $query = "delete from yongo_issue_security_scheme_level where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $issueSecuritySchemeLevelId);
@@ -253,7 +253,7 @@ class IssueSecurityScheme
     }
 
     public function makeAllLevelsNotDefault($securitySchemeId) {
-        $query = "update issue_security_scheme_level set default_flag = 0 where issue_security_scheme_id = ?";
+        $query = "update yongo_issue_security_scheme_level set default_flag = 0 where issue_security_scheme_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $securitySchemeId);
@@ -261,7 +261,7 @@ class IssueSecurityScheme
     }
 
     public function setLevelDefault($securityLevelId) {
-        $query = "update issue_security_scheme_level set default_flag = 1 where id = ? limit 1";
+        $query = "update yongo_issue_security_scheme_level set default_flag = 1 where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $securityLevelId);
@@ -269,7 +269,7 @@ class IssueSecurityScheme
     }
 
     public function getDefaultLevel($securitySchemeId) {
-        $query = "select * from issue_security_scheme_level where issue_security_scheme_id = ? and default_flag = 1";
+        $query = "select * from yongo_issue_security_scheme_level where issue_security_scheme_id = ? and default_flag = 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $securitySchemeId);

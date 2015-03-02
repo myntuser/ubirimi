@@ -65,7 +65,7 @@ class IssueStatistic
                 $group_by = 'group by yongo_issue.type_id';
                 break;
             case 'status':
-                $query .= 'left join issue_status on yongo_issue.status_id = yongo_issue_status.id ';
+                $query .= 'left join yongo_issue_status on yongo_issue.status_id = yongo_issue_status.id ';
                 $group_by = 'group by yongo_issue.status_id';
                 break;
             case 'assignee':
@@ -75,7 +75,7 @@ class IssueStatistic
         }
         $query .= 'where issue_' . $type . '.project_' . $type . '_id = ? ';
         if ($type == 'version')
-            $query .= 'and issue_version.affected_targeted_flag = ' . Issue::ISSUE_FIX_VERSION_FLAG  . ' ';
+            $query .= 'and yongo_issue_version.affected_targeted_flag = ' . Issue::ISSUE_FIX_VERSION_FLAG  . ' ';
         $query .= 'and yongo_issue.resolution_id is null ';
         $query .= 'and yongo_issue.project_id = ? ';
 

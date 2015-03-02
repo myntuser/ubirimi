@@ -120,7 +120,7 @@ class YongoProject
     public function getByIssueTypeFieldConfigurationScheme($clientId, $issueTypeFieldConfigurationId) {
         $query = 'SELECT * ' .
             'from yongo_project ' .
-            'WHERE project.issue_type_field_configuration_id = ? and client_id = ? ';
+            'where yongo_project.issue_type_field_configuration_id = ? and client_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -136,7 +136,7 @@ class YongoProject
     public function getByIssueTypeScreenSchemeId($clientId, $issueTypeScreenSchemeId) {
         $query = 'SELECT * ' .
             'from yongo_project ' .
-            'WHERE project.issue_type_screen_scheme_id = ? and client_id = ? ';
+            'where yongo_project.issue_type_screen_scheme_id = ? and client_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -191,7 +191,7 @@ class YongoProject
     public function getByIssueTypeScheme($schemeId) {
         $query = 'SELECT * ' .
             'from yongo_project ' .
-            'WHERE project.issue_type_scheme_id = ? ';
+            'where yongo_project.issue_type_scheme_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -207,7 +207,7 @@ class YongoProject
     public function getByPermissionScheme($schemeId) {
         $query = 'SELECT * ' .
             'from yongo_project ' .
-            'WHERE project.permission_scheme_id = ? ';
+            'where yongo_project.permission_scheme_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -223,7 +223,7 @@ class YongoProject
     public function getByIssueSecurityScheme($schemeId) {
         $query = 'SELECT * ' .
             'from yongo_project ' .
-            'WHERE project.issue_security_scheme_id = ? ';
+            'where yongo_project.issue_security_scheme_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -239,7 +239,7 @@ class YongoProject
     public function getByNotificationScheme($schemeId) {
         $query = 'SELECT * ' .
             'from yongo_project ' .
-            'WHERE project.notification_scheme_id = ? ';
+            'where yongo_project.notification_scheme_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -497,9 +497,9 @@ class YongoProject
             while ($component = $projectComponents->fetch_array(MYSQLI_ASSOC)) {
                 $q = 'select count(yongo_issue.id) as total ' .
                         'from yongo_issue ' .
-                        'left join issue_component on yongo_issue.id = issue_component.issue_id ' .
+                        'left join yongo_issue_component on yongo_issue.id = yongo_issue_component.issue_id ' .
                         'where project_id = ? ' .
-                        'and issue_component.project_component_id = ? ' .
+                        'and yongo_issue_component.project_component_id = ? ' .
                         'and yongo_issue.resolution_id is null';
 
                 $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
@@ -519,9 +519,9 @@ class YongoProject
 
             $q = 'select count(yongo_issue.id) as total ' .
                     'from yongo_issue ' .
-                    'left join issue_component on yongo_issue.id = issue_component.issue_id ' .
+                    'left join yongo_issue_component on yongo_issue.id = yongo_issue_component.issue_id ' .
                     'where project_id = ? ' .
-                    'and issue_component.project_component_id IS NULL ' .
+                    'and yongo_issue_component.project_component_id IS NULL ' .
                     'and yongo_issue.resolution_id is null';
 
             $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
@@ -1102,8 +1102,8 @@ class YongoProject
             'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
                        'yongo_notification_scheme_data.component_lead is not null) ' .
             'left join yongo_issue on yongo_issue.id = ? ' .
-            'left join issue_component on issue_component.issue_id = yongo_issue.id ' .
-            'left join project_component on project_component.id = issue_component.project_component_id ' .
+            'left join yongo_issue_component on yongo_issue_component.issue_id = yongo_issue.id ' .
+            'left join project_component on project_component.id = yongo_issue_component.project_component_id ' .
             'left join general_user on general_user.id = project_component.leader_id ' .
             'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
                 'yongo_notification_scheme_data.event_id = ? and ' .
@@ -1407,7 +1407,7 @@ class YongoProject
     public function getByWorkflowSchemeId($schemeId) {
         $query = 'SELECT * ' .
             'from yongo_project ' .
-            'WHERE project.workflow_scheme_id = ? ';
+            'where yongo_project.workflow_scheme_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
