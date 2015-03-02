@@ -36,7 +36,7 @@ class ScreenScheme
     }
 
     public function save($currentDate) {
-        $query = "INSERT INTO screen_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_screen_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -47,7 +47,7 @@ class ScreenScheme
     }
 
     public function addData($screenSchemeId, $operationId, $screenId, $currentDate) {
-        $query = "INSERT INTO screen_scheme_data(screen_scheme_id, sys_operation_id, screen_id, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_screen_scheme_data(screen_scheme_id, sys_operation_id, screen_id, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -56,7 +56,7 @@ class ScreenScheme
     }
 
     public function deleteDataByScreenSchemeId($Id) {
-        $query = "delete from screen_scheme_data where screen_scheme_id = ?";
+        $query = "delete from yongo_screen_scheme_data where screen_scheme_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -64,7 +64,7 @@ class ScreenScheme
     }
 
     public function updateDataById($screenSchemeId, $operationId, $screenId) {
-        $query = "update screen_scheme_data set screen_id = ? where screen_scheme_id = ? and sys_operation_id = ? limit 1";
+        $query = "update yongo_screen_scheme_data set screen_id = ? where screen_scheme_id = ? and sys_operation_id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iii", $screenId, $screenSchemeId, $operationId);
@@ -72,7 +72,7 @@ class ScreenScheme
     }
 
     public function updateMetaDataById($Id, $name, $description, $date) {
-        $query = "update screen_scheme set name = ?, description = ?, date_updated = ? where id = ? limit 1";
+        $query = "update yongo_screen_scheme set name = ?, description = ?, date_updated = ? where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("sssi", $name, $description, $date, $Id);
@@ -80,11 +80,11 @@ class ScreenScheme
     }
 
     public function getDataByScreenSchemeId($screenSchemeId) {
-        $query = "select screen_scheme_data.id, screen_scheme_data.sys_operation_id, screen_scheme_data.screen_id, screen.name as screen_name, sys_operation.name as operation_name " .
-            "from screen_scheme_data " .
-            "left join screen on screen.id = screen_scheme_data.screen_id " .
-            "left join sys_operation on sys_operation.id = screen_scheme_data.sys_operation_id " .
-            "where screen_scheme_data.screen_scheme_id = ?";
+        $query = "select yongo_screen_scheme_data.id, yongo_screen_scheme_data.sys_operation_id, yongo_screen_scheme_data.screen_id, yongo_screen.name as screen_name, yongo_operation.name as operation_name " .
+            "from yongo_screen_scheme_data " .
+            "left join yongo_screen on yongo_screen.id = yongo_screen_scheme_data.screen_id " .
+            "left join yongo_operation on yongo_operation.id = yongo_screen_scheme_data.sys_operation_id " .
+            "where yongo_screen_scheme_data.screen_scheme_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $screenSchemeId);
@@ -97,12 +97,12 @@ class ScreenScheme
     }
 
     public function getDataByScreenSchemeIdAndSysOperationId($screenSchemeId, $sysOperationId) {
-        $query = "select screen_scheme_data.id, screen_scheme_data.sys_operation_id, screen_scheme_data.screen_id, screen.name as screen_name, sys_operation.name as operation_name " .
-            "from screen_scheme_data " .
-            "left join screen on screen.id = screen_scheme_data.screen_id " .
-            "left join sys_operation on sys_operation.id = screen_scheme_data.sys_operation_id " .
-            "where screen_scheme_data.screen_scheme_id = ? and " .
-                "screen_scheme_data.sys_operation_id = ? " .
+        $query = "select yongo_screen_scheme_data.id, yongo_screen_scheme_data.sys_operation_id, yongo_screen_scheme_data.screen_id, yongo_screen.name as screen_name, yongo_operation.name as operation_name " .
+            "from yongo_screen_scheme_data " .
+            "left join yongo_screen on yongo_screen.id = yongo_screen_scheme_data.screen_id " .
+            "left join yongo_operation on yongo_operation.id = yongo_screen_scheme_data.sys_operation_id " .
+            "where yongo_screen_scheme_data.screen_scheme_id = ? and " .
+                "yongo_screen_scheme_data.sys_operation_id = ? " .
             "limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -116,11 +116,11 @@ class ScreenScheme
     }
 
     public function getDataByScreenDataId($Id) {
-        $query = "select screen_scheme_data.id, screen_scheme_data.screen_scheme_id, screen_scheme_data.sys_operation_id, screen_scheme_data.screen_id, screen.name as screen_name, sys_operation.name as operation_name " .
-            "from screen_scheme_data " .
-            "left join screen on screen.id = screen_scheme_data.screen_id " .
-            "left join sys_operation on sys_operation.id = screen_scheme_data.sys_operation_id " .
-            "where screen_scheme_data.id = ? ";
+        $query = "select yongo_screen_scheme_data.id, yongo_screen_scheme_data.screen_scheme_id, yongo_screen_scheme_data.sys_operation_id, yongo_screen_scheme_data.screen_id, yongo_screen.name as screen_name, yongo_operation.name as operation_name " .
+            "from yongo_screen_scheme_data " .
+            "left join yongo_screen on yongo_screen.id = yongo_screen_scheme_data.screen_id " .
+            "left join yongo_operation on yongo_operation.id = yongo_screen_scheme_data.sys_operation_id " .
+            "where yongo_screen_scheme_data.id = ? ";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -134,7 +134,7 @@ class ScreenScheme
 
     public function getMetaDataById($Id) {
         $query = "select * " .
-            "from screen_scheme " .
+            "from yongo_screen_scheme " .
             "where id = ? " .
             "limit 1";
 
@@ -149,7 +149,7 @@ class ScreenScheme
     }
 
     public function getMetaDataByClientId($clientId) {
-        $query = "select * from screen_scheme where client_id = ?";
+        $query = "select * from yongo_screen_scheme where client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
@@ -162,7 +162,7 @@ class ScreenScheme
     }
 
     public function getMetaDataByNameAndClientId($clientId, $name) {
-        $query = "select * from screen_scheme where client_id = ? and LOWER(name) = ?";
+        $query = "select * from yongo_screen_scheme where client_id = ? and LOWER(name) = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $clientId, $name);
@@ -175,12 +175,12 @@ class ScreenScheme
     }
 
     public function getByIssueType($issueTypeId, $clientId) {
-        $query = "select screen_scheme.id, screen_scheme.name " .
-                 "from screen_scheme " .
-                 "left join issue_type_screen_scheme_data on issue_type_screen_scheme_data.screen_scheme_id = screen_scheme.id " .
-                 "where screen_scheme.client_id = ? " .
-                 "and issue_type_screen_scheme_data.issue_type_id = ? " .
-                 "group by screen_scheme.id";
+        $query = "select yongo_screen_scheme.id, yongo_screen_scheme.name " .
+                 "from yongo_screen_scheme " .
+                 "left join yongo_issue_type_screen_scheme_data on yongo_issue_type_screen_scheme_data.screen_scheme_id = yongo_screen_scheme.id " .
+                 "where yongo_screen_scheme.client_id = ? " .
+                 "and yongo_issue_type_screen_scheme_data.issue_type_id = ? " .
+                 "group by yongo_screen_scheme.id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $clientId, $issueTypeId);
@@ -193,12 +193,12 @@ class ScreenScheme
     }
 
     public function getByScreenId($clientId, $screenId) {
-        $query = "select screen_scheme.id, screen_scheme.name " .
-            "from screen_scheme_data " .
-            "left join screen_scheme on screen_scheme.id = screen_scheme_data.screen_scheme_id " .
-            "where screen_scheme.client_id = ? " .
-            "and screen_scheme_data.screen_id = ? " .
-            "group by screen_scheme.id";
+        $query = "select yongo_screen_scheme.id, yongo_screen_scheme.name " .
+            "from yongo_screen_scheme_data " .
+            "left join yongo_screen_scheme on yongo_screen_scheme.id = yongo_screen_scheme_data.screen_scheme_id " .
+            "where yongo_screen_scheme.client_id = ? " .
+            "and yongo_screen_scheme_data.screen_id = ? " .
+            "group by yongo_screen_scheme.id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $clientId, $screenId);
@@ -211,7 +211,7 @@ class ScreenScheme
     }
 
     public function deleteById($screenSchemeId) {
-        $query = "delete from screen_scheme where id = ? limit 1";
+        $query = "delete from yongo_screen_scheme where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $screenSchemeId);

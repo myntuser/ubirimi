@@ -118,7 +118,7 @@ class IssueType
         $stmt->bind_param("i", $Id);
         $stmt->execute();
 
-        $query = 'delete from field_issue_type_data where issue_type_id = ?';
+        $query = 'delete from yongo_field_issue_type_data where issue_type_id = ?';
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
         $stmt->execute();
@@ -128,7 +128,7 @@ class IssueType
         $stmt->bind_param("i", $Id);
         $stmt->execute();
 
-        $query = 'delete from issue_type_screen_scheme_data where issue_type_id = ?';
+        $query = 'delete from yongo_issue_type_screen_scheme_data where issue_type_id = ?';
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
         $stmt->execute();

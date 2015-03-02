@@ -679,7 +679,7 @@ class UbirimiClient
     }
 
     public function createDefaultScreenScheme($clientId, $currentDate) {
-        $query = "INSERT INTO screen_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_screen_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $name = 'Default Screen Scheme';
@@ -747,7 +747,7 @@ class UbirimiClient
         $defaultScreenData = UbirimiContainer::get()['repository']->get(Screen::class)->getByName($clientId, 'Default Screen');
         $defaultScreenId = $defaultScreenData['id'];
 
-        $query = "INSERT INTO screen_scheme_data(screen_scheme_id, sys_operation_id, screen_id, date_created) VALUES " .
+        $query = "INSERT INTO yongo_screen_scheme_data(screen_scheme_id, sys_operation_id, screen_id, date_created) VALUES " .
             "(" . $screenSchemeId . "," . SystemOperation::OPERATION_CREATE . ", " . $defaultScreenId . ", '" . $currentDate . "'), " .
             "(" . $screenSchemeId . "," . SystemOperation::OPERATION_EDIT . ", " . $defaultScreenId . ", '" . $currentDate . "'), " .
             "(" . $screenSchemeId . "," . SystemOperation::OPERATION_VIEW . ", " . $defaultScreenId . ", '" . $currentDate . "')";
@@ -756,7 +756,7 @@ class UbirimiClient
 
     public function createDefaultIssueTypeScreenSchemeData($clientId, $issueTypeScreenSchemeId, $screenSchemeId, $currentDate) {
         $issueTypes = UbirimiContainer::get()['repository']->get(IssueType::class)->getAll($clientId);
-        $query = "INSERT INTO issue_type_screen_scheme_data(issue_type_screen_scheme_id, issue_type_id, screen_scheme_id, date_created) VALUES ";
+        $query = "INSERT INTO yongo_issue_type_screen_scheme_data(issue_type_screen_scheme_id, issue_type_id, screen_scheme_id, date_created) VALUES ";
         while ($issueType = $issueTypes->fetch_array(MYSQLI_ASSOC)) {
             $query .= "(" . $issueTypeScreenSchemeId . "," . $issueType['id'] . ", " . $screenSchemeId . ", '" . $currentDate . "'), ";
         }

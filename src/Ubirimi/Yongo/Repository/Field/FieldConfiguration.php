@@ -124,7 +124,7 @@ class FieldConfiguration {
 
     public function getDataByConfigurationAndField($fieldConfigurationId, $fieldId) {
         $query = "select * " .
-            "from field_configuration_data " .
+            "from yongo_field_configuration_data " .
             "where field_configuration_id = ? and field_id = ? " .
             "limit 1";
 
@@ -140,7 +140,7 @@ class FieldConfiguration {
 
     public function getDataByConfigurationId($fieldConfigurationId) {
         $query = "select * " .
-            "from field_configuration_data " .
+            "from yongo_field_configuration_data " .
             "where field_configuration_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -155,7 +155,7 @@ class FieldConfiguration {
     }
 
     public function updateFieldDescription($fieldConfigurationId, $fieldId, $description) {
-        $query = "update field_configuration_data set field_description = ? " .
+        $query = "update yongo_field_configuration_data set field_description = ? " .
             "where field_configuration_id = ? and field_id = ? " .
             "limit 1 ";
 
@@ -167,7 +167,7 @@ class FieldConfiguration {
     public function updateData($fieldConfigurationId, $fieldId, $visibleFlag, $requiredFlag) {
         if (isset($visibleFlag)) {
             if ($visibleFlag == 1) {
-                $query = "update field_configuration_data set visible_flag = 1 " .
+                $query = "update yongo_field_configuration_data set visible_flag = 1 " .
                     "where field_configuration_id = ? and field_id = ? " .
                     "limit 1 ";
 
@@ -175,7 +175,7 @@ class FieldConfiguration {
                 $stmt->bind_param("ii", $fieldConfigurationId, $fieldId);
                 $stmt->execute();
             } else {
-                $query = "update field_configuration_data set visible_flag = 0, required_flag = 0 " .
+                $query = "update yongo_field_configuration_data set visible_flag = 0, required_flag = 0 " .
                     "where field_configuration_id = ? and field_id = ? " .
                     "limit 1 ";
 
@@ -186,7 +186,7 @@ class FieldConfiguration {
         }
 
         if (isset($requiredFlag)) {
-            $query = "update field_configuration_data set required_flag = ? " .
+            $query = "update yongo_field_configuration_data set required_flag = ? " .
                 "where field_configuration_id = ? and field_id = ? " .
                 "limit 1 ";
 
@@ -197,7 +197,7 @@ class FieldConfiguration {
     }
 
     public function addSimpleData($fieldConfigurationId, $fieldId) {
-        $query = "INSERT INTO field_configuration_data(field_configuration_id, field_id) VALUES (?, ?)";
+        $query = "INSERT INTO yongo_field_configuration_data(field_configuration_id, field_id) VALUES (?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $fieldConfigurationId, $fieldId);
@@ -207,7 +207,7 @@ class FieldConfiguration {
     }
 
     public function addCompleteData($fieldConfigurationId, $fieldId, $visibleFlag, $requiredFlag, $fieldDescription) {
-        $query = "INSERT INTO field_configuration_data(field_configuration_id, field_id, visible_flag, required_flag, field_description) VALUES (?, ?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_field_configuration_data(field_configuration_id, field_id, visible_flag, required_flag, field_description) VALUES (?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iiiis", $fieldConfigurationId, $fieldId, $visibleFlag, $requiredFlag, $fieldDescription);
@@ -217,7 +217,7 @@ class FieldConfiguration {
     }
 
     public function deleteDataByFieldConfigurationId($fieldConfigurationId) {
-        $query = "delete from field_configuration_data where field_configuration_id = ?";
+        $query = "delete from yongo_field_configuration_data where field_configuration_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $fieldConfigurationId);

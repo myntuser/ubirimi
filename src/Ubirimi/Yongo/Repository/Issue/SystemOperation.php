@@ -29,7 +29,7 @@ class SystemOperation
 
     public function getAll() {
         $query = "SELECT * " .
-            "FROM sys_operation";
+            "FROM yongo_operation";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();

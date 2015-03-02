@@ -139,8 +139,8 @@ class Field {
 
     public function getIssueTypesFor($fieldId) {
         $query = "SELECT yongo_issue_type.name, yongo_issue_type.id " .
-            "FROM field_issue_type_data " .
-            "left join yongo_issue_type on yongo_issue_type.id = field_issue_type_data.issue_type_id " .
+            "FROM yongo_field_issue_type_data " .
+            "left join yongo_issue_type on yongo_issue_type.id = yongo_field_issue_type_data.issue_type_id " .
             "where field_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -155,8 +155,8 @@ class Field {
 
     public function getProjectsFor($fieldId) {
         $query = "SELECT yongo_project.name, yongo_project.id  " .
-            "FROM field_project_data " .
-            "left join yongo_project on yongo_project.id = field_project_data.project_id " .
+            "FROM yongo_field_project_data " .
+            "left join yongo_project on yongo_project.id = yongo_field_project_data.project_id " .
             "where field_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -191,12 +191,12 @@ class Field {
             while ($field = $fields->fetch_array(MYSQLI_ASSOC)) {
                 $fieldId = $field['id'];
 
-                $query = "delete from field_issue_type_data where field_id = ?";
+                $query = "delete from yongo_field_issue_type_data where field_id = ?";
                 $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
                 $stmt->bind_param("i", $fieldId);
                 $stmt->execute();
 
-                $query = "delete from field_project_data where field_id = ?";
+                $query = "delete from yongo_field_project_data where field_id = ?";
                 $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
                 $stmt->bind_param("i", $fieldId);
                 $stmt->execute();

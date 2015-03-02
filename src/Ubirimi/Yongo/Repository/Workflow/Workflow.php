@@ -211,13 +211,13 @@ class Workflow
 
     public function getDataById($Id) {
         $query = "select yongo_workflow_data.id, is1.name as isn1, is1.id as isi1, is2.name as isn2, is2.id as isi2, transition_name, transition_description, yongo_workflow_data.workflow_id, " .
-                 "screen.name as screen_name, screen.id as screen_id, ws2.name as destination_step_name, ws2.id as destination_step_id " .
+                 "yongo_screen.name as screen_name, yongo_screen.id as screen_id, ws2.name as destination_step_name, ws2.id as destination_step_id " .
             "from yongo_workflow_data " .
             "left join yongo_workflow_step ws1 on ws1.id = yongo_workflow_data.workflow_step_id_from " .
             "left join yongo_workflow_step ws2 on ws2.id = yongo_workflow_data.workflow_step_id_to " .
             "left join yongo_issue_status is1 on ws1.linked_issue_status_id = is1.id " .
             "left join yongo_issue_status is2 on ws2.linked_issue_status_id = is2.id " .
-            "left join screen on screen.id = yongo_workflow_data.screen_id " .
+            "left join yongo_screen on yongo_screen.id = yongo_workflow_data.screen_id " .
             "where yongo_workflow_data.id = " . $Id . ' ' .
             "limit 1";
 

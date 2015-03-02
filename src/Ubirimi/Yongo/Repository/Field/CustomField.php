@@ -97,7 +97,7 @@ class CustomField {
         }
 
         for ($i = 0; $i < count($issueType); $i++) {
-            $queryIssueType = "INSERT INTO field_issue_type_data(field_id, issue_type_id) VALUES (?, ?)";
+            $queryIssueType = "INSERT INTO yongo_field_issue_type_data(field_id, issue_type_id) VALUES (?, ?)";
             if ($stmtIssueType = UbirimiContainer::get()['db.connection']->prepare($queryIssueType)) {
 
                 $stmtIssueType->bind_param("ii", $fieldId, $issueType[$i]);
@@ -113,7 +113,7 @@ class CustomField {
             }
         }
         for ($i = 0; $i < count($project); $i++) {
-            $queryProject = "INSERT INTO field_project_data(field_id, project_id) VALUES (?, ?)";
+            $queryProject = "INSERT INTO yongo_field_project_data(field_id, project_id) VALUES (?, ?)";
             if ($stmtProject = UbirimiContainer::get()['db.connection']->prepare($queryProject)) {
 
                 $stmtProject->bind_param("ii", $fieldId, $project[$i]);
@@ -133,7 +133,7 @@ class CustomField {
     }
 
     public function deleteDataByProjectId($projectId) {
-        $query = "delete from field_project_data where project_id = ?";
+        $query = "delete from yongo_field_project_data where project_id = ?";
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $projectId);
         $stmt->execute();
@@ -146,17 +146,17 @@ class CustomField {
         $stmt->bind_param("i", $customFieldId);
         $stmt->execute();
 
-        $query = "delete from field_configuration_data where field_id = ?";
+        $query = "delete from yongo_field_configuration_data where field_id = ?";
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $customFieldId);
         $stmt->execute();
 
-        $query = "delete from field_issue_type_data where field_id = ?";
+        $query = "delete from yongo_field_issue_type_data where field_id = ?";
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $customFieldId);
         $stmt->execute();
 
-        $query = "delete from field_project_data where field_id = ?";
+        $query = "delete from yongo_field_project_data where field_id = ?";
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $customFieldId);
         $stmt->execute();
@@ -166,7 +166,7 @@ class CustomField {
         $stmt->bind_param("i", $customFieldId);
         $stmt->execute();
 
-        $query = "delete from screen_data where field_id = ?";
+        $query = "delete from yongo_screen_data where field_id = ?";
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $customFieldId);
         $stmt->execute();

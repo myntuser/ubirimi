@@ -1380,11 +1380,11 @@ class YongoProject
     }
 
     public function getFieldInformation($issueTypeFieldConfigurationId, $issueTypeId, $resultType = null) {
-        $query = "SELECT field_configuration_data.field_id, field_configuration_data.visible_flag, field_configuration_data.required_flag, field_configuration_data.field_description, " .
+        $query = "SELECT yongo_field_configuration_data.field_id, yongo_field_configuration_data.visible_flag, yongo_field_configuration_data.required_flag, yongo_field_configuration_data.field_description, " .
                  "field.code as field_code " .
             "FROM issue_type_field_configuration_data " .
-            "LEFT JOIN field_configuration_data on field_configuration_data.field_configuration_id = issue_type_field_configuration_data.field_configuration_id " .
-            "left join field on field.id = field_configuration_data.field_id " .
+            "LEFT JOIN yongo_field_configuration_data on yongo_field_configuration_data.field_configuration_id = issue_type_field_configuration_data.field_configuration_id " .
+            "left join field on field.id = yongo_field_configuration_data.field_id " .
             "WHERE issue_type_field_configuration_data.issue_type_field_configuration_id = ? and " .
             "issue_type_field_configuration_data.issue_type_id = ?";
 

@@ -46,8 +46,8 @@ class Screen
 
     public function getAll($clientId) {
         $query = "SELECT * " .
-            "FROM screen " .
-            "where screen.client_id = ?";
+            "from yongo_screen " .
+            "where yongo_screen.client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
@@ -60,7 +60,7 @@ class Screen
     }
 
     public function getByClientId($clientId) {
-        $query = "SELECT * FROM screen where client_id = ?";
+        $query = "SELECT * from yongo_screen where client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
@@ -79,7 +79,7 @@ class Screen
             // todo: cred ca aici position ar trebui incrementat
         }
 
-        $query = "INSERT INTO screen_data(screen_id, field_id, `position`, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_screen_data(screen_id, field_id, `position`, date_created) VALUES (?, ?, ?, ?)";
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
         $stmt->bind_param("iiis", $screenId, $fieldId, $position, $currentDate);
@@ -87,9 +87,9 @@ class Screen
     }
 
     public function getAllBySchemeId($screenSchemeId) {
-        $query = "select screen.id, screen.name, screen.description " .
-            "from screen_scheme_data " .
-            "left join screen on screen.id = screen_scheme_data.screen_id " .
+        $query = "select yongo_screen.id, yongo_screen.name, yongo_screen.description " .
+            "from yongo_screen_scheme_data " .
+            "left join yongo_screen on yongo_screen.id = yongo_screen_scheme_data.screen_id " .
             "where screen_scheme_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -103,12 +103,12 @@ class Screen
     }
 
     public function getDataById($Id) {
-        $query = "select screen_data.id, field.name as field_name, field.code as field_code, field.id as field_id, screen_data.position, field.system_flag, " .
+        $query = "select yongo_screen_data.id, field.name as field_name, field.code as field_code, field.id as field_id, yongo_screen_data.position, field.system_flag, " .
                  "field.all_issue_type_flag, field.all_project_flag, sys_field_type.code as type_code, field.description " .
-            "from screen_data " .
-            "left join field on field.id = screen_data.field_id " .
+            "from yongo_screen_data " .
+            "left join field on field.id = yongo_screen_data.field_id " .
             "left join sys_field_type on sys_field_type.id = field.sys_field_type_id " .
-            "where screen_data.screen_id = " . $Id . " " .
+            "where yongo_screen_data.screen_id = " . $Id . " " .
             "order by `position`";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -122,8 +122,8 @@ class Screen
 
     public function getMetaDataById($Id) {
         $query = "select * " .
-            "from screen " .
-            "where screen.id = ? " .
+            "from yongo_screen " .
+            "where yongo_screen.id = ? " .
             "limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -138,8 +138,8 @@ class Screen
 
     public function getByNameAndId($clientId, $name, $screenId = null) {
         $query = "select id " .
-            "from screen " .
-            "where screen.client_id = ? and name = ? ";
+            "from yongo_screen " .
+            "where yongo_screen.client_id = ? and name = ? ";
         if ($screenId)
             $query .= ' and id != ' . $screenId . ' ';
 
@@ -166,10 +166,10 @@ class Screen
     }
 
     public function getByFieldId($clientId, $fieldId) {
-        $query = "select screen.id, screen.name " .
-            "from screen " .
-            "left join screen_data on screen_data.screen_id = screen.id " .
-            "where screen.client_id = ? and screen_data.field_id = ?";
+        $query = "select yongo_screen.id, yongo_screen.name " .
+            "from yongo_screen " .
+            "left join yongo_screen_data on yongo_screen_data.screen_id = yongo_screen.id " .
+            "where yongo_screen.client_id = ? and yongo_screen_data.field_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $clientId, $fieldId);
@@ -182,7 +182,7 @@ class Screen
     }
 
     public function deleteDataByScreenIdAndFieldId($screenId, $fieldId) {
-        $query = "delete from screen_data where screen_id = ? and field_id = ? LIMIT 1";
+        $query = "delete from yongo_screen_data where screen_id = ? and field_id = ? LIMIT 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $screenId, $fieldId);
@@ -190,7 +190,7 @@ class Screen
     }
 
     public function deleteDataByFieldId($fieldId) {
-        $query = "delete from screen_data where field_id = ?";
+        $query = "delete from yongo_screen_data where field_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $fieldId);
@@ -198,10 +198,10 @@ class Screen
     }
 
     public function checkFieldInScreen($clientId, $screenId, $fieldId) {
-        $query = "select screen.id " .
-            "from screen " .
-            "left join screen_data on screen_data.screen_id = screen.id " .
-            "where screen.client_id = ? and screen.id = ? and screen_data.field_id = ?";
+        $query = "select yongo_screen.id " .
+            "from yongo_screen " .
+            "left join yongo_screen_data on yongo_screen_data.screen_id = yongo_screen.id " .
+            "where yongo_screen.client_id = ? and yongo_screen.id = ? and yongo_screen_data.field_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iii", $clientId, $screenId, $fieldId);
@@ -214,9 +214,9 @@ class Screen
     }
 
     public function getByName($clientId, $screenName) {
-        $query = "select screen.* " .
-            "from screen " .
-            "where screen.client_id = ? and screen.name = ? " .
+        $query = "select yongo_screen.* " .
+            "from yongo_screen " .
+            "where yongo_screen.client_id = ? and yongo_screen.name = ? " .
             "limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -230,7 +230,7 @@ class Screen
     }
 
     public function deleteDataById($screenDataId) {
-        $query = "delete from screen_data where id = ? limit 1";
+        $query = "delete from yongo_screen_data where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $screenDataId);
@@ -238,13 +238,13 @@ class Screen
     }
 
     public function deleteById($screenId) {
-        $query = "delete from screen_data where screen_id = ?";
+        $query = "delete from yongo_screen_data where screen_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $screenId);
         $stmt->execute();
 
-        $query = "delete from screen where id = ? limit 1";
+        $query = "delete from yongo_screen where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $screenId);
@@ -256,7 +256,7 @@ class Screen
 
         $field2 = UbirimiContainer::get()['repository']->get(Screen::class)->getFieldByOrder($screenId, $position);
 
-        $query = "update screen_data set `position` = ? " .
+        $query = "update yongo_screen_data set `position` = ? " .
             "where screen_id = ? and field_id = ? " .
             "limit 1 ";
 
@@ -264,7 +264,7 @@ class Screen
         $stmt->bind_param("iii", $position, $screenId, $fieldId);
         $stmt->execute();
 
-        $query = "update screen_data set `position` = ? " .
+        $query = "update yongo_screen_data set `position` = ? " .
             "where screen_id = ? and field_id = ? " .
             "limit 1 ";
 
@@ -275,8 +275,8 @@ class Screen
 
     public function getLastOrderNumber($screenId) {
         $query = "select `position` " .
-            "from screen_data " .
-            "where screen_data.screen_id = ? " .
+            "from yongo_screen_data " .
+            "where yongo_screen_data.screen_id = ? " .
             "order by `position` desc " .
             "limit 1";
 
@@ -292,9 +292,9 @@ class Screen
     }
 
     public function getFieldById($screenId, $fieldId) {
-        $query = "select screen_data.* " .
-            "from screen_data " .
-            "where screen_data.screen_id = ? and field_id = ? " .
+        $query = "select yongo_screen_data.* " .
+            "from yongo_screen_data " .
+            "where yongo_screen_data.screen_id = ? and field_id = ? " .
             "limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -308,9 +308,9 @@ class Screen
     }
 
     public function getFieldByOrder($screenId, $position) {
-        $query = "select screen_data.* " .
-            "from screen_data " .
-            "where screen_data.screen_id = ? and `position` = ? " .
+        $query = "select yongo_screen_data.* " .
+            "from yongo_screen_data " .
+            "where yongo_screen_data.screen_id = ? and `position` = ? " .
             "limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
