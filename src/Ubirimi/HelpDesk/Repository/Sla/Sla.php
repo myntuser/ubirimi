@@ -213,6 +213,7 @@ class Sla
             }
         }
 
+        $value = str_ireplace('=', ' = ', $value);
         $value = str_ireplace('priority', 'priority_id', $value);
         $value = str_ireplace('type', 'type_id', $value);
         $value = str_ireplace('status', 'status_id', $value);
@@ -226,19 +227,19 @@ class Sla
         $types = UbirimiContainer::get()['repository']->get(IssueType::class)->getAll($clientId);
 
         while ($statuses && $status = $statuses->fetch_array(MYSQLI_ASSOC)) {
-            $value = str_ireplace($status['name'], $status['id'], $value);
+            $value = str_ireplace(' ' . $status['name'], $status['id'], $value);
         }
 
         while ($priorities && $priority = $priorities->fetch_array(MYSQLI_ASSOC)) {
-            $value = str_ireplace($priority['name'], $priority['id'], $value);
+            $value = str_ireplace(' ' . $priority['name'], $priority['id'], $value);
         }
 
         while ($resolutions && $resolution = $resolutions->fetch_array(MYSQLI_ASSOC)) {
-            $value = str_ireplace($resolution['name'], $resolution['id'], $value);
+            $value = str_ireplace(' ' . $resolution['name'], $resolution['id'], $value);
         }
 
         while ($types && $type = $types->fetch_array(MYSQLI_ASSOC)) {
-            $value = str_ireplace($type['name'], $type['id'], $value);
+            $value = str_ireplace(' ' . $type['name'], $type['id'], $value);
         }
 
         $query = 'select yongo_issue.id ' .
@@ -351,7 +352,6 @@ class Sla
                 $goalCalendarId = $goal['help_sla_calendar_id'];
             } else {
                 $definitionSQL = UbirimiContainer::get()['repository']->get(Sla::class)->transformGoalDefinitionIntoSQL($goal, $issueId, $projectId, $clientId);
-
                 $issueFound = false;
                 if ($stmtGoal = UbirimiContainer::get()['db.connection']->prepare($definitionSQL)) {
                     $stmtGoal->execute();
