@@ -80,7 +80,7 @@ class IssueTypeScreenScheme
 
     public function getDataById($Id) {
         $query = "select yongo_issue_type_screen_scheme_data.id, yongo_issue_type_screen_scheme_data.screen_scheme_id, yongo_issue_type_screen_scheme_data.issue_type_id, " .
-                    "issue_type.name as issue_type_name, yongo_screen_scheme.name as screen_scheme_name, yongo_issue_type_screen_scheme_data.issue_type_screen_scheme_id " .
+                    "yongo_issue_type.name as issue_type_name, yongo_screen_scheme.name as screen_scheme_name, yongo_issue_type_screen_scheme_data.issue_type_screen_scheme_id " .
                  "from yongo_issue_type_screen_scheme_data " .
                  "left join yongo_issue_type on yongo_issue_type.id = yongo_issue_type_screen_scheme_data.issue_type_id " .
                  "left join yongo_screen_scheme on yongo_screen_scheme.id = yongo_issue_type_screen_scheme_data.screen_scheme_id " .

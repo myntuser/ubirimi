@@ -34,6 +34,8 @@ class AddController extends UbirimiController
     {
         Util::checkUserIsLoggedInAndRedirect();
 
+        $menuSelectedCategory = 'issue';
+
         $type = $request->get('type');
         if ($type == 'project') {
             $buttonLabel = 'Create Issue Type Scheme';

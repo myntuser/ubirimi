@@ -34,6 +34,8 @@ class AddController extends UbirimiController
     {
         Util::checkUserIsLoggedInAndRedirect();
 
+        $menuSelectedCategory = 'issue';
+
         $emptyName = false;
 
         $allIssueTypes = $this->getRepository(IssueType::class)->getAll($session->get('client/id'));

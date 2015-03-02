@@ -35,6 +35,8 @@ class AddController extends UbirimiController
     {
         Util::checkUserIsLoggedInAndRedirect();
 
+        $menuSelectedCategory = 'issue';
+
         $emptyName = false;
 
         $allScreens = $this->getRepository(Screen::class)->getAll($session->get('client/id'));

@@ -32,7 +32,7 @@ class GlobalPermission
     const GLOBAL_PERMISSION_DOCUMENTADOR_CREATE_SPACE = 7;
 
     public function getAllByProductId($productId) {
-        $query = "SELECT * FROM sys_permission_global where sys_product_id = ? order by name";
+        $query = "SELECT * FROM yongo_permission_global where sys_product_id = ? order by name";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $productId);
@@ -45,7 +45,7 @@ class GlobalPermission
     }
 
     public function getById($permissionId) {
-        $query = "SELECT * FROM sys_permission_global where id = ? limit 1";
+        $query = "SELECT * FROM yongo_permission_global where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $permissionId);
@@ -168,9 +168,9 @@ class GlobalPermission
 
     public function getDataById($Id) {
         $query = 'select `general_group`.name, `general_group`.id, yongo_permission_global_data.id as sys_permission_global_data_id, ' .
-            'sys_permission_global.name as permission_name ' .
+            'yongo_permission_global.name as permission_name ' .
             'from yongo_permission_global_data ' .
-            'left join sys_permission_global on sys_permission_global.id = yongo_permission_global_data.sys_permission_global_id ' .
+            'left join yongo_permission_global on yongo_permission_global.id = yongo_permission_global_data.sys_permission_global_id ' .
             'left join `general_group` on general_group.id = yongo_permission_global_data.group_id ' .
             'where yongo_permission_global_data.id = ? ' .
             'limit 1';

@@ -124,7 +124,7 @@ class FieldConfigurationScheme {
 
     public function getDataByFieldConfigurationSchemeId($Id) {
         $query = "select yongo_issue_type_field_configuration_data.id, yongo_issue_type_field_configuration_data.issue_type_id, " .
-            "field_configuration.name as field_configuration_name, yongo_issue_type.name as issue_type_name, yongo_issue_type_field_configuration_data.field_configuration_id " .
+            "yongo_field_configuration.name as field_configuration_name, yongo_issue_type.name as issue_type_name, yongo_issue_type_field_configuration_data.field_configuration_id " .
             "from yongo_issue_type_field_configuration_data " .
             "left join yongo_issue_type on yongo_issue_type.id = yongo_issue_type_field_configuration_data.issue_type_id " .
             "left join yongo_field_configuration on yongo_field_configuration.id = yongo_issue_type_field_configuration_data.field_configuration_id " .
@@ -144,7 +144,7 @@ class FieldConfigurationScheme {
     public function getDataById($Id) {
         $query = "select yongo_issue_type_field_configuration_data.id, yongo_issue_type_field_configuration_data.field_configuration_id, " .
                     "yongo_issue_type_field_configuration_data.issue_type_id, " .
-                    "issue_type.name as issue_type_name, yongo_field_configuration.name as field_configuration_name, yongo_issue_type_field_configuration_data.issue_type_field_configuration_id " .
+                    "yongo_issue_type.name as issue_type_name, yongo_field_configuration.name as field_configuration_name, yongo_issue_type_field_configuration_data.issue_type_field_configuration_id " .
                  "from yongo_issue_type_field_configuration_data " .
                  "left join yongo_issue_type on yongo_issue_type.id = yongo_issue_type_field_configuration_data.issue_type_id " .
                  "left join yongo_field_configuration on yongo_field_configuration.id = yongo_issue_type_field_configuration_data.field_configuration_id " .

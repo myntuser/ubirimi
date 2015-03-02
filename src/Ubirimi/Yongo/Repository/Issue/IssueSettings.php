@@ -55,7 +55,7 @@ class IssueSettings
 
     public function getByName($clientId, $setting_type, $name, $settingId = null) {
         $query = 'select id, name, description ' .
-            'from issue_' . $setting_type . ' ' .
+            'from yongo_issue_' . $setting_type . ' ' .
             'where client_id = ? ' .
             'and LOWER(name) = ? ';
 
@@ -79,6 +79,9 @@ class IssueSettings
     }
 
     public function create($type, $clientId, $name, $description, $iconName = null, $color = null, $date) {
+
+        $type = 'yongo_' . $type;
+
         if ($iconName) {
             if ($color) {
                 $query = "INSERT INTO " . $type . "(client_id, name, description, icon_name, color, date_created) VALUES (?, ?, ?, ?, ?, ?)";
@@ -111,7 +114,7 @@ class IssueSettings
     }
 
     public function updateById($Id, $type, $name, $description, $color = null, $date) {
-        $query = 'UPDATE issue_' . $type . ' SET ' .
+        $query = 'UPDATE yongo_issue_' . $type . ' SET ' .
                  'name = ?, description = ?, date_updated = ? ';
         if ($color)
             $query .= ", color = '" . $color . "' ";
@@ -125,7 +128,7 @@ class IssueSettings
 
     public function getById($Id, $settingType, $returnField = null) {
         $query = 'select * ' .
-                 'from issue_' . $settingType . ' ' .
+                 'from yongo_issue_' . $settingType . ' ' .
                  'where id = ? ' .
                  'limit 1';
 
@@ -158,7 +161,7 @@ class IssueSettings
     }
 
     public function deletePriorityById($Id) {
-        $query = 'delete from issue_priority where id = ? limit 1';
+        $query = 'delete from yongo_issue_priority where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
