@@ -124,9 +124,9 @@ class FieldConfigurationScheme {
 
     public function getDataByFieldConfigurationSchemeId($Id) {
         $query = "select issue_type_field_configuration_data.id, issue_type_field_configuration_data.issue_type_id, " .
-            "field_configuration.name as field_configuration_name, issue_type.name as issue_type_name, issue_type_field_configuration_data.field_configuration_id " .
+            "field_configuration.name as field_configuration_name, yongo_issue_type.name as issue_type_name, issue_type_field_configuration_data.field_configuration_id " .
             "from issue_type_field_configuration_data " .
-            "left join issue_type on issue_type.id = issue_type_field_configuration_data.issue_type_id " .
+            "left join yongo_issue_type on yongo_issue_type.id = issue_type_field_configuration_data.issue_type_id " .
             "left join field_configuration on field_configuration.id = issue_type_field_configuration_data.field_configuration_id " .
             "where issue_type_field_configuration_data.issue_type_field_configuration_id = ? ";
 
@@ -146,7 +146,7 @@ class FieldConfigurationScheme {
                     "issue_type_field_configuration_data.issue_type_id, " .
                     "issue_type.name as issue_type_name, field_configuration.name as field_configuration_name, issue_type_field_configuration_data.issue_type_field_configuration_id " .
                  "from issue_type_field_configuration_data " .
-                 "left join issue_type on issue_type.id = issue_type_field_configuration_data.issue_type_id " .
+                 "left join yongo_issue_type on yongo_issue_type.id = issue_type_field_configuration_data.issue_type_id " .
                  "left join field_configuration on field_configuration.id = issue_type_field_configuration_data.field_configuration_id " .
                  "where issue_type_field_configuration_data.id = ? ";
 
@@ -199,9 +199,9 @@ class FieldConfigurationScheme {
     }
 
     public function getIssueTypesForFieldConfiguration($issueTypeFieldConfigurationId, $fieldConfigurationId) {
-        $query = "select issue_type.id, issue_type.name " .
+        $query = "select yongo_issue_type.id, yongo_issue_type.name " .
             "from issue_type_field_configuration_data " .
-            "left join issue_type on issue_type.id = issue_type_field_configuration_data.issue_type_id " .
+            "left join yongo_issue_type on yongo_issue_type.id = issue_type_field_configuration_data.issue_type_id " .
             "where issue_type_field_configuration_data.issue_type_field_configuration_id = ? and field_configuration_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

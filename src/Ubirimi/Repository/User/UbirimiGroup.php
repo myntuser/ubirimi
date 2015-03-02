@@ -221,12 +221,12 @@ class UbirimiGroup
         $stmt->bind_param("i", $groupId);
         $stmt->execute();
 
-        $query = 'delete from notification_scheme_data where group_id = ?';
+        $query = 'delete from yongo_notification_scheme_data where group_id = ?';
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $groupId);
         $stmt->execute();
 
-        $query = 'delete from permission_scheme_data where group_id = ?';
+        $query = 'delete from yongo_permission_scheme_data where group_id = ?';
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $groupId);
         $stmt->execute();

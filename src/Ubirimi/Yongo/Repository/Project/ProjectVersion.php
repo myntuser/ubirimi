@@ -26,7 +26,7 @@ class ProjectVersion
     public function getByIds($Ids)
     {
         $query = 'SELECT project_version.* ' .
-            'FROM project_version ' .
+            'from yongo_project_version ' .
             'WHERE id IN (' . implode(', ', $Ids) . ') ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -57,7 +57,7 @@ class ProjectVersion
         $stmt->bind_param("i", $versionId);
         $stmt->execute();
 
-        $query = 'delete from project_version where id = ?';
+        $query = 'delete from yongo_project_version where id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $versionId);

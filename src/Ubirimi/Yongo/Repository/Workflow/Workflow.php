@@ -37,11 +37,11 @@ class Workflow
     }
 
     public function getAllByClientId($clientId) {
-        $query = "select workflow.id, workflow.name, workflow.description, workflow_scheme.name as scheme_name, issue_type_scheme.name as issue_type_scheme_name " .
+        $query = "select workflow.id, workflow.name, workflow.description, workflow_scheme.name as scheme_name, yongo_issue_type_scheme.name as issue_type_scheme_name " .
                  "from workflow " .
                  "left join workflow_scheme_data on workflow_scheme_data.workflow_id = workflow.id " .
                  "left join workflow_scheme on workflow_scheme.id = workflow_scheme_data.workflow_scheme_id " .
-                 "left join issue_type_scheme on issue_type_scheme.id = workflow.issue_type_scheme_id " .
+                 "left join yongo_issue_type_scheme on yongo_issue_type_scheme.id = workflow.issue_type_scheme_id " .
                  "where workflow.client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -287,9 +287,9 @@ class Workflow
     public function getByIssueType($issueTypeId, $clientId) {
         $query = "select workflow.name, workflow.id " .
             "from workflow " .
-            "left join issue_type_scheme_data on issue_type_scheme_data.issue_type_scheme_id = workflow.issue_type_scheme_id " .
-            "left join issue_type on issue_type.id = issue_type_scheme_data.issue_type_id " .
-            "where issue_type.id = ? " .
+            "left join yongo_issue_type_scheme_data on yongo_issue_type_scheme_data.issue_type_scheme_id = workflow.issue_type_scheme_id " .
+            "left join yongo_issue_type on yongo_issue_type.id = yongo_issue_type_scheme_data.issue_type_id " .
+            "where yongo_issue_type.id = ? " .
             "and workflow.client_id = ? " .
             "group by workflow.id";
 

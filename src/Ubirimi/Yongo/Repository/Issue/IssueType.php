@@ -24,9 +24,9 @@ use Ubirimi\Container\UbirimiContainer;
 class IssueType
 {
     public function getAll($clientId) {
-        $query = "SELECT issue_type.* " .
+        $query = "SELECT yongo_issue_type.* " .
                  "FROM issue_type " .
-                 "where issue_type.client_id = ?";
+                 "where yongo_issue_type.client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
@@ -39,9 +39,9 @@ class IssueType
     }
 
     public function getAllSubTasks($clientId) {
-        $query = "SELECT issue_type.* " .
+        $query = "SELECT yongo_issue_type.* " .
                  "FROM issue_type " .
-                 "where issue_type.client_id = ? and sub_task_flag = 1";
+                 "where yongo_issue_type.client_id = ? and sub_task_flag = 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
@@ -78,12 +78,12 @@ class IssueType
     }
 
     public function getSchemesForIssueTypeId($typeId, $type) {
-        $query = "select issue_type_scheme.name, issue_type_scheme.description, issue_type_scheme.id " .
+        $query = "select yongo_issue_type_scheme.name, yongo_issue_type_scheme.description, yongo_issue_type_scheme.id " .
             "from issue_type " .
-            "left join issue_type_scheme_data on issue_type_scheme_data.issue_type_id = issue_type.id " .
-            "left join issue_type_scheme on issue_type_scheme.id = issue_type_scheme_data.issue_type_scheme_id " .
-            "where issue_type.id = ? " .
-            "and issue_type_scheme.type = ?";
+            "left join yongo_issue_type_scheme_data on yongo_issue_type_scheme_data.issue_type_id = yongo_issue_type.id " .
+            "left join yongo_issue_type_scheme on yongo_issue_type_scheme.id = yongo_issue_type_scheme_data.issue_type_scheme_id " .
+            "where yongo_issue_type.id = ? " .
+            "and yongo_issue_type_scheme.type = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $typeId, $type);
@@ -96,11 +96,11 @@ class IssueType
     }
 
     public function getByProjects($projectIdsArray) {
-        $query = "select distinct issue_type.id, issue_type.name " .
-            "from project " .
-            "left join issue_type_scheme_data on issue_type_scheme_data.issue_type_scheme_id = project.issue_type_scheme_id " .
-            "left join issue_type on issue_type.id = issue_type_scheme_data.issue_type_id " .
-            "where project.id IN (" . implode(',', $projectIdsArray) . ')';
+        $query = "select distinct yongo_issue_type.id, yongo_issue_type.name " .
+            "from yongo_project " .
+            "left join yongo_issue_type_scheme_data on yongo_issue_type_scheme_data.issue_type_scheme_id = yongo_project.issue_type_scheme_id " .
+            "left join yongo_issue_type on yongo_issue_type.id = yongo_issue_type_scheme_data.issue_type_id " .
+            "where yongo_project.id  IN (" . implode(',', $projectIdsArray) . ')';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();

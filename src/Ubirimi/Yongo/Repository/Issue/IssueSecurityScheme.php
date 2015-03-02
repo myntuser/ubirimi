@@ -90,7 +90,7 @@ class IssueSecurityScheme
     public function deleteById($Id) {
         $levels = UbirimiContainer::get()['repository']->get(IssueSecurityScheme::class)->getLevelsByIssueSecuritySchemeId($Id);
         while ($levels && $level = $levels->fetch_array(MYSQLI_ASSOC)) {
-            $query = "delete from issue_security_scheme_level_data where issue_security_scheme_level_id = ?";
+            $query = "delete from yongo_issue_security_scheme_level_data where issue_security_scheme_level_id = ?";
 
             $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
             $stmt->bind_param("i", $level['id']);
@@ -148,14 +148,14 @@ class IssueSecurityScheme
     }
 
     public function getDataByLevelId($levelId) {
-        $query = "select issue_security_scheme_level_data.id, issue_security_scheme_level_data.issue_security_scheme_level_id, " .
-                 "issue_security_scheme_level_data.permission_role_id, issue_security_scheme_level_data.group_id, issue_security_scheme_level_data.user_id, " .
-                 "issue_security_scheme_level_data.current_assignee, issue_security_scheme_level_data.reporter, issue_security_scheme_level_data.project_lead, issue_security_scheme_level_data.date_created, " .
+        $query = "select yongo_issue_security_scheme_level_data.id, yongo_issue_security_scheme_level_data.issue_security_scheme_level_id, " .
+                 "yongo_issue_security_scheme_level_data.permission_role_id, yongo_issue_security_scheme_level_data.group_id, yongo_issue_security_scheme_level_data.user_id, " .
+                 "yongo_issue_security_scheme_level_data.current_assignee, yongo_issue_security_scheme_level_data.reporter, yongo_issue_security_scheme_level_data.project_lead, yongo_issue_security_scheme_level_data.date_created, " .
                  "general_user.first_name, general_user.last_name, general_user.id as user_id, general_group.id as group_id, general_group.name as group_name, permission_role.name as role_name " .
-                 "from issue_security_scheme_level_data " .
-                 "left join general_user on general_user.id = issue_security_scheme_level_data.user_id " .
-                 "left join `general_group` on  `general_group`.id = issue_security_scheme_level_data.group_id " .
-                 "left join permission_role on permission_role.id = issue_security_scheme_level_data.permission_role_id " .
+                 "from yongo_issue_security_scheme_level_data " .
+                 "left join general_user on general_user.id = yongo_issue_security_scheme_level_data.user_id " .
+                 "left join `general_group` on  `general_group`.id = yongo_issue_security_scheme_level_data.group_id " .
+                 "left join permission_role on permission_role.id = yongo_issue_security_scheme_level_data.permission_role_id " .
                  "where issue_security_scheme_level_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -172,7 +172,7 @@ class IssueSecurityScheme
         switch ($levelDataType) {
 
             case IssueSecurityScheme::SECURITY_SCHEME_DATA_TYPE_USER:
-                $query = "INSERT INTO issue_security_scheme_level_data(issue_security_scheme_level_id, user_id, date_created) VALUES (?, ?, ?)";
+                $query = "INSERT INTO yongo_issue_security_scheme_level_data(issue_security_scheme_level_id, user_id, date_created) VALUES (?, ?, ?)";
 
                 $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -184,7 +184,7 @@ class IssueSecurityScheme
                 break;
 
             case IssueSecurityScheme::SECURITY_SCHEME_DATA_TYPE_GROUP:
-                $query = "INSERT INTO issue_security_scheme_level_data(issue_security_scheme_level_id, group_id, date_created) VALUES (?, ?, ?)";
+                $query = "INSERT INTO yongo_issue_security_scheme_level_data(issue_security_scheme_level_id, group_id, date_created) VALUES (?, ?, ?)";
                 $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
                 $stmt->bind_param("iis", $levelId, $group, $currentDate);
@@ -195,7 +195,7 @@ class IssueSecurityScheme
                 break;
 
             case IssueSecurityScheme::SECURITY_SCHEME_DATA_TYPE_PROJECT_ROLE:
-                $query = "INSERT INTO issue_security_scheme_level_data(issue_security_scheme_level_id, permission_role_id, date_created) VALUES (?, ?, ?)";
+                $query = "INSERT INTO yongo_issue_security_scheme_level_data(issue_security_scheme_level_id, permission_role_id, date_created) VALUES (?, ?, ?)";
 
                 $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -209,7 +209,7 @@ class IssueSecurityScheme
             case IssueSecurityScheme::SECURITY_SCHEME_DATA_TYPE_CURRENT_ASSIGNEE:
             case IssueSecurityScheme::SECURITY_SCHEME_DATA_TYPE_REPORTER:
             case IssueSecurityScheme::SECURITY_SCHEME_DATA_TYPE_PROJECT_LEAD:
-                $query = "INSERT INTO issue_security_scheme_level_data(issue_security_scheme_level_id, `" . $levelDataType . "`, date_created) VALUES (?, ?, ?)";
+                $query = "INSERT INTO yongo_issue_security_scheme_level_data(issue_security_scheme_level_id, `" . $levelDataType . "`, date_created) VALUES (?, ?, ?)";
 
                 $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
                 $value = 1;
@@ -231,7 +231,7 @@ class IssueSecurityScheme
     }
 
     public function deleteLevelById($issueSecuritySchemeLevelId) {
-        $query = "delete from issue_security_scheme_level_data where issue_security_scheme_level_id = ?";
+        $query = "delete from yongo_issue_security_scheme_level_data where issue_security_scheme_level_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $issueSecuritySchemeLevelId);
@@ -245,7 +245,7 @@ class IssueSecurityScheme
     }
 
     public function deleteLevelDataById($issueSecuritySchemeLevelDataId) {
-        $query = "delete from issue_security_scheme_level_data where id = ? limit 1";
+        $query = "delete from yongo_issue_security_scheme_level_data where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $issueSecuritySchemeLevelDataId);
@@ -283,7 +283,7 @@ class IssueSecurityScheme
     }
 
     public function getLevelDataById($issueSecuritySchemeLevelDataId) {
-        $query = "select * from issue_security_scheme_level_data where id = ? limit 1";
+        $query = "select * from yongo_issue_security_scheme_level_data where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $issueSecuritySchemeLevelDataId);

@@ -34,13 +34,13 @@ class ProjectCategory
     }
 
     public function deleteById($clientId, $projectCategoryId) {
-        $query = "delete from project_category where id = ? and client_id = ? limit 1";
+        $query = "delete from yongo_project_category where id = ? and client_id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $projectCategoryId, $clientId);
         $stmt->execute();
 
-        $query = "update project set project_category_id = null where project_category_id = ? and client_id = ?";
+        $query = "update yongo_project  project_category_id = null where project_category_id = ? and client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $projectCategoryId, $clientId);
@@ -59,7 +59,7 @@ class ProjectCategory
     }
 
     public function getAll($clientId) {
-        $query = "SELECT * from project_category WHERE client_id = ?";
+        $query = "SELECT * from yongo_project_category WHERE client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
@@ -72,7 +72,7 @@ class ProjectCategory
     }
 
     public function getById($categoryId) {
-        $query = "SELECT * from project_category WHERE id = ? limit 1";
+        $query = "SELECT * from yongo_project_category WHERE id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $categoryId);
@@ -94,7 +94,7 @@ class ProjectCategory
     }
 
     public function getByName($name, $projectCategoryId, $clientId) {
-        $query = 'select id, name from project_category where client_id = ? and LOWER(name) = LOWER(?) ';
+        $query = 'select id, name from yongo_project_category where client_id = ? and LOWER(name) = LOWER(?) ';
         if ($projectCategoryId)
             $query .= 'and id != ?';
 

@@ -108,13 +108,13 @@ class UbirimiUser
         $query = 'delete from issue_attachment where user_id = ' . $userId;
         UbirimiContainer::get()['db.connection']->query($query);
 
-        $query = 'delete from permission_scheme_data where user_id = ' . $userId;
+        $query = 'delete from yongo_permission_scheme_data where user_id = ' . $userId;
         UbirimiContainer::get()['db.connection']->query($query);
 
-        $query = 'delete from notification_scheme_data where user_id = ' . $userId;
+        $query = 'delete from yongo_notification_scheme_data where user_id = ' . $userId;
         UbirimiContainer::get()['db.connection']->query($query);
 
-        $query = 'update project set lead_id = NULL where lead_id = ' . $userId;
+        $query = 'update yongo_project  lead_id = NULL where lead_id = ' . $userId;
         UbirimiContainer::get()['db.connection']->query($query);
 
         $query = 'update project_component set leader_id = NULL where leader_id = ' . $userId;
@@ -123,7 +123,7 @@ class UbirimiUser
         $query = 'delete from general_group_data where user_id = ' . $userId;
         UbirimiContainer::get()['db.connection']->query($query);
 
-        $query = 'delete from project_role_data where user_id = ' . $userId;
+        $query = 'delete from yongo_project_role_data where user_id = ' . $userId;
         UbirimiContainer::get()['db.connection']->query($query);
 
         $query = 'delete from permission_role_data where default_user_id = ' . $userId;
@@ -205,8 +205,8 @@ class UbirimiUser
     }
 
     public function checkUserInProjectRoleId($userId, $projectId, $roleId) {
-        $query = "SELECT project_role_data.id, project_role_data.user_id " .
-            "FROM project_role_data " .
+        $query = "SELECT yongo_project_role_data.id, yongo_project_role_data.user_id " .
+            "from yongo_project_role_data " .
             "WHERE permission_role_id = ? " .
             "AND project_id = ? " .
             "AND user_id = ?";
@@ -227,13 +227,13 @@ class UbirimiUser
             $queryCondition = " OR group_id IN (" . implode(', ', $groupIds) . ')';
         }
 
-        $query = "SELECT project_role_data.id, project_role_data.user_id, general_group.id as group_id, general_group.name as group_name " .
-            "FROM project_role_data " .
-            "left join `general_group` on  `general_group`.id = project_role_data.group_id " .
+        $query = "SELECT yongo_project_role_data.id, yongo_project_role_data.user_id, general_group.id as group_id, general_group.name as group_name " .
+            "from yongo_project_role_data " .
+            "left join `general_group` on  `general_group`.id = yongo_project_role_data.group_id " .
             "WHERE permission_role_id = ? " .
             "AND project_id = ? " .
             "AND (user_id = ? " . $queryCondition . ') ' .
-            "and project_role_data.group_id is not null";
+            "and yongo_project_role_data.group_id is not null";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iii", $roleId, $projectId, $userId);
@@ -246,13 +246,13 @@ class UbirimiUser
     }
 
     public function checkProjectRole($userId, $projectId, $roleId, $groupIds) {
-        $query = "SELECT project_role_data.id, project_role_data.user_id, general_group.id as group_id, general_group.name as group_name " .
-                    "FROM project_role_data " .
-                    "left join `general_group` on  `general_group`.id = project_role_data.group_id " .
+        $query = "SELECT yongo_project_role_data.id, yongo_project_role_data.user_id, general_group.id as group_id, general_group.name as group_name " .
+                    "from yongo_project_role_data " .
+                    "left join `general_group` on  `general_group`.id = yongo_project_role_data.group_id " .
                     "WHERE permission_role_id = ? " .
                         "AND project_id = ? " .
                         "AND (user_id = ? OR group_id IN (" . implode(', ', $groupIds) . ')) ' .
-                    "order by project_role_data.user_id";
+                    "order by yongo_project_role_data.user_id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iii", $roleId, $projectId, $userId);
@@ -285,22 +285,22 @@ class UbirimiUser
 
     public function hasGlobalPermission($clientId, $userId, $globalPermissionId) {
         $query = 'select general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'from sys_permission_global_data ' .
-            'left join `general_group_data` on `general_group_data`.group_id = sys_permission_global_data.group_id ' .
+            'from yongo_permission_global_data ' .
+            'left join `general_group_data` on `general_group_data`.group_id = yongo_permission_global_data.group_id ' .
             'left join general_user on general_user.id = general_group_data.user_id ' .
-            'where sys_permission_global_data.client_id = ? and ' .
-            'sys_permission_global_data.sys_permission_global_id = ? and ' .
+            'where yongo_permission_global_data.client_id = ? and ' .
+            'yongo_permission_global_data.sys_permission_global_id = ? and ' .
             'general_group_data.user_id = ? and ' .
             'general_user.id is not null ' .
 
             ' UNION ' .
 
             'select general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'from sys_permission_global_data ' .
-            'left join general_user on general_user.id = sys_permission_global_data.user_id ' .
-            'where sys_permission_global_data.client_id = ? and ' .
-            'sys_permission_global_data.sys_permission_global_id = ? and ' .
-            'sys_permission_global_data.user_id = ? and ' .
+            'from yongo_permission_global_data ' .
+            'left join general_user on general_user.id = yongo_permission_global_data.user_id ' .
+            'where yongo_permission_global_data.client_id = ? and ' .
+            'yongo_permission_global_data.sys_permission_global_id = ? and ' .
+            'yongo_permission_global_data.user_id = ? and ' .
             'general_user.id is not null ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -631,67 +631,78 @@ class UbirimiUser
 
         // 1. user in security scheme level data
         $query =
-            'SELECT issue_security_scheme_level_data.id ' .
-                'from issue_security_scheme_level_data ' .
-                'where issue_security_scheme_level_data.issue_security_scheme_level_id = ? and ' .
-                'issue_security_scheme_level_data.user_id = ? ' .
+            'SELECT yongo_issue_security_scheme_level_data.id ' .
+                'from yongo_issue_security_scheme_level_data ' .
+                'where yongo_issue_security_scheme_level_data.issue_security_scheme_level_id = ? and ' .
+                'yongo_issue_security_scheme_level_data.user_id = ? ' .
+
                 // 2. group - user in security scheme level data
+
                 'UNION DISTINCT ' .
-                'SELECT issue_security_scheme_level_data.id ' .
-                'from issue_security_scheme_level_data ' .
-                'left join `general_group` on general_group.id = issue_security_scheme_level_data.group_id ' .
+                'SELECT yongo_issue_security_scheme_level_data.id ' .
+                'from yongo_issue_security_scheme_level_data ' .
+                'left join `general_group` on general_group.id = yongo_issue_security_scheme_level_data.group_id ' .
                 'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
                 'left join general_user on general_user.id = general_group_data.user_id ' .
-                'where issue_security_scheme_level_data.issue_security_scheme_level_id = ? and ' .
-                'issue_security_scheme_level_data.user_id = ? ' .
+                'where yongo_issue_security_scheme_level_data.issue_security_scheme_level_id = ? and ' .
+                'yongo_issue_security_scheme_level_data.user_id = ? ' .
+
                 // 3. permission role in security scheme level data - user
+
                 'UNION DISTINCT ' .
-                'SELECT issue_security_scheme_level_data.id ' .
-                'from issue_security_scheme_level_data ' .
-                'left join project_role_data on project_role_data.permission_role_id = issue_security_scheme_level_data.permission_role_id ' .
-                'left join general_user on general_user.id = project_role_data.user_id ' .
-                'where issue_security_scheme_level_data.issue_security_scheme_level_id = ? and ' .
-                'issue_security_scheme_level_data.user_id = ? ' .
+                'SELECT yongo_issue_security_scheme_level_data.id ' .
+                'from yongo_issue_security_scheme_level_data ' .
+                'left join yongo_project_role_data on yongo_project_role_data.permission_role_id = yongo_issue_security_scheme_level_data.permission_role_id ' .
+                'left join general_user on general_user.id = yongo_project_role_data.user_id ' .
+                'where yongo_issue_security_scheme_level_data.issue_security_scheme_level_id = ? and ' .
+                'yongo_issue_security_scheme_level_data.user_id = ? ' .
+
                 // 4. permission role in security scheme level data - group
+
                 'UNION DISTINCT ' .
-                'SELECT issue_security_scheme_level_data.id ' .
-                'from issue_security_scheme_level_data ' .
-                'left join project_role_data on project_role_data.permission_role_id = issue_security_scheme_level_data.permission_role_id ' .
-                'left join `general_group` on general_group.id = project_role_data.group_id ' .
+                'SELECT yongo_issue_security_scheme_level_data.id ' .
+                'from yongo_issue_security_scheme_level_data ' .
+                'left join yongo_project_role_data on yongo_project_role_data.permission_role_id = yongo_issue_security_scheme_level_data.permission_role_id ' .
+                'left join `general_group` on general_group.id = yongo_project_role_data.group_id ' .
                 'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
                 'left join general_user on general_user.id = general_group_data.user_id ' .
-                'where issue_security_scheme_level_data.issue_security_scheme_level_id = ? and ' .
-                'issue_security_scheme_level_data.user_id = ? ' .
+                'where yongo_issue_security_scheme_level_data.issue_security_scheme_level_id = ? and ' .
+                'yongo_issue_security_scheme_level_data.user_id = ? ' .
+
                 // 5. current_assignee in security scheme level data
+
                 'UNION DISTINCT ' .
-                'SELECT issue_security_scheme_level_data.id ' .
-                'from issue_security_scheme_level_data ' .
+                'SELECT yongo_issue_security_scheme_level_data.id ' .
+                'from yongo_issue_security_scheme_level_data ' .
                 'left join yongo_issue on yongo_issue.id = ? ' .
                 'left join general_user on general_user.id = yongo_issue.user_assigned_id ' .
-                'where issue_security_scheme_level_data.issue_security_scheme_level_id = ? and ' .
-                'issue_security_scheme_level_data.current_assignee is not null and ' .
+                'where yongo_issue_security_scheme_level_data.issue_security_scheme_level_id = ? and ' .
+                'yongo_issue_security_scheme_level_data.current_assignee is not null and ' .
                 'yongo_issue.user_assigned_id is not null and ' .
                 'general_user.id = ? ' .
+
                 // 6. reporter in security scheme level data
+
                 'UNION DISTINCT ' .
-                'SELECT issue_security_scheme_level_data.id ' .
-                'from issue_security_scheme_level_data ' .
+                'SELECT yongo_issue_security_scheme_level_data.id ' .
+                'from yongo_issue_security_scheme_level_data ' .
                 'left join yongo_issue on yongo_issue.id = ? ' .
                 'left join general_user on general_user.id = yongo_issue.user_reported_id ' .
-                'where issue_security_scheme_level_data.issue_security_scheme_level_id = ? and ' .
-                'issue_security_scheme_level_data.reporter is not null and ' .
+                'where yongo_issue_security_scheme_level_data.issue_security_scheme_level_id = ? and ' .
+                'yongo_issue_security_scheme_level_data.reporter is not null and ' .
                 'yongo_issue.user_reported_id is not null and ' .
                 'general_user.id = ? ' .
+
                 // 7. project_lead in security scheme level data
 
                 'UNION DISTINCT ' .
-                'SELECT issue_security_scheme_level_data.id ' .
-                'from issue_security_scheme_level_data ' .
-                'left join project on project.id = ? ' .
-                'left join general_user on general_user.id = project.lead_id ' .
-                'where issue_security_scheme_level_data.issue_security_scheme_level_id = ? and ' .
-                'issue_security_scheme_level_data.project_lead is not null and ' .
-                'project.lead_id is not null and ' .
+                'SELECT yongo_issue_security_scheme_level_data.id ' .
+                'from yongo_issue_security_scheme_level_data ' .
+                'left join yongo_project on yongo_project.id = ? ' .
+                'left join general_user on general_user.id = yongo_project.lead_id ' .
+                'where yongo_issue_security_scheme_level_data.issue_security_scheme_level_id = ? and ' .
+                'yongo_issue_security_scheme_level_data.project_lead is not null and ' .
+                'yongo_project.lead_id is not null and ' .
                 'general_user.id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

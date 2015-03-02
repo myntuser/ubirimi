@@ -58,7 +58,7 @@ class AddDataController extends UbirimiController
                 $definitionData = 'cond_id=' . WorkflowCondition::CONDITION_ONLY_ASSIGNEE;
                 $this->getRepository(WorkflowCondition::class)->addConditionString($workflowDataId, $definitionData);
 
-                $this->getLogger()->addInfo('ADD Yongo Workflow Condition' , $this->getLoggerContext());
+                $this->getLogger()->addInfo('ADD Yongo Workflow Condition', $this->getLoggerContext());
 
                 return new RedirectResponse('/yongo/administration/workflow/transition-conditions/' . $workflowDataId);
             } else
@@ -68,7 +68,7 @@ class AddDataController extends UbirimiController
 
                     $this->getRepository(WorkflowCondition::class)->addConditionString($workflowDataId, $definitionData);
 
-                    $this->getLogger()->addInfo('ADD Yongo Workflow Condition' , $this->getLoggerContext());
+                    $this->getLogger()->addInfo('ADD Yongo Workflow Condition', $this->getLoggerContext());
 
                     return new RedirectResponse('/yongo/administration/workflow/transition-conditions/' . $workflowDataId);
                 }
@@ -86,7 +86,7 @@ class AddDataController extends UbirimiController
 
                 $this->getRepository(WorkflowCondition::class)->addConditionString($workflowDataId, $conditionString);
 
-                $this->getLogger()->addInfo('ADD Yongo Workflow Condition' , $this->getLoggerContext());
+                $this->getLogger()->addInfo('ADD Yongo Workflow Condition', $this->getLoggerContext());
 
                 return new RedirectResponse('/yongo/administration/workflow/transition-conditions/' . $workflowDataId);
             }

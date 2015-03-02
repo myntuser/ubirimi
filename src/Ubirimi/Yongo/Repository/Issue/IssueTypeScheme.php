@@ -38,7 +38,7 @@ class IssueTypeScheme
     }
 
     public function save($currentDate) {
-        $query = "INSERT INTO issue_type_scheme(client_id, name, description, type, date_created) VALUES (?, ?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_issue_type_scheme(client_id, name, description, type, date_created) VALUES (?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -49,9 +49,9 @@ class IssueTypeScheme
     }
 
     public function getByClientId($clientId, $type = null) {
-        $query = "select issue_type_scheme.id, issue_type_scheme.name, issue_type_scheme.description " .
-                 "from issue_type_scheme " .
-                 "where issue_type_scheme.client_id = ? ";
+        $query = "select yongo_issue_type_scheme.id, yongo_issue_type_scheme.name, yongo_issue_type_scheme.description " .
+                 "from yongo_issue_type_scheme " .
+                 "where yongo_issue_type_scheme.client_id = ? ";
 
         if ($type)
             $query .= " and type = ?";
@@ -71,9 +71,9 @@ class IssueTypeScheme
     }
 
     public function getById($issueTypeSchemeId) {
-        $query = "select issue_type_scheme.id, issue_type_scheme.name, issue_type_scheme.description " .
-                 "from issue_type_scheme " .
-                 "where issue_type_scheme.id = ? " .
+        $query = "select yongo_issue_type_scheme.id, yongo_issue_type_scheme.name, yongo_issue_type_scheme.description " .
+                 "from yongo_issue_type_scheme " .
+                 "where yongo_issue_type_scheme.id = ? " .
                  "limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -88,8 +88,8 @@ class IssueTypeScheme
 
     public function getMetaDataById($Id) {
         $query = "select * " .
-            "from issue_type_scheme " .
-            "where issue_type_scheme.id = ? " .
+            "from yongo_issue_type_scheme " .
+            "where yongo_issue_type_scheme.id = ? " .
             "limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -103,9 +103,9 @@ class IssueTypeScheme
     }
 
     public function getDataById($Id) {
-        $query = "select issue_type_scheme_data.id, issue_type.name, issue_type.description, issue_type_scheme_data.issue_type_id, issue_type.icon_name as issue_type_icon_name " .
-            "from issue_type_scheme_data " .
-            "left join issue_type on issue_type.id = issue_type_scheme_data.issue_type_id " .
+        $query = "select yongo_issue_type_scheme_data.id, yongo_issue_type.name, yongo_issue_type.description, yongo_issue_type_scheme_data.issue_type_id, yongo_issue_type.icon_name as issue_type_icon_name " .
+            "from yongo_issue_type_scheme_data " .
+            "left join yongo_issue_type on yongo_issue_type.id = yongo_issue_type_scheme_data.issue_type_id " .
             "where issue_type_scheme_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -119,7 +119,7 @@ class IssueTypeScheme
     }
 
     public function updateMetaDataById($Id, $name, $description) {
-        $query = "update issue_type_scheme set name = ?, description = ? where id = ? limit 1";
+        $query = "update yongo_issue_type_scheme set name = ?, description = ? where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ssi", $name, $description, $Id);
@@ -127,7 +127,7 @@ class IssueTypeScheme
     }
 
     public function deleteDataByIssueTypeSchemeId($Id) {
-        $query = "delete from issue_type_scheme_data where issue_type_scheme_id = ?";
+        $query = "delete from yongo_issue_type_scheme_data where issue_type_scheme_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -135,7 +135,7 @@ class IssueTypeScheme
     }
 
     public function addData($issueTypeSchemeId, $issueTypeId, $currentDate) {
-        $query = "INSERT INTO issue_type_scheme_data(issue_type_scheme_id, issue_type_id, date_created) VALUES (?, ?, ?)";
+        $query = "INSERT INTO yongo_issue_type_scheme_data(issue_type_scheme_id, issue_type_id, date_created) VALUES (?, ?, ?)";
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
         $stmt->bind_param("iis", $issueTypeSchemeId, $issueTypeId, $currentDate);
@@ -143,7 +143,7 @@ class IssueTypeScheme
     }
 
     public function deleteById($issueTypeSchemeId) {
-        $query = "delete from issue_type_scheme where id = ? limit 1";
+        $query = "delete from yongo_issue_type_scheme where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $issueTypeSchemeId);
@@ -159,7 +159,7 @@ class IssueTypeScheme
     }
 
     public function getMetaDataByNameAndClientId($clientId, $name) {
-        $query = "select * from issue_type_scheme where client_id = ? and LOWER(name) = ?";
+        $query = "select * from yongo_issue_type_scheme where client_id = ? and LOWER(name) = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $clientId, $name);

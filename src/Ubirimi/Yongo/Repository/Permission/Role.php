@@ -75,7 +75,7 @@ class Role
     }
 
     public function deleteRolesForUser($userId) {
-        $query = "delete from project_role_data where user_id = ?";
+        $query = "delete from yongo_project_role_data where user_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 

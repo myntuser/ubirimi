@@ -82,7 +82,7 @@ class IssueTypeScreenScheme
         $query = "select issue_type_screen_scheme_data.id, issue_type_screen_scheme_data.screen_scheme_id, issue_type_screen_scheme_data.issue_type_id, " .
                     "issue_type.name as issue_type_name, screen_scheme.name as screen_scheme_name, issue_type_screen_scheme_data.issue_type_screen_scheme_id " .
                  "from issue_type_screen_scheme_data " .
-                 "left join issue_type on issue_type.id = issue_type_screen_scheme_data.issue_type_id " .
+                 "left join yongo_issue_type on yongo_issue_type.id = issue_type_screen_scheme_data.issue_type_id " .
                  "left join screen_scheme on screen_scheme.id = issue_type_screen_scheme_data.screen_scheme_id " .
                  "where issue_type_screen_scheme_data.id = ? ";
 
@@ -98,9 +98,9 @@ class IssueTypeScreenScheme
 
     public function getDataByIssueTypeScreenSchemeId($issueTypeScreenSchemeId) {
         $query = "select issue_type_screen_scheme_data.id, issue_type_screen_scheme_data.issue_type_id, issue_type_screen_scheme_data.screen_scheme_id, " .
-                    "screen_scheme.name as screen_scheme_name, issue_type.name as issue_type_name " .
+                    "screen_scheme.name as screen_scheme_name, yongo_issue_type.name as issue_type_name " .
                  "from issue_type_screen_scheme_data " .
-                 "left join issue_type on issue_type.id = issue_type_screen_scheme_data.issue_type_id " .
+                 "left join yongo_issue_type on yongo_issue_type.id = issue_type_screen_scheme_data.issue_type_id " .
                  "left join screen_scheme on screen_scheme.id = issue_type_screen_scheme_data.screen_scheme_id " .
                  "where issue_type_screen_scheme_data.issue_type_screen_scheme_id = ? ";
 
@@ -117,9 +117,9 @@ class IssueTypeScreenScheme
 
     public function getDataByIssueTypeScreenSchemeIdAndIssueTypeId($issueTypeScreenSchemeId, $issueTypeId) {
         $query = "select issue_type_screen_scheme_data.id, issue_type_screen_scheme_data.issue_type_id, issue_type_screen_scheme_data.screen_scheme_id, " .
-            "screen_scheme.name as screen_scheme_name, issue_type.name as issue_type_name " .
+            "screen_scheme.name as screen_scheme_name, yongo_issue_type.name as issue_type_name " .
             "from issue_type_screen_scheme_data " .
-            "left join issue_type on issue_type.id = issue_type_screen_scheme_data.issue_type_id " .
+            "left join yongo_issue_type on yongo_issue_type.id = issue_type_screen_scheme_data.issue_type_id " .
             "left join screen_scheme on screen_scheme.id = issue_type_screen_scheme_data.screen_scheme_id " .
             "where issue_type_screen_scheme_data.issue_type_screen_scheme_id = ? and " .
                 "issue_type_screen_scheme_data.issue_type_id = ? " .
@@ -205,9 +205,9 @@ class IssueTypeScreenScheme
     }
 
     public function getIssueTypesForScreenScheme($issueTypeScreenSchemeId, $screenSchemeId) {
-        $query = "select issue_type.id, issue_type.name " .
+        $query = "select yongo_issue_type.id, yongo_issue_type.name " .
             "from issue_type_screen_scheme_data " .
-            "left join issue_type on issue_type.id = issue_type_screen_scheme_data.issue_type_id " .
+            "left join yongo_issue_type on yongo_issue_type.id = issue_type_screen_scheme_data.issue_type_id " .
             "where issue_type_screen_scheme_data.issue_type_screen_scheme_id = ? and screen_scheme_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

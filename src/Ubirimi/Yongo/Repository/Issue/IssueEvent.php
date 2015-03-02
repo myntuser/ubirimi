@@ -183,9 +183,9 @@ class IssueEvent
     public function getNotificationSchemesByEventId($clientId, $eventId) {
         $query = "SELECT notification_scheme.id, notification_scheme.name " .
             "FROM notification_scheme " .
-            "left join notification_scheme_data on notification_scheme_data.notification_scheme_id = notification_scheme.id " .
+            "left join yongo_notification_scheme_data on yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id " .
             "WHERE notification_scheme.client_id = ? " .
-            "and notification_scheme_data.event_id = ? " .
+            "and yongo_notification_scheme_data.event_id = ? " .
             "group by notification_scheme.id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

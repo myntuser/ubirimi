@@ -540,7 +540,7 @@ class Sla
     }
 
     public function transformConditionForView($condition) {
-        $condition = str_replace(array('start_', 'stop_'), '' , $condition);
+        $condition = str_replace(array('start_', 'stop_'), '', $condition);
         if (substr($condition, 0, 11) == 'status_set_') {
             $StatusId = str_replace('status_set_', '', $condition);
             $statusName = UbirimiContainer::get()['repository']->get(IssueSettings::class)->getById($StatusId, 'status', 'name');
@@ -599,9 +599,9 @@ class Sla
     public function getByCalendarId($clientId, $calendarId) {
         $query = 'select help_sla.* ' .
             'from help_sla ' .
-            'left join project on project.id = help_sla.project_id ' .
+            'left join yongo_project on yongo_project.id = help_sla.project_id ' .
             'left join help_sla_goal on help_sla_goal.help_sla_id = help_sla.id ' .
-            'where project.client_id = ? and help_sla_goal.help_sla_calendar_id = ? ';
+            'where yongo_project.client_id = ? and help_sla_goal.help_sla_calendar_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $clientId, $calendarId);

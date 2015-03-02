@@ -138,9 +138,9 @@ class Field {
     }
 
     public function getIssueTypesFor($fieldId) {
-        $query = "SELECT issue_type.name, issue_type.id " .
+        $query = "SELECT yongo_issue_type.name, yongo_issue_type.id " .
             "FROM field_issue_type_data " .
-            "left join issue_type on issue_type.id = field_issue_type_data.issue_type_id " .
+            "left join yongo_issue_type on yongo_issue_type.id = field_issue_type_data.issue_type_id " .
             "where field_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -154,9 +154,9 @@ class Field {
     }
 
     public function getProjectsFor($fieldId) {
-        $query = "SELECT project.name, project.id " .
+        $query = "SELECT yongo_project.name, yongo_project.id  " .
             "FROM field_project_data " .
-            "left join project on project.id = field_project_data.project_id " .
+            "left join yongo_project on yongo_project.id = field_project_data.project_id " .
             "where field_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

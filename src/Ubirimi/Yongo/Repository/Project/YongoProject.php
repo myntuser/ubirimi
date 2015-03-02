@@ -39,7 +39,7 @@ class YongoProject
 {
     public function getLast5ByClientId($clientId) {
         $query = "select *  " .
-            'from project ' .
+            'from yongo_project ' .
             'where client_id = ? ' .
             'order by id desc ' .
             'limit 5';
@@ -55,7 +55,7 @@ class YongoProject
     }
 
     public function getCount($clientId) {
-        $query = 'SELECT count(id) as total FROM project WHERE client_id = ? ';
+        $query = 'SELECT count(id) as total from yongo_project WHERE client_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -70,9 +70,9 @@ class YongoProject
 
     public function getWorkflowScheme($projectId) {
         $query = "select workflow_scheme.*  " .
-            'from project ' .
-            'left join workflow_scheme on workflow_scheme.id = project.workflow_scheme_id ' .
-            'where project.id = ?';
+            'from yongo_project ' .
+            'left join workflow_scheme on workflow_scheme.id = yongo_project.workflow_scheme_id ' .
+            'where yongo_project.id  = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $projectId);
@@ -87,9 +87,9 @@ class YongoProject
 
     public function getByClientId($clientId) {
         $query = 'SELECT * ' .
-            'FROM project ' .
-            'WHERE project.client_id = ? ' .
-            'order by project.name';
+            'from yongo_project ' .
+            'WHERE yongo_project.client_id = ? ' .
+            'order by yongo_project.name';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
@@ -103,8 +103,8 @@ class YongoProject
 
     public function getByClientIdAndIds($clientId, $projectIds) {
         $query = 'SELECT * ' .
-            'FROM project ' .
-            'WHERE project.client_id = ? and id IN (' . implode(", ", $projectIds) . ")";
+            'from yongo_project ' .
+            'WHERE yongo_project.client_id = ? and id IN (' . implode(", ", $projectIds) . ")";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -119,7 +119,7 @@ class YongoProject
 
     public function getByIssueTypeFieldConfigurationScheme($clientId, $issueTypeFieldConfigurationId) {
         $query = 'SELECT * ' .
-            'FROM project ' .
+            'from yongo_project ' .
             'WHERE project.issue_type_field_configuration_id = ? and client_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -135,7 +135,7 @@ class YongoProject
 
     public function getByIssueTypeScreenSchemeId($clientId, $issueTypeScreenSchemeId) {
         $query = 'SELECT * ' .
-            'FROM project ' .
+            'from yongo_project ' .
             'WHERE project.issue_type_screen_scheme_id = ? and client_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -151,15 +151,15 @@ class YongoProject
 
     public function getWorkflowUsedForType($projectId, $issueTypeId) {
         $query = "select workflow.id, workflow.name  " .
-            'from project ' .
-            'left join workflow_scheme on workflow_scheme.id = project.workflow_scheme_id ' .
+            'from yongo_project ' .
+            'left join workflow_scheme on workflow_scheme.id = yongo_project.workflow_scheme_id ' .
             'left join workflow_scheme_data on workflow_scheme_data.workflow_scheme_id = workflow_scheme.id ' .
             'left join workflow on workflow.id = workflow_scheme_data.workflow_id ' .
-            'left join issue_type_scheme on issue_type_scheme.id = workflow.issue_type_scheme_id ' .
-            'left join issue_type_scheme_data on issue_type_scheme_data.issue_type_scheme_id = issue_type_scheme.id ' .
-            'left join issue_type on issue_type.id = issue_type_scheme_data.issue_type_id ' .
-            'where project.id = ? ' .
-            'and issue_type.id = ?';
+            'left join yongo_issue_type_scheme on yongo_issue_type_scheme.id = workflow.issue_type_scheme_id ' .
+            'left join yongo_issue_type_scheme_data on yongo_issue_type_scheme_data.issue_type_scheme_id = yongo_issue_type_scheme.id ' .
+            'left join yongo_issue_type on yongo_issue_type.id = yongo_issue_type_scheme_data.issue_type_id ' .
+            'where yongo_project.id  = ? ' .
+            'and yongo_issue_type.id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $projectId, $issueTypeId);
@@ -172,12 +172,12 @@ class YongoProject
     }
 
     public function getAllIssueTypesForProjects($projectIdOrArray) {
-        $query = 'SELECT issue_type.id, issue_type.name, issue_type.description ' .
-            'FROM project ' .
-            'left join issue_type_scheme on issue_type_scheme.id = project.issue_type_scheme_id ' .
-            'left join issue_type_scheme_data on issue_type_scheme_data.issue_type_scheme_id = issue_type_scheme.id ' .
-            'left join issue_type on issue_type.id = issue_type_scheme_data.issue_type_id ' .
-            'where project.id IN (' . implode(', ', $projectIdOrArray) . ')';
+        $query = 'SELECT yongo_issue_type.id, yongo_issue_type.name, yongo_issue_type.description ' .
+            'from yongo_project ' .
+            'left join yongo_issue_type_scheme on yongo_issue_type_scheme.id = yongo_project.issue_type_scheme_id ' .
+            'left join yongo_issue_type_scheme_data on yongo_issue_type_scheme_data.issue_type_scheme_id = yongo_issue_type_scheme.id ' .
+            'left join yongo_issue_type on yongo_issue_type.id = yongo_issue_type_scheme_data.issue_type_id ' .
+            'where yongo_project.id  IN (' . implode(', ', $projectIdOrArray) . ')';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
@@ -190,7 +190,7 @@ class YongoProject
 
     public function getByIssueTypeScheme($schemeId) {
         $query = 'SELECT * ' .
-            'FROM project ' .
+            'from yongo_project ' .
             'WHERE project.issue_type_scheme_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -206,7 +206,7 @@ class YongoProject
 
     public function getByPermissionScheme($schemeId) {
         $query = 'SELECT * ' .
-            'FROM project ' .
+            'from yongo_project ' .
             'WHERE project.permission_scheme_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -222,7 +222,7 @@ class YongoProject
 
     public function getByIssueSecurityScheme($schemeId) {
         $query = 'SELECT * ' .
-            'FROM project ' .
+            'from yongo_project ' .
             'WHERE project.issue_security_scheme_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -238,7 +238,7 @@ class YongoProject
 
     public function getByNotificationScheme($schemeId) {
         $query = 'SELECT * ' .
-            'FROM project ' .
+            'from yongo_project ' .
             'WHERE project.notification_scheme_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -253,9 +253,9 @@ class YongoProject
     }
 
     public function getByIds($projectIds) {
-        $query = 'SELECT project.id, project.client_id, code, name ' .
-            'FROM project ' .
-            'WHERE project.id IN (' . implode(', ', $projectIds) . ')';
+        $query = 'SELECT yongo_project.id, yongo_project.client_id, code, name ' .
+            'from yongo_project ' .
+            'WHERE yongo_project.id  IN (' . implode(', ', $projectIds) . ')';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -268,13 +268,13 @@ class YongoProject
     }
 
     public function getById($projectId) {
-        $query = 'SELECT project.id, project.client_id, permission_scheme_id, lead_id, code, name,' .
+        $query = 'SELECT yongo_project.id, yongo_project.client_id, permission_scheme_id, lead_id, code, name,' .
                     'issue_type_screen_scheme_id, issue_type_field_configuration_id, workflow_scheme_id, notification_scheme_id, ' .
                     'description, general_user.first_name, general_user.last_name, issue_type_scheme_id, issue_security_scheme_id, project_category_id, ' .
                     'help_desk_enabled_flag ' .
-                 'FROM project ' .
-                 'LEFT join general_user on general_user.id = project.lead_id ' .
-                 'WHERE project.id = ? ';
+                 'from yongo_project ' .
+                 'LEFT join general_user on general_user.id = yongo_project.lead_id ' .
+                 'WHERE yongo_project.id  = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -288,7 +288,7 @@ class YongoProject
     }
 
     public function updateLeader($projectId, $leaderId) {
-        $query = 'update project set lead_id = ? where id = ?';
+        $query = 'update yongo_project  lead_id = ? where id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $leaderId, $projectId);
@@ -296,7 +296,7 @@ class YongoProject
     }
 
     public function getByCode($code, $projectId, $clientId) {
-        $query = 'select id, name, code from project where client_id = ? and LOWER(code) = LOWER(?) ';
+        $query = 'select id, name, code from yongo_project where client_id = ? and LOWER(code) = LOWER(?) ';
         if ($projectId) $query .= 'and id != ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -315,7 +315,7 @@ class YongoProject
     }
 
     public function getByName($name, $projectId, $clientId) {
-        $query = 'select id, name, code from project where client_id = ? and LOWER(name) = LOWER(?) ';
+        $query = 'select id, name, code from yongo_project where client_id = ? and LOWER(name) = LOWER(?) ';
         if ($projectId) $query .= 'and id != ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -345,7 +345,7 @@ class YongoProject
 
     public function getSubComponents($parentComponentId) {
         $query = 'SELECT project_component.id, project_component.project_id, project_component.name, project_component.description, general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'FROM project_component ' .
+            'from yongo_project_component ' .
             'left join general_user on general_user.id = project_component.leader_id ' .
             'where parent_id = ?';
 
@@ -434,7 +434,7 @@ class YongoProject
     public function getComponents($projectIdOrArray = null, $resultType = null, $onlyParents = null) {
         $query = 'SELECT project_component.id, project_component.project_id, project_component.name, project_component.description, general_user.id as user_id, general_user.first_name, general_user.last_name, ' .
                     'pc_parent.name as parent_name ' .
-                 'FROM project_component ' .
+                 'from yongo_project_component ' .
                  'left join project_component as pc_parent on pc_parent.id = project_component.parent_id ' .
                  'left join general_user on general_user.id = project_component.leader_id ' .
                  'where 1 = 1 ';
@@ -470,7 +470,7 @@ class YongoProject
 
     public function getVersions($projectIdOrArray = null) {
         $query = 'SELECT id, project_id, name, description ' .
-                 'FROM project_version ';
+                 'from yongo_project_version ';
 
         if (isset($projectIdOrArray)) {
             if (is_array($projectIdOrArray))
@@ -633,7 +633,7 @@ class YongoProject
         UbirimiContainer::get()['repository']->get(CustomField::class)->deleteDataByProjectId($Id);
         UbirimiContainer::get()['repository']->get(Board::class)->deleteByProjectId($Id);
 
-        $query = "DELETE IGNORE FROM project_role_data WHERE project_id = " . $Id;
+        $query = "DELETE IGNORE from yongo_project_role_data WHERE project_id = " . $Id;
         UbirimiContainer::get()['db.connection']->query($query);
 
         // delete the help desk related information
@@ -642,7 +642,7 @@ class YongoProject
         $query = "DELETE IGNORE FROM help_filter WHERE project_id = " . $Id;
         UbirimiContainer::get()['db.connection']->query($query);
 
-        $query = "DELETE IGNORE FROM project WHERE id = " . $Id . ' LIMIT 1';
+        $query = "DELETE IGNORE from yongo_project WHERE id = " . $Id . ' LIMIT 1';
         UbirimiContainer::get()['db.connection']->query($query);
 
         $query = "SET FOREIGN_KEY_CHECKS = 1;";
@@ -650,15 +650,15 @@ class YongoProject
     }
 
     public function getIssueTypes($projectId, $includeSubTasks, $resultType = null, $resultColumn = null) {
-        $query = 'SELECT issue_type.id, issue_type.name, issue_type.description ' .
-            'FROM project ' .
-            'left join issue_type_scheme on issue_type_scheme.id = project.issue_type_scheme_id ' .
-            'left join issue_type_scheme_data on issue_type_scheme_data.issue_type_scheme_id = issue_type_scheme.id ' .
-            'left join issue_type on issue_type.id = issue_type_scheme_data.issue_type_id ' .
-            'where project.id = ?';
+        $query = 'SELECT yongo_issue_type.id, yongo_issue_type.name, yongo_issue_type.description ' .
+            'from yongo_project ' .
+            'left join yongo_issue_type_scheme on yongo_issue_type_scheme.id = yongo_project.issue_type_scheme_id ' .
+            'left join yongo_issue_type_scheme_data on yongo_issue_type_scheme_data.issue_type_scheme_id = yongo_issue_type_scheme.id ' .
+            'left join yongo_issue_type on yongo_issue_type.id = yongo_issue_type_scheme_data.issue_type_id ' .
+            'where yongo_project.id  = ?';
 
         if ($includeSubTasks == 0) {
-            $query .= ' and issue_type.sub_task_flag = 0';
+            $query .= ' and yongo_issue_type.sub_task_flag = 0';
         }
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -685,12 +685,12 @@ class YongoProject
     }
 
     public function getSubTasksIssueTypes($projectId, $resultType = null, $resultColumn = null) {
-        $query = 'SELECT issue_type.id, issue_type.name, issue_type.description ' .
-            'FROM project ' .
-            'left join issue_type_scheme on issue_type_scheme.id = project.issue_type_scheme_id ' .
-            'left join issue_type_scheme_data on issue_type_scheme_data.issue_type_scheme_id = issue_type_scheme.id ' .
-            'left join issue_type on issue_type.id = issue_type_scheme_data.issue_type_id ' .
-            'where project.id = ? and issue_type.sub_task_flag = 1';
+        $query = 'SELECT yongo_issue_type.id, yongo_issue_type.name, yongo_issue_type.description ' .
+            'from yongo_project ' .
+            'left join yongo_issue_type_scheme on yongo_issue_type_scheme.id = yongo_project.issue_type_scheme_id ' .
+            'left join yongo_issue_type_scheme_data on yongo_issue_type_scheme_data.issue_type_scheme_id = yongo_issue_type_scheme.id ' .
+            'left join yongo_issue_type on yongo_issue_type.id = yongo_issue_type_scheme_data.issue_type_id ' .
+            'where yongo_project.id  = ? and yongo_issue_type.sub_task_flag = 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $projectId);
@@ -762,11 +762,11 @@ class YongoProject
 
     public function getUsersInRole($projectId, $roleId) {
         $query = 'select general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'FROM project_role_data ' .
-            'left join general_user on general_user.id = project_role_data.user_id ' .
-            'where project_role_data.project_id = ? and ' .
-                'project_role_data.permission_role_id = ? and ' .
-                'project_role_data.user_id is not null';
+            'from yongo_project_role_data ' .
+            'left join general_user on general_user.id = yongo_project_role_data.user_id ' .
+            'where yongo_project_role_data.project_id = ? and ' .
+                'yongo_project_role_data.permission_role_id = ? and ' .
+                'yongo_project_role_data.user_id is not null';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $projectId, $roleId);
@@ -780,22 +780,22 @@ class YongoProject
 
     public function getAllUsersInRole($projectId, $roleId) {
         $query = 'select general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'FROM project_role_data ' .
-            'left join general_user on general_user.id = project_role_data.user_id ' .
-            'where project_role_data.project_id = ? and ' .
-            'project_role_data.permission_role_id = ? and ' .
-            'project_role_data.user_id is not null ' .
+            'from yongo_project_role_data ' .
+            'left join general_user on general_user.id = yongo_project_role_data.user_id ' .
+            'where yongo_project_role_data.project_id = ? and ' .
+            'yongo_project_role_data.permission_role_id = ? and ' .
+            'yongo_project_role_data.user_id is not null ' .
 
             'UNION DISTINCT ' .
 
                 'select general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'FROM project_role_data ' .
-            'left join `general_group` on general_group.id = project_role_data.group_id ' .
+            'from yongo_project_role_data ' .
+            'left join `general_group` on general_group.id = yongo_project_role_data.group_id ' .
             'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
             'left join general_user on general_user.id = general_group_data.user_id ' .
-            'where project_role_data.project_id = ? and ' .
-            'project_role_data.permission_role_id = ? and ' .
-            'project_role_data.group_id is not null';
+            'where yongo_project_role_data.project_id = ? and ' .
+            'yongo_project_role_data.permission_role_id = ? and ' .
+            'yongo_project_role_data.group_id is not null';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iiii", $projectId, $roleId, $projectId, $roleId);
@@ -809,11 +809,11 @@ class YongoProject
 
     public function getGroupsInRole($projectId, $roleId) {
         $query = 'SELECT general_group.id as group_id, general_group.name as group_name ' .
-            'FROM project_role_data ' .
-            'left join `general_group` on general_group.id = project_role_data.group_id ' .
-            'where project_role_data.project_id = ? and ' .
-                'project_role_data.permission_role_id = ? and ' .
-                'project_role_data.group_id is not null';
+            'from yongo_project_role_data ' .
+            'left join `general_group` on general_group.id = yongo_project_role_data.group_id ' .
+            'where yongo_project_role_data.project_id = ? and ' .
+                'yongo_project_role_data.permission_role_id = ? and ' .
+                'yongo_project_role_data.group_id is not null';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $projectId, $roleId);
@@ -826,7 +826,7 @@ class YongoProject
     }
 
     public function deleteUsersByPermissionRole($projectId, $roleId) {
-        $query = "delete from project_role_data where project_id = ? and permission_role_id = ? and user_id is not null ";
+        $query = "delete from yongo_project_role_data where project_id = ? and permission_role_id = ? and user_id is not null ";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -836,7 +836,7 @@ class YongoProject
     }
 
     public function deleteGroupsByPermissionRole($projectId, $roleId) {
-        $query = "delete from project_role_data where project_id = ? and permission_role_id = ? and group_id is not null ";
+        $query = "delete from yongo_project_role_data where project_id = ? and permission_role_id = ? and group_id is not null ";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -874,60 +874,60 @@ class YongoProject
 
         // 1. user in permission scheme
         $query = '(select general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'from project ' .
-            'left join permission_scheme on permission_scheme.id = project.permission_scheme_id ' .
-            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-            'left join general_user on general_user.id = permission_scheme_data.user_id ' .
-            'where project.id IN ' . $projectsSQL . ' and ' .
-                'permission_scheme_data.sys_permission_id = ? and ' .
-                'permission_scheme_data.user_id is not null and ' .
+            'from yongo_project ' .
+            'left join yongo_permission_scheme on yongo_permission_scheme.id = yongo_project.permission_scheme_id ' .
+            'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+            'left join general_user on general_user.id = yongo_permission_scheme_data.user_id ' .
+            'where yongo_project.id  IN ' . $projectsSQL . ' and ' .
+                'yongo_permission_scheme_data.sys_permission_id = ? and ' .
+                'yongo_permission_scheme_data.user_id is not null and ' .
                 'general_user.id is not null) ' .
 
             // 2. group in permission scheme
 
             'UNION DISTINCT ' .
             '(select general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'from project ' .
-            'left join permission_scheme on permission_scheme.id = project.permission_scheme_id ' .
-            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-            'left join `general_group` on general_group.id = permission_scheme_data.group_id ' .
+            'from yongo_project ' .
+            'left join yongo_permission_scheme on yongo_permission_scheme.id = yongo_project.permission_scheme_id ' .
+            'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+            'left join `general_group` on general_group.id = yongo_permission_scheme_data.group_id ' .
             'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
             'left join general_user on general_user.id = general_group_data.user_id ' .
-            'where project.id  IN ' . $projectsSQL . ' and ' .
-                'permission_scheme_data.group_id is not null and ' .
-                'permission_scheme_data.sys_permission_id = ? and ' .
+            'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
+                'yongo_permission_scheme_data.group_id is not null and ' .
+                'yongo_permission_scheme_data.sys_permission_id = ? and ' .
                 'general_user.id is not null) ' .
 
             // 3. permission role in permission scheme - user
 
             'UNION DISTINCT ' .
             '(select general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'from project ' .
-            'left join permission_scheme on permission_scheme.id = project.permission_scheme_id ' .
-            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-            'left join project_role_data on project_role_data.permission_role_id = permission_scheme_data.permission_role_id ' .
-            'left join general_user on general_user.id = project_role_data.user_id ' .
-            'where project.id  IN ' . $projectsSQL . ' and ' .
-                'project_role_data.user_id is not null and ' .
-                'project_role_data.project_id IN ' . $projectsSQL . ' and ' .
-                'permission_scheme_data.sys_permission_id = ? and ' .
+            'from yongo_project ' .
+            'left join yongo_permission_scheme on yongo_permission_scheme.id = yongo_project.permission_scheme_id ' .
+            'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+            'left join yongo_project_role_data on yongo_project_role_data.permission_role_id = yongo_permission_scheme_data.permission_role_id ' .
+            'left join general_user on general_user.id = yongo_project_role_data.user_id ' .
+            'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
+                'yongo_project_role_data.user_id is not null and ' .
+                'yongo_project_role_data.project_id IN ' . $projectsSQL . ' and ' .
+                'yongo_permission_scheme_data.sys_permission_id = ? and ' .
                 'general_user.id is not null) ' .
 
             // 4. permission role in permission scheme - group
 
             'UNION DISTINCT ' .
             '(select general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'from project ' .
-            'left join permission_scheme on permission_scheme.id = project.permission_scheme_id ' .
-            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-            'left join project_role_data on project_role_data.permission_role_id = permission_scheme_data.permission_role_id ' .
-            'left join `general_group` on general_group.id = project_role_data.group_id ' .
+            'from yongo_project ' .
+            'left join yongo_permission_scheme on yongo_permission_scheme.id = yongo_project.permission_scheme_id ' .
+            'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+            'left join yongo_project_role_data on yongo_project_role_data.permission_role_id = yongo_permission_scheme_data.permission_role_id ' .
+            'left join `general_group` on general_group.id = yongo_project_role_data.group_id ' .
             'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
             'left join general_user on general_user.id = general_group_data.user_id ' .
-            'where project.id  IN ' . $projectsSQL . ' and ' .
-                'project_role_data.group_id is not null and ' .
-                'project_role_data.project_id IN ' . $projectsSQL . ' and ' .
-                'permission_scheme_data.sys_permission_id = ? and ' .
+            'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
+                'yongo_project_role_data.group_id is not null and ' .
+                'yongo_project_role_data.project_id IN ' . $projectsSQL . ' and ' .
+                'yongo_permission_scheme_data.sys_permission_id = ? and ' .
                 'general_user.id is not null)' .
             'order by first_name, last_name';
 
@@ -963,73 +963,73 @@ class YongoProject
 
             // 1. user in permission scheme
         $query = 'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
-            'from project ' .
-            'left join notification_scheme on notification_scheme.id = project.notification_scheme_id ' .
-            'left join notification_scheme_data on notification_scheme_data.notification_scheme_id = notification_scheme.id ' .
-            'left join general_user on general_user.id = notification_scheme_data.user_id ' .
-            'where project.id IN ' . $projectsSQL . ' and ' .
-                'notification_scheme_data.event_id = ? and ' .
-                'notification_scheme_data.user_id is not null and ' .
+            'from yongo_project ' .
+            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id ' .
+            'left join general_user on general_user.id = yongo_notification_scheme_data.user_id ' .
+            'where yongo_project.id  IN ' . $projectsSQL . ' and ' .
+                'yongo_notification_scheme_data.event_id = ? and ' .
+                'yongo_notification_scheme_data.user_id is not null and ' .
                 'general_user.id is not null ' .
 
             // 2. group in permission scheme
 
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
-            'from project ' .
-            'left join notification_scheme on notification_scheme.id = project.notification_scheme_id ' .
-            'left join notification_scheme_data on notification_scheme_data.notification_scheme_id = notification_scheme.id ' .
-            'left join `general_group` on general_group.id = notification_scheme_data.group_id ' .
+            'from yongo_project ' .
+            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id ' .
+            'left join `general_group` on general_group.id = yongo_notification_scheme_data.group_id ' .
             'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
             'left join general_user on general_user.id = general_group_data.user_id ' .
-            'where project.id  IN ' . $projectsSQL . ' and ' .
-                'notification_scheme_data.group_id is not null and ' .
-                'notification_scheme_data.event_id = ? and ' .
+            'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
+                'yongo_notification_scheme_data.group_id is not null and ' .
+                'yongo_notification_scheme_data.event_id = ? and ' .
                 'general_user.id is not null ' .
 
             // 3. permission role in permission scheme - user
 
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
-            'from project ' .
-            'left join notification_scheme on notification_scheme.id = project.notification_scheme_id ' .
-            'left join notification_scheme_data on notification_scheme_data.notification_scheme_id = notification_scheme.id ' .
-            'left join project_role_data on project_role_data.permission_role_id = notification_scheme_data.permission_role_id ' .
-            'left join general_user on general_user.id = project_role_data.user_id ' .
-            'where project.id  IN ' . $projectsSQL . ' and ' .
-                'project_role_data.user_id is not null and ' .
-                'notification_scheme_data.event_id = ? and ' .
+            'from yongo_project ' .
+            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id ' .
+            'left join yongo_project_role_data on yongo_project_role_data.permission_role_id = yongo_notification_scheme_data.permission_role_id ' .
+            'left join general_user on general_user.id = yongo_project_role_data.user_id ' .
+            'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
+                'yongo_project_role_data.user_id is not null and ' .
+                'yongo_notification_scheme_data.event_id = ? and ' .
                 'general_user.id is not null ' .
 
             // 4. permission role in permission scheme - group
 
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
-            'from project ' .
-            'left join notification_scheme on notification_scheme.id = project.notification_scheme_id ' .
-            'left join notification_scheme_data on notification_scheme_data.notification_scheme_id = notification_scheme.id ' .
-            'left join project_role_data on project_role_data.permission_role_id = notification_scheme_data.permission_role_id ' .
-            'left join `general_group` on general_group.id = project_role_data.group_id ' .
+            'from yongo_project ' .
+            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id ' .
+            'left join yongo_project_role_data on yongo_project_role_data.permission_role_id = yongo_notification_scheme_data.permission_role_id ' .
+            'left join `general_group` on general_group.id = yongo_project_role_data.group_id ' .
             'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
             'left join general_user on general_user.id = general_group_data.user_id ' .
-            'where project.id  IN ' . $projectsSQL . ' and ' .
-                'project_role_data.group_id is not null and ' .
-                'notification_scheme_data.event_id = ? and ' .
+            'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
+                'yongo_project_role_data.group_id is not null and ' .
+                'yongo_notification_scheme_data.event_id = ? and ' .
                 'general_user.id is not null ' .
 
             // 5. current_assignee in permission scheme
 
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
-            'from project ' .
-            'left join notification_scheme on notification_scheme.id = project.notification_scheme_id ' .
-            'left join notification_scheme_data on (notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
-                       'notification_scheme_data.current_assignee is not null) ' .
+            'from yongo_project ' .
+            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
+                       'yongo_notification_scheme_data.current_assignee is not null) ' .
             'left join yongo_issue on yongo_issue.id = ? ' .
             'left join general_user on general_user.id = yongo_issue.user_assigned_id ' .
-                'where project.id IN ' . $projectsSQL . ' and ' .
-                'notification_scheme_data.event_id = ? and ' .
-                'notification_scheme_data.current_assignee is not null and ' .
+                'where yongo_project.id  IN ' . $projectsSQL . ' and ' .
+                'yongo_notification_scheme_data.event_id = ? and ' .
+                'yongo_notification_scheme_data.current_assignee is not null and ' .
                 'yongo_issue.user_assigned_id is not null and ' .
                 'general_user.id is not null ' .
 
@@ -1037,15 +1037,15 @@ class YongoProject
 
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
-            'from project ' .
-            'left join notification_scheme on notification_scheme.id = project.notification_scheme_id ' .
-            'left join notification_scheme_data on (notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
-                       'notification_scheme_data.reporter is not null) ' .
+            'from yongo_project ' .
+            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
+                       'yongo_notification_scheme_data.reporter is not null) ' .
             'left join yongo_issue on yongo_issue.id = ? ' .
             'left join general_user on general_user.id = yongo_issue.user_reported_id ' .
-            'where project.id IN ' . $projectsSQL . ' and ' .
-                'notification_scheme_data.event_id = ? and ' .
-                'notification_scheme_data.reporter is not null and ' .
+            'where yongo_project.id  IN ' . $projectsSQL . ' and ' .
+                'yongo_notification_scheme_data.event_id = ? and ' .
+                'yongo_notification_scheme_data.reporter is not null and ' .
                 'yongo_issue.user_reported_id is not null and ' .
                 'general_user.id is not null ' .
 
@@ -1053,61 +1053,61 @@ class YongoProject
 
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
-            'from project ' .
-            'left join notification_scheme on notification_scheme.id = project.notification_scheme_id ' .
-            'left join notification_scheme_data on (notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
-            'notification_scheme_data.current_user is not null) ' .
+            'from yongo_project ' .
+            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
+            'yongo_notification_scheme_data.current_user is not null) ' .
             'left join general_user on general_user.id = ? ' .
-            'where project.id  IN ' . $projectsSQL . ' and ' .
-                'notification_scheme_data.event_id = ? and ' .
-                'notification_scheme_data.current_user is not null and ' .
+            'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
+                'yongo_notification_scheme_data.event_id = ? and ' .
+                'yongo_notification_scheme_data.current_user is not null and ' .
                 'general_user.id is not null ' .
 
             // 8. all watchers
             
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
-            'from project ' .
-            'left join notification_scheme on notification_scheme.id = project.notification_scheme_id ' .
-            'left join notification_scheme_data on (notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
-            'notification_scheme_data.all_watchers is not null) ' .
+            'from yongo_project ' .
+            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
+            'yongo_notification_scheme_data.all_watchers is not null) ' .
             'left join yongo_issue on yongo_issue.id = ? ' .
             'left join yongo_issue_watch on yongo_issue_watch.yongo_issue_id = yongo_issue.id ' .
             'left join general_user on general_user.id = yongo_issue_watch.user_id ' .
-            'where project.id  IN ' . $projectsSQL . ' and ' .
-            'notification_scheme_data.event_id = ? and ' .
+            'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
+            'yongo_notification_scheme_data.event_id = ? and ' .
             'general_user.id is not null ' .
 
             // 9. project_lead in permission scheme
 
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
-            'from project ' .
-            'left join notification_scheme on notification_scheme.id = project.notification_scheme_id ' .
-            'left join notification_scheme_data on (notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
-            'notification_scheme_data.project_lead is not null) ' .
-            'left join general_user on general_user.id = project.lead_id ' .
-            'where project.id  IN ' . $projectsSQL . ' and ' .
-                'notification_scheme_data.event_id = ? and ' .
-                'notification_scheme_data.project_lead is not null and ' .
-                'project.lead_id is not null and ' .
+            'from yongo_project ' .
+            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
+            'yongo_notification_scheme_data.project_lead is not null) ' .
+            'left join general_user on general_user.id = yongo_project.lead_id ' .
+            'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
+                'yongo_notification_scheme_data.event_id = ? and ' .
+                'yongo_notification_scheme_data.project_lead is not null and ' .
+                'yongo_project.lead_id is not null and ' .
                 'general_user.id is not null ' .
 
             // 10. component_lead in permission scheme
 
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
-            'from project ' .
-            'left join notification_scheme on notification_scheme.id = project.notification_scheme_id ' .
-            'left join notification_scheme_data on (notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
-                       'notification_scheme_data.component_lead is not null) ' .
+            'from yongo_project ' .
+            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
+                       'yongo_notification_scheme_data.component_lead is not null) ' .
             'left join yongo_issue on yongo_issue.id = ? ' .
             'left join issue_component on issue_component.issue_id = yongo_issue.id ' .
             'left join project_component on project_component.id = issue_component.project_component_id ' .
             'left join general_user on general_user.id = project_component.leader_id ' .
-            'where project.id  IN ' . $projectsSQL . ' and ' .
-                'notification_scheme_data.event_id = ? and ' .
-                'notification_scheme_data.component_lead is not null and ' .
+            'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
+                'yongo_notification_scheme_data.event_id = ? and ' .
+                'yongo_notification_scheme_data.component_lead is not null and ' .
                 'project_component.leader_id is not null and ' .
                 'general_user.id is not null ' .
 
@@ -1115,15 +1115,15 @@ class YongoProject
 
             'UNION DISTINCT ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name, general_user.email, general_user.notify_own_changes_flag ' .
-            'from project ' .
-            'left join notification_scheme on notification_scheme.id = project.notification_scheme_id ' .
-            'left join notification_scheme_data on (notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
-            'notification_scheme_data.user_picker_multiple_selection is not null) ' .
+            'from yongo_project ' .
+            'left join notification_scheme on notification_scheme.id = yongo_project.notification_scheme_id ' .
+            'left join yongo_notification_scheme_data on (yongo_notification_scheme_data.notification_scheme_id = notification_scheme.id and ' .
+            'yongo_notification_scheme_data.user_picker_multiple_selection is not null) ' .
             'left join yongo_issue on yongo_issue.id = ? ' .
-            'left join issue_custom_field_data on (issue_custom_field_data.issue_id = yongo_issue.id and issue_custom_field_data.field_id = notification_scheme_data.user_picker_multiple_selection) ' .
+            'left join issue_custom_field_data on (issue_custom_field_data.issue_id = yongo_issue.id and issue_custom_field_data.field_id = yongo_notification_scheme_data.user_picker_multiple_selection) ' .
             'left join general_user on general_user.id = issue_custom_field_data.value ' .
-            'where project.id  IN ' . $projectsSQL . ' and ' .
-            'notification_scheme_data.event_id = ? and ' .
+            'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
+            'yongo_notification_scheme_data.event_id = ? and ' .
             'general_user.id is not null';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1144,9 +1144,9 @@ class YongoProject
             $projectsSQL = '(' . $projectIdArray . ')';
 
         $query = 'SELECT DISTINCT general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'from project_role_data ' .
-            'left join general_user on general_user.id = project_role_data.user_id ' .
-            'where project_role_data.project_id IN ' . $projectsSQL;
+            'from yongo_project_role_data ' .
+            'left join general_user on general_user.id = yongo_project_role_data.user_id ' .
+            'where yongo_project_role_data.project_id IN ' . $projectsSQL;
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
@@ -1175,28 +1175,28 @@ class YongoProject
 
             // 1. user in permission scheme
         $query = 'select general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'from project ' .
-            'left join permission_scheme on permission_scheme.id = project.permission_scheme_id ' .
-            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-            'left join general_user on general_user.id = permission_scheme_data.user_id ' .
-            'where project.id IN ' . $projectsSQL . ' and ' .
-                'permission_scheme_data.user_id = ? and ' .
-                'permission_scheme_data.sys_permission_id = ? ' .
+            'from yongo_project ' .
+            'left join yongo_permission_scheme on yongo_permission_scheme.id = yongo_project.permission_scheme_id ' .
+            'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+            'left join general_user on general_user.id = yongo_permission_scheme_data.user_id ' .
+            'where yongo_project.id  IN ' . $projectsSQL . ' and ' .
+                'yongo_permission_scheme_data.user_id = ? and ' .
+                'yongo_permission_scheme_data.sys_permission_id = ? ' .
 
 
             // 2. group in permission scheme
 
             'UNION ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'from project ' .
-            'left join permission_scheme on permission_scheme.id = project.permission_scheme_id ' .
-            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-            'left join `general_group` on general_group.id = permission_scheme_data.group_id ' .
+            'from yongo_project ' .
+            'left join yongo_permission_scheme on yongo_permission_scheme.id = yongo_project.permission_scheme_id ' .
+            'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+            'left join `general_group` on general_group.id = yongo_permission_scheme_data.group_id ' .
             'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
             'left join general_user on general_user.id = general_group_data.user_id ' .
-            'where project.id  IN ' . $projectsSQL . ' and ' .
-                'permission_scheme_data.group_id is not null and ' .
-                'permission_scheme_data.sys_permission_id = ? and ' .
+            'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
+                'yongo_permission_scheme_data.group_id is not null and ' .
+                'yongo_permission_scheme_data.sys_permission_id = ? and ' .
                 'general_user.id = ? ' .
 
 
@@ -1204,14 +1204,14 @@ class YongoProject
 
             'UNION ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'from project ' .
-            'left join permission_scheme on permission_scheme.id = project.permission_scheme_id ' .
-            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-            'left join project_role_data on project_role_data.permission_role_id = permission_scheme_data.permission_role_id ' .
-            'left join general_user on general_user.id = project_role_data.user_id ' .
-            'where project.id  IN ' . $projectsSQL . ' and ' .
-                'project_role_data.user_id is not null and ' .
-                'permission_scheme_data.sys_permission_id = ? and ' .
+            'from yongo_project ' .
+            'left join yongo_permission_scheme on yongo_permission_scheme.id = yongo_project.permission_scheme_id ' .
+            'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+            'left join yongo_project_role_data on yongo_project_role_data.permission_role_id = yongo_permission_scheme_data.permission_role_id ' .
+            'left join general_user on general_user.id = yongo_project_role_data.user_id ' .
+            'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
+                'yongo_project_role_data.user_id is not null and ' .
+                'yongo_permission_scheme_data.sys_permission_id = ? and ' .
                 'general_user.id = ? ' .
 
 
@@ -1219,30 +1219,30 @@ class YongoProject
 
             'UNION ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'from project ' .
-            'left join permission_scheme on permission_scheme.id = project.permission_scheme_id ' .
-            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-            'left join project_role_data on project_role_data.permission_role_id = permission_scheme_data.permission_role_id ' .
-            'left join `general_group` on general_group.id = project_role_data.group_id ' .
+            'from yongo_project ' .
+            'left join yongo_permission_scheme on yongo_permission_scheme.id = yongo_project.permission_scheme_id ' .
+            'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+            'left join yongo_project_role_data on yongo_project_role_data.permission_role_id = yongo_permission_scheme_data.permission_role_id ' .
+            'left join `general_group` on general_group.id = yongo_project_role_data.group_id ' .
             'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
             'left join general_user on general_user.id = general_group_data.user_id ' .
-            'where project.id  IN ' . $projectsSQL . ' and ' .
-                'project_role_data.group_id is not null and ' .
-                'permission_scheme_data.sys_permission_id = ? and ' .
+            'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
+                'yongo_project_role_data.group_id is not null and ' .
+                'yongo_permission_scheme_data.sys_permission_id = ? and ' .
                 'general_user.id = ? ' .
 
             // 5. reporter
 
             'UNION ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'from project ' .
-            'left join permission_scheme on permission_scheme.id = project.permission_scheme_id ' .
-            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-            'left join yongo_issue on yongo_issue.project_id = project.id ' .
+            'from yongo_project ' .
+            'left join yongo_permission_scheme on yongo_permission_scheme.id = yongo_project.permission_scheme_id ' .
+            'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+            'left join yongo_issue on yongo_issue.project_id = yongo_project.id ' .
             'left join general_user on general_user.id = yongo_issue.user_reported_id ' .
-            'where project.id  IN ' . $projectsSQL . ' and ' .
-            'permission_scheme_data.sys_permission_id = ? and ' .
-            'permission_scheme_data.reporter = 1 and ' .
+            'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
+            'yongo_permission_scheme_data.sys_permission_id = ? and ' .
+            'yongo_permission_scheme_data.reporter = 1 and ' .
             'general_user.id = ? ';
 
 
@@ -1256,14 +1256,14 @@ class YongoProject
         $query .=
             'UNION ' .
             'select general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'from project ' .
-            'left join permission_scheme on permission_scheme.id = project.permission_scheme_id ' .
-            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-            'left join yongo_issue on yongo_issue.project_id = project.id ' .
+            'from yongo_project ' .
+            'left join yongo_permission_scheme on yongo_permission_scheme.id = yongo_project.permission_scheme_id ' .
+            'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+            'left join yongo_issue on yongo_issue.project_id = yongo_project.id ' .
             'left join general_user on general_user.id = yongo_issue.user_assigned_id ' .
-            'where project.id  IN ' . $projectsSQL . ' and ' .
-            'permission_scheme_data.sys_permission_id = ? and ' .
-            'permission_scheme_data.current_assignee = 1 and ' .
+            'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
+            'yongo_permission_scheme_data.sys_permission_id = ? and ' .
+            'yongo_permission_scheme_data.current_assignee = 1 and ' .
             'general_user.id = ? ';
 
         if ($issueId) {
@@ -1275,12 +1275,12 @@ class YongoProject
         $query .=
             'UNION ' .
             'SELECT -1 as user_id, null as first_name, null as last_name ' .
-            'from project ' .
-            'left join permission_scheme on permission_scheme.id = project.permission_scheme_id ' .
-            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-            'where project.id  IN ' . $projectsSQL . ' and ' .
-            'permission_scheme_data.sys_permission_id = ? and ' .
-            'permission_scheme_data.group_id = 0 ';
+            'from yongo_project ' .
+            'left join yongo_permission_scheme on yongo_permission_scheme.id = yongo_project.permission_scheme_id ' .
+            'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+            'where yongo_project.id   IN ' . $projectsSQL . ' and ' .
+            'yongo_permission_scheme_data.sys_permission_id = ? and ' .
+            'yongo_permission_scheme_data.group_id = 0 ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         if ($issueId) {
@@ -1299,7 +1299,7 @@ class YongoProject
     }
 
     public function getVersionById($versionId) {
-        $query = "SELECT id, project_id, name, description FROM project_version WHERE id = ? LIMIT 1";
+        $query = "SELECT id, project_id, name, description from yongo_project_version WHERE id = ? LIMIT 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $versionId);
@@ -1313,7 +1313,7 @@ class YongoProject
 
     public function getComponentById($componentId) {
         $query = "SELECT project_component.id, leader_id, project_id, name, description, general_user.id as user_id, general_user.first_name, general_user.last_name " .
-            "FROM project_component " .
+            "from yongo_project_component " .
             "LEFT join general_user on general_user.id = project_component.leader_id " .
             "WHERE project_component.id = ? " .
             "LIMIT 1";
@@ -1406,7 +1406,7 @@ class YongoProject
 
     public function getByWorkflowSchemeId($schemeId) {
         $query = 'SELECT * ' .
-            'FROM project ' .
+            'from yongo_project ' .
             'WHERE project.workflow_scheme_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1421,9 +1421,9 @@ class YongoProject
     }
 
     public function getByIssueId($issueId) {
-        $query = 'select project.id ' .
+        $query = 'select yongo_project.id  ' .
                  'from yongo_issue ' .
-                 'left join project on project.id = yongo_issue.project_id ' .
+                 'left join yongo_project on yongo_project.id = yongo_issue.project_id ' .
                  'where yongo_issue.id = ? ' .
                  'limit 1';
 
@@ -1456,7 +1456,7 @@ class YongoProject
     }
 
     public function getVersionByName($projectId, $name, $versionId = null) {
-        $query = 'select id, name from project_version where project_id = ? and LOWER(name) = LOWER(?) ';
+        $query = 'select id, name from yongo_project_version where project_id = ? and LOWER(name) = LOWER(?) ';
         if ($versionId) $query .= ' and id != ?';
         $query .= ' limit 1';
 
@@ -1476,7 +1476,7 @@ class YongoProject
     }
 
     public function getComponentByName($projectId, $name, $componentId = null) {
-        $query = 'select id, name from project_component where project_id = ? and LOWER(name) = LOWER(?)';
+        $query = 'select id, name from yongo_project_component where project_id = ? and LOWER(name) = LOWER(?)';
         if ($componentId) $query .= ' and id != ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1512,14 +1512,14 @@ class YongoProject
     }
 
     public function getByWorkflowIssueTypeScheme($clientId, $workflowIssueTypeSchemeId) {
-        $query = 'select project.id, project.name ' .
+        $query = 'select yongo_project.id, yongo_project.name ' .
                  'from workflow ' .
                  'left join workflow_scheme_data on workflow_scheme_data.workflow_id = workflow.id ' .
-                 'left join project on project.workflow_scheme_id = workflow_scheme_data.workflow_scheme_id ' .
+                 'left join yongo_project on yongo_project.workflow_scheme_id = workflow_scheme_data.workflow_scheme_id ' .
                  'where workflow.client_id = ? and ' .
                  'workflow.issue_type_scheme_id = ? and ' .
-                 'project.id is not null ' .
-                 'group by project.id';
+                 'yongo_project.id is not null ' .
+                 'group by yongo_project.id ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $clientId, $workflowIssueTypeSchemeId);
@@ -1534,10 +1534,10 @@ class YongoProject
     }
 
     public function getAll($filters = array()) {
-        $query = 'select project.id, project.name, project.code, project.description, project.date_created, ' .
+        $query = 'select yongo_project.id, yongo_project.name, yongo_project.code, yongo_project.description, yongo_project.date_created, ' .
                  'client.company_name as client_company_name, client.contact_email ' .
-                 'from project ' .
-                 'left join client on client.id = project.client_id ' .
+                 'from yongo_project ' .
+                 'left join client on client.id = yongo_project.client_id ' .
                  'where 1 = 1';
 
         if (!empty($filters['today'])) {
@@ -1585,7 +1585,7 @@ class YongoProject
     }
 
     public function setIssueSecuritySchemeId($projectId, $projectIssueSecuritySchemeId) {
-        $query = 'update project set issue_security_scheme_id = ? where id = ? limit 1';
+        $query = 'update yongo_project  issue_security_scheme_id = ? where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $projectIssueSecuritySchemeId, $projectId);
@@ -1632,7 +1632,7 @@ class YongoProject
     }
 
     public function updateLastIssueNumber($projectId, $newIssueNumber) {
-        $query = 'update project set issue_number = ? where id = ? limit 1';
+        $query = 'update yongo_project  issue_number = ? where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $newIssueNumber, $projectId);
@@ -1640,7 +1640,7 @@ class YongoProject
     }
 
     public function updatePermissionScheme($projectId, $permissionSchemeId) {
-        $query = 'update project set permission_scheme_id = ? where id = ? limit 1';
+        $query = 'update yongo_project  permission_scheme_id = ? where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $permissionSchemeId, $projectId);
@@ -1648,7 +1648,7 @@ class YongoProject
     }
 
     public function updateNotificationScheme($projectId, $notificationSchemeId) {
-        $query = 'update project set notification_scheme_id = ? where id = ? limit 1';
+        $query = 'update yongo_project  notification_scheme_id = ? where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $notificationSchemeId, $projectId);
@@ -1656,7 +1656,7 @@ class YongoProject
     }
 
     public function updateFieldConfigurationScheme($projectId, $fieldConfigurationSchemeId) {
-        $query = 'update project set issue_type_field_configuration_id = ? where id = ? limit 1';
+        $query = 'update yongo_project  issue_type_field_configuration_id = ? where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $fieldConfigurationSchemeId, $projectId);
@@ -1664,7 +1664,7 @@ class YongoProject
     }
 
     public function updateIssueTypeScreenScheme($projectId, $issueTypeScreenSchemeId) {
-        $query = 'update project set issue_type_screen_scheme_id = ? where id = ? limit 1';
+        $query = 'update yongo_project  issue_type_screen_scheme_id = ? where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $issueTypeScreenSchemeId, $projectId);
@@ -1672,9 +1672,9 @@ class YongoProject
     }
 
     public function getByWorkflowId($workflowId) {
-        $query = 'select project.id ' .
-                 'from project ' .
-                 'left join workflow_scheme on workflow_scheme.id = project.workflow_scheme_id ' .
+        $query = 'select yongo_project.id  ' .
+                 'from yongo_project ' .
+                 'left join workflow_scheme on workflow_scheme.id = yongo_project.workflow_scheme_id ' .
                  'left join workflow_scheme_data on workflow_scheme_data.workflow_scheme_id = workflow_scheme.id ' .
                  'where workflow_scheme_data.workflow_id = ?';
 
@@ -1694,8 +1694,8 @@ class YongoProject
 
         $query = 'SELECT yongo_issue.id, resolution_id
             FROM yongo_issue
-            left join project on project.id = yongo_issue.project_id
-            left join client on client.id = project.client_id
+            left join yongo_project on yongo_project.id = yongo_issue.project_id
+            left join client on client.id = yongo_project.client_id
             WHERE DATE(yongo_issue.date_created) <= ?';
 
         if (-1 != $projectId) {
@@ -1729,8 +1729,8 @@ class YongoProject
     public function getTotalIssuesResolvedOnDate($clientId, $projectId, $date, $helpdeskFlag = 0) {
         $query = 'SELECT yongo_issue.id, resolution_id
                 FROM yongo_issue
-                left join project on project.id = yongo_issue.project_id
-                left join client on client.id = project.client_id
+                left join yongo_project on yongo_project.id = yongo_issue.project_id
+                left join client on client.id = yongo_project.client_id
                 WHERE DATE(yongo_issue.date_updated) <= ? AND resolution_id IS NOT NULL';
 
         if (-1 != $projectId) {
@@ -1762,7 +1762,7 @@ class YongoProject
 
     public function getParentComponent($parentComponentId, $resultType = null) {
         $query = 'select id as project_component_id, parent_id, name ' .
-            'from project_component ' .
+            'from yongo_project_component ' .
             'where id = ? order by id desc';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1866,7 +1866,7 @@ class YongoProject
     }
 
     public function toggleHelpDeskFlag($projectId) {
-        $query = 'update project set help_desk_enabled_flag = 1 - help_desk_enabled_flag where id = ? limit 1';
+        $query = 'update yongo_project  help_desk_enabled_flag = 1 - help_desk_enabled_flag where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $projectId);
@@ -1874,10 +1874,10 @@ class YongoProject
     }
 
     public function getWorkDoneDistributition($projectId, $dateFrom, $dateTo, $resultType = null) {
-        $query = 'SELECT issue_type.name as type_name, general_user.first_name, general_user.last_name, COUNT(yongo_issue.id) as total ' .
+        $query = 'SELECT yongo_issue_type.name as type_name, general_user.first_name, general_user.last_name, COUNT(yongo_issue.id) as total ' .
                  'FROM yongo_issue ' .
                  'LEFT join general_user on general_user.id = yongo_issue.user_assigned_id ' .
-                 'LEFT JOIN issue_type ON issue_type.id = yongo_issue.type_id ' .
+                 'LEFT join yongo_issue_type ON yongo_issue_type.id = yongo_issue.type_id ' .
                  'WHERE yongo_issue.project_id = ? ' .
                  'and yongo_issue.resolution_id is not null ' .
                  'and yongo_issue.date_resolved >= ? and yongo_issue.date_resolved <= ? ' .

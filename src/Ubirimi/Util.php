@@ -338,14 +338,14 @@ class Util {
             'null as new_value, ' .
             'general_user.id as user_id, general_user.first_name, general_user.last_name, ' .
             'yongo_issue.nr as nr, ' .
-            'project.code as code, ' .
+            'yongo_project.code as code, ' .
             'yongo_issue.id as issue_id, ' .
             'null as comment_content, ' .
             'general_user.avatar_picture ' .
             'from yongo_issue ' .
             'left join general_user on general_user.id = yongo_issue.user_reported_id ' .
-            'left join project on project.id = yongo_issue.project_id ' .
-            'where project.id IN (' . implode(', ', $projectIds) . ') ' .
+            'left join yongo_project on yongo_project.id = yongo_issue.project_id ' .
+            'where yongo_project.id  IN (' . implode(', ', $projectIds) . ') ' .
             $queryWherePart .
             $queryWherePartDateIssueCreated .
             'order by date_created desc) ';
@@ -360,15 +360,15 @@ class Util {
             'null as new_value, ' .
             'general_user.id as user_id, general_user.first_name, general_user.last_name, ' .
             'yongo_issue.nr as nr, ' .
-            'project.code as code, ' .
+            'yongo_project.code as code, ' .
             'yongo_issue.id as issue_id, ' .
             'issue_comment.content as comment_content, ' .
             'general_user.avatar_picture ' .
             'from yongo_issue ' .
             'left join issue_comment on yongo_issue.id = issue_comment.issue_id ' .
             'left join general_user on general_user.id = issue_comment.user_id ' .
-            'left join project on project.id = yongo_issue.project_id ' .
-            'where project.id IN (' . implode(', ', $projectIds) . ') ' .
+            'left join yongo_project on yongo_project.id = yongo_issue.project_id ' .
+            'where yongo_project.id  IN (' . implode(', ', $projectIds) . ') ' .
             $queryWherePart .
             $queryWherePartDateIssueCommented .
             'and issue_comment.issue_id is not null ' .
@@ -384,15 +384,15 @@ class Util {
             'issue_history.new_value, ' .
             'general_user.id as user_id, general_user.first_name as first_name, general_user.last_name as last_name, ' .
             'yongo_issue.nr as nr, ' .
-            'project.code as code, ' .
+            'yongo_project.code as code, ' .
             'yongo_issue.id as issue_id, ' .
             'null as comment_content, ' .
             'general_user.avatar_picture ' .
             'from yongo_issue ' .
             'left join issue_history on issue_history.issue_id = yongo_issue.id ' .
             'left join general_user on general_user.id = issue_history.by_user_id ' .
-            'left join project on project.id = yongo_issue.project_id ' .
-            'where project.id IN (' . implode(', ', $projectIds) . ') ' .
+            'left join yongo_project on yongo_project.id = yongo_issue.project_id ' .
+            'where yongo_project.id  IN (' . implode(', ', $projectIds) . ') ' .
             $queryWherePart .
             $queryWherePartDateIssueHistory .
             'and issue_history.issue_id is not null ' .

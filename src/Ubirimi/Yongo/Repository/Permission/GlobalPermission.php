@@ -58,12 +58,12 @@ class GlobalPermission
     }
 
     public function getDataByPermissionIdAndUserId($clientId, $globalPermissionId, $userId) {
-        $query = 'select `general_group`.name, `general_group`.id, sys_permission_global_data.id as sys_permission_global_data_id ' .
-            'from sys_permission_global_data ' .
-            'left join `general_group` on general_group.id = sys_permission_global_data.group_id ' .
-            'where sys_permission_global_data.sys_permission_global_id = ? and ' .
-            'sys_permission_global_data.client_id = ? and ' .
-            'sys_permission_global_data.user_id = ?';
+        $query = 'select `general_group`.name, `general_group`.id, yongo_permission_global_data.id as sys_permission_global_data_id ' .
+            'from yongo_permission_global_data ' .
+            'left join `general_group` on general_group.id = yongo_permission_global_data.group_id ' .
+            'where yongo_permission_global_data.sys_permission_global_id = ? and ' .
+            'yongo_permission_global_data.client_id = ? and ' .
+            'yongo_permission_global_data.user_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iii", $globalPermissionId, $clientId, $userId);
@@ -76,12 +76,12 @@ class GlobalPermission
     }
 
     public function getDataByPermissionIdAndGroupId($clientId, $globalPermissionId, $groupId) {
-        $query = 'select `general_group`.name, `general_group`.id, sys_permission_global_data.id as sys_permission_global_data_id ' .
-            'from sys_permission_global_data ' .
-            'left join `general_group` on general_group.id = sys_permission_global_data.group_id ' .
-            'where sys_permission_global_data.sys_permission_global_id = ? and ' .
-            'sys_permission_global_data.client_id = ? and ' .
-            'sys_permission_global_data.group_id = ?';
+        $query = 'select `general_group`.name, `general_group`.id, yongo_permission_global_data.id as sys_permission_global_data_id ' .
+            'from yongo_permission_global_data ' .
+            'left join `general_group` on general_group.id = yongo_permission_global_data.group_id ' .
+            'where yongo_permission_global_data.sys_permission_global_id = ? and ' .
+            'yongo_permission_global_data.client_id = ? and ' .
+            'yongo_permission_global_data.group_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iii", $globalPermissionId, $clientId, $groupId);
@@ -94,11 +94,11 @@ class GlobalPermission
     }
 
     public function getDataByPermissionId($clientId, $globalPermissionId, $resultType = null, $resultColumn = null) {
-        $query = 'select `general_group`.name, `general_group`.id, sys_permission_global_data.id as sys_permission_global_data_id ' .
-            'from sys_permission_global_data ' .
-            'left join `general_group` on general_group.id = sys_permission_global_data.group_id ' .
-            'where sys_permission_global_data.sys_permission_global_id = ? and ' .
-            'sys_permission_global_data.client_id = ?';
+        $query = 'select `general_group`.name, `general_group`.id, yongo_permission_global_data.id as sys_permission_global_data_id ' .
+            'from yongo_permission_global_data ' .
+            'left join `general_group` on general_group.id = yongo_permission_global_data.group_id ' .
+            'where yongo_permission_global_data.sys_permission_global_id = ? and ' .
+            'yongo_permission_global_data.client_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $globalPermissionId, $clientId);
@@ -124,7 +124,7 @@ class GlobalPermission
     }
 
     public function addDataForGroupId($clientId, $permissionId, $groupId, $date) {
-        $query = "INSERT INTO sys_permission_global_data(client_id, sys_permission_global_id, group_id, date_created) VALUES " .
+        $query = "INSERT INTO yongo_permission_global_data(client_id, sys_permission_global_id, group_id, date_created) VALUES " .
                  "(?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -135,7 +135,7 @@ class GlobalPermission
     }
 
     public function addDataForUserId($clientId, $permissionId, $userId) {
-        $query = "INSERT INTO sys_permission_global_data(client_id, sys_permission_global_id, user_id) VALUES " .
+        $query = "INSERT INTO yongo_permission_global_data(client_id, sys_permission_global_id, user_id) VALUES " .
             "(?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -146,7 +146,7 @@ class GlobalPermission
     }
 
     public function deleteById($Id) {
-        $query = "delete from sys_permission_global_data where id = ? limit 1";
+        $query = "delete from yongo_permission_global_data where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -154,7 +154,7 @@ class GlobalPermission
     }
 
     public function deleteByPermissionId($clientId, $globalsPermissionId, $type) {
-        $query = "delete from sys_permission_global_data where client_id = ? and sys_permission_global_id = ? ";
+        $query = "delete from yongo_permission_global_data where client_id = ? and sys_permission_global_id = ? ";
 
         if ($type == 'group')
             $query .= 'and group_id is not null';
@@ -167,12 +167,12 @@ class GlobalPermission
     }
 
     public function getDataById($Id) {
-        $query = 'select `general_group`.name, `general_group`.id, sys_permission_global_data.id as sys_permission_global_data_id, ' .
+        $query = 'select `general_group`.name, `general_group`.id, yongo_permission_global_data.id as sys_permission_global_data_id, ' .
             'sys_permission_global.name as permission_name ' .
-            'from sys_permission_global_data ' .
-            'left join sys_permission_global on sys_permission_global.id = sys_permission_global_data.sys_permission_global_id ' .
-            'left join `general_group` on general_group.id = sys_permission_global_data.group_id ' .
-            'where sys_permission_global_data.id = ? ' .
+            'from yongo_permission_global_data ' .
+            'left join sys_permission_global on sys_permission_global.id = yongo_permission_global_data.sys_permission_global_id ' .
+            'left join `general_group` on general_group.id = yongo_permission_global_data.group_id ' .
+            'where yongo_permission_global_data.id = ? ' .
             'limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

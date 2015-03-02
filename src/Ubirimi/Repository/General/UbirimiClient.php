@@ -267,7 +267,7 @@ class UbirimiClient
     }
 
     public function createDefaultPermissionScheme($clientId, $currentDate) {
-        $query = "INSERT INTO permission_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_permission_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $name = 'Default Permission Scheme';
@@ -293,7 +293,7 @@ class UbirimiClient
 
     public function createDefaultIssueTypeSchemeData($clientId, $issueTypeSchemeId, $currentDate) {
         $issueTypes = UbirimiContainer::get()['repository']->get(IssueType::class)->getAll($clientId);
-        $query = "INSERT INTO issue_type_scheme_data(issue_type_scheme_id, issue_type_id, date_created) VALUES ";
+        $query = "INSERT INTO yongo_issue_type_scheme_data(issue_type_scheme_id, issue_type_id, date_created) VALUES ";
         while ($issueType = $issueTypes->fetch_array(MYSQLI_ASSOC)) {
             $query .= "(" . $issueTypeSchemeId . "," . $issueType['id'] . ", '" . $currentDate . "'), ";
         }
@@ -318,14 +318,14 @@ class UbirimiClient
     public function createDefaultIssueTypes($clientId, $currentDate) {
         $query = "INSERT INTO issue_type(client_id, name, description, sub_task_flag, icon_name, date_created) VALUES " .
             "(" . $clientId . ", 'Bug', 'A problem which impairs or prevents the functions of the product.', 0, 'bug.png', '" . $currentDate . "'), (" . $clientId . ", 'New feature', 'A new feature of the product, which has yet to be developed.', 0, 'new_feature.png', '" . $currentDate . "'), " .
-            "(" . $clientId . ", 'Task', 'A task that needs to be done.', 0, 'task.png', '" . $currentDate . "'), (" . $clientId . " , 'Improvement', 'An improvement or enhancement to an existing feature or task.', 0, 'improvement.png', '" . $currentDate . "'), " .
-            "(" . $clientId . ", 'Story', 'A user story', 0, 'story.png', '" . $currentDate . "'), (" . $clientId . " , 'Epic', 'A big user story that needs to be broken down.', 0, 'epic.png', '" . $currentDate . "'), " .
-            "(" . $clientId . ", 'Technical task', 'A technical task.', 1, 'technical.png', '" . $currentDate . "'), (" . $clientId . " , 'Sub-task', 'The sub-task of the issue', 1, 'sub_task.png', '" . $currentDate . "');";
+            "(" . $clientId . ", 'Task', 'A task that needs to be done.', 0, 'task.png', '" . $currentDate . "'), (" . $clientId . ", 'Improvement', 'An improvement or enhancement to an existing feature or task.', 0, 'improvement.png', '" . $currentDate . "'), " .
+            "(" . $clientId . ", 'Story', 'A user story', 0, 'story.png', '" . $currentDate . "'), (" . $clientId . ", 'Epic', 'A big user story that needs to be broken down.', 0, 'epic.png', '" . $currentDate . "'), " .
+            "(" . $clientId . ", 'Technical task', 'A technical task.', 1, 'technical.png', '" . $currentDate . "'), (" . $clientId . ", 'Sub-task', 'The sub-task of the issue', 1, 'sub_task.png', '" . $currentDate . "');";
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
     public  function createDefaultIssueTypeScheme($clientId, $type, $currentDate) {
-        $query = "INSERT INTO issue_type_scheme(client_id, name, description, type, date_created) VALUES (?, ?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_issue_type_scheme(client_id, name, description, type, date_created) VALUES (?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $name = 'Default Issue Type Scheme';
@@ -366,7 +366,7 @@ class UbirimiClient
             "(" . $clientId . ", 'Open', 'The issue is open and ready for the assignee to start work on it.', '" . $currentDate . "'), " .
             "(" . $clientId . ", 'Resolved', 'A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed.', '" . $currentDate . "'), " .
             "(" . $clientId . ", 'Closed', 'The issue is considered finished, the resolution is correct. Issues which are closed can be reopened.', '" . $currentDate . "'), " .
-            "(" . $clientId . " , 'In Progress', 'This issue is being actively worked on at the moment by the assignee.', '" . $currentDate . "'), " .
+            "(" . $clientId . ", 'In Progress', 'This issue is being actively worked on at the moment by the assignee.', '" . $currentDate . "'), " .
             "(" . $clientId . ", 'Reopened', 'This issue was once resolved, but the resolution was deemed incorrect. From here issues are either marked assigned or resolved.', '" . $currentDate . "')";
         UbirimiContainer::get()['db.connection']->query($query);
     }
@@ -374,7 +374,7 @@ class UbirimiClient
     public function createDefaultIssueResolutions($clientId, $currentDate) {
         $query = "INSERT INTO issue_resolution(client_id, name, description, date_created) VALUES " .
             "(" . $clientId . ", 'Fixed', 'A fix for this issue is checked into the tree and tested.', '" . $currentDate . "'), (" . $clientId . ", 'Cannot Reproduce', 'All attempts at reproducing this issue failed, or not enough information was available to reproduce the issue. Reading the code produces no clues as to why this behavior would occur. If more information appears later, please reopen the issue.', '" . $currentDate . "'), " .
-            "(" . $clientId . ", 'Won\'t Fix', 'The problem described is an issue which will never be fixed.', '" . $currentDate . "'), (" . $clientId . " , 'Duplicate', 'The problem is a duplicate of an existing issue.', '" . $currentDate . "'), " .
+            "(" . $clientId . ", 'Won\'t Fix', 'The problem described is an issue which will never be fixed.', '" . $currentDate . "'), (" . $clientId . ", 'Duplicate', 'The problem is a duplicate of an existing issue.', '" . $currentDate . "'), " .
             "(" . $clientId . ", 'No Change Required', 'The problems does not require a change.', '" . $currentDate . "')";
         UbirimiContainer::get()['db.connection']->query($query);
     }
@@ -501,7 +501,7 @@ class UbirimiClient
         $query = 'delete from general_log where client_id = ' . $clientId;
         UbirimiContainer::get()['db.connection']->query($query);
 
-        $query = 'delete from sys_permission_global_data where client_id = ' . $clientId;
+        $query = 'delete from yongo_permission_global_data where client_id = ' . $clientId;
         UbirimiContainer::get()['db.connection']->query($query);
 
         // delete Cheetah Product data
@@ -571,14 +571,14 @@ class UbirimiClient
         if ($onlyHelpDeskFlag) {
             $partQuery = ' AND project.help_desk_enabled_flag = 1 ';
         }
-        $query = 'SELECT project.id, code, project.name, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
-                 'project_category.name as category_name, project_category_id as category_id ' .
-                 'FROM project ' .
-                 'LEFT join general_user ON project.lead_id = general_user.id ' .
-                 'left join project_category on project_category.id = project.project_category_id ' .
-                 'WHERE project.client_id = ? ' .
+        $query = 'SELECT yongo_project.id, code, yongo_project.name, yongo_project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
+                 'yongo_project_category.name as category_name, project_category_id as category_id ' .
+                 'from yongo_project ' .
+                 'LEFT join general_user on yongo_project.lead_id = general_user.id ' .
+                 'left join yongo_project_category on yongo_project_category.id = yongo_project.project_category_id ' .
+                 'WHERE yongo_project.client_id = ? ' .
                  $partQuery .
-                 'ORDER BY project.name ASC';
+                 'ORDER BY yongo_project.name ASC';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -1101,144 +1101,144 @@ class UbirimiClient
 
         // 1. user in permission scheme
 
-        $queryLoggedInUser = '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
-             'project.issue_type_field_configuration_id, project.lead_id, project.issue_security_scheme_id, project_category.name as category_name, project_category.id as category_id, ' .
+        $queryLoggedInUser = '(SELECT DISTINCT yongo_project.id, yongo_project.code, yongo_project.name, issue_type_screen_scheme_id, yongo_project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
+             'yongo_project.issue_type_field_configuration_id, yongo_project.lead_id, yongo_project.issue_security_scheme_id, yongo_project_category.name as category_name, yongo_project_category.id as category_id, ' .
              'user_lead.first_name as lead_first_name, user_lead.last_name as lead_last_name ' .
-        'from permission_scheme ' .
-        'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-        'left join project on project.permission_scheme_id = permission_scheme.id ' .
-        'left join general_user on general_user.id = permission_scheme_data.user_id ' .
-        'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
-        'left join project_category on project_category.id = project.project_category_id ' .
-        'where permission_scheme.client_id = ? and ' .
-            'permission_scheme_data.user_id = ? and ' .
-            'permission_scheme_data.sys_permission_id = ? and ' .
-            'project.id is not null and ' .
+        'from yongo_permission_scheme ' .
+        'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+        'left join yongo_project on yongo_project.permission_scheme_id = yongo_permission_scheme.id ' .
+        'left join general_user on general_user.id = yongo_permission_scheme_data.user_id ' .
+        'LEFT join general_user user_lead on yongo_project.lead_id = user_lead.id ' .
+        'left join yongo_project_category on yongo_project_category.id = yongo_project.project_category_id ' .
+        'where yongo_permission_scheme.client_id = ? and ' .
+            'yongo_permission_scheme_data.user_id = ? and ' .
+            'yongo_permission_scheme_data.sys_permission_id = ? and ' .
+            'yongo_project.id is not null and ' .
             'general_user.id is not null) ' .
 
         // 2. group in permission scheme
 
         'UNION DISTINCT ' .
 
-        '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
-             'project.issue_type_field_configuration_id, project.lead_id, project.issue_security_scheme_id, project_category.name as category_name, project_category.id as category_id, ' .
+        '(SELECT DISTINCT yongo_project.id, yongo_project.code, yongo_project.name, issue_type_screen_scheme_id, yongo_project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
+             'yongo_project.issue_type_field_configuration_id, yongo_project.lead_id, yongo_project.issue_security_scheme_id, yongo_project_category.name as category_name, yongo_project_category.id as category_id, ' .
              'user_lead.first_name as lead_first_name, user_lead.last_name as lead_last_name ' .
-        'from permission_scheme ' .
-        'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-        'left join project on project.permission_scheme_id = permission_scheme.id ' .
-        'left join `general_group` on general_group.id = permission_scheme_data.group_id ' .
+        'from yongo_permission_scheme ' .
+        'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+        'left join yongo_project on yongo_project.permission_scheme_id = yongo_permission_scheme.id ' .
+        'left join `general_group` on general_group.id = yongo_permission_scheme_data.group_id ' .
         'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
         'left join general_user on general_user.id = general_group_data.user_id ' .
-        'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
-        'left join project_category on project_category.id = project.project_category_id ' .
-        'where permission_scheme.client_id = ? and ' .
-            'permission_scheme_data.group_id is not null and ' .
-            'permission_scheme_data.sys_permission_id = ? and ' .
+        'LEFT join general_user user_lead on yongo_project.lead_id = user_lead.id ' .
+        'left join yongo_project_category on yongo_project_category.id = yongo_project.project_category_id ' .
+        'where yongo_permission_scheme.client_id = ? and ' .
+            'yongo_permission_scheme_data.group_id is not null and ' .
+            'yongo_permission_scheme_data.sys_permission_id = ? and ' .
             'general_user.id = ? and ' .
-            'project.id is not null and ' .
+            'yongo_project.id is not null and ' .
             'general_user.id is not null) ' .
 
             // 2.1 group Anyone
 
         'UNION ' .
 
-        '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, null as first_name, null as last_name, null as user_id, ' .
-            'project.issue_type_field_configuration_id, project.lead_id, project.issue_security_scheme_id, project_category.name as category_name, project_category.id as category_id, ' .
+        '(SELECT DISTINCT yongo_project.id, yongo_project.code, yongo_project.name, issue_type_screen_scheme_id, yongo_project.description, null as first_name, null as last_name, null as user_id, ' .
+            'yongo_project.issue_type_field_configuration_id, yongo_project.lead_id, yongo_project.issue_security_scheme_id, yongo_project_category.name as category_name, yongo_project_category.id as category_id, ' .
             'user_lead.first_name as lead_first_name, user_lead.last_name as lead_last_name ' .
-        'from permission_scheme ' .
-        'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-        'left join project on project.permission_scheme_id = permission_scheme.id ' .
-        'left join project_category on project_category.id = project.project_category_id ' .
-        'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
-        'where permission_scheme.client_id = ? and ' .
-            'permission_scheme_data.sys_permission_id = ? and ' .
-            'permission_scheme_data.group_id = 0) ' .
+        'from yongo_permission_scheme ' .
+        'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+        'left join yongo_project on yongo_project.permission_scheme_id = yongo_permission_scheme.id ' .
+        'left join yongo_project_category on yongo_project_category.id = yongo_project.project_category_id ' .
+        'LEFT join general_user user_lead on yongo_project.lead_id = user_lead.id ' .
+        'where yongo_permission_scheme.client_id = ? and ' .
+            'yongo_permission_scheme_data.sys_permission_id = ? and ' .
+            'yongo_permission_scheme_data.group_id = 0) ' .
 
             // 3. permission role in permission scheme - user
 
         'UNION DISTINCT ' .
 
-        '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
-            'project.issue_type_field_configuration_id, project.lead_id, project.issue_security_scheme_id, project_category.name as category_name, project_category.id as category_id, ' .
+        '(SELECT DISTINCT yongo_project.id, yongo_project.code, yongo_project.name, issue_type_screen_scheme_id, yongo_project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
+            'yongo_project.issue_type_field_configuration_id, yongo_project.lead_id, yongo_project.issue_security_scheme_id, yongo_project_category.name as category_name, yongo_project_category.id as category_id, ' .
             'user_lead.first_name as lead_first_name, user_lead.last_name as lead_last_name ' .
-        'from permission_scheme ' .
-        'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-        'left join project on project.permission_scheme_id = permission_scheme.id ' .
-        'left join project_role_data on project_role_data.permission_role_id = permission_scheme_data.permission_role_id ' .
-        'left join general_user on general_user.id = project_role_data.user_id ' .
-        'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
-        'left join project_category on project_category.id = project.project_category_id ' .
-        'where permission_scheme.client_id = ? and ' .
-            'project_role_data.user_id is not null and ' .
-            'permission_scheme_data.sys_permission_id = ? and ' .
+        'from yongo_permission_scheme ' .
+        'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+        'left join yongo_project on yongo_project.permission_scheme_id = yongo_permission_scheme.id ' .
+        'left join yongo_project_role_data on yongo_project_role_data.permission_role_id = yongo_permission_scheme_data.permission_role_id ' .
+        'left join general_user on general_user.id = yongo_project_role_data.user_id ' .
+        'LEFT join general_user user_lead on yongo_project.lead_id = user_lead.id ' .
+        'left join yongo_project_category on yongo_project_category.id = yongo_project.project_category_id ' .
+        'where yongo_permission_scheme.client_id = ? and ' .
+            'yongo_project_role_data.user_id is not null and ' .
+            'yongo_permission_scheme_data.sys_permission_id = ? and ' .
             'general_user.id = ? and ' .
             'general_user.id is not null and ' .
-            'project.id is not null and ' .
-            'project_role_data.project_id = project.id) ' .
+            'yongo_project.id is not null and ' .
+            'yongo_project_role_data.project_id = yongo_project.id) ' .
 
             // 4. permission role in permission scheme - group
 
         'UNION DISTINCT ' .
 
-        '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
-            'project.issue_type_field_configuration_id, project.lead_id, project.issue_security_scheme_id, project_category.name as category_name, project_category.id as category_id, ' .
+        '(SELECT DISTINCT yongo_project.id, yongo_project.code, yongo_project.name, issue_type_screen_scheme_id, yongo_project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
+            'yongo_project.issue_type_field_configuration_id, yongo_project.lead_id, yongo_project.issue_security_scheme_id, yongo_project_category.name as category_name, yongo_project_category.id as category_id, ' .
             'user_lead.first_name as lead_first_name, user_lead.last_name as lead_last_name ' .
-        'from permission_scheme ' .
-        'left join project on project.permission_scheme_id = permission_scheme.id ' .
-        'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-        'left join project_role_data on project_role_data.permission_role_id = permission_scheme_data.permission_role_id ' .
-        'left join `general_group` on general_group.id = project_role_data.group_id ' .
+        'from yongo_permission_scheme ' .
+        'left join yongo_project on yongo_project.permission_scheme_id = yongo_permission_scheme.id ' .
+        'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+        'left join yongo_project_role_data on yongo_project_role_data.permission_role_id = yongo_permission_scheme_data.permission_role_id ' .
+        'left join `general_group` on general_group.id = yongo_project_role_data.group_id ' .
         'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
         'left join general_user on general_user.id = general_group_data.user_id ' .
-        'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
-        'left join project_category on project_category.id = project.project_category_id ' .
-        'where permission_scheme.client_id = ? and ' .
-            'project_role_data.group_id is not null and ' .
-            'permission_scheme_data.sys_permission_id = ? and ' .
+        'LEFT join general_user user_lead on yongo_project.lead_id = user_lead.id ' .
+        'left join yongo_project_category on yongo_project_category.id = yongo_project.project_category_id ' .
+        'where yongo_permission_scheme.client_id = ? and ' .
+            'yongo_project_role_data.group_id is not null and ' .
+            'yongo_permission_scheme_data.sys_permission_id = ? and ' .
             'general_user.id = ? and ' .
-            'project.id is not null and ' .
+            'yongo_project.id is not null and ' .
             'general_user.id is not null) ' .
 
             // 5. reporter
 
         'UNION DISTINCT ' .
 
-        '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
-            'project.issue_type_field_configuration_id, project.lead_id, project.issue_security_scheme_id, project_category.name as category_name, project_category.id as category_id, ' .
+        '(SELECT DISTINCT yongo_project.id, yongo_project.code, yongo_project.name, issue_type_screen_scheme_id, yongo_project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
+            'yongo_project.issue_type_field_configuration_id, yongo_project.lead_id, yongo_project.issue_security_scheme_id, yongo_project_category.name as category_name, yongo_project_category.id as category_id, ' .
             'user_lead.first_name as lead_first_name, user_lead.last_name as lead_last_name ' .
-        'from permission_scheme ' .
-        'left join project on project.permission_scheme_id = permission_scheme.id ' .
-        'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-        'left join yongo_issue on yongo_issue.project_id = project.id ' .
+        'from yongo_permission_scheme ' .
+        'left join yongo_project on yongo_project.permission_scheme_id = yongo_permission_scheme.id ' .
+        'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+        'left join yongo_issue on yongo_issue.project_id = yongo_project.id ' .
         'left join general_user on general_user.id = yongo_issue.user_reported_id ' .
-        'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
-        'left join project_category on project_category.id = project.project_category_id ' .
-        'where permission_scheme.client_id = ? and ' .
-            'permission_scheme_data.sys_permission_id = ? and ' .
-            'permission_scheme_data.reporter = 1 and ' .
+        'LEFT join general_user user_lead on yongo_project.lead_id = user_lead.id ' .
+        'left join yongo_project_category on yongo_project_category.id = yongo_project.project_category_id ' .
+        'where yongo_permission_scheme.client_id = ? and ' .
+            'yongo_permission_scheme_data.sys_permission_id = ? and ' .
+            'yongo_permission_scheme_data.reporter = 1 and ' .
             'general_user.id = ? and ' .
-            'project.id is not null and ' .
+            'yongo_project.id is not null and ' .
             'general_user.id is not null) ' .
 
             // 6. current assignee
 
         'UNION DISTINCT ' .
 
-        '(SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
-            'project.issue_type_field_configuration_id, project.lead_id, project.issue_security_scheme_id, project_category.name as category_name, project_category.id as category_id, ' .
+        '(SELECT DISTINCT yongo_project.id, yongo_project.code, yongo_project.name, issue_type_screen_scheme_id, yongo_project.description, general_user.first_name, general_user.last_name, general_user.id as user_id, ' .
+            'yongo_project.issue_type_field_configuration_id, yongo_project.lead_id, yongo_project.issue_security_scheme_id, yongo_project_category.name as category_name, yongo_project_category.id as category_id, ' .
             'user_lead.first_name as lead_first_name, user_lead.last_name as lead_last_name ' .
-        'from permission_scheme ' .
-        'left join project on project.permission_scheme_id = permission_scheme.id ' .
-        'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-        'left join yongo_issue on yongo_issue.project_id = project.id ' .
+        'from yongo_permission_scheme ' .
+        'left join yongo_project on yongo_project.permission_scheme_id = yongo_permission_scheme.id ' .
+        'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+        'left join yongo_issue on yongo_issue.project_id = yongo_project.id ' .
         'left join general_user on general_user.id = yongo_issue.user_assigned_id ' .
-        'LEFT join general_user user_lead ON project.lead_id = user_lead.id ' .
-        'left join project_category on project_category.id = project.project_category_id ' .
-        'where permission_scheme.client_id = ? and ' .
-            'permission_scheme_data.sys_permission_id = ? and ' .
-            'permission_scheme_data.current_assignee = 1 and ' .
+        'LEFT join general_user user_lead on yongo_project.lead_id = user_lead.id ' .
+        'left join yongo_project_category on yongo_project_category.id = yongo_project.project_category_id ' .
+        'where yongo_permission_scheme.client_id = ? and ' .
+            'yongo_permission_scheme_data.sys_permission_id = ? and ' .
+            'yongo_permission_scheme_data.current_assignee = 1 and ' .
             'general_user.id = ? and ' .
-            'project.id is not null and ' .
+            'yongo_project.id is not null and ' .
             'general_user.id is not null) ' .
 
         'order by name';
@@ -1246,16 +1246,16 @@ class UbirimiClient
         // check to see if group 'Anyone' is in the permission. This is for the case of Anonymous access
         if (!$userId) {
 
-            $queryAnonymousUser = 'SELECT DISTINCT project.id, project.code, project.name, issue_type_screen_scheme_id, project.description, null as first_name, null as last_name, null as user_id, ' .
-                'project.issue_type_field_configuration_id, project.lead_id, project.issue_security_scheme_id, project_category.name as category_name, project_category.id as category_id ' .
-                'from permission_scheme ' .
-                'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id ' .
-                'left join project on project.permission_scheme_id = permission_scheme.id ' .
-                'left join project_category on project_category.id = project.project_category_id ' .
-                'where permission_scheme.client_id = ? and ' .
-                    'permission_scheme_data.sys_permission_id = ? and ' .
-                    'permission_scheme_data.group_id = 0 ' .
-                'order by project.name';
+            $queryAnonymousUser = 'SELECT DISTINCT yongo_project.id, yongo_project.code, yongo_project.name, issue_type_screen_scheme_id, yongo_project.description, null as first_name, null as last_name, null as user_id, ' .
+                'yongo_project.issue_type_field_configuration_id, yongo_project.lead_id, yongo_project.issue_security_scheme_id, yongo_project_category.name as category_name, yongo_project_category.id as category_id ' .
+                'from yongo_permission_scheme ' .
+                'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id ' .
+                'left join yongo_project on yongo_project.permission_scheme_id = yongo_permission_scheme.id ' .
+                'left join yongo_project_category on yongo_project_category.id = yongo_project.project_category_id ' .
+                'where yongo_permission_scheme.client_id = ? and ' .
+                    'yongo_permission_scheme_data.sys_permission_id = ? and ' .
+                    'yongo_permission_scheme_data.group_id = 0 ' .
+                'order by yongo_project.name';
 
                 $stmt = UbirimiContainer::get()['db.connection']->prepare($queryAnonymousUser);
             $stmt->bind_param("ii", $clientId, $permissionId);
@@ -1353,7 +1353,7 @@ class UbirimiClient
         $groupAdministratorsId = $groupAdministrators['id'];
         $groupUsersId = $groupUsers['id'];
 
-        $query = "INSERT INTO sys_permission_global_data(client_id, sys_permission_global_id, group_id) VALUES (?, ?, ?)";
+        $query = "INSERT INTO yongo_permission_global_data(client_id, sys_permission_global_id, group_id) VALUES (?, ?, ?)";
 
         // for Administrators group
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -1383,7 +1383,7 @@ class UbirimiClient
     }
 
     public function addYongoGlobalPermissionData($clientId, $groupAdministrators, $groupUsers) {
-        $query = "INSERT INTO sys_permission_global_data(client_id, sys_permission_global_id, group_id) VALUES (?, ?, ?)";
+        $query = "INSERT INTO yongo_permission_global_data(client_id, sys_permission_global_id, group_id) VALUES (?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $Id = GlobalPermission::GLOBAL_PERMISSION_YONGO_SYSTEM_ADMINISTRATORS;

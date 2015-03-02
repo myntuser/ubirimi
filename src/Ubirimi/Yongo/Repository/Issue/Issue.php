@@ -50,10 +50,10 @@ class Issue
         $query = 'SELECT SQL_CALC_FOUND_ROWS issue_main_table.id, issue_main_table.nr, issue_main_table.summary, issue_main_table.description, issue_main_table.environment, ' .
             'user_reported.id as reporter, user_reported.first_name as ur_first_name, user_reported.last_name as ur_last_name, user_reported.avatar_picture as reporter_avatar_picture, ' .
             'user_assigned.first_name as ua_first_name, user_assigned.last_name as ua_last_name, user_assigned.id as assignee, user_assigned.avatar_picture as assignee_avatar_picture, ' .
-            'project.code as project_code, project.name as project_name, issue_main_table.project_id as issue_project_id, issue_type.id as issue_type_id, issue_type.icon_name as issue_type_icon_name, issue_type.description as issue_type_description, ' .
-            'issue_priority.id as priority, issue_priority.color as priority_color, issue_priority.icon_name as issue_priority_icon_name, issue_priority.description as issue_priority_description, issue_priority.name as priority_name, ' .
+            'yongo_project.code as project_code, yongo_project.name as project_name, issue_main_table.project_id as issue_project_id, yongo_issue_type.id as issue_type_id, yongo_issue_type.icon_name as issue_type_icon_name, yongo_issue_type.description as issue_type_description, ' .
+            'yongo_issue_priority.id as priority, yongo_issue_priority.color as priority_color, yongo_issue_priority.icon_name as issue_priority_icon_name, yongo_issue_priority.description as issue_priority_description, yongo_issue_priority.name as priority_name, ' .
             'issue_status.id as status, issue_status.name as status_name, ' .
-            'issue_type.id as type, issue_type.name as type_name, ' .
+            'yongo_issue_type.id as type, yongo_issue_type.name as type_name, ' .
             'issue_resolution.name as resolution_name, issue_main_table.resolution_id as resolution, issue_main_table.parent_id, issue_main_table.security_scheme_level_id as security_level, ' .
             'issue_security_scheme_level.name as security_level_name, ' .
             'issue_main_table.user_assigned_id as issue_assignee, ' .
@@ -70,56 +70,56 @@ class Issue
             // deal with security scheme level
 
             // 1. user in security scheme level data
-            $query .= '(SELECT max(issue_security_scheme_level_data.id)
-                      from issue_security_scheme_level_data
-                      left join general_user on general_user.id = issue_security_scheme_level_data.user_id
-                      where issue_security_scheme_level_data.issue_security_scheme_level_id = issue_main_table.security_scheme_level_id
+            $query .= '(SELECT max(yongo_issue_security_scheme_level_data.id)
+                      from yongo_issue_security_scheme_level_data
+                      left join general_user on general_user.id = yongo_issue_security_scheme_level_data.user_id
+                      where yongo_issue_security_scheme_level_data.issue_security_scheme_level_id = issue_main_table.security_scheme_level_id
                       and general_user.id = ?) as security_check1, ';
 
             $parameterType .= 'i';
             $parameterArray[] = $securitySchemeUserId;
 
             // 2. user in group security scheme level data
-            $query .= '(SELECT max(issue_security_scheme_level_data.id) ' .
-                'from issue_security_scheme_level_data ' .
-                'left join `general_group` on general_group.id = issue_security_scheme_level_data.group_id ' .
+            $query .= '(SELECT max(yongo_issue_security_scheme_level_data.id) ' .
+                'from yongo_issue_security_scheme_level_data ' .
+                'left join `general_group` on general_group.id = yongo_issue_security_scheme_level_data.group_id ' .
                 'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
                 'left join general_user on general_user.id = general_group_data.user_id ' .
-                'where issue_security_scheme_level_data.issue_security_scheme_level_id = issue_main_table.security_scheme_level_id and ' .
+                'where yongo_issue_security_scheme_level_data.issue_security_scheme_level_id = issue_main_table.security_scheme_level_id and ' .
                 'general_user.id = ?) as security_check2, ';
 
             $parameterType .= 'i';
             $parameterArray[] = $securitySchemeUserId;
 
             // 3. permission role in security scheme level data - user
-            $query .= '(SELECT max(issue_security_scheme_level_data.id) ' .
-                'from issue_security_scheme_level_data ' .
-                'left join project_role_data on project_role_data.permission_role_id = issue_security_scheme_level_data.permission_role_id ' .
-                'left join general_user on general_user.id = project_role_data.user_id ' .
-                'where issue_security_scheme_level_data.issue_security_scheme_level_id = issue_main_table.security_scheme_level_id and ' .
+            $query .= '(SELECT max(yongo_issue_security_scheme_level_data.id) ' .
+                'from yongo_issue_security_scheme_level_data ' .
+                'left join yongo_project_role_data on yongo_project_role_data.permission_role_id = yongo_issue_security_scheme_level_data.permission_role_id ' .
+                'left join general_user on general_user.id = yongo_project_role_data.user_id ' .
+                'where yongo_issue_security_scheme_level_data.issue_security_scheme_level_id = issue_main_table.security_scheme_level_id and ' .
                 'general_user.id = ?) as security_check3, ';
 
             $parameterType .= 'i';
             $parameterArray[] = $securitySchemeUserId;
 
             // 4. permission role in security scheme level data - group
-            $query .= '(SELECT max(issue_security_scheme_level_data.id) ' .
-                'from issue_security_scheme_level_data ' .
-                'left join project_role_data on project_role_data.permission_role_id = issue_security_scheme_level_data.permission_role_id ' .
-                'left join `general_group` on general_group.id = project_role_data.group_id ' .
+            $query .= '(SELECT max(yongo_issue_security_scheme_level_data.id) ' .
+                'from yongo_issue_security_scheme_level_data ' .
+                'left join yongo_project_role_data on yongo_project_role_data.permission_role_id = yongo_issue_security_scheme_level_data.permission_role_id ' .
+                'left join `general_group` on general_group.id = yongo_project_role_data.group_id ' .
                 'left join `general_group_data` on general_group_data.group_id = `general_group`.id ' .
                 'left join general_user on general_user.id = general_group_data.user_id ' .
-                'where issue_security_scheme_level_data.issue_security_scheme_level_id = issue_main_table.security_scheme_level_id and ' .
+                'where yongo_issue_security_scheme_level_data.issue_security_scheme_level_id = issue_main_table.security_scheme_level_id and ' .
                 'general_user.id = ?) as security_check4, ';
 
             $parameterType .= 'i';
             $parameterArray[] = $securitySchemeUserId;
 
             // 5. current_assignee in security scheme level data
-            $query .= '(SELECT max(issue_security_scheme_level_data.id) ' .
-                'from issue_security_scheme_level_data, general_user ' .
-                'where issue_security_scheme_level_data.issue_security_scheme_level_id = issue_main_table.security_scheme_level_id and ' .
-                'issue_security_scheme_level_data.current_assignee is not null and ' .
+            $query .= '(SELECT max(yongo_issue_security_scheme_level_data.id) ' .
+                'from yongo_issue_security_scheme_level_data, general_user ' .
+                'where yongo_issue_security_scheme_level_data.issue_security_scheme_level_id = issue_main_table.security_scheme_level_id and ' .
+                'yongo_issue_security_scheme_level_data.current_assignee is not null and ' .
                 'issue_main_table.user_assigned_id is not null and ' .
                 'issue_main_table.user_assigned_id = general_user.id and ' .
                 'general_user.id = ?) as security_check5, ';
@@ -128,10 +128,10 @@ class Issue
             $parameterArray[] = $securitySchemeUserId;
 
             // 6. reporter in security scheme level data
-            $query .= '(SELECT max(issue_security_scheme_level_data.id) ' .
-                'from issue_security_scheme_level_data, general_user ' .
-                'where issue_security_scheme_level_data.issue_security_scheme_level_id = issue_main_table.security_scheme_level_id and ' .
-                'issue_security_scheme_level_data.reporter is not null and ' .
+            $query .= '(SELECT max(yongo_issue_security_scheme_level_data.id) ' .
+                'from yongo_issue_security_scheme_level_data, general_user ' .
+                'where yongo_issue_security_scheme_level_data.issue_security_scheme_level_id = issue_main_table.security_scheme_level_id and ' .
+                'yongo_issue_security_scheme_level_data.reporter is not null and ' .
                 'issue_main_table.user_reported_id is not null and ' .
                 'issue_main_table.user_reported_id = general_user.id and ' .
                 'general_user.id = ?) as security_check6, ';
@@ -141,13 +141,13 @@ class Issue
 
             // 7. project_lead in security scheme level data
 
-            $query .= '(SELECT max(issue_security_scheme_level_data.id) ' .
-                'from issue_security_scheme_level_data, project, general_user ' .
-                'where issue_security_scheme_level_data.issue_security_scheme_level_id = issue_main_table.security_scheme_level_id and ' .
-                'project.id = issue_main_table.project_id and ' .
-                'project.lead_id = general_user.id and ' .
-                'issue_security_scheme_level_data.project_lead is not null and ' .
-                'project.lead_id is not null and ' .
+            $query .= '(SELECT max(yongo_issue_security_scheme_level_data.id) ' .
+                'from yongo_issue_security_scheme_level_data, project, general_user ' .
+                'where yongo_issue_security_scheme_level_data.issue_security_scheme_level_id = issue_main_table.security_scheme_level_id and ' .
+                'yongo_project.id = issue_main_table.project_id and ' .
+                'yongo_project.lead_id = general_user.id and ' .
+                'yongo_issue_security_scheme_level_data.project_lead is not null and ' .
+                'yongo_project.lead_id is not null and ' .
                 'general_user.id = ?) as security_check7, ';
 
             $parameterType .= 'i';
@@ -157,14 +157,14 @@ class Issue
         $query .=
             'issue_main_table.date_created, issue_main_table.date_updated, issue_main_table.date_resolved, issue_main_table.date_due as due_date ' .
             'from yongo_issue as issue_main_table ' .
-            'LEFT JOIN issue_priority ON issue_main_table.priority_id = issue_priority.id ' .
-            'LEFT JOIN issue_type ON issue_main_table.type_id = issue_type.id ' .
-            'LEFT JOIN issue_status ON issue_main_table.status_id = issue_status.id ' .
+            'LEFT join yongo_issue_priority ON issue_main_table.priority_id = yongo_issue_priority.id ' .
+            'LEFT join yongo_issue_type ON issue_main_table.type_id = yongo_issue_type.id ' .
+            'LEFT JOIN issue_status ON issue_main_table.status_id = yongo_issue_status.id ' .
             'LEFT JOIN issue_resolution ON issue_main_table.resolution_id = issue_resolution.id ' .
             'LEFT JOIN issue_component ON issue_main_table.id = issue_component.issue_id ' .
             'LEFT JOIN issue_version ON issue_main_table.id = issue_version.issue_id ' .
-            'LEFT JOIN project ON issue_main_table.project_id = project.id ' .
-            'left join permission_scheme_data on permission_scheme_data.permission_scheme_id = project.permission_scheme_id ' .
+            'LEFT join yongo_project ON issue_main_table.project_id = yongo_project.id ' .
+            'left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_project.permission_scheme_id ' .
             'LEFT join general_user AS user_reported ON issue_main_table.user_reported_id = user_reported.id ' .
             'LEFT join general_user AS user_assigned ON issue_main_table.user_assigned_id = user_assigned.id ' .
             'LEFT JOIN issue_security_scheme_level ON issue_security_scheme_level.id = issue_main_table.security_scheme_level_id ' .
@@ -178,7 +178,7 @@ class Issue
         if (isset($parameters['sprint'])) {
             $query .= 'LEFT JOIN agile_board_sprint_issue ON agile_board_sprint_issue.issue_id = issue_main_table.id ';
             $query .= 'LEFT JOIN yongo_issue issue_parent on issue_parent.id = issue_main_table.parent_id ';
-            $query .= 'LEFT JOIN project project_parent on project_parent.id = issue_parent.project_id ';
+            $query .= 'LEFT join yongo_project project_parent on project_parent.id = issue_parent.project_id ';
         }
 
         $queryWhere = '';
@@ -465,7 +465,7 @@ class Issue
         }
 
         if (isset($parameters['client_id'])) {
-            $queryWhere .= ' project.client_id = ? AND ';
+            $queryWhere .= ' yongo_project.client_id = ? AND ';
             $parameterType .= 'i';
             $parameterArray[] = $parameters['client_id'];
         }
@@ -936,7 +936,7 @@ class Issue
 
     public function getAvailableIssueNumber($projectId) {
         $query = 'SELECT issue_number ' .
-                    'FROM project ' .
+                    'from yongo_project ' .
                     'WHERE id = ? ' .
                     'ORDER BY id desc ' .
                     'LIMIT 1';
@@ -1449,8 +1449,8 @@ class Issue
     public function updateSecurityLevel($clientId, $issueSecuritySchemeLevelId, $newIssueSecuritySchemeLevelId) {
         $query = 'select yongo_issue.id ' .
             'from yongo_issue ' .
-            'left join project on project.id = yongo_issue.project_id ' .
-            'where project.client_id = ? and ' .
+            'left join yongo_project on yongo_project.id = yongo_issue.project_id ' .
+            'where yongo_project.client_id = ? and ' .
             'yongo_issue.security_scheme_level_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

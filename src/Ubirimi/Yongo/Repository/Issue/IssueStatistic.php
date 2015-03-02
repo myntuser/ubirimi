@@ -24,12 +24,12 @@ use Ubirimi\Container\UbirimiContainer;
 class IssueStatistic
 {
     public function getUnresolvedIssuesByProjectForUser($userId) {
-        $q = 'select count(yongo_issue.id) as total, project.name, project.id as project_id ' .
+        $q = 'select count(yongo_issue.id) as total, yongo_project.name, yongo_project.id  as project_id ' .
             'from yongo_issue ' .
-            'left join project on yongo_issue.project_id = project.id ' .
+            'left join yongo_project on yongo_issue.project_id = yongo_project.id ' .
             'where yongo_issue.user_assigned_id = ? ' .
             'and yongo_issue.resolution_id is null ' .
-            'and project.name is not null ' .
+            'and yongo_project.name is not null ' .
             'group by yongo_issue.project_id';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
@@ -57,15 +57,15 @@ class IssueStatistic
         $group_by = '';
         switch ($setting) {
             case 'priority':
-                $query .= 'left join issue_priority on yongo_issue.priority_id = issue_priority.id ';
+                $query .= 'left join yongo_issue_priority on yongo_issue.priority_id = yongo_issue_priority.id ';
                 $group_by = 'group by yongo_issue.priority_id';
                 break;
             case 'type':
-                $query .= 'left join issue_type on yongo_issue.type_id = issue_type.id ';
+                $query .= 'left join yongo_issue_type on yongo_issue.type_id = yongo_issue_type.id ';
                 $group_by = 'group by yongo_issue.type_id';
                 break;
             case 'status':
-                $query .= 'left join issue_status on yongo_issue.status_id = issue_status.id ';
+                $query .= 'left join issue_status on yongo_issue.status_id = yongo_issue_status.id ';
                 $group_by = 'group by yongo_issue.status_id';
                 break;
             case 'assignee':

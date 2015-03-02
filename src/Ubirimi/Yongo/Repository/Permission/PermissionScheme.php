@@ -36,7 +36,7 @@ class PermissionScheme
     }
 
     public function save($currentDate) {
-        $query = "INSERT INTO permission_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_permission_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -47,7 +47,7 @@ class PermissionScheme
     }
 
     public function getByClientId($clientId) {
-        $query = "select * from permission_scheme where client_id = ?";
+        $query = "select * from yongo_permission_scheme where client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
@@ -61,7 +61,7 @@ class PermissionScheme
 
     public function getMetaDataById($Id) {
         $query = "select * " .
-            "from permission_scheme " .
+            "from yongo_permission_scheme " .
             "where id = ? " .
             "limit 1";
 
@@ -76,7 +76,7 @@ class PermissionScheme
     }
 
     public function updateMetaDataById($Id, $name, $description, $date) {
-        $query = "update permission_scheme set name = ?, description = ?, date_updated = ? where id = ? limit 1";
+        $query = "update yongo_permission_scheme set name = ?, description = ?, date_updated = ? where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("sssi", $name, $description, $date, $Id);
@@ -84,16 +84,16 @@ class PermissionScheme
     }
 
     public function getDataByPermissionId($permissionSchemeId, $permissionId) {
-        $query = "select permission_scheme_data.id, general_user.id as user_id, general_user.first_name, general_user.last_name, permission_scheme_data.reporter, " .
-                    "permission_scheme_data.group_id as group_id, general_group.name as group_name, " .
+        $query = "select yongo_permission_scheme_data.id, general_user.id as user_id, general_user.first_name, general_user.last_name, yongo_permission_scheme_data.reporter, " .
+                    "yongo_permission_scheme_data.group_id as group_id, general_group.name as group_name, " .
                     "permission_role.id as permission_role_id, permission_role.name as permission_role_name, " .
-                    "permission_scheme_data.current_assignee, permission_scheme_data.reporter, permission_scheme_data.project_lead " .
-            "from permission_scheme_data " .
-            "left join permission_role on permission_role.id = permission_scheme_data.permission_role_id " .
-            "left join `general_group` on general_group.id = permission_scheme_data.group_id " .
-            "left join general_user on general_user.id = permission_scheme_data.user_id " .
-            "where permission_scheme_data.permission_scheme_id = ? " .
-            "and permission_scheme_data.sys_permission_id = ?";
+                    "yongo_permission_scheme_data.current_assignee, yongo_permission_scheme_data.reporter, yongo_permission_scheme_data.project_lead " .
+            "from yongo_permission_scheme_data " .
+            "left join permission_role on permission_role.id = yongo_permission_scheme_data.permission_role_id " .
+            "left join `general_group` on general_group.id = yongo_permission_scheme_data.group_id " .
+            "left join general_user on general_user.id = yongo_permission_scheme_data.user_id " .
+            "where yongo_permission_scheme_data.permission_scheme_id = ? " .
+            "and yongo_permission_scheme_data.sys_permission_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $permissionSchemeId, $permissionId);
@@ -107,9 +107,9 @@ class PermissionScheme
     }
 
     public function getDataByPermissionSchemeId($permissionSchemeId) {
-        $query = "select permission_scheme_data.* " .
-            "from permission_scheme_data " .
-            "where permission_scheme_data.permission_scheme_id = ?";
+        $query = "select yongo_permission_scheme_data.* " .
+            "from yongo_permission_scheme_data " .
+            "where yongo_permission_scheme_data.permission_scheme_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $permissionSchemeId);
@@ -123,9 +123,9 @@ class PermissionScheme
     }
 
     public function getDataByPermissionSchemeIdAndPermissionId($permissionSchemeId, $sysPermissionId) {
-        $query = "select permission_scheme_data.* " .
-            "from permission_scheme_data " .
-            "where permission_scheme_data.permission_scheme_id = ? and sys_permission_id = ?";
+        $query = "select yongo_permission_scheme_data.* " .
+            "from yongo_permission_scheme_data " .
+            "where yongo_permission_scheme_data.permission_scheme_id = ? and sys_permission_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $permissionSchemeId, $sysPermissionId);
@@ -138,11 +138,11 @@ class PermissionScheme
     }
 
     public function getDataByProjectIdAndPermissionId($projectId, $sysPermissionId) {
-        $query = "select permission_scheme_data.* " .
-            "from permission_scheme_data " .
-            "left join permission_scheme on permission_scheme.id = permission_scheme_data.permission_scheme_id " .
-            "left join project on project.permission_scheme_id = permission_scheme.id " .
-            "where project.id = ? and sys_permission_id = ?";
+        $query = "select yongo_permission_scheme_data.* " .
+            "from yongo_permission_scheme_data " .
+            "left join yongo_permission_scheme on yongo_permission_scheme.id = yongo_permission_scheme_data.permission_scheme_id " .
+            "left join yongo_project on yongo_project.permission_scheme_id = yongo_permission_scheme.id " .
+            "where yongo_project.id  = ? and sys_permission_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $projectId, $sysPermissionId);
@@ -155,7 +155,7 @@ class PermissionScheme
     }
 
     public function getMetaDataByNameAndClientId($clientId, $name) {
-        $query = "select * from permission_scheme where client_id = ? and LOWER(name) = ?";
+        $query = "select * from yongo_permission_scheme where client_id = ? and LOWER(name) = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("is", $clientId, $name);
@@ -171,7 +171,7 @@ class PermissionScheme
         switch ($permissionType) {
 
             case Permission::PERMISSION_TYPE_USER:
-                $query = "INSERT INTO permission_scheme_data(permission_scheme_id, sys_permission_id, user_id, date_created) VALUES (?, ?, ?, ?)";
+                $query = "INSERT INTO yongo_permission_scheme_data(permission_scheme_id, sys_permission_id, user_id, date_created) VALUES (?, ?, ?, ?)";
                 $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
                 $stmt->bind_param("iiis", $permissionSchemeId, $sysPermissionId, $userId, $currentDate);
@@ -182,7 +182,7 @@ class PermissionScheme
                 break;
 
             case Permission::PERMISSION_TYPE_GROUP:
-                $query = "INSERT INTO permission_scheme_data(permission_scheme_id, sys_permission_id, group_id, date_created) VALUES (?, ?, ?, ?)";
+                $query = "INSERT INTO yongo_permission_scheme_data(permission_scheme_id, sys_permission_id, group_id, date_created) VALUES (?, ?, ?, ?)";
 
                 $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -194,7 +194,7 @@ class PermissionScheme
                 break;
 
             case Permission::PERMISSION_TYPE_PROJECT_ROLE:
-                $query = "INSERT INTO permission_scheme_data(permission_scheme_id, sys_permission_id, permission_role_id, date_created) VALUES (?, ?, ?, ?)";
+                $query = "INSERT INTO yongo_permission_scheme_data(permission_scheme_id, sys_permission_id, permission_role_id, date_created) VALUES (?, ?, ?, ?)";
 
                 $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -209,7 +209,7 @@ class PermissionScheme
             case Permission::PERMISSION_TYPE_REPORTER:
             case Permission::PERMISSION_TYPE_PROJECT_LEAD:
 
-                $query = "INSERT INTO permission_scheme_data(permission_scheme_id, sys_permission_id, `" . $permissionType . "`, date_created) VALUES (?, ?, ?, ?)";
+                $query = "INSERT INTO yongo_permission_scheme_data(permission_scheme_id, sys_permission_id, `" . $permissionType . "`, date_created) VALUES (?, ?, ?, ?)";
 
                 $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
                 $value = 1;
@@ -224,9 +224,9 @@ class PermissionScheme
 
     public function getUsersForPermissionId($permissionSchemeId, $permissionId) {
         $query = "select general_user.id as user_id, general_user.first_name, general_user.last_name " .
-            "from permission_scheme_data " .
-            "left join general_user on general_user.id = permission_scheme_data.user_id " .
-            "where permission_scheme_data.permission_scheme_id = ? and permission_scheme_data.sys_permission_id = ? and user_id is not null";
+            "from yongo_permission_scheme_data " .
+            "left join general_user on general_user.id = yongo_permission_scheme_data.user_id " .
+            "where yongo_permission_scheme_data.permission_scheme_id = ? and yongo_permission_scheme_data.sys_permission_id = ? and user_id is not null";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $permissionSchemeId, $permissionId);
@@ -241,9 +241,9 @@ class PermissionScheme
 
     public function getGroupsForPermissionId($permissionSchemeId, $permissionId) {
         $query = "SELECT general_group.id as group_id, general_group.name as group_name " .
-            "from permission_scheme_data " .
-            "left join `general_group` on general_group.id = permission_scheme_data.group_id " .
-            "where permission_scheme_data.permission_scheme_id = ? and permission_scheme_data.sys_permission_id = ? and group_id is not null";
+            "from yongo_permission_scheme_data " .
+            "left join `general_group` on general_group.id = yongo_permission_scheme_data.group_id " .
+            "where yongo_permission_scheme_data.permission_scheme_id = ? and yongo_permission_scheme_data.sys_permission_id = ? and group_id is not null";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $permissionSchemeId, $permissionId);
@@ -257,9 +257,9 @@ class PermissionScheme
 
     public function getPermissionRolesForPermissionId($permissionSchemeId, $permissionId) {
         $query = "select permission_role.id as permission_role_id, permission_role.name as permission_role_name " .
-            "from permission_scheme_data " .
-            "left join permission_role on permission_role.id = permission_scheme_data.permission_role_id " .
-            "where permission_scheme_data.permission_scheme_id = ? and permission_scheme_data.sys_permission_id = ? and permission_role_id is not null";
+            "from yongo_permission_scheme_data " .
+            "left join permission_role on permission_role.id = yongo_permission_scheme_data.permission_role_id " .
+            "where yongo_permission_scheme_data.permission_scheme_id = ? and yongo_permission_scheme_data.sys_permission_id = ? and permission_role_id is not null";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $permissionSchemeId, $permissionId);
@@ -272,7 +272,7 @@ class PermissionScheme
     }
 
     public function deleteUserDataByPermissionId($permissionSchemeId, $permissionId) {
-        $query = "delete from permission_scheme_data where permission_scheme_id = ? and sys_permission_id = ? and user_id is not null";
+        $query = "delete from yongo_permission_scheme_data where permission_scheme_id = ? and sys_permission_id = ? and user_id is not null";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -281,7 +281,7 @@ class PermissionScheme
     }
 
     public function deleteGroupDataByPermissionId($permissionSchemeId, $permissionId) {
-        $query = "delete from permission_scheme_data where permission_scheme_id = ? and sys_permission_id = ? and group_id is not null";
+        $query = "delete from yongo_permission_scheme_data where permission_scheme_id = ? and sys_permission_id = ? and group_id is not null";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -290,7 +290,7 @@ class PermissionScheme
     }
 
     public function deleteRoleDataByPermissionId($permissionSchemeId, $permissionId) {
-        $query = "delete from permission_scheme_data where permission_scheme_id = ? and sys_permission_id = ? and permission_role_id is not null";
+        $query = "delete from yongo_permission_scheme_data where permission_scheme_id = ? and sys_permission_id = ? and permission_role_id is not null";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -299,7 +299,7 @@ class PermissionScheme
     }
 
     public function addUserDataToPermissionId($permissionSchemeId, $permissionId, $userArray) {
-        $query = 'insert into permission_scheme_data(permission_scheme_id, sys_permission_id, user_id) values ';
+        $query = 'insert into yongo_permission_scheme_data(permission_scheme_id, sys_permission_id, user_id) values ';
         for ($i = 0; $i < count($userArray); $i++)
             $query .= '(' . $permissionSchemeId . ', ' . $permissionId . ', ' . $userArray[$i] . '),';
 
@@ -309,7 +309,7 @@ class PermissionScheme
     }
 
     public function addGroupDataToPermissionId($permissionSchemeId, $permissionId, $groupArr) {
-        $query = 'insert into permission_scheme_data(permission_scheme_id, sys_permission_id, group_id) values ';
+        $query = 'insert into yongo_permission_scheme_data(permission_scheme_id, sys_permission_id, group_id) values ';
         for ($i = 0; $i < count($groupArr); $i++)
             $query .= '(' . $permissionSchemeId . ', ' . $permissionId . ', ' . $groupArr[$i] . '),';
 
@@ -318,7 +318,7 @@ class PermissionScheme
     }
 
     public function addRoleDataToPermissionId($permissionSchemeId, $permissionId, $roleArr, $currentDate) {
-        $query = 'insert into permission_scheme_data(permission_scheme_id, sys_permission_id, permission_role_id, date_created) values ';
+        $query = 'insert into yongo_permission_scheme_data(permission_scheme_id, sys_permission_id, permission_role_id, date_created) values ';
         for ($i = 0; $i < count($roleArr); $i++)
             $query .= '(' . $permissionSchemeId . ', ' . $permissionId . ', ' . $roleArr[$i] . ", '" . $currentDate . "'),";
 
@@ -327,7 +327,7 @@ class PermissionScheme
     }
 
     public function deleteDataById($permissionSchemeDataId) {
-        $query = "delete from permission_scheme_data where id = ? limit 1";
+        $query = "delete from yongo_permission_scheme_data where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -336,7 +336,7 @@ class PermissionScheme
     }
 
     public function deleteDataByPermissionSchemeId($permissionSchemeId) {
-        $query = "delete from permission_scheme_data where permission_scheme_id = ?";
+        $query = "delete from yongo_permission_scheme_data where permission_scheme_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $permissionSchemeId);
@@ -382,7 +382,7 @@ class PermissionScheme
     }
 
     public function deleteById($permissionSchemeId) {
-        $query = "delete from permission_scheme where id = ? limit 1";
+        $query = "delete from yongo_permission_scheme where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -399,7 +399,7 @@ class PermissionScheme
     }
 
     public function addDataRaw($permissionSchemeId, $permissionId, $permissionRoleId, $groupId, $userId, $currentAssignee, $reporter, $projectLead, $currentDate) {
-        $query = "INSERT INTO permission_scheme_data(permission_scheme_id, sys_permission_id, permission_role_id, group_id, user_id, current_assignee, reporter, " .
+        $query = "INSERT INTO yongo_permission_scheme_data(permission_scheme_id, sys_permission_id, permission_role_id, group_id, user_id, current_assignee, reporter, " .
             "project_lead, date_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -411,11 +411,11 @@ class PermissionScheme
     }
 
     public function getByClientIdAndGroupBy($clientId, $groupId) {
-        $query = "select permission_scheme.* " .
-            "from permission_scheme " .
-            "left join permission_scheme_data on permission_scheme_data.permission_scheme_id = permission_scheme.id " .
-            "where permission_scheme.client_id = ? and permission_scheme_data.group_id = ? " .
-            "group by permission_scheme.id";
+        $query = "select yongo_permission_scheme.* " .
+            "from yongo_permission_scheme " .
+            "left join yongo_permission_scheme_data on yongo_permission_scheme_data.permission_scheme_id = yongo_permission_scheme.id " .
+            "where yongo_permission_scheme.client_id = ? and yongo_permission_scheme_data.group_id = ? " .
+            "group by yongo_permission_scheme.id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $clientId, $groupId);

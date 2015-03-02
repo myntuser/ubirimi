@@ -25,7 +25,7 @@ class ProjectComponent
 {
     public function getByIds($Ids) {
         $query = 'SELECT project_component.* ' .
-            'FROM project_component ' .
+            'from yongo_project_component ' .
             'WHERE id IN (' . implode(', ', $Ids) . ') ' .
             'order by id asc';
 
@@ -41,9 +41,9 @@ class ProjectComponent
 
     public function getAll()
     {
-        $query = 'SELECT project_component.*, project.name as project_name
-            FROM project_component
-            LEFT JOIN project on project.id = project_component.project_id
+        $query = 'SELECT project_component.*, yongo_project.name as project_name
+            from yongo_project_component
+            LEFT join yongo_project on yongo_project.id = project_component.project_id
             order by id asc';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -61,14 +61,14 @@ class ProjectComponent
         $stmt->bind_param("i", $componentId);
         $stmt->execute();
 
-        $query = 'delete from project_component where id = ? limit 1';
+        $query = 'delete from yongo_project_component where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $componentId);
         $stmt->execute();
 
         // delete also any subcomponents
-        $query = 'delete from project_component where parent_id = ?';
+        $query = 'delete from yongo_project_component where parent_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $componentId);
