@@ -46,7 +46,7 @@ class IssueFilter
     }
 
     public function save($userId, $name, $description, $definition, $date) {
-        $query = "INSERT INTO filter(user_id, name, description, definition, date_created) VALUES (?, ?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_filter(user_id, name, description, definition, date_created) VALUES (?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("issss", $userId, $name, $description, $definition, $date);
@@ -96,10 +96,10 @@ class IssueFilter
     }
 
     public function checkFilterIsFavouriteForUserId($filterId, $userId) {
-        $query = "SELECT filter_favourite.id " .
-            "FROM filter_favourite " .
-            "where filter_favourite.user_id = ? and " .
-            "filter_favourite.filter_id = ? " .
+        $query = "SELECT yongo_filter_favourite.id " .
+            "FROM yongo_filter_favourite " .
+            "where yongo_filter_favourite.user_id = ? and " .
+            "yongo_filter_favourite.filter_id = ? " .
             "limit 1";
 
         if ($stmt = UbirimiContainer::get()['db.connection']->prepare($query)) {
@@ -114,7 +114,7 @@ class IssueFilter
     }
 
     public function deleteFavouriteByFilterIdAndUserId($userId, $filterId) {
-        $query = 'delete from filter_favourite where user_id = ? and filter_id = ? limit 1 ';
+        $query = 'delete from yongo_filter_favourite where user_id = ? and filter_id = ? limit 1 ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -123,7 +123,7 @@ class IssueFilter
     }
 
     public function addFavourite($userId, $filterId, $date) {
-        $query = "INSERT INTO filter_favourite(user_id, filter_id, date_created) VALUES (?, ?, ?)";
+        $query = "INSERT INTO yongo_filter_favourite(user_id, filter_id, date_created) VALUES (?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("iis", $userId, $filterId, $date);

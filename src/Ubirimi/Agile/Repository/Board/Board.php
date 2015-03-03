@@ -70,10 +70,10 @@ class Board
     public function getByClientId($clientId, $resultType = null) {
         $query = "select agile_board.client_id, agile_board.id, agile_board.filter_id, agile_board.name, agile_board.description, agile_board.swimlane_strategy, " .
                  "agile_board.user_created_id, agile_board.date_created, general_user.first_name, general_user.last_name, " .
-                 "filter.name as filter_name, filter.id as filter_id, filter.definition as filter_definition " .
+                 "yongo_filter.name as filter_name, yongo_filter.id as filter_id, yongo_filter.definition as filter_definition " .
             "from agile_board " .
             "left join general_user on general_user.id = agile_board.user_created_id " .
-            "left join filter on filter.id = agile_board.filter_id " .
+            "left join yongo_filter on yongo_filter.id = agile_board.filter_id " .
             "where agile_board.client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -96,10 +96,10 @@ class Board
 
     public function getById($boardId) {
         $query = "select agile_board.id, agile_board.client_id, agile_board.name, agile_board.description, agile_board.user_created_id, agile_board.swimlane_strategy, " .
-                 "filter.id as filter_id, filter.name as filter_name, filter.description as filter_description, " .
+                 "yongo_filter.id as filter_id, yongo_filter.name as filter_name, yongo_filter.description as filter_description, " .
                  "general_user.first_name, general_user.last_name " .
             "from agile_board " .
-            "left join filter on filter.id = agile_board.filter_id " .
+            "left join yongo_filter on yongo_filter.id = agile_board.filter_id " .
             "left join general_user on general_user.id = agile_board.user_created_id " .
             "where agile_board.id = ? " .
             "limit 1";
@@ -358,7 +358,7 @@ class Board
 
         $searchParameters['not_status'] = $completeStatuses;
 
-        return UbirimiContainer::get()['repository']->get(Issue::class)->getByParameters($searchParameters, $loggedInUserId);
+        return UbirimiContainer::get()['repository']->get(Issue::class)->getByParameters($searchParameters, $loggedInUserId, null, $loggedInUserId);
     }
 
     public function deleteIssuesFromSprints($issueIdArray) {

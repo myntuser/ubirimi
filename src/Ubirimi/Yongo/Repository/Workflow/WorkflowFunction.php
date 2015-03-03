@@ -198,11 +198,11 @@ class WorkflowFunction
     }
 
     public function getByWorkflowDataId($workflowDataId) {
-        $query = "SELECT sys_workflow_post_function.name, yongo_workflow_post_function_data.definition_data, sys_workflow_post_function.id as function_id, " .
-                    "yongo_workflow_post_function_data.sys_workflow_post_function_id, yongo_workflow_post_function_data.id, sys_workflow_post_function.description, " .
-                    "sys_workflow_post_function.user_editable_flag, sys_workflow_post_function.user_deletable_flag " .
+        $query = "SELECT yongo_workflow_post_function.name, yongo_workflow_post_function_data.definition_data, yongo_workflow_post_function.id as function_id, " .
+                    "yongo_workflow_post_function_data.sys_workflow_post_function_id, yongo_workflow_post_function_data.id, yongo_workflow_post_function.description, " .
+                    "yongo_workflow_post_function.user_editable_flag, yongo_workflow_post_function.user_deletable_flag " .
                  "from yongo_workflow_post_function_data " .
-                 "left join sys_workflow_post_function on sys_workflow_post_function.id = yongo_workflow_post_function_data.sys_workflow_post_function_id " .
+                 "left join yongo_workflow_post_function on yongo_workflow_post_function.id = yongo_workflow_post_function_data.sys_workflow_post_function_id " .
                  "where yongo_workflow_post_function_data.workflow_data_id = ? " .
                  "order by yongo_workflow_post_function_data.id";
 
@@ -217,11 +217,11 @@ class WorkflowFunction
     }
 
     public function getByWorkflowDataIdAndFunctionId($workflowDataId, $functionId) {
-        $query = "SELECT sys_workflow_post_function.name, yongo_workflow_post_function_data.definition_data, sys_workflow_post_function.id as function_id, " .
-                    "yongo_workflow_post_function_data.sys_workflow_post_function_id, yongo_workflow_post_function_data.id, sys_workflow_post_function.description, " .
-                    "sys_workflow_post_function.user_editable_flag " .
+        $query = "SELECT yongo_workflow_post_function.name, yongo_workflow_post_function_data.definition_data, yongo_workflow_post_function.id as function_id, " .
+                    "yongo_workflow_post_function_data.sys_workflow_post_function_id, yongo_workflow_post_function_data.id, yongo_workflow_post_function.description, " .
+                    "yongo_workflow_post_function.user_editable_flag " .
                  "from yongo_workflow_post_function_data " .
-                 "left join sys_workflow_post_function on sys_workflow_post_function.id = yongo_workflow_post_function_data.sys_workflow_post_function_id " .
+                 "left join yongo_workflow_post_function on yongo_workflow_post_function.id = yongo_workflow_post_function_data.sys_workflow_post_function_id " .
                  "where yongo_workflow_post_function_data.workflow_data_id = ? " .
                  "and yongo_workflow_post_function_data.sys_workflow_post_function_id = ? " .
                  "order by yongo_workflow_post_function_data.id";
@@ -237,7 +237,7 @@ class WorkflowFunction
     }
 
     public function getAll() {
-        $query = "SELECT * from sys_workflow_post_function";
+        $query = "SELECT * from yongo_workflow_post_function";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
@@ -249,7 +249,7 @@ class WorkflowFunction
     }
 
     public function getById($functionId) {
-        $query = "SELECT * from sys_workflow_post_function where id = ?";
+        $query = "SELECT * from yongo_workflow_post_function where id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $functionId);
@@ -271,10 +271,10 @@ class WorkflowFunction
     }
 
     public function getDataById($workflowPostFunctionDataId) {
-        $query = "SELECT sys_workflow_post_function.id as function_id, sys_workflow_post_function.name, yongo_workflow_post_function_data.workflow_data_id, yongo_workflow_post_function_data.definition_data, " .
+        $query = "SELECT yongo_workflow_post_function.id as function_id, yongo_workflow_post_function.name, yongo_workflow_post_function_data.workflow_data_id, yongo_workflow_post_function_data.definition_data, " .
                     "yongo_workflow.name as workflow_name, yongo_workflow.id as workflow_id, yongo_workflow_data.transition_name " .
                  "from yongo_workflow_post_function_data " .
-                 "left join sys_workflow_post_function on sys_workflow_post_function.id = yongo_workflow_post_function_data.sys_workflow_post_function_id " .
+                 "left join yongo_workflow_post_function on yongo_workflow_post_function.id = yongo_workflow_post_function_data.sys_workflow_post_function_id " .
                  "left join yongo_workflow_data on yongo_workflow_data.id = yongo_workflow_post_function_data.workflow_data_id " .
                  "left join yongo_workflow on yongo_workflow.id = yongo_workflow_data.workflow_id " .
                  "where yongo_workflow_post_function_data.id = ?";
