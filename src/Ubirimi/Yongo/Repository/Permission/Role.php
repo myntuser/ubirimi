@@ -99,7 +99,7 @@ class Role
     }
 
     public function deleteDefaultUsersByPermissionRoleId($permissionRoleId) {
-        $query = 'delete from permission_role_data where permission_role_id = ? and default_user_id is not null';
+        $query = 'delete from yongo_permission_role_data where permission_role_id = ? and default_user_id is not null';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $permissionRoleId);
@@ -107,7 +107,7 @@ class Role
     }
 
     public function deleteDefaultGroupsByPermissionRoleId($permissionRoleId) {
-        $query = 'delete from permission_role_data where permission_role_id = ? and default_group_id is not null';
+        $query = 'delete from yongo_permission_role_data where permission_role_id = ? and default_group_id is not null';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $permissionRoleId);
@@ -132,10 +132,10 @@ class Role
 
     public function getDefaultUsers($permissionRoleId) {
         $query = 'select general_user.id as user_id, general_user.first_name, general_user.last_name ' .
-            'from permission_role_data ' .
-            'left join general_user on general_user.id = permission_role_data.default_user_id ' .
-            'where permission_role_data.permission_role_id = ? and ' .
-            'permission_role_data.default_user_id is not null ' .
+            'from yongo_permission_role_data ' .
+            'left join general_user on general_user.id = yongo_permission_role_data.default_user_id ' .
+            'where yongo_permission_role_data.permission_role_id = ? and ' .
+            'yongo_permission_role_data.default_user_id is not null ' .
             'order by general_user.first_name, general_user.last_name';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
@@ -150,10 +150,10 @@ class Role
 
     public function getDefaultGroups($permissionRoleId) {
         $query = 'SELECT general_group.id as group_id, general_group.name as group_name ' .
-            'from permission_role_data ' .
-            'left join `general_group` on general_group.id = permission_role_data.default_group_id ' .
-            'where permission_role_data.permission_role_id = ? and ' .
-            'permission_role_data.default_group_id is not null';
+            'from yongo_permission_role_data ' .
+            'left join `general_group` on general_group.id = yongo_permission_role_data.default_group_id ' .
+            'where yongo_permission_role_data.permission_role_id = ? and ' .
+            'yongo_permission_role_data.default_group_id is not null';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $permissionRoleId);
@@ -166,7 +166,7 @@ class Role
     }
 
     public function addDefaultUsers($permissionRoleId, $userArray, $currentDate) {
-        $query = 'insert into permission_role_data(permission_role_id, default_user_id, date_created) values ';
+        $query = 'insert into yongo_permission_role_data(permission_role_id, default_user_id, date_created) values ';
 
         for ($i = 0; $i < count($userArray); $i++)
             $query .= '(' . $permissionRoleId . ' ,' . $userArray[$i] . ",'" . $currentDate . "'), ";
@@ -177,7 +177,7 @@ class Role
     }
 
     public function addDefaultGroups($permissionRoleId, $groupArrayIds, $currentDate) {
-        $query = 'insert into permission_role_data(permission_role_id, default_group_id, date_created) values ';
+        $query = 'insert into yongo_permission_role_data(permission_role_id, default_group_id, date_created) values ';
 
         for ($i = 0; $i < count($groupArrayIds); $i++)
             $query .= '(' . $permissionRoleId . ' ,' . $groupArrayIds[$i] . ",'" . $currentDate . "'), ";
@@ -188,7 +188,7 @@ class Role
     }
 
     public function deleteById($permissionRoleId) {
-        $query = 'delete from permission_role_data where permission_role_id = ?';
+        $query = 'delete from yongo_permission_role_data where permission_role_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $permissionRoleId);

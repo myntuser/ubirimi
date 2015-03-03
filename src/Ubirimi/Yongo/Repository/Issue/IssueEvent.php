@@ -53,7 +53,7 @@ class IssueEvent
     }
 
     public function save($currentDate) {
-        $query = "INSERT INTO event(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_event(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -64,7 +64,7 @@ class IssueEvent
     }
 
     public function addRaw($clientId, $name, $code, $description, $systemFlag, $dateCreated) {
-        $query = "INSERT INTO event(client_id, name, code, description, system_flag, date_created) VALUES (?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_event(client_id, name, code, description, system_flag, date_created) VALUES (?, ?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 

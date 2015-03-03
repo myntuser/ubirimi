@@ -715,11 +715,11 @@ class YongoProject
     }
 
     public function addDefaultUsers($clientId, $projectId, $currentDate) {
-        $query = 'SELECT permission_role_data.default_user_id, permission_role_data.permission_role_id ' .
-            'FROM permission_role_data ' .
-            'left join yongo_permission_role on yongo_permission_role.id = permission_role_data.permission_role_id ' .
+        $query = 'SELECT yongo_permission_role_data.default_user_id, yongo_permission_role_data.permission_role_id ' .
+            'FROM yongo_permission_role_data ' .
+            'left join yongo_permission_role on yongo_permission_role.id = yongo_permission_role_data.permission_role_id ' .
             'where yongo_permission_role.client_id = ? ' .
-            'and permission_role_data.default_user_id is not null';
+            'and yongo_permission_role_data.default_user_id is not null';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
@@ -738,11 +738,11 @@ class YongoProject
     }
 
     public function addDefaultGroups($clientId, $projectId, $currentDate) {
-        $query = 'SELECT permission_role_data.default_group_id, permission_role_data.permission_role_id ' .
-            'FROM permission_role_data ' .
-            'left join yongo_permission_role on yongo_permission_role.id = permission_role_data.permission_role_id ' .
+        $query = 'SELECT yongo_permission_role_data.default_group_id, yongo_permission_role_data.permission_role_id ' .
+            'FROM yongo_permission_role_data ' .
+            'left join yongo_permission_role on yongo_permission_role.id = yongo_permission_role_data.permission_role_id ' .
             'where yongo_permission_role.client_id = ? ' .
-            'and permission_role_data.default_group_id is not null';
+            'and yongo_permission_role_data.default_group_id is not null';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);

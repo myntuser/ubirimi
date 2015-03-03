@@ -352,7 +352,7 @@ class UbirimiClient
     }
 
     public function createDefaultIssuePriorities($clientId, $currentDate) {
-        $query = "INSERT INTO issue_priority(client_id, name, icon_name, color, description, date_created) VALUES " .
+        $query = "INSERT INTO yongo_issue_priority(client_id, name, icon_name, color, description, date_created) VALUES " .
             "(" . $clientId . ", 'Minor', 'minor.png', '#006600', 'Minor loss of function, or other problem where easy workaround is present.', '" . $currentDate . "'), " .
             "(" . $clientId . ", 'Major', 'major.png', '#009900', 'Major loss of function.', '" . $currentDate . "'), " .
             "(" . $clientId . ", 'Critical', 'critical.png', '#FF0000', 'Crashes, loss of data, severe memory leak.', '" . $currentDate . "'), " .
@@ -468,7 +468,7 @@ class UbirimiClient
             $query = 'delete from general_group_data where user_id IN (' . $users_ids_string . ')';
             UbirimiContainer::get()['db.connection']->query($query);
 
-            $query = 'delete from permission_role_data where default_user_id IN (' . $users_ids_string . ')';
+            $query = 'delete from yongo_permission_role_data where default_user_id IN (' . $users_ids_string . ')';
             UbirimiContainer::get()['db.connection']->query($query);
         }
 
@@ -664,7 +664,7 @@ class UbirimiClient
     }
 
     public function createDefaultScreens($clientId, $currentDate) {
-        $query = "INSERT INTO screen(client_id, name, description, date_created) VALUES " .
+        $query = "INSERT INTO yongo_screen(client_id, name, description, date_created) VALUES " .
             "(" . $clientId . ",'Default Screen', 'Allows to update all system fields.', '" . $currentDate . "'), " .
             "(" . $clientId . ",'Resolve Issue Screen', 'Allows to set resolution, change fix versions and assign an issue.', '" . $currentDate . "'), " .
             "(" . $clientId . ",'Workflow Screen', 'This screen is used in the workflow and enables you to assign issues.', '" . $currentDate . "');";
@@ -957,38 +957,38 @@ class UbirimiClient
 
         // save the position of the elements
         // create node
-        $query = "insert into workflow_position(workflow_id, workflow_step_id, top_position, left_position) " .
+        $query = "insert into yongo_workflow_position(workflow_id, workflow_step_id, top_position, left_position) " .
             "values (" . $workflowId . ", " . $createStepId . ", 29, 509)";
         UbirimiContainer::get()['db.connection']->query($query);
 
         // open node
-        $query = "insert into workflow_position(workflow_id, workflow_step_id, top_position, left_position) " .
+        $query = "insert into yongo_workflow_position(workflow_id, workflow_step_id, top_position, left_position) " .
             "values (" . $workflowId . ", " . $openStepId . ", 190, 471)";
         UbirimiContainer::get()['db.connection']->query($query);
 
         // resolved node
-        $query = "insert into workflow_position(workflow_id, workflow_step_id, top_position, left_position) " .
+        $query = "insert into yongo_workflow_position(workflow_id, workflow_step_id, top_position, left_position) " .
             "values (" . $workflowId . ", " . $closedStepId . ", 736, 305)";
         UbirimiContainer::get()['db.connection']->query($query);
 
         // close node
-        $query = "insert into workflow_position(workflow_id, workflow_step_id, top_position, left_position) " .
+        $query = "insert into yongo_workflow_position(workflow_id, workflow_step_id, top_position, left_position) " .
             "values (" . $workflowId . ", " . $resolvedStepId . ", 277, 886)";
         UbirimiContainer::get()['db.connection']->query($query);
 
         // in progress node
-        $query = "insert into workflow_position(workflow_id, workflow_step_id, top_position, left_position) " .
+        $query = "insert into yongo_workflow_position(workflow_id, workflow_step_id, top_position, left_position) " .
             "values (" . $workflowId . ", " . $reopenedStepId . ", 438, 598)";
         UbirimiContainer::get()['db.connection']->query($query);
 
         // reopened node
-        $query = "insert into workflow_position(workflow_id, workflow_step_id, top_position, left_position) " .
+        $query = "insert into yongo_workflow_position(workflow_id, workflow_step_id, top_position, left_position) " .
             "values (" . $workflowId . ", " . $inProgressStepId . ", 680, 867)";
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
     public function createDefaultEvents($clientId, $currentDate) {
-        $query = "INSERT INTO event(client_id, name, code, description, system_flag, date_created) VALUES " .
+        $query = "INSERT INTO yongo_event(client_id, name, code, description, system_flag, date_created) VALUES " .
             "(" . $clientId . ",'Issue Created', 1, 'This is the \'issue created\' event.', 1, '" . $currentDate . "'), " .
             "(" . $clientId . ",'Issue Updated', 2, 'This is the \'issue updated\' event.', 1, '" . $currentDate . "'), " .
             "(" . $clientId . ",'Issue Assigned', 3, 'This is the \'issue assigned\' event.', 1, '" . $currentDate . "'), " .
@@ -1404,7 +1404,7 @@ class UbirimiClient
     }
 
     public function createDefaultFields($clientId, $date) {
-        $query = "INSERT INTO field(client_id, code, name, description, system_flag, date_created) VALUES " .
+        $query = "INSERT INTO yongo_field(client_id, code, name, description, system_flag, date_created) VALUES " .
             "(" . $clientId . ", 'resolution', 'Resolution', 'Resolution', 1, '" . $date . "'), " .
             "(" . $clientId . ", 'comment', 'Comment', 'Comment', 1, '" . $date . "'), " .
             "(" . $clientId . ", 'summary', 'Summary', 'Summary', 1, '" . $date . "'), " .
@@ -1792,7 +1792,7 @@ class UbirimiClient
     }
 
     public function deleteYongoIssuePriorities($clientId) {
-        $query = 'delete from issue_priority where client_id = ' . $clientId;
+        $query = 'delete from yongo_issue_priority where client_id = ' . $clientId;
         UbirimiContainer::get()['db.connection']->query($query);
     }
 

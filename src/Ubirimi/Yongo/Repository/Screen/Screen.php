@@ -34,7 +34,7 @@ class Screen
     }
 
     public function save($currentDate) {
-        $query = "INSERT INTO screen(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_screen(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -156,7 +156,7 @@ class Screen
     }
 
     public function updateMetadataById($screenId, $name, $description, $date) {
-        $query = "update screen set name = ?, description = ?, date_updated = ? " .
+        $query = "update yongo_screen set name = ?, description = ?, date_updated = ? " .
                  "where id = ? " .
                  "limit 1 ";
 

@@ -25,8 +25,8 @@ class WorkflowPosition
 {
     public function getByWorkflowId($Id) {
         $query = "select * " .
-            "from workflow_position " .
-            "where workflow_position.workflow_id = " . $Id;
+            "from yongo_workflow_position " .
+            "where yongo_workflow_position.workflow_id = " . $Id;
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->execute();
@@ -38,7 +38,7 @@ class WorkflowPosition
     }
 
     public function deleteByWorkflowId($workflowId) {
-        $query = "delete from workflow_position where workflow_id = ? ";
+        $query = "delete from yongo_workflow_position where workflow_id = ? ";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $workflowId);
@@ -46,7 +46,7 @@ class WorkflowPosition
     }
 
     public function addSinglePositionRecord($workflowId, $stepId, $topPosition, $leftPosition) {
-        $q = 'insert into workflow_position(workflow_id, workflow_step_id, top_position, left_position) values(?, ?, ?, ?)';
+        $q = 'insert into yongo_workflow_position(workflow_id, workflow_step_id, top_position, left_position) values(?, ?, ?, ?)';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($q);
         $stmt->bind_param("iiii", $workflowId, $stepId, $topPosition, $leftPosition);
@@ -56,7 +56,7 @@ class WorkflowPosition
 
     public function addPosition($workflowId, $data) {
         for ($i = 0; $i < count($data); $i++) {
-            $q = 'insert into workflow_position(workflow_id, workflow_step_id, top_position, left_position) ' .
+            $q = 'insert into yongo_workflow_position(workflow_id, workflow_step_id, top_position, left_position) ' .
                 'values(?, ?, ?, ?)';
 
             $stmt = UbirimiContainer::get()['db.connection']->prepare($q);

@@ -25,7 +25,7 @@ use Ubirimi\Container\UbirimiContainer;
 class UbirimiUser
 {
     public function getPermissionRolesByUserId($userId, $resultType = null, $field = null) {
-        $query = 'select distinct permission_role_id from permission_role_data where user_id = ?';
+        $query = 'select distinct permission_role_id from yongo_permission_role_data where user_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $userId);
@@ -126,7 +126,7 @@ class UbirimiUser
         $query = 'delete from yongo_project_role_data where user_id = ' . $userId;
         UbirimiContainer::get()['db.connection']->query($query);
 
-        $query = 'delete from permission_role_data where default_user_id = ' . $userId;
+        $query = 'delete from yongo_permission_role_data where default_user_id = ' . $userId;
         UbirimiContainer::get()['db.connection']->query($query);
 
         // delete calendar related entities

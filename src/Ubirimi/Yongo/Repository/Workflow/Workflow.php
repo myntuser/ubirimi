@@ -157,7 +157,7 @@ class Workflow
         $stmt->bind_param("i", $Id);
         $stmt->execute();
 
-        $query = "delete from workflow_position where workflow_id = ?";
+        $query = "delete from yongo_workflow_position where workflow_id = ?";
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
         $stmt->execute();
@@ -422,12 +422,12 @@ class Workflow
 
         // set the position of the initial nodes
         // create node
-        $query = "insert into workflow_position(workflow_id, workflow_step_id, top_position, left_position) " .
+        $query = "insert into yongo_workflow_position(workflow_id, workflow_step_id, top_position, left_position) " .
             "values (" . $workflowId . ", " . $stepCreateId . ", 73, 45)";
         UbirimiContainer::get()['db.connection']->query($query);
 
         // open node
-        $query = "insert into workflow_position(workflow_id, workflow_step_id, top_position, left_position) " .
+        $query = "insert into yongo_workflow_position(workflow_id, workflow_step_id, top_position, left_position) " .
             "values (" . $workflowId . ", " . $stepOpenId . ", 119, 306)";
         UbirimiContainer::get()['db.connection']->query($query);
     }
