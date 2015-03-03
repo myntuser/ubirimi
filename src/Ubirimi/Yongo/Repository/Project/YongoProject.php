@@ -556,7 +556,7 @@ class YongoProject
         $forHelpDesk,
         $currentDate
     ) {
-        $query = "INSERT INTO project(client_id, lead_id, issue_type_scheme_id, issue_type_screen_scheme_id, issue_type_field_configuration_id, " .
+        $query = "INSERT INTO yongo_project(client_id, lead_id, issue_type_scheme_id, issue_type_screen_scheme_id, issue_type_field_configuration_id, " .
                     "workflow_scheme_id, permission_scheme_id, notification_scheme_id, name, code, description, project_category_id, help_desk_enabled_flag, date_created) VALUES " .
                  "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -727,7 +727,7 @@ class YongoProject
         $result = $stmt->get_result();
         if ($result->num_rows) {
             while ($data = $result->fetch_array(MYSQLI_ASSOC)) {
-                $query_add = "INSERT INTO project_role_data(project_id, permission_role_id, user_id, date_created) VALUES " .
+                $query_add = "INSERT INTO yongo_project_role_data(project_id, permission_role_id, user_id, date_created) VALUES " .
                     "(?, ?, ?, ?)";
 
                 $stmt2 = UbirimiContainer::get()['db.connection']->prepare($query_add);
@@ -750,7 +750,7 @@ class YongoProject
         $result = $stmt->get_result();
         if ($result->num_rows) {
             while ($data = $result->fetch_array(MYSQLI_ASSOC)) {
-                $query_add = "INSERT INTO project_role_data(project_id, permission_role_id, group_id, date_created) VALUES " .
+                $query_add = "INSERT INTO yongo_project_role_data(project_id, permission_role_id, group_id, date_created) VALUES " .
                     "(?, ?, ?, ?)";
 
                 $stmt2 = UbirimiContainer::get()['db.connection']->prepare($query_add);
@@ -846,7 +846,7 @@ class YongoProject
     }
 
     public function addUsersForPermissionRole($projectId, $roleId, $userArray, $currentDate) {
-        $query = 'insert into project_role_data(project_id, permission_role_id, user_id, date_created) values ';
+        $query = 'insert into yongo_project_role_data(project_id, permission_role_id, user_id, date_created) values ';
 
         for ($i = 0; $i < count($userArray); $i++)
             $query .= '(' . $projectId . ', ' . $roleId . ' ,' . $userArray[$i] . ",'" . $currentDate . "'), ";
@@ -856,7 +856,7 @@ class YongoProject
     }
 
     public function addGroupsForPermissionRole($projectId, $permissionRoleId, $groupArrayIds, $currentDate) {
-        $query = 'insert into project_role_data(project_id, permission_role_id, group_id, date_created) values ';
+        $query = 'insert into yongo_project_role_data(project_id, permission_role_id, group_id, date_created) values ';
 
         for ($i = 0; $i < count($groupArrayIds); $i++)
             $query .= '(' . $projectId . ', ' . $permissionRoleId . ' ,' . $groupArrayIds[$i] . ",'" . $currentDate . "'), ";

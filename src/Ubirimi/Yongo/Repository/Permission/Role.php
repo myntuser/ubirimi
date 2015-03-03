@@ -66,7 +66,7 @@ class Role
     }
 
     public function addProjectRoleForUser($userId, $projectId, $roleId, $currentDate) {
-        $query = "INSERT INTO project_role_data(project_id, permission_role_id, user_id, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_project_role_data(project_id, permission_role_id, user_id, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
