@@ -40,8 +40,6 @@ class ClientService
                 $data['baseURL'],
                 $data['adminEmail'],
                 null,
-                null,
-                null,
                 UbirimiClient::INSTANCE_TYPE_ON_DEMAND,
                 Util::getServerCurrentDateTime()
             );

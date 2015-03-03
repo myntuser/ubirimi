@@ -379,12 +379,12 @@ class UbirimiClient
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function create($company_name, $companyDomain, $baseURL, $companyEmail, $countryId, $vatNumber = null, $paymillId, $instanceType, $date) {
-        $query = "INSERT INTO client(company_name, company_domain, base_url, contact_email, date_created, instance_type, sys_country_id, vat_number, paymill_id) " .
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public function create($company_name, $companyDomain, $baseURL, $companyEmail, $countryId, $instanceType, $date) {
+        $query = "INSERT INTO client(company_name, company_domain, base_url, contact_email, date_created, instance_type, sys_country_id) " .
+            "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
-        $stmt->bind_param("ssssssiis", $company_name, $companyDomain, $baseURL, $companyEmail, $date, $instanceType, $countryId, $vatNumber, $paymillId);
+        $stmt->bind_param("ssssssi", $company_name, $companyDomain, $baseURL, $companyEmail, $date, $instanceType, $countryId);
 
         $stmt->execute();
 
@@ -524,20 +524,13 @@ class UbirimiClient
         $query = 'delete from client where id = ' . $clientId . ' limit 1';
         UbirimiContainer::get()['db.connection']->query($query);
 
-        // also delete paymill information
-        $client = new PaymillClient();
-        $client->setId($clientData['paymill_id']);
-
-        $requestPaymill = new PaymillRequest(UbirimiContainer::get()['paymill.private_key']);
-        $response = $requestPaymill->delete($client);
-
         $query = "SET FOREIGN_KEY_CHECKS = 1;";
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
     public function getAll($filters = array()) {
         $query = 'select client.id, company_name, company_domain, address_1, address_2, city, district, contact_email, ' .
-                 'date_created, installed_flag, last_login, is_payable, paymill_id, ' .
+                 'date_created, installed_flag, date_last_login, ' .
                  'sys_country.name as country_name, sys_country_id ' .
                  'from client ' .
                  'left join sys_country on sys_country.id = client.sys_country_id
@@ -1960,18 +1953,10 @@ class UbirimiClient
 
     public function updateLoginTime($clientId, $datetime)
     {
-        $query = "UPDATE client SET last_login = ? WHERE id = ? limit 1";
+        $query = "UPDATE client SET date_last_login = ? WHERE id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("si", $datetime, $clientId);
-        $stmt->execute();
-    }
-
-    public function updatePaymillId($clientPaymillId, $clientId) {
-        $query = "UPDATE client SET paymill_id = ? WHERE id = ? limit 1";
-
-        $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
-        $stmt->bind_param("si", $clientPaymillId, $clientId);
         $stmt->execute();
     }
 }

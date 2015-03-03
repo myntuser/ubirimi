@@ -834,7 +834,7 @@ class UbirimiUser
 
     public function updateLoginTime($userId, $datetime)
     {
-        $query = "update general_user set last_login = ? WHERE id = ? limit 1";
+        $query = "update general_user set date_last_login = ? WHERE id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("si", $datetime, $userId);
