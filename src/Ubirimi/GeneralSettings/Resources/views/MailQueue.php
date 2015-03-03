@@ -11,7 +11,6 @@ require_once __DIR__ . '/_header.php';
     <?php endif ?>
     <div class="pageContent">
         <?php if (Util::userHasClientAdministrationPermission()): ?>
-            <?php Util::renderBreadCrumb('Mail > Mail Queue') ?>
             <div class="infoBox">
                 <span>This page shows you the current Ubirmi internal event queue, whose events may trigger notification emails.</span>
                 <br />
