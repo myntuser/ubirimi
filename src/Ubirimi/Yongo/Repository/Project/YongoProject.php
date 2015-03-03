@@ -1585,7 +1585,7 @@ class YongoProject
     }
 
     public function setIssueSecuritySchemeId($projectId, $projectIssueSecuritySchemeId) {
-        $query = 'update yongo_project  issue_security_scheme_id = ? where id = ? limit 1';
+        $query = 'update yongo_project set issue_security_scheme_id = ? where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $projectIssueSecuritySchemeId, $projectId);
@@ -1632,7 +1632,7 @@ class YongoProject
     }
 
     public function updateLastIssueNumber($projectId, $newIssueNumber) {
-        $query = 'update yongo_project  issue_number = ? where id = ? limit 1';
+        $query = 'update yongo_project set issue_number = ? where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $newIssueNumber, $projectId);
@@ -1640,7 +1640,7 @@ class YongoProject
     }
 
     public function updatePermissionScheme($projectId, $permissionSchemeId) {
-        $query = 'update yongo_project  permission_scheme_id = ? where id = ? limit 1';
+        $query = 'update yongo_project set permission_scheme_id = ? where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $permissionSchemeId, $projectId);
@@ -1648,7 +1648,7 @@ class YongoProject
     }
 
     public function updateNotificationScheme($projectId, $notificationSchemeId) {
-        $query = 'update yongo_project  notification_scheme_id = ? where id = ? limit 1';
+        $query = 'update yongo_project set notification_scheme_id = ? where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $notificationSchemeId, $projectId);
@@ -1656,7 +1656,7 @@ class YongoProject
     }
 
     public function updateFieldConfigurationScheme($projectId, $fieldConfigurationSchemeId) {
-        $query = 'update yongo_project  issue_type_field_configuration_id = ? where id = ? limit 1';
+        $query = 'update yongo_project set issue_type_field_configuration_id = ? where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $fieldConfigurationSchemeId, $projectId);
@@ -1664,7 +1664,7 @@ class YongoProject
     }
 
     public function updateIssueTypeScreenScheme($projectId, $issueTypeScreenSchemeId) {
-        $query = 'update yongo_project  issue_type_screen_scheme_id = ? where id = ? limit 1';
+        $query = 'update yongo_project set issue_type_screen_scheme_id = ? where id = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ii", $issueTypeScreenSchemeId, $projectId);

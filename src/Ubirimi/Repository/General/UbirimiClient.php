@@ -1024,7 +1024,6 @@ class UbirimiClient
 
     public function getSettings($clientId) {
         $query = 'select * from client_settings where client_id = ' . $clientId;
-
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
         $stmt->execute();

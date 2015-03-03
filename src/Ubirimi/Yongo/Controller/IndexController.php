@@ -45,6 +45,7 @@ class IndexController extends UbirimiController
         }
         $sectionPageTitle = $clientSettings['title_name'] . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Dashboard';
 
+        $selectedProjectId = $session->get('selected_project_id');
         $userAssignedId = $session->get('user/id');
         $allProjects = $this->getRepository(UbirimiClient::class)->getProjects($clientId);
 

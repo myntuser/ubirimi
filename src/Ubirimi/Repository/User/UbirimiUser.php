@@ -114,7 +114,7 @@ class UbirimiUser
         $query = 'delete from yongo_notification_scheme_data where user_id = ' . $userId;
         UbirimiContainer::get()['db.connection']->query($query);
 
-        $query = 'update yongo_project  lead_id = NULL where lead_id = ' . $userId;
+        $query = 'update yongo_project set lead_id = NULL where lead_id = ' . $userId;
         UbirimiContainer::get()['db.connection']->query($query);
 
         $query = 'update yongo_project_component set leader_id = NULL where leader_id = ' . $userId;

@@ -35,18 +35,22 @@ class ViewActivityStreamController extends UbirimiController
     {
         $projectId = $request->request->get('id');
         $loggedInUserId = $session->get('user/id');
-        $clientId = $session->get('client/id');
-
-        $client = $this->getRepository(UbirimiClient::class)->getById($clientId);
-        $clientSettings = $this->getRepository(UbirimiClient::class)->getSettings($clientId);
 
         if (Util::checkUserIsLoggedIn()) {
+            $clientId = $session->get('client/id');
+            $client = $this->getRepository(UbirimiClient::class)->getById($clientId);
+            $clientSettings = $this->getRepository(UbirimiClient::class)->getSettings($clientId);
             $hasBrowsingPermission = $this->getRepository(YongoProject::class)->userHasPermission(array($projectId), Permission::PERM_BROWSE_PROJECTS, $loggedInUserId);
         } else {
             $loggedInUserId = null;
             $httpHOST = Util::getHttpHost();
+            $clientId = $this->getRepository(UbirimiClient::class)->getByBaseURL($httpHOST, 'array', 'id');
+            $loggedInUserId = null;
+            $clientSettings = $this->getRepository(UbirimiClient::class)->getSettings($clientId);
             $hasBrowsingPermission = $this->getRepository(YongoProject::class)->userHasPermission(array($projectId), Permission::PERM_BROWSE_PROJECTS);
         }
+
+        $historyData = array();
 
         if ($hasBrowsingPermission) {
             $helpDeskFlag = 0;
@@ -60,7 +64,7 @@ class ViewActivityStreamController extends UbirimiController
             $historyList = null;
             do {
                 $historyList = Util::getProjectHistory(array($projectId), $helpDeskFlag, null, date_format($startDate, 'Y-m-d'), $endDate);
-                if (null == $historyList && date_format($startDate, 'Y-m-d H:i:s') == $client['date_created']) {
+                if (null == $historyList || date_format($startDate, 'Y-m-d H:i:s') == $client['date_created']) {
                     break;
                 }
                 $startDate = date_sub($startDate, date_interval_create_from_date_string('2 days'));
@@ -71,8 +75,6 @@ class ViewActivityStreamController extends UbirimiController
                 }
             } while ($historyList == null);
 
-
-            $historyData = array();
             $userData = array();
             while ($historyList && $history = $historyList->fetch_array(MYSQLI_ASSOC)) {
                 $historyData[substr($history['date_created'], 0, 10)][$history['user_id']][$history['date_created']][] = $history;

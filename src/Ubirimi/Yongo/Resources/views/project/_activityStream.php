@@ -8,7 +8,6 @@ use Ubirimi\Yongo\Repository\Field\Field;
 
 ?>
 <?php if ($historyList): ?>
-
     <?php foreach($historyData as $date => $data): ?>
         <div>
             <div style="padding-top: 4px; padding-bottom: 4px">

@@ -36,8 +36,14 @@ class UbirimiKernelViewListener
 
         extract($variables);
 
-        $loggedInUserId = UbirimiContainer::get()['session']->get('user/id');
-        $clientId = UbirimiContainer::get()['session']->get('client/id');
+        if (!array_key_exists('clientId', $variables)) {
+            $clientId = UbirimiContainer::get()['session']->get('client/id');
+        }
+
+        if (!array_key_exists('loggedInUserId', $variables)) {
+            $loggedInUserId = UbirimiContainer::get()['session']->get('user/id');
+        }
+
         $session = UbirimiContainer::get()['session'];
 
         require_once $view;

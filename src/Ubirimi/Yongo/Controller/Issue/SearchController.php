@@ -42,6 +42,8 @@ class SearchController extends UbirimiController
         if (Util::checkUserIsLoggedIn()) {
             $issuesPerPage = $session->get('user/issues_per_page');
             $clientSettings = $session->get('client/settings');
+            $clientId = $session->get('client/id');
+            $loggedInUserId = $session->get('user/id');
         } else {
             $issuesPerPage = 25;
             $httpHOST = Util::getHttpHost();
@@ -49,9 +51,6 @@ class SearchController extends UbirimiController
             $loggedInUserId = null;
             $clientSettings = $this->getRepository(UbirimiClient::class)->getSettings($clientId);
         }
-
-        $clientId = $session->get('client/id');
-        $loggedInUserId = $session->get('user/id');
 
         $sectionPageTitle = $clientSettings['title_name'] . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Search';
 
