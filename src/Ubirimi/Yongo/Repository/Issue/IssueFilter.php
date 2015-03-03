@@ -71,9 +71,9 @@ class IssueFilter
     }
 
     public function getAllByClientId($clientId) {
-        $query = 'SELECT filter.id, user_id, filter.name, description, definition, filter.date_created ' .
+        $query = 'SELECT yongo_filter.id, user_id, yongo_filter.name, description, definition, yongo_filter.date_created ' .
                  'from yongo_filter ' .
-                 'left join general_user on general_user.id = filter.user_id ' .
+                 'left join general_user on general_user.id = yongo_filter.user_id ' .
                  'WHERE general_user.client_id = ?';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
