@@ -72,7 +72,10 @@ if ($session->has('client/products')) {
                     <?php if (Util::checkUserIsLoggedIn()): ?>
                         <td style="height:44px;" id="menu_top_user" width="58px" align="center" class="product-menu">
                             <span>
-                                <img src="<?php echo UbirimiContainer::get()['repository']->get(UbirimiUser::class)->getUserAvatarPicture($session->get('user'), 'small') ?>" title="<?php echo $session->get('user/first_name') . ' ' . $session->get('user/last_name') ?>" height="33px" style="vertical-align: middle" />
+                                <img src="<?php echo UbirimiContainer::get()['repository']->get(UbirimiUser::class)->getUserAvatarPicture($session->get('user'), 'small') ?>"
+                                     title="<?php echo $session->get('user/first_name') . ' ' . $session->get('user/last_name') ?>"
+                                     height="33px"
+                                     style="vertical-align: middle" />
                             </span>
                             <span class="arrow" style="top: 12px;"></span>
                             &nbsp;

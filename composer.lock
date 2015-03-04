@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5f0ae21f4d67a8743573b9b1a988af6b",
+    "hash": "f22491cb43918af1a95515689a4767ed",
     "packages": [
         {
             "name": "cogpowered/finediff",
@@ -155,12 +155,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "f05ed3a44a8e40533d4cf60a0669db6b1887b499"
+                "reference": "6469e290207e5846e859bd69618c67e1650f2d76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/f05ed3a44a8e40533d4cf60a0669db6b1887b499",
-                "reference": "f05ed3a44a8e40533d4cf60a0669db6b1887b499",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/6469e290207e5846e859bd69618c67e1650f2d76",
+                "reference": "6469e290207e5846e859bd69618c67e1650f2d76",
                 "shasum": ""
             },
             "require": {
@@ -219,7 +219,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2015-02-11 14:20:33"
+            "time": "2015-03-04 11:37:13"
         },
         {
             "name": "nyholm/zebra-image",
@@ -1278,16 +1278,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "7ebc77780d286f14c9a26b342c32527a39f344ad"
+                "reference": "072af3f32db5853ba6b02a5554fb5541204fec04"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/7ebc77780d286f14c9a26b342c32527a39f344ad",
-                "reference": "7ebc77780d286f14c9a26b342c32527a39f344ad",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/072af3f32db5853ba6b02a5554fb5541204fec04",
+                "reference": "072af3f32db5853ba6b02a5554fb5541204fec04",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "~2.7|~3.0"
             },
             "suggest": {
                 "ext-symfony_debug": ""
@@ -1326,7 +1329,7 @@
                 "debug",
                 "dump"
             ],
-            "time": "2015-02-05 06:59:50"
+            "time": "2015-02-25 12:52:01"
         },
         {
             "name": "symfony/yaml",

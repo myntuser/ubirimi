@@ -12,9 +12,8 @@
             "email": "francisc.nopcea@ubirimi.com"
         }
     ],
-
     "autoload": {
-        "classmap": ["src/"]
+        "psr-4": {"": "src/"}
     },
     "require": {
         "symfony/event-dispatcher": "2.5.*",
@@ -36,5 +35,8 @@
         "robmorgan/phinx": "*",
         "monolog/monolog": "1.12.*@dev",
         "phploc/phploc": "*"
+    },
+    "scripts": {
+        "post-install-cmd": "Ubirimi\\Install::install"
     }
 }

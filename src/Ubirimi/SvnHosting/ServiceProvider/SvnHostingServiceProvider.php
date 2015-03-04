@@ -17,9 +17,10 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-namespace Ubirimi\SvnHosting\Service;
+namespace Ubirimi\SvnHosting\ServiceProvider;
 
 use Ubirimi\Container\ServiceProviderInterface;
+use Ubirimi\SvnHosting\Service\EmailService;
 
 class SvnHostingServiceProvider implements ServiceProviderInterface
 {

@@ -17,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-namespace Ubirimi\Component\EventListener;
+namespace Ubirimi\Component\ApiClient\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Ubirimi\Component\ApiClient\ApiEvent;

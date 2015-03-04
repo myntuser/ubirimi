@@ -18,12 +18,12 @@
  */
 
 use Ubirimi\Calendar\EventListener\CalendarEventSubscriber;
-use Ubirimi\Component\EventListener\JsonResponseListener;
+use Ubirimi\Component\ApiClient\EventListener\JsonResponseListener;
 use Ubirimi\Container\UbirimiContainer;
 use Ubirimi\EventListener\UbirimiSubscriber;
 use Ubirimi\Service\ConfigService;
 use Ubirimi\SvnHosting\EventListener\SvnHostingEventSubscriber;
-use Ubirimi\SvnHosting\Service\SvnHostingServiceProvider;
+use Ubirimi\SvnHosting\ServiceProvider\SvnHostingServiceProvider;
 use Ubirimi\Yongo\EventListener\IssueEventSubscriber;
 use Ubirimi\Service\RouteBootstrapService;
 use Ubirimi\ServiceProvider\UbirimiCoreServiceProvider;
