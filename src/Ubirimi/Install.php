@@ -4,10 +4,20 @@ namespace Ubirimi;
 
 use Composer\Script\Event;
 use Ubirimi\Container\UbirimiContainer;
+use Ubirimi\Service\ConfigService;
+use Ubirimi\ServiceProvider\UbirimiCoreServiceProvider;
 
 class Install {
 
     public static function install(Event $event) {
+
+        /* parse .properties file and make them available in the container */
+        $configs = ConfigService::process(__DIR__ . '/../../app/config/config.properties');
+
+        /* register global configs to the container */
+        UbirimiContainer::loadConfigs($configs);
+        UbirimiContainer::register(new UbirimiCoreServiceProvider());
+
         $io = $event->getIO();
 
         $domain = $io->ask("Domain: ");
@@ -18,7 +28,7 @@ class Install {
         $adminEmail = $io->ask("Administrator Password (again): ");
         $baseURL = $io->ask("Base URL (Ex: http://ubirimi.company.com): ");
 
-        $cliendData = array(
+        $clientData = array('data' => json_encode(array(
             'companyDomain' => $domain,
             'adminFirstName' => $adminFirstName,
             'adminLastName' => $adminLastName,
@@ -26,9 +36,9 @@ class Install {
             'adminPass' => $adminPassword,
             'adminEmail' => $adminEmail,
             'baseURL' => $baseURL
-        );
+        )));
 
-        UbirimiContainer::get()['client']->add($cliendData);
+        UbirimiContainer::get()['client']->add($clientData);
 
         exit;
     }

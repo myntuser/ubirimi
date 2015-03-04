@@ -40,6 +40,7 @@ use Ubirimi\Service\PasswordService;
 use Ubirimi\Service\RepositoryService;
 use Ubirimi\Service\UserService;
 use Ubirimi\Service\WarmUpService;
+use Savant3;
 
 class UbirimiCoreServiceProvider implements ServiceProviderInterface
 {
@@ -117,7 +118,7 @@ class UbirimiCoreServiceProvider implements ServiceProviderInterface
         });
 
         $pimple['savant'] = $pimple->share(function() {
-            return new \Savant3(array(
+            return new Savant3(array(
                     'template_path' => array(
                         __DIR__ . '/../Yongo/Resources/views/email/',
                         __DIR__ . '/../GeneralSettings/Resources/views/email/',

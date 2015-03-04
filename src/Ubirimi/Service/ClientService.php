@@ -78,7 +78,7 @@ class ClientService
             $conn->rollback();
 
             throw new \Exception(
-                sprintf('Could not install client [%s]. Error [%s]', $data['companyName'], $e->getMessage())
+                sprintf('Could not install client [%s]. Error [%s]', $data['baseURL'], $e->getMessage())
             );
         }
     }
