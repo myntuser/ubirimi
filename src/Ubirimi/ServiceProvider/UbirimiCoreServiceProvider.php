@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHa
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Ubirimi\Api\Service\BasicAuthenticationService;
 use Ubirimi\Container\ServiceProviderInterface;
-use Ubirimi\Container\UbirimiContainer;
+use Ubirimi\DbMonologHandler;
 use Ubirimi\LoginTimeService\LoginTimeService;
 use Ubirimi\Service\ClientService;
 use Ubirimi\Service\DatabaseConnectorService;
@@ -80,7 +80,7 @@ class UbirimiCoreServiceProvider implements ServiceProviderInterface
                 mkdir(__DIR__ . '/../../../app/logs', 0755, true);
             }
             $logger->pushHandler(new StreamHandler(__DIR__ . '/../../../app/logs/ubirimi.log', Logger::DEBUG));
-            $logger->pushHandler(new \DbMonologHandler(), Logger::DEBUG);
+            $logger->pushHandler(new DbMonologHandler(), Logger::DEBUG);
             $logger->pushProcessor($IntrospectionProcessor);
             $logger->pushProcessor($webProcessor);
 
