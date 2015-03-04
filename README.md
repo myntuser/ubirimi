@@ -11,7 +11,7 @@ Requirements
 - Be warned that PHP versions before 5.3.8 are known to be buggy and might not work for you
 - MySQL 5.0 or above
 - if you go with Apache you must install mod_rewrite module
-- needed PHP extensions: mysqli, gd
+- needed PHP extensions: mysqli, mysqlnd, gd
 
 Products available
 ------------
@@ -62,7 +62,9 @@ Upgrading
 Documentation
 -------------
 
-not much available so far
+Common Errors:
+Error: PHP Fatal error:  Call to undefined method mysqli_stmt::get_result()
+Cause: mysqlnd not installed
 
 Contributing
 ------------
