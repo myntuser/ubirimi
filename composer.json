@@ -15,6 +15,12 @@
     "autoload": {
         "psr-4": {"": "src/"}
     },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/domnulnopcea/Savant3.git"
+        }
+    ],
     "require": {
         "symfony/event-dispatcher": "2.5.*",
         "symfony/http-foundation": "2.5.*",

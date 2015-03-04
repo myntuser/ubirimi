@@ -4,7 +4,9 @@ namespace Ubirimi;
 
 use Composer\Script\Event;
 use Ubirimi\Container\UbirimiContainer;
+use Ubirimi\Service\ClientService;
 use Ubirimi\Service\ConfigService;
+use Ubirimi\Service\DatabaseConnectorService;
 use Ubirimi\ServiceProvider\UbirimiCoreServiceProvider;
 
 class Install {

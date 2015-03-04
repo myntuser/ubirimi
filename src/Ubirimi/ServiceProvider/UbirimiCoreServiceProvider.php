@@ -32,15 +32,15 @@ use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Ubirimi\Api\Service\BasicAuthenticationService;
 use Ubirimi\Container\ServiceProviderInterface;
 use Ubirimi\DbMonologHandler;
-use Ubirimi\LoginTimeService\LoginTimeService;
 use Ubirimi\Service\ClientService;
 use Ubirimi\Service\DatabaseConnectorService;
 use Ubirimi\Service\EmailService;
+use Ubirimi\Service\LoginTimeService\LoginTimeService;
 use Ubirimi\Service\PasswordService;
 use Ubirimi\Service\RepositoryService;
 use Ubirimi\Service\UserService;
 use Ubirimi\Service\WarmUpService;
-use Savant3;
+use Savant3\Savant3;
 
 class UbirimiCoreServiceProvider implements ServiceProviderInterface
 {

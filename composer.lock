@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ccd11617be47e89e122707252300ed3e",
+    "hash": "dfc02e5d3476871544d0448efa7add07",
     "packages": [
         {
             "name": "cogpowered/finediff",
@@ -155,12 +155,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "6469e290207e5846e859bd69618c67e1650f2d76"
+                "reference": "4b6c798f9ccabc4e0225644fa4e5ae94828aeab0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/6469e290207e5846e859bd69618c67e1650f2d76",
-                "reference": "6469e290207e5846e859bd69618c67e1650f2d76",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/4b6c798f9ccabc4e0225644fa4e5ae94828aeab0",
+                "reference": "4b6c798f9ccabc4e0225644fa4e5ae94828aeab0",
                 "shasum": ""
             },
             "require": {
@@ -219,7 +219,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2015-03-04 11:37:13"
+            "time": "2015-03-04 17:56:10"
         },
         {
             "name": "nyholm/zebra-image",
@@ -512,24 +512,15 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/saltybeagle/Savant3.git",
-                "reference": "ebf4385bf44bec8c7a169571ac178f626017c466"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/saltybeagle/Savant3/zipball/ebf4385bf44bec8c7a169571ac178f626017c466",
-                "reference": "ebf4385bf44bec8c7a169571ac178f626017c466",
-                "shasum": ""
+                "url": "https://github.com/domnulnopcea/Savant3.git",
+                "reference": "6bfbcb1d0746793b4b1ca2b412b52713431ac32c"
             },
             "type": "library",
             "autoload": {
-                "classmap": [
-                    "Savant3.php",
-                    "Savant3",
-                    "Savant3/resources"
-                ]
+                "psr-4": {
+                    "Savant3\\": "src"
+                }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "LGPL"
             ],
@@ -540,7 +531,7 @@
                 }
             ],
             "description": "Savant3 template engine",
-            "time": "2014-01-07 17:10:32"
+            "time": "2015-03-04 19:36:42"
         },
         {
             "name": "sebastian/finder-facade",
