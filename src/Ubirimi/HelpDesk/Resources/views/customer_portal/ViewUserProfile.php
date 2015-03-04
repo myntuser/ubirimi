@@ -1,6 +1,7 @@
 <?php
 
 use Ubirimi\Repository\User\UbirimiUser;
+use Ubirimi\Container\UbirimiContainer;
 
 require __DIR__ . '/_header.php';
 ?>
@@ -33,7 +34,7 @@ require __DIR__ . '/_header.php';
                                         <img id="profile-picture"
                                              style="width: 150px; height: 150px; vertical-align: top"
                                              title="<?php echo $user['first_name'] . ' ' . $user['last_name'] ?>"
-                                             src="<?php echo $this->getRepository(UbirimiUser::class)->getUserAvatarPicture($user, 'big') ?>" />
+                                             src="<?php echo UbirimiContainer::get()['repository']->get(UbirimiUser::class)->getUserAvatarPicture($user, 'big') ?>" />
                                         <img id="loading" style="display: none" src="/img/loader.gif" />
                                     </span>
                                     <?php if ($loggedInUserId == $userId): ?>

@@ -33,7 +33,6 @@ use Ubirimi\Yongo\Repository\Issue\IssueAttachment;
 
 class OperationConfirmationController extends UbirimiController
 {
-
     public function indexAction(Request $request, SessionInterface $session)
     {
         Util::checkUserIsLoggedInAndRedirect();
@@ -56,7 +55,7 @@ class OperationConfirmationController extends UbirimiController
                         $this->getLogger()->addInfo('DELETE Yongo issue ' . $issue['project_code'] . '-' . $issue['nr'], $this->getLoggerContext());
 
                         UbirimiContainer::get()['dispatcher']->dispatch(YongoEvents::YONGO_ISSUE_EMAIL, $issueEvent);
-                                            }
+                    }
 
                     $this->getRepository(Issue::class)->deleteById($issueIds[$i]);
                     $this->getRepository(IssueAttachment::class)->deleteByIssueId($issueIds[$i]);
