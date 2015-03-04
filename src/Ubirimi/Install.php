@@ -22,7 +22,6 @@ class Install {
 
         $io = $event->getIO();
 
-        $domain = $io->ask("Domain: ");
         $adminFirstName = $io->ask("Administrator First Name: ");
         $adminLastName = $io->ask("Administrator Last Name: ");
         $adminUsername = $io->ask("Administrator Username: ");
@@ -31,7 +30,6 @@ class Install {
         $baseURL = $io->ask("Base URL (Ex: http://ubirimi.company.com): ");
 
         $clientData = array('data' => json_encode(array(
-            'companyDomain' => $domain,
             'adminFirstName' => $adminFirstName,
             'adminLastName' => $adminLastName,
             'adminUsername' => $adminUsername,

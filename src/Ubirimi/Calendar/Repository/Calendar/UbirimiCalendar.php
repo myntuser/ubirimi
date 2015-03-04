@@ -262,7 +262,7 @@ class UbirimiCalendar
     }
 
     public function getAll() {
-        $query = "select cal_calendar.name, cal_calendar.description, cal_calendar.date_created, client.company_domain, cal_calendar.id " .
+        $query = "select cal_calendar.name, cal_calendar.description, cal_calendar.date_created, client.base_url, cal_calendar.id " .
             "from cal_calendar " .
             "left join general_user on general_user.id = cal_calendar.user_id " .
             "left join client on client.id = general_user.client_id " .

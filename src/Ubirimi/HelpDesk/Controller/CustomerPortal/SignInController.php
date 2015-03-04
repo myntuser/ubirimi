@@ -39,7 +39,7 @@ class SignInController extends UbirimiController
 
         $clientId = $clientSettings['id'];
 
-        if ($session->has('user') && Util::getSubdomain() == $session->get('client/company_domain')) {
+        if ($session->has('user') && $httpHOST == $session->get('client/base_url')) {
             return new RedirectResponse($httpHOST . '/helpdesk/customer-portal/dashboard');
         }
 

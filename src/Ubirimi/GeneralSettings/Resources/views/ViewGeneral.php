@@ -30,7 +30,7 @@ require_once __DIR__ . '/_header.php';
                 </tr>
                 <tr>
                     <td width="30%">Base URL</td>
-                    <td>https://<?php echo $client['company_domain'] ?>.ubirimi.net</td>
+                    <td><?php echo $client['base_url'] ?></td>
                 </tr>
             </table>
             <br />

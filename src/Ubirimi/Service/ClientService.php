@@ -36,7 +36,6 @@ class ClientService
 
             $clientId = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->create(
                 null,
-                $data['companyDomain'],
                 $data['baseURL'],
                 $data['adminEmail'],
                 null,

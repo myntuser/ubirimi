@@ -33,11 +33,8 @@ class ShareDialogController extends UbirimiController
         Util::checkUserIsLoggedInAndRedirect();
 
         $clientId = UbirimiContainer::get()['session']->get('client/id');
-
         $issueId = $request->get('id');
-
         $users = UbirimiContainer::get()['repository']->get(UbirimiUser::class)->getByClientId($clientId, 0);
-        $subdomain = Util::getSubdomain();
 
         return $this->render(__DIR__ . '/../../Resources/views/issue/ShareDialog.php', get_defined_vars());
     }

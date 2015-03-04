@@ -20,12 +20,11 @@
 namespace Ubirimi\SvnHosting\Repository;
 
 use Exception;
-use Path;
 use Ubirimi\ConsoleUtils;
 use Ubirimi\Container\UbirimiContainer;
 use Ubirimi\Repository\General\UbirimiClient;
-use ubirimi\svn\SVNCrypt;
-use ubirimi\svn\SVNUtils;
+use Ubirimi\SvnHosting\SVNCrypt;
+use Ubirimi\SvnHosting\SVNUtils;
 use Ubirimi\Util;
 
 class SvnRepository
@@ -186,7 +185,7 @@ class SvnRepository
     public function getAll($filters = array()) {
         $query = 'SELECT svn_repository.id, svn_repository.client_id, user_created_id, name, description, code,
                             svn_repository.date_created, general_user.first_name, general_user.last_name,
-                            client.company_domain ' .
+                            client.base_url ' .
                     'FROM svn_repository ' .
                     'LEFT join general_user ON svn_repository.user_created_id = general_user.id ' .
                     'LEFT JOIN client ON client.id = svn_repository.client_id ' .
@@ -330,11 +329,11 @@ class SvnRepository
         self::deleteById($Id);
 
         /* update apache configs */
-        SvnRepository::updateHtpasswd($repo['id'], $client['company_domain']);
+        SvnRepository::updateHtpasswd($repo['id'], $client['id']);
         SvnRepository::updateAuthz();
 
         /* delete from the disk */
-        $path = UbirimiContainer::get()['subversion.path'] . Util::slugify($client['company_domain']) . '/' . Util::slugify($repo['name']);
+        $path = UbirimiContainer::get()['subversion.path'] . Util::slugify($client['id']) . '/' . Util::slugify($repo['name']);
         system("rm -rf $path");
 
         /* refresh apache config */
@@ -368,7 +367,7 @@ class SvnRepository
         }
     }
 
-    public function updateHtpasswd($repoId, $companyDomain) {
+    public function updateHtpasswd($repoId, $clientId) {
         $text = "";
 
         $repository = UbirimiContainer::get()['repository']->get(SvnRepository::class)->getById($repoId);
@@ -391,7 +390,7 @@ class SvnRepository
         }
 
         $path = str_replace('REPO_DIR', Util::slugify($repository['name']), UbirimiContainer::get()['subversion.passwd']);
-        $path = str_replace('CLIENT_DIR', Util::slugify($companyDomain), $path);
+        $path = str_replace('CLIENT_DIR', Util::slugify($clientId), $path);
         @file_put_contents($path, $text);
     }
 
@@ -461,22 +460,22 @@ class SvnRepository
             $clientData = UbirimiContainer::get()['session']->get('client');
 
             $path = str_replace('REPO_DIR', Util::slugify($repository['name']), UbirimiContainer::get()['subversion.authz']);
-            $path = str_replace('CLIENT_DIR', Util::slugify($clientData['company_domain']), $path);
+            $path = str_replace('CLIENT_DIR', Util::slugify($clientData['id']), $path);
 
             @file_put_contents($path, $text . $text_svn_groups . "\n" . $text_svn_projects);
         }
     }
 
-    public function apacheConfig($clientDomain, $repositoryName) {
-        file_put_contents(UbirimiContainer::get()['subversion.apache_config'], "Use SubversionRepo $clientDomain $repositoryName\n", FILE_APPEND | LOCK_EX);
+    public function apacheConfig($clientId, $repositoryName) {
+        file_put_contents(UbirimiContainer::get()['subversion.apache_config'], "Use SubversionRepo $clientId $repositoryName\n", FILE_APPEND | LOCK_EX);
     }
 
     public function refreshApacheConfig() {
         $text = "";
 
-        $query = "SELECT *
-                      FROM svn_repository
-                      LEFT JOIN client on svn_repository.client_id = client.id";
+        $query = "SELECT * " .
+                 "FROM svn_repository " .
+                 "LEFT JOIN client on svn_repository.client_id = client.id";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -484,7 +483,7 @@ class SvnRepository
         $result = $stmt->get_result();
 
         while ($repo = $result->fetch_array(MYSQLI_ASSOC)) {
-            $text .= "Use SubversionRepo " . Util::slugify($repo['company_domain']) . ' ' . Util::slugify($repo['name']) . "\n";
+            $text .= "Use SubversionRepo " . $repo['client_id'] . ' ' . Util::slugify($repo['name']) . "\n";
         }
 
         file_put_contents(UbirimiContainer::get()['subversion.apache_config'], $text, LOCK_EX);

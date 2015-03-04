@@ -35,7 +35,6 @@ class SignupController extends UbirimiController
         $session->remove('user_account_created');
 
         $httpHOST = Util::getHttpHost();
-        $clientDomain = Util::getSubdomain();
 
         $clientId = $this->getRepository(UbirimiClient::class)->getByBaseURL($httpHOST, 'array', 'id');
         $client = $this->getRepository(UbirimiClient::class)->getById($clientId);
@@ -110,7 +109,7 @@ class SignupController extends UbirimiController
                         'email' => $email,
                         'username' => $username,
                         'password' => $password,
-                        'clientDomain' => $client['company_domain'],
+                        'clientBaseURL' => $client['base_url'],
                         'country' => $countryId
                     )
                 );

@@ -1,4 +1,5 @@
 <?php
+
 use Ubirimi\SystemProduct;
 
 $urlIssuePrefix = '/yongo/issue/';

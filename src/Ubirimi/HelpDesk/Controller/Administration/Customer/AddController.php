@@ -34,7 +34,7 @@ class AddController extends UbirimiController
     public function indexAction(Request $request, SessionInterface $session)
     {
         Util::checkUserIsLoggedInAndRedirect();
-        $clientDomain = $session->get('client/company_domain');
+        $clientBaseURL = $session->get('client/base_url');
 
         $organizationId = $request->query->get('id');
 
@@ -75,7 +75,7 @@ class AddController extends UbirimiController
                     'password' => $password,
                     'email' => $email,
                     'isCustomer' => true,
-                    'clientDomain' => $session->get('client/company_domain')
+                    'clientBaseURL' => $session->get('client/base_url')
                 ));
 
                 if ($organizationId) {

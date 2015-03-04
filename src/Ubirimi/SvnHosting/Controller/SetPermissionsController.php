@@ -39,7 +39,7 @@ class SetPermissionsController extends UbirimiController
 
         $this->getRepository(SvnRepository::class)->updateUserPermissions($repoId, $Id, $hasRead, $hasWrite);
 
-        $this->getRepository(SvnRepository::class)->updateHtpasswd($repoId, $session->get('client/company_domain'));
+        $this->getRepository(SvnRepository::class)->updateHtpasswd($repoId, $session->get('client/id'));
         $this->getRepository(SvnRepository::class)->updateAuthz();
 
         return new Response('');

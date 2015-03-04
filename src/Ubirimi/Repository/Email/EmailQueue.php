@@ -88,7 +88,7 @@ class EmailQueue
 
     public function getAll() {
         $query = 'SELECT general_mail_queue.from_address, general_mail_queue.to_address, general_mail_queue.subject, general_mail_queue.content, general_mail_queue.date_created, ' .
-                 'client.company_domain ' .
+                 'client.base_url ' .
             'FROM general_mail_queue ' .
             'left join client on client.id = general_mail_queue.client_id';
 

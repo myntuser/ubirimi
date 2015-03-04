@@ -798,13 +798,6 @@ class Util {
     <?php
     }
 
-    public static function getSubdomain() {
-        $httpHost = $_SERVER['SERVER_NAME'];
-        $parameters = explode(".", $httpHost);
-
-        return array_shift($parameters);
-    }
-
     public static function runsOnLocalhost() {
 
         return in_array('lan', explode('.', $_SERVER['HTTP_HOST']));

@@ -33,21 +33,16 @@ class DeleteRepositoryController extends UbirimiController
     {
         Util::checkUserIsLoggedInAndRedirect();
 
-        $clientId = $session->get('client/id');
-        $loggedInUserId = $session->get('user/id');
-
         $Id = $request->request->get('svn_id');
 
         $repo = $this->getRepository(SvnRepository::class)->getById($Id);
 
         $this->getRepository(SvnRepository::class)->deleteById($Id);
-
-        $this->getRepository(SvnRepository::class)->updateHtpasswd($repo['id'], $session->get('client/company_domain'));
+        $this->getRepository(SvnRepository::class)->updateHtpasswd($repo['id'], $session->get('client/id'));
         $this->getRepository(SvnRepository::class)->updateAuthz();
 
         /* delete the content from hdd */
-        $companyDomain = Util::getSubdomain();
-        $path = UbirimiContainer::get()['subversion.path'] . Util::slugify($companyDomain) . '/' . Util::slugify($repo['name']);
+        $path = UbirimiContainer::get()['subversion.path'] . $session->get('client/id') . '/' . Util::slugify($repo['name']);
         system("rm -rf $path");
 
         /* refresh apache config */

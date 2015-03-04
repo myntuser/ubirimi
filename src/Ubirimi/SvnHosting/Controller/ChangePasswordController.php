@@ -23,7 +23,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Ubirimi\Container\UbirimiContainer;
-use Ubirimi\Event\LogEvent;
 use Ubirimi\Repository\User\UbirimiUser;
 use Ubirimi\SvnHosting\Event\SvnHostingEvent;
 use Ubirimi\SvnHosting\Event\SvnHostingEvents;
@@ -61,7 +60,7 @@ class ChangePasswordController extends UbirimiController
             if (Util::hasNoErrors($errors)) {
                 $this->getRepository(SvnRepository::class)->updateUserPassword($session->get('selected_svn_repo_id'), $userId, $password);
 
-                $this->getRepository(SvnRepository::class)->updateHtpasswd($session->get('selected_svn_repo_id'), $session->get('client/company_domain'));
+                $this->getRepository(SvnRepository::class)->updateHtpasswd($session->get('selected_svn_repo_id'), $session->get('client/id'));
                 $this->getRepository(SvnRepository::class)->updateAuthz();
 
                 $svnEvent = new SvnHostingEvent($svnRepo['name'], $user, array('password' => $password));

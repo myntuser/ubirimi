@@ -37,7 +37,7 @@ class AddController extends UbirimiController
 
         $session->set('selected_product_id', -1);
 
-        $clientDomain = $session->get('client/company_domain');
+        $clientBaseURL = $session->get('client/base_url');
 
         $groupDevelopers = $this->getRepository(UbirimiGroup::class)->getByName($session->get('client/id'), 'Developers');
 
@@ -114,7 +114,7 @@ class AddController extends UbirimiController
                     'email' => $email,
                     'username' => $username,
                     'password' => $password,
-                    'clientDomain' => $session->get('client/company_domain')
+                    'clientBaseURL' => $session->get('client/base_url')
                 );
 
                 if ($svnRepoId) {

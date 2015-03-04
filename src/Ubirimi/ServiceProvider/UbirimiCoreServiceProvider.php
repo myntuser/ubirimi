@@ -35,7 +35,7 @@ use Ubirimi\DbMonologHandler;
 use Ubirimi\Service\ClientService;
 use Ubirimi\Service\DatabaseConnectorService;
 use Ubirimi\Service\EmailService;
-use Ubirimi\Service\LoginTimeService\LoginTimeService;
+use Ubirimi\Service\LoginTimeService;
 use Ubirimi\Service\PasswordService;
 use Ubirimi\Service\RepositoryService;
 use Ubirimi\Service\UserService;

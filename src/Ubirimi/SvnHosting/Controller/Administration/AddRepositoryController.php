@@ -23,11 +23,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Ubirimi\Container\UbirimiContainer;
-use Ubirimi\Event\LogEvent;
 use Ubirimi\Event\UbirimiEvents;
 use Ubirimi\Event\UserEvent;
-use ubirimi\svn\SVNUtils;
 use Ubirimi\SvnHosting\Repository\SvnRepository;
+use Ubirimi\SvnHosting\SVNUtils;
 use Ubirimi\SystemProduct;
 use Ubirimi\UbirimiController;
 use Ubirimi\Util;
@@ -71,10 +70,10 @@ class AddRepositoryController extends UbirimiController
                 $currentDate = Util::getServerCurrentDateTime();
                 $repoId = $this->getRepository(SvnRepository::class)->addRepo($clientId, $session->get('user/id'), $name, $description, $code, $currentDate);
 
-                $repoPath = UbirimiContainer::get()['subversion.path'] . Util::slugify($session->get('client/company_domain')) . '/' . Util::slugify($name);
+                $repoPath = UbirimiContainer::get()['subversion.path'] . $clientId . '/' . Util::slugify($name);
                 /* create the repository on disk */
-                @mkdir(UbirimiContainer::get()['subversion.path'] . Util::slugify($session->get('client/company_domain')), 0700, true);
-                @mkdir(UbirimiContainer::get()['subversion.path'] . Util::slugify($session->get('client/company_domain')) . '/' . Util::slugify($name), 0700, true);
+                @mkdir(UbirimiContainer::get()['subversion.path'] . $clientId, 0700, true);
+                @mkdir(UbirimiContainer::get()['subversion.path'] . $clientId . '/' . Util::slugify($name), 0700, true);
 
                 try {
                     $this->getRepository(SvnRepository::class)->createSvn($repoPath);
@@ -85,7 +84,7 @@ class AddRepositoryController extends UbirimiController
                     $this->getRepository(SvnRepository::class)->updateUserPermissions($repoId, $session->get('user/id'), 1, 1);
 
                     /* apache config */
-                    $this->getRepository(SvnRepository::class)->apacheConfig(Util::slugify($session->get('client/company_domain')), Util::slugify($name));
+                    $this->getRepository(SvnRepository::class)->apacheConfig($clientId, Util::slugify($name));
                 } catch (\Exception $e) {
 
                 }
@@ -97,7 +96,7 @@ class AddRepositoryController extends UbirimiController
                     $session->get('user/username'),
                     null,
                     $session->get('user/email'),
-                    array('svnRepoId' => $repoId, 'svnRepositoryName' => $name)
+                    array('svnRepoId' => $repoId, 'repositoryName' => $name)
                 );
 
                 UbirimiContainer::get()['dispatcher']->dispatch(UbirimiEvents::USER, $userEvent);

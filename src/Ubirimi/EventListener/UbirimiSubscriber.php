@@ -21,7 +21,6 @@ namespace Ubirimi\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Ubirimi\Container\UbirimiContainer;
-use Ubirimi\Event\LogEvent;
 use Ubirimi\Event\UbirimiEvent;
 use Ubirimi\Event\UbirimiEvents;
 use Ubirimi\Event\UserEvent;
@@ -46,7 +45,7 @@ class UbirimiSubscriber implements EventSubscriberInterface
                             $event->getLastName(),
                             $event->getPassword(),
                             $event->getEmail(),
-                            $event->getExtra()['clientDomain'],
+                            $event->getExtra()['clientBaseURL'],
                             $event->getExtra()['clientId']);
                         break;
 
@@ -57,7 +56,7 @@ class UbirimiSubscriber implements EventSubscriberInterface
                             $event->getUsername(),
                             $event->getPassword(),
                             $event->getEmail(),
-                            $event->getExtra()['clientDomain'],
+                            $event->getExtra()['clientBaseURL'],
                             $event->getExtra()['clientId']);
                         break;
                 }
