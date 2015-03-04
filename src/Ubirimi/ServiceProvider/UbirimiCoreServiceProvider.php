@@ -76,7 +76,10 @@ class UbirimiCoreServiceProvider implements ServiceProviderInterface
             $IntrospectionProcessor = new IntrospectionProcessor();
             $webProcessor = new WebProcessor();
 
-            $logger->pushHandler(new StreamHandler(UbirimiContainer::get()['log.path'], Logger::DEBUG));
+            if (!file_exists(__DIR__ . '/../../../app/logs/ubirimi.log')) {
+                mkdir(__DIR__ . '/../../../app/logs', 0755, true);
+            }
+            $logger->pushHandler(new StreamHandler(__DIR__ . '/../../../app/logs/ubirimi.log', Logger::DEBUG));
             $logger->pushHandler(new \DbMonologHandler(), Logger::DEBUG);
             $logger->pushProcessor($IntrospectionProcessor);
             $logger->pushProcessor($webProcessor);

@@ -50,4 +50,4 @@ UbirimiContainer::get()['dispatcher']->addSubscriber(new CalendarEventSubscriber
 UbirimiContainer::get()['dispatcher']->addSubscriber(new SvnHostingEventSubscriber());
 
 $routeBootstrapper = new RouteBootstrapService();
-$urlMatcher = $routeBootstrapper->bootstrap(UbirimiContainer::get()['app.cache'], UbirimiContainer::get()['deploy.on_demand']);
+$urlMatcher = $routeBootstrapper->bootstrap(UbirimiContainer::get()['deploy.on_demand']);

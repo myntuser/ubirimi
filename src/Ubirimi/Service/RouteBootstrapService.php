@@ -46,26 +46,20 @@ class RouteBootstrapService
     /**
      * @return \Symfony\Component\Routing\Matcher\UrlMatcherInterface
      */
-    public function bootstrap($cache, $onDemand = true)
+    public function bootstrap($onDemand = true)
     {
         $this->context = new RequestContext();
         $this->context->fromRequest(Request::createFromGlobals());
 
-        if (false === $cache) {
+        if (!file_exists(__DIR__ . '/../../../app/cache/ProjectUrlMatcher.php')) {
             $this->processRoutes($onDemand);
 
             return $this->router->getMatcher();
-        } else {
-            if (!file_exists(UbirimiContainer::get()['app.cacheDir'] . '/ProjectUrlMatcher.php')) {
-                $this->processRoutes($onDemand);
-
-                return $this->router->getMatcher();
-            }
-
-            require_once UbirimiContainer::get()['app.cacheDir'] . '/ProjectUrlMatcher.php';
-
-            return new \ProjectUrlMatcher($this->context);
         }
+
+        require_once __DIR__ . '/../../../app/cache/ProjectUrlMatcher.php';
+
+        return new \ProjectUrlMatcher($this->context);
     }
 
     /**
@@ -82,7 +76,7 @@ class RouteBootstrapService
         $this->context->fromRequest(Request::createFromGlobals());
 
         /* delete previous route cache if exists */
-        @unlink(UbirimiContainer::get()['app.cacheDir'] . '/ProjectUrlMatcher.php');
+        @unlink(__DIR__ . '/../../../app/cache/ProjectUrlMatcher.php');
 
         /* these are the routing yaml files that are loaded regardless of deployment context (onDemand, download) */
         $routingPaths = array(
@@ -103,7 +97,7 @@ class RouteBootstrapService
             __DIR__ . '/../SvnHosting/Resources/config'
         );
 
-        $options = array('cache_dir' => UbirimiContainer::get()['app.cacheDir']);
+        $options = array('cache_dir' => __DIR__ . '/../../../app/cache');
 
         $this->router = new Router(
             new YamlFileLoader(new FileLocator(__DIR__ . '/../Yongo/Resources/config')),
