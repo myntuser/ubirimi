@@ -48,7 +48,6 @@ if ($session->get('client/settings/timezone')) {
     date_default_timezone_set('Europe/London');
 }
 
-$a = new Savant3();
 try {
     $request = Request::createFromGlobals();
     $request->setSession($session);
