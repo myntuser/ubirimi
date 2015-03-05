@@ -297,7 +297,7 @@ class Sprint
     }
 
     public function getAllSprintsForClients() {
-        $query = "select agile_board_sprint.*, client.company_name, client.company_domain " .
+        $query = "select agile_board_sprint.*, client.company_name, client.base_url " .
             "from agile_board_sprint " .
             "left join agile_board on agile_board.id = agile_board_sprint.agile_board_id " .
             "left join client on client.id = agile_board.client_id " .

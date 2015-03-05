@@ -36,7 +36,7 @@ class UbirimiLog
 
     public function getAll() {
         $query = "select general_log.id, general_log.message, general_log.date_created, " .
-                 "client.company_domain, general_user.first_name, general_user.last_name " .
+                 "client.base_url, general_user.first_name, general_user.last_name " .
             "from general_log " .
             "left join general_user on general_user.id = general_log.user_id " .
             "left join client on client.id = general_user.client_id " .
@@ -55,7 +55,7 @@ class UbirimiLog
 
     public function getByClientIdAndInterval($clientId, $from, $to) {
         $query = "select general_log.id, general_log.message, general_log.date_created, " .
-            "client.company_domain, general_user.first_name, general_user.last_name " .
+            "client.base_url, general_user.first_name, general_user.last_name " .
             "from general_log " .
             "left join general_user on general_user.id = general_log.user_id " .
             "left join client on client.id = general_user.client_id " .

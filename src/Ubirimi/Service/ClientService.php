@@ -36,7 +36,6 @@ class ClientService
 
             $clientId = UbirimiContainer::get()['repository']->get(UbirimiClient::class)->create(
                 null,
-                $data['companyDomain'],
                 $data['baseURL'],
                 $data['adminEmail'],
                 null,
@@ -68,7 +67,7 @@ class ClientService
                 'Your account details - Ubirimi.com',
                 Util::getTemplate('_newAccount.php', array(
                         'username' => $data['adminUsername'],
-                        'companyDomain' => $data['companyDomain'],
+                        'companyBaseURL' => $data['baseURL'],
                         'emailAddress' => $data['adminEmail'])
                 ),
                 Util::getServerCurrentDateTime());

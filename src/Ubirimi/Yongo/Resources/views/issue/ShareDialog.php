@@ -1,8 +1,14 @@
+<?php
+use Ubirimi\Util;
+?>
 <table>
     <tr>
         <td>
             <div>Link to Issue</div>
-            <input type="text" class="inputTextLarge" value="https://<?php echo $subdomain ?>.ubirimi.net/yongo/issue/<?php echo $issueId ?>" disabled="disabled" />
+            <input type="text"
+                   class="inputTextLarge"
+                   value="<?php echo Util::getHttpHost() ?>/yongo/issue/<?php echo $issueId ?>"
+                   disabled="disabled" />
         </td>
     </tr>
     <tr>

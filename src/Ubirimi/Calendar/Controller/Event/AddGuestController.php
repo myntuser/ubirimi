@@ -26,7 +26,6 @@ use Ubirimi\Calendar\Event\CalendarEvent as CalEvent;
 use Ubirimi\Calendar\Event\CalendarEvents;
 use Ubirimi\Calendar\Repository\Event\CalendarEvent;
 use Ubirimi\Container\UbirimiContainer;
-use Ubirimi\Event\LogEvent;
 use Ubirimi\Repository\User\UbirimiUser;
 use Ubirimi\UbirimiController;
 use Ubirimi\Util;

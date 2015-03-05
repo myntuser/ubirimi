@@ -25,7 +25,7 @@ use Ubirimi\Service\UbirimiService;
 
 class EmailService extends UbirimiService
 {
-    public function newUser($repositoryName, $firstName, $lastName, $username, $mail, $repositoryName)
+    public function newUser($repositoryName, $firstName, $lastName, $username, $mail)
     {
         if ($this->session->get('client/settings/smtp')) {
 

@@ -45,7 +45,11 @@ require_once __DIR__ . '/_header.php';
                         <td width="250" align="right">Base URL</td>
                         <td width="10"></td>
                         <td>
-                            <input class="inputText" readonly="readonly" type="text" value="https://<?php echo $client['company_domain'] ?>.ubirimi.net" name="base_url" />
+                            <input class="inputText"
+                                   readonly="readonly"
+                                   type="text"
+                                   value="<?php echo $client['base_url'] ?>"
+                                   name="base_url" />
                         </td>
                     </tr>
                 </table>

@@ -1,7 +1,8 @@
 <?php
+
 use Ubirimi\Container\UbirimiContainer;
-use ubirimi\svn\SVNLog;
 use Ubirimi\Util;
+use Ubirimi\SvnHosting\SVNLog;
 
 require_once __DIR__ . '/_header.php';
 ?>
@@ -42,7 +43,9 @@ require_once __DIR__ . '/_header.php';
                                     <?php
                                         $log = null;
                                         try {
-                                            $log = SVNLog::log(UbirimiContainer::get()['subversion.path'] . Util::slugify($session->get('client/company_domain')) . '/' . Util::slugify($svnRepo['name']));
+                                            $log = SVNLog::log(UbirimiContainer::get()['subversion.path'] .
+                                                Util::slugify($session->get('client/id')) . '/' . Util::slugify
+                                                ($svnRepo['name']));
                                         } catch (Exception $e) {
 
                                         }

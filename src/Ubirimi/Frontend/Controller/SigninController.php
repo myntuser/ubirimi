@@ -33,9 +33,7 @@ class SigninController extends UbirimiController
     public function indexAction(Request $request, SessionInterface $session)
     {
         $content = 'Signin.php';
-
         $signInError = null;
-        $httpHOST = $_SERVER['SERVER_NAME'];
 
         $httpHOST = Util::getHttpHost();
 
@@ -43,7 +41,7 @@ class SigninController extends UbirimiController
         $clientId = $clientSettings['id'];
         $client = $this->getRepository(UbirimiClient::class)->getById($clientId);
 
-        if ($session->has('user') && Util::getSubdomain() == $session->get('client/company_domain')) {
+        if ($session->has('user') && $httpHOST == $session->get('client/base_url')) {
             return new RedirectResponse($httpHOST . '/yongo/my-dashboard');
         }
 

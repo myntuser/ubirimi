@@ -89,6 +89,7 @@ class SignUpController extends UbirimiController
                         'email' => $email,
                         'isCustomer' => true,
                         'password' => $password,
+                        'clientBaseURL' => $client['base_url']
                     )
                 );
 

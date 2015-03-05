@@ -164,7 +164,6 @@ class Email {
         $versionsAffected = UbirimiContainer::get()['repository']->get(IssueVersion::class)->getByIssueIdAndProjectId($issueId, $projectId, Issue::ISSUE_AFFECTED_VERSION_FLAG);
         $versionsFixed = UbirimiContainer::get()['repository']->get(IssueVersion::class)->getByIssueIdAndProjectId($issueId, $projectId, Issue::ISSUE_FIX_VERSION_FLAG);
         $components = UbirimiContainer::get()['repository']->get(IssueComponent::class)->getByIssueIdAndProjectId($issueId, $projectId);
-        $clientDomain = Util::getSubdomain();
 
         $customFieldsSingleValue = UbirimiContainer::get()['repository']->get(CustomField::class)->getCustomFieldsData($issueId);
         $customFieldsUserPickerMultiple = UbirimiContainer::get()['repository']->get(CustomField::class)->getUserPickerData($issueId);
@@ -181,7 +180,6 @@ class Email {
                         $subject,
                         Util::getTemplate('_newIssue.php', array(
                             'issue' => $issue,
-                            'client_domain' => $clientDomain,
                             'custom_fields_single_value' => $customFieldsSingleValue,
                             'custom_fields_user_picker_multiple' => $customFieldsUserPickerMultiple,
                             'components' => $components,
@@ -238,7 +236,6 @@ class Email {
                 null,
                 $subject,
                 Util::getTemplate('_issueAssign.php', array(
-                        'clientDomain' => Util::getSubdomain(),
                         'issue' => $issue,
                         'comment' => $comment,
                         'project' => array('id' => $issue['issue_project_id'], 'name' => $issue['project_name']),
@@ -258,7 +255,6 @@ class Email {
                 null,
                 Email::$smtpSettings['email_prefix'] . ' ' . "[Issue] - Issue UPDATED " . $issue['project_code'] . '-' . $issue['nr'],
                 Util::getTemplate('_issueUpdated.php', array(
-                        'clientDomain' => Util::getSubdomain(),
                         'issue' => $issue,
                         'project' => $project,
                         'user' => $loggedInUser,
@@ -319,7 +315,6 @@ class Email {
                 null,
                 $subject,
                 Util::getTemplate('_newComment.php',array(
-                        'clientDomain' => Util::getSubdomain(),
                         'issue' => $issue,
                         'project' => $project,
                         'content' => $content,
@@ -341,7 +336,6 @@ class Email {
             null,
             $subject,
             Util::getTemplate('_workLogged.php',array(
-                    'clientDomain' => Util::getSubdomain(),
                     'issue' => $issue,
                     'project' => $project,
                     'extraInformation' => $extraInformation,
@@ -362,7 +356,6 @@ class Email {
             null,
             $subject,
             Util::getTemplate('_addAttachment.php',array(
-                    'clientDomain' => Util::getSubdomain(),
                     'issue' => $issue,
                     'project' => $project,
                     'extraInformation' => $extraInformation,
@@ -383,7 +376,6 @@ class Email {
             null,
             $subject,
             Util::getTemplate('_workLogUpdated.php',array(
-                    'clientDomain' => Util::getSubdomain(),
                     'issue' => $issue,
                     'project' => $project,
                     'extraInformation' => $extraInformation,
@@ -404,7 +396,6 @@ class Email {
             null,
             $subject,
             Util::getTemplate('_workLogDeleted.php',array(
-                    'clientDomain' => Util::getSubdomain(),
                     'issue' => $issue,
                     'project' => $project,
                     'extraInformation' => $extraInformation,
@@ -527,8 +518,7 @@ class Email {
                 Util::getTemplate('_issueShare.php', array(
                         'issue' => $issue,
                         'userThatShares' => $userThatShares,
-                        'noteContent' => $noteContent,
-                        'clientDomain' => Util::getSubdomain())
+                        'noteContent' => $noteContent)
                 ),
                 $date);
         }
@@ -550,8 +540,7 @@ class Email {
                 $subject,
                 Util::getTemplate('_share.php', array('calendar' => $calendar,
                     'userThatShares' => $userThatShares,
-                    'noteContent' => $noteContent,
-                    'clientDomain' => Util::getSubdomain())),
+                    'noteContent' => $noteContent)),
                 $date);
         }
     }
@@ -572,8 +561,7 @@ class Email {
                 $subject,
                 Util::getTemplate('_eventShare.php', array('event' => $event,
                     'userThatShares' => $userThatShares,
-                    'noteContent' => $noteContent,
-                    'clientDomain' => Util::getSubdomain())),
+                    'noteContent' => $noteContent)),
                 $date);
         }
     }

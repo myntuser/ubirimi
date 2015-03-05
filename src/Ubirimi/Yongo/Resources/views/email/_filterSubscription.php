@@ -1,4 +1,5 @@
 <?php
+
 use Ubirimi\SystemProduct;
 
 $urlIssuePrefix = '/yongo/issue/';
@@ -10,4 +11,5 @@ $clientSettings = $this->clientSettings;
 $clientId = $this->clientId;
 $cliMode = $this->cliMode;
 $getSearchParameters = $this->searchParameters;
+
 require __DIR__ . '/../issue/search/_listResult.php';

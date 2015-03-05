@@ -19,8 +19,6 @@
 
 namespace Ubirimi\Repository\General;
 
-use Paymill\Models\Request\Client as PaymillClient;
-use Paymill\Request as PaymillRequest;
 use Ubirimi\Agile\Repository\Board\Board;
 use Ubirimi\Calendar\Repository\Calendar\UbirimiCalendar;
 use Ubirimi\Calendar\Repository\Reminder\ReminderPeriod;
@@ -132,7 +130,7 @@ class UbirimiClient
 
     public function getLastMonthActiveClients() {
         $date = date("Y-m-d", mktime(0, 0, 0, date("m") - 1, 1, date("Y")));
-        $query = 'SELECT count(general_log.id) as log_entries, client.id, client.company_domain, client.company_name, client.contact_email, client.date_created ' .
+        $query = 'SELECT count(general_log.id) as log_entries, client.id, client.base_url, client.company_name, client.contact_email, client.date_created ' .
                  'FROM general_log ' .
                  'LEFT JOIN client ON client.id = general_log.client_id ' .
                  'WHERE general_log.date_created >= ? AND ' .
@@ -379,12 +377,12 @@ class UbirimiClient
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function create($company_name, $companyDomain, $baseURL, $companyEmail, $countryId, $instanceType, $date) {
-        $query = "INSERT INTO client(company_name, company_domain, base_url, contact_email, date_created, instance_type, sys_country_id) " .
-            "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public function create($company_name, $baseURL, $companyEmail, $countryId, $instanceType, $date) {
+        $query = "INSERT INTO client(company_name, base_url, contact_email, date_created, instance_type, sys_country_id) " .
+            "VALUES (?, ?, ?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
-        $stmt->bind_param("ssssssi", $company_name, $companyDomain, $baseURL, $companyEmail, $date, $instanceType, $countryId);
+        $stmt->bind_param("sssssi", $company_name, $baseURL, $companyEmail, $date, $instanceType, $countryId);
 
         $stmt->execute();
 
@@ -529,7 +527,7 @@ class UbirimiClient
     }
 
     public function getAll($filters = array()) {
-        $query = 'select client.id, company_name, company_domain, address_1, address_2, city, district, contact_email, ' .
+        $query = 'select client.id, company_name, base_url, address_1, address_2, city, district, contact_email, ' .
                  'date_created, installed_flag, date_last_login, ' .
                  'sys_country.name as country_name, sys_country_id ' .
                  'from client ' .
@@ -1423,12 +1421,12 @@ class UbirimiClient
         UbirimiContainer::get()['db.connection']->query($query);
     }
 
-    public function checkAvailableDomain($companyDomain) {
-        $query = 'SELECT id from client where company_domain = ? limit 1';
+    public function checkAvailableDomain($companyBaseURL) {
+        $query = 'SELECT id from client where base_url = ? limit 1';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
-        $stmt->bind_param("s", $companyDomain);
+        $stmt->bind_param("s", $companyBaseURL);
         $stmt->execute();
         $result = $stmt->get_result();
         if ($result->num_rows) {
@@ -1857,9 +1855,8 @@ class UbirimiClient
     }
 
     public function getCurrentMonthAndDayPayingCustomers() {
-        $query = "SELECT client.company_domain,
+        $query = "SELECT client.base_url,
                          client.contact_email,
-                         client.base_url,
                          client.id,
                          general_invoice.number as invoice_number,
                          general_invoice.amount as invoice_amount

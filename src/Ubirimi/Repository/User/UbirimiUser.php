@@ -343,7 +343,7 @@ class UbirimiUser
 
     public function getByUsernameAndBaseURL($username, $baseURL) {
         $query = 'SELECT username, general_user.id, email, first_name, last_name, client_id, issues_per_page, password,
-                         super_user_flag, client.company_domain, svn_administrator_flag, client_administrator_flag ' .
+                         super_user_flag, client.base_url, svn_administrator_flag, client_administrator_flag ' .
             'from general_user ' .
             'left join client on client.id = general_user.client_id ' .
             "WHERE username = ? " .
@@ -361,18 +361,18 @@ class UbirimiUser
             return null;
     }
 
-    public function getByUsernameAndClientDomain($username, $domain) {
+    public function getByUsernameAndClientBaseURL($username, $baseURL) {
         $query = 'SELECT username, general_user.id, email, first_name, last_name, client_id, issues_per_page, password,
-                         super_user_flag, client.company_domain, svn_administrator_flag, client_administrator_flag ' .
+                         super_user_flag, client.base_url, svn_administrator_flag, client_administrator_flag ' .
             'from general_user ' .
             'left join client on client.id = general_user.client_id ' .
             "WHERE username = ? " .
-            "and client.company_domain = ? " .
+            "and client.base_url = ? " .
             "LIMIT 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
-        $stmt->bind_param("ss", $username, $domain);
+        $stmt->bind_param("ss", $username, $baseURL);
         $stmt->execute();
         $result = $stmt->get_result();
         if ($result->num_rows)
@@ -585,7 +585,7 @@ class UbirimiUser
 
     public function getByEmailAddressAndBaseURL($address, $baseURL) {
         $query = 'SELECT username, general_user.id, email, first_name, last_name, client_id, issues_per_page, password, ' .
-                  'super_user_flag, client.company_domain, svn_administrator_flag ' .
+                  'super_user_flag, client.base_url, svn_administrator_flag ' .
             'from general_user ' .
             'left join client on client.id = general_user.client_id ' .
             "WHERE email = ? " .
@@ -605,7 +605,7 @@ class UbirimiUser
 
     public function getCustomerByEmailAddressAndBaseURL($address, $baseURL) {
         $query = 'select general_user.id, email, first_name, last_name, client_id, password, ' .
-                  'client.company_domain ' .
+                  'client.base_url ' .
             'from general_user ' .
             'left join client on client.id = general_user.client_id ' .
             "WHERE email = ? " .

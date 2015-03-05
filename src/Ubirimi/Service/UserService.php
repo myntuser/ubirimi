@@ -103,7 +103,7 @@ class UserService extends UbirimiService
             $data['password'],
             $data['email'],
             array(
-                'clientDomain' => $data['clientDomain'],
+                'clientBaseURL' => $data['clientBaseURL'],
                 'isCustomer' => $data['isCustomer'],
                 'clientId' => $data['clientId']
             )

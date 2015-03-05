@@ -72,8 +72,7 @@ foreach ($usersToNotify as $user) {
                 'columns' => $columns,
                 'userId' => $user['id'],
                 'clientId' => $user['client_id'],
-                'cliMode' => true,
-                'client_domain' => $client['company_domain'])
+                'cliMode' => true)
         ),
         Util::getServerCurrentDateTime());
 }
