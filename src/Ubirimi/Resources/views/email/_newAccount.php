@@ -8,7 +8,7 @@
     <br />
     You can use Ubirimi product suite at:
     <br />
-    <a href="https://<?php echo $this->companyDomain ?>.ubirimi.net">https://<?php echo $this->companyDomain ?>.ubirimi.net</a>
+    <a href="<?php echo $this->companyBaseURL ?>"><?php echo $this->companyBaseURL ?></a>
     <br /><br />
 
     You can manage your Ubirimi account at:
