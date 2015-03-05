@@ -54,22 +54,49 @@ exec { "/usr/sbin/a2enmod rewrite" :
 
 # Set up a new VirtualHost
 
-file {"/var/www":
+file {"/var/www/html":
   ensure => "link",
-  target => "/vagrant",
+  target => "/vagrant/web",
   require => Package["apache2"],
   notify => Service["apache2"],
   replace => yes,
   force => true,
 }
 
-file { "/etc/apache2/sites-available/default":
+file { "/var/www":
+  ensure  => "link",
+  target  => "/vagrant",
+  require => Package["apache2"],
+  notify  => Service["apache2"],
+  replace => yes,
+  force   => true,
+}
+
+file { "/etc/apache2/sites-available/ubirimi":
   ensure => "link",
   target => "/vagrant/manifests/assets/vhost.conf",
   require => Package["apache2"],
   notify => Service["apache2"],
   replace => yes,
   force => true,
+}
+
+file { "/etc/apache2/sites-enabled/ubirimi":
+  ensure  => "link",
+  target  => "/vagrant/manifests/assets/vhost.conf",
+  require => Package["apache2"],
+  notify  => Service["apache2"],
+  replace => yes,
+  force   => true,
+}
+
+file { "/etc/apache2/sites-enabled/ubirimi.conf":
+  ensure  => "link",
+  target  => "/vagrant/manifests/assets/vhost.conf",
+  require => Package["apache2"],
+  notify  => Service["apache2"],
+  replace => yes,
+  force   => true,
 }
 
 # Set Apache to run as the Vagrant user
