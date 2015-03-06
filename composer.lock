@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e4a9bf1165e94767167a372c4869bb90",
+    "hash": "dc49853b69578e1bf404ba437bc5e771",
     "packages": [
         {
             "name": "cogpowered/finediff",
@@ -151,16 +151,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "dev-master",
+            "version": "1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "4b6c798f9ccabc4e0225644fa4e5ae94828aeab0"
+                "reference": "1fbe8c2641f2b163addf49cc5e18f144bec6b19f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/4b6c798f9ccabc4e0225644fa4e5ae94828aeab0",
-                "reference": "4b6c798f9ccabc4e0225644fa4e5ae94828aeab0",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1fbe8c2641f2b163addf49cc5e18f144bec6b19f",
+                "reference": "1fbe8c2641f2b163addf49cc5e18f144bec6b19f",
                 "shasum": ""
             },
             "require": {
@@ -219,7 +219,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2015-03-04 17:56:10"
+            "time": "2014-12-29 21:29:35"
         },
         {
             "name": "nyholm/zebra-image",
