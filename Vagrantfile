@@ -3,8 +3,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "hashicorp/precise64"
-  #config.vm.network "forwarded_port", guest: 80, host: 8080
-
+  config.vm.network "private_network", ip: "10.0.0.6"
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine.
   # Forward MySql port on 33066, used for connecting admin-clients to localhost:33066
@@ -23,7 +22,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #
   config.vm.provision "puppet" do |puppet|
     puppet.manifests_path = "manifests"
-    puppet.manifest_file  = "site.pp"
+    puppet.manifest_file = "site.pp"
+    puppet.options = "--verbose --debug"
   end
 
 end
