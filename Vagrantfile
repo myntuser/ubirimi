@@ -2,7 +2,22 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.hostname = "ubirimi.dev"
+
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+
+  config.vm.define 'default' do |node|
+    node.vm.hostname = 'ubirimi.dev'
+    node.vm.network :private_network, ip: '192.168.42.42'
+    node.hostmanager.aliases = %w(ubirimi.dev)
+  end
+
   config.vm.box = "hashicorp/precise64"
+
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine.
   # Forward MySql port on 33066, used for connecting admin-clients to localhost:33066
@@ -24,5 +39,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     puppet.manifest_file = "site.pp"
     puppet.options = "--verbose --debug"
   end
-
+  
 end
