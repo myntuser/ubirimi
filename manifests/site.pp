@@ -52,6 +52,10 @@ exec { "/usr/sbin/a2enmod rewrite" :
   require => Package["apache2"]
 }
 
+package { ["git"]:
+  ensure => installed
+}
+
 # Set up a new VirtualHost
 
 file {"/var/www/html":
@@ -123,7 +127,18 @@ exec { "apache_lockfile_permissions" :
 
 # Setup the intial database
 
-exec { "ubirimi database" :
-  command => "/usr/bin/mysql -uroot -e \"create database ubirimi;\"",
+exec { "drop existing ubirimi database" :
+  command => "/usr/bin/mysql -uroot -e \"drop database if exists ubirimi;\"",
   require => Service["mysql"],
+}
+
+exec { "create ubirimi database" :
+  command => "/usr/bin/mysql -uroot -e \"create database if not exists ubirimi;\"",
+  logoutput => on_failure,
+  require => [Service["mysql"], Exec['drop existing ubirimi database']]
+}
+
+exec { "import database structure" :
+  command => "/usr/bin/mysql -uroot ubirimi < /vagrant/db/ubirimi.sql;",
+  require => [Service["mysql"], Exec['create ubirimi database']]
 }
