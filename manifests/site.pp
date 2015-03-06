@@ -58,15 +58,6 @@ package { ["git"]:
 
 # Set up a new VirtualHost
 
-file {"/var/www/html":
-  ensure => "link",
-  target => "/vagrant/web",
-  require => Package["apache2"],
-  notify => Service["apache2"],
-  replace => yes,
-  force => true,
-}
-
 file { "/var/www":
   ensure  => "link",
   target  => "/vagrant",
@@ -78,16 +69,16 @@ file { "/var/www":
 
 file { "/etc/apache2/sites-available/ubirimi":
   ensure => "link",
-  target => "/vagrant/manifests/assets/vhost.conf",
+  target => "/vagrant/manifests/assets/ubirimi.conf",
   require => Package["apache2"],
   notify => Service["apache2"],
   replace => yes,
   force => true,
 }
 
-file { "/etc/apache2/sites-enabled/ubirimi":
+file { "/etc/apache2/sites-enabled/000-default.conf":
   ensure  => "link",
-  target  => "/vagrant/manifests/assets/vhost.conf",
+  target  => "/vagrant/manifests/assets/ubirimi.conf",
   require => Package["apache2"],
   notify  => Service["apache2"],
   replace => yes,
@@ -96,7 +87,7 @@ file { "/etc/apache2/sites-enabled/ubirimi":
 
 file { "/etc/apache2/sites-enabled/ubirimi.conf":
   ensure  => "link",
-  target  => "/vagrant/manifests/assets/vhost.conf",
+  target  => "/vagrant/manifests/assets/ubirimi.conf",
   require => Package["apache2"],
   notify  => Service["apache2"],
   replace => yes,
