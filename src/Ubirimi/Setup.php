@@ -14,10 +14,7 @@ class Setup {
     public static function setup(Event $event) {
 
         /* parse .properties file and make them available in the container */
-        $configsApplication = ConfigService::process(__DIR__ . '/../app/config/app.properties');
-        $configsDatabase = ConfigService::process(__DIR__ . '/../app/config/db.properties');
-
-        $configs = array_merge($configsApplication, $configsDatabase);
+        $configs = ConfigService::process(__DIR__ . '/../app/config/db.properties');
 
         /* register global configs to the container */
         UbirimiContainer::loadConfigs($configs);
