@@ -10,7 +10,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.hostmanager.ignore_private_ip = false
   config.hostmanager.include_offline = true
 
-  config.vm.define 'default' do |node|
+  config.vm.define 'ubirimi' do |node|
     node.vm.hostname = 'ubirimi.dev'
     node.vm.network :private_network, ip: '192.168.42.42'
     node.hostmanager.aliases = %w(ubirimi.dev)
