@@ -56,6 +56,10 @@ package { ["git"]:
   ensure => installed
 }
 
+package { ["mc"]:
+  ensure => installed
+}
+
 # Set up a new VirtualHost
 
 file { "/var/www":
@@ -129,7 +133,20 @@ exec { "create ubirimi database" :
   require => [Service["mysql"], Exec['drop existing ubirimi database']]
 }
 
+exec { "allow root to connect from anywhere" :
+  command => "/usr/bin/mysql -uroot -e \"use mysql; update user set host='%' where user='root' and host='127.0.0.1'; flush privileges;\"",
+  logoutput => on_failure,
+  require => [Service["mysql"], Exec['create ubirimi database']]
+}
+
 exec { "import database structure" :
   command => "/usr/bin/mysql -uroot ubirimi < /vagrant/db/ubirimi.sql;",
   require => [Service["mysql"], Exec['create ubirimi database']]
+}
+
+exec { "allow external mysql connections":
+  command => "/bin/sed -i \"s/bind-address.*/bind-address = 0.0.0.0/\" /etc/mysql/my.cnf",
+  onlyif => '/bin/grep "bind-address.*\=.*127\.0\.0\.1" /etc/mysql/my.cnf',
+  require => Package["mysql-server"],
+  notify => Service["mysql"],
 }
