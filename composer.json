@@ -43,6 +43,6 @@
         "phploc/phploc": "*"
     },
     "scripts": {
-        "setup": "Ubirimi\\Install::install"
+        "setup": "Ubirimi\\Setup::setup"
     }
 }

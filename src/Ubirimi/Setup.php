@@ -9,9 +9,9 @@ use Ubirimi\Service\ConfigService;
 use Ubirimi\Service\DatabaseConnectorService;
 use Ubirimi\ServiceProvider\UbirimiCoreServiceProvider;
 
-class Install {
+class Setup {
 
-    public static function install(Event $event) {
+    public static function setup(Event $event) {
 
         /* parse .properties file and make them available in the container */
         $configsApplication = ConfigService::process(__DIR__ . '/../app/config/app.properties');
