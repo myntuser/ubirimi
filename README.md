@@ -69,7 +69,12 @@ Cause: mysqlnd not installed
 Contributing
 ------------
 
-Ubirimi is an open source, community-driven project. If you would like to contribute just send pull requests.
+Ubirimi is an open source, community-driven project. If you would like to contribute just send pull requests. To get started clone the repository. Inside then newly created project do "vagrant up" from the command line. You will be all set with a working project.
+
+Requirements on Host Machine:
+Virtual Box
+Vagrant
+Vagrant hostmanager plugin - https://github.com/mitchellh/vagrant/wiki/Available-Vagrant-Plugins
 
 Copyright and license
 ---------------------
