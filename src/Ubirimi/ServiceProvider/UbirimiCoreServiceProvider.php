@@ -79,8 +79,6 @@ class UbirimiCoreServiceProvider implements ServiceProviderInterface
 
             if (!file_exists(__DIR__ . '/../../../app/logs/ubirimi.log')) {
                 mkdir(__DIR__ . '/../../../app/logs', 0755, true);
-                var_dump(fopen(__DIR__ . '/../../../app/logs/ubirimi.log', "a+"));
-
             }
             $logger->pushHandler(new StreamHandler(__DIR__ . '/../../../app/logs/ubirimi.log', Logger::DEBUG));
             $logger->pushHandler(new DbMonologHandler(), Logger::DEBUG);
