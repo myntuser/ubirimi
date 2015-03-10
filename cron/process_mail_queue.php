@@ -20,7 +20,6 @@
 use Ubirimi\Repository\Email\EmailQueue;
 use Ubirimi\Container\UbirimiContainer;
 use Ubirimi\Repository\SMTPServer;
-use Ubirimi\Util;
 
 /* check locking mechanism */
 if (file_exists(__DIR__ . '/process_mail_queue.lock')) {
@@ -38,7 +37,7 @@ $emails = UbirimiContainer::get()['repository']->get(EmailQueue::class)->getBatc
 while ($emails && $email = $emails->fetch_array(MYSQLI_ASSOC)) {
     $smtpSettings = UbirimiContainer::get()['repository']->get(SMTPServer::class)->getByClientId($email['client_id']);
     if (null == $smtpSettings) {
-        $smtpSettings = Util::getUbirimiSMTPSettings();
+        echo "No SMTP server defined. Aborting\n";
     }
 
     try {

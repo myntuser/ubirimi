@@ -27,8 +27,10 @@ require_once __DIR__ . '/../vendor/autoload.php';
 /* parse .properties file and make them available in the container */
 $configsApplication = ConfigService::process(__DIR__ . '/../app/config/app.properties');
 $configsDatabase = ConfigService::process(__DIR__ . '/../app/config/db.properties');
+$configsSMTP = ConfigService::process(__DIR__ . '/../app/config/smtp.properties');
+$configsSubversion = ConfigService::process(__DIR__ . '/../app/config/subversion.properties');
 
-$configs = array_merge($configsApplication, $configsDatabase);
+$configs = array_merge($configsApplication, $configsDatabase, $configsSMTP, $configsSubversion);
 
 /* register global configs to the container */
 UbirimiContainer::loadConfigs($configs);

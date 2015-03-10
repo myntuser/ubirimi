@@ -1037,47 +1037,6 @@ class Util {
         }
     }
 
-    public static function getUbirimiSMTPSettings($type = 'accounts') {
-        switch ($type) {
-            case 'accounts':
-                return array('smtp_protocol' => SMTPServer::PROTOCOL_SECURE_SMTP,
-                             'email_prefix' => '',
-                             'username' => 'accounts@ubirimi.com',
-                             'from_address' => 'accounts@ubirimi.com',
-                             'password' => 'scumpamea',
-                             'hostname' => 'smtp.gmail.com',
-                             'tls_flag' => true,
-                             'port' => 587);
-                break;
-
-            case 'contact':
-                return array('smtp_protocol' => SMTPServer::PROTOCOL_SECURE_SMTP,
-                             'email_prefix' => '',
-                             'username' => 'contact@ubirimi.com',
-                             'from_address' => 'contact@ubirimi.com',
-                             'password' => 'scumpamea',
-                             'hostname' => 'smtp.gmail.com',
-                             'tls_flag' => true,
-                             'port' => 587);
-                break;
-
-            case 'notification':
-                return array('smtp_protocol' => SMTPServer::PROTOCOL_SECURE_SMTP,
-                    'email_prefix' => '',
-                    'username' => 'notification@ubirimi.com',
-                    'from_address' => 'notification@ubirimi.com',
-                    'password' => 'scumpamea',
-                    'hostname' => 'smtp.gmail.com',
-                    'tls_flag' => true,
-                    'port' => 587);
-                break;
-        }
-    }
-
-    public static function getUbirmiMailer($type = 'accounts') {
-        return UbirimiContainer::get()['repository']->get(Email::class)->getMailer(self::getUbirimiSMTPSettings($type));
-    }
-
     public static function getAssetsFolder($productId, $context = null) {
         switch ($productId) {
             case SystemProduct::SYS_PRODUCT_GENERAL_SETTINGS:

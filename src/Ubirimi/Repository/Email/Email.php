@@ -189,8 +189,10 @@ class Email {
                         Util::getServerCurrentDateTime());
     }
 
-    public function getMailer($smtpSettings) {
-        $smtpSecurity = null;
+    public function getMailer($clientId) {
+
+        $smtpSettings = UbirimiContainer::get()['repository']->get(SMTPServer::class)->getByClientId($clientId);
+
         if ($smtpSettings['smtp_protocol'] == SMTPServer::PROTOCOL_SECURE_SMTP)
             $smtpSecurity = 'ssl';
 
@@ -278,28 +280,6 @@ class Email {
             }
 
             UbirimiContainer::get()['repository']->get(Email::class)->sendEmailIssueChanged($issue, $project, $loggedInUser, $clientId, $changedFields, $user);
-        }
-    }
-
-    public function sendContactMessage($to_address, $name, $subject, $message, $email) {
-        $mailer = Util::getUbirmiMailer('contact');
-
-        $message = Swift_Message::newInstance('Contact message - Ubirimi.com')
-                            ->setFrom(array('contact@ubirimi.com'))
-                            ->setTo($to_address)
-                            ->setBody(
-                                Util::getTemplate('_contact.php', array(
-                                    'name' => $name,
-                                    'email' => $email,
-                                    'message' => $message,
-                                    'subject' => $subject)),
-                                'text/html'
-                            );
-
-        try {
-            $mailer->send($message);
-        } catch (Exception $e) {
-
         }
     }
 
@@ -415,11 +395,7 @@ class Email {
 
         $mailer = Util::getUbirmiMailer();
 
-//        try {
-            $mailer->send($message);
-//        } catch (Exception $e) {
-//
-//        }
+        $mailer->send($message);
     }
 
     private function sendEmailDeleteIssue($issue, $clientId, $user, $loggedInUser, $project) {
