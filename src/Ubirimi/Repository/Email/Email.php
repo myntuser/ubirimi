@@ -384,7 +384,9 @@ class Email {
             $date);
     }
 
-    public function sendEmailRetrievePassword($address, $password) {
+    public function sendEmailRetrievePassword($clientId, $address, $password) {
+        $smtpSettings = UbirimiContainer::get()['repository']->get(SMTPServer::class)->getByClientId($clientId);
+
         $tpl = UbirimiContainer::get()['savant'];
         $tpl->assign(array('password' => $password));
 
@@ -393,7 +395,7 @@ class Email {
                         ->setTo(array($address))
                         ->setBody($tpl->fetch('_restorePassword.php'), 'text/html');
 
-        $mailer = Util::getUbirmiMailer();
+        $mailer = UbirimiContainer::get()['repository']->get(Email::class)->getMailer($smtpSettings);
 
         $mailer->send($message);
     }

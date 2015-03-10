@@ -53,7 +53,7 @@ class PasswordRecoverDoController extends UbirimiController
                 if ($userData) {
                     $password = Util::updatePasswordForUserId($userData['id']);
 
-                    $event = new UbirimiEvent(array('email' => $address, 'password' => $password));
+                    $event = new UbirimiEvent(array('email' => $address, 'password' => $password, 'client_id' => $userData['client_id']));
                     UbirimiContainer::get()['dispatcher']->dispatch(UbirimiEvents::PASSWORD_RECOVER, $event);
 
                     return new RedirectResponse('/recover-password/response');

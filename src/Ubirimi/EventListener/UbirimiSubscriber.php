@@ -86,7 +86,7 @@ class UbirimiSubscriber implements EventSubscriberInterface
 
     public function onPasswordRecover(UbirimiEvent $event)
     {
-        UbirimiContainer::get()['email']->passwordRecover($event->getData()['email'], $event->getData()['password']);
+        UbirimiContainer::get()['email']->passwordRecover($event->getData()['client_id'], $event->getData()['email'], $event->getData()['password']);
     }
 
     public static function getSubscribedEvents()

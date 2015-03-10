@@ -41,8 +41,8 @@ class EmailService extends UbirimiService
         UbirimiContainer::get()['repository']->get(EmailRepository::class)->sendFeedback($userData, $like, $improve, $newFeatures, $experience);
     }
 
-    public function passwordRecover($email, $password)
+    public function passwordRecover($clientId, $email, $password)
     {
-        UbirimiContainer::get()['repository']->get(EmailRepository::class)->sendEmailRetrievePassword($email, $password);
+        UbirimiContainer::get()['repository']->get(EmailRepository::class)->sendEmailRetrievePassword($clientId, $email, $password);
     }
 }
