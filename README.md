@@ -1,8 +1,7 @@
 What is Ubirimi?
 -----------------
 
-Ubirimi is a productivity platform that offers open source tools. It is designed to suite a multitude of scenarios: from personal use to large enterprise deployments. It is written with speed and
-flexibility in mind. A commercial fork can be found at https://www.ubirimi.com. All profit is donated to charity.
+Ubirimi is a productivity platform that offers open source tools. It is designed to suite a multitude of scenarios: from personal use to large enterprise deployments. It is written with speed and flexibility in mind. A fork can be found at https://www.ubirimi.com.
 
 Requirements
 ------------
@@ -69,7 +68,14 @@ Cause: mysqlnd not installed
 Contributing
 ------------
 
-Ubirimi is an open source, community-driven project. If you would like to contribute just send pull requests. To get started clone the repository. Inside then newly created project do "vagrant up" from the command line. You will be all set with a working project.
+Ubirimi is an open source, community-driven project. If you would like to contribute just send pull requests. To get started clone the repository. 
+
+Inside then newly created project, from the terminal run the following commands:
+
+`vagrant plugin install vagrant-hostmanager`
+`vagrant up ubirimi`
+
+You will be all set with a working project.
 
 Requirements on Host Machine:
 Virtual Box
