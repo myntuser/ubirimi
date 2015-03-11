@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.1.14
+-- version 3.4.11.1deb2+deb7u1
 -- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: Mar 03, 2015 at 06:37 PM
--- Server version: 5.6.17
--- PHP Version: 5.5.12
+-- Host: 127.0.0.1:33066
+-- Generation Time: Mar 11, 2015 at 02:29 PM
+-- Server version: 5.5.41
+-- PHP Version: 5.5.22-1~dotdeb.1
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 --
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `agile_board` (
   KEY `user_created_id` (`user_created_id`),
   KEY `client_id` (`client_id`),
   KEY `filter_id` (`filter_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `agile_board_column` (
   `position` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `agile_board_id` (`agile_board_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `agile_board_column_status` (
   PRIMARY KEY (`id`),
   KEY `agile_board_column_id` (`agile_board_column_id`),
   KEY `issue_status_id` (`issue_status_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `agile_board_project` (
   PRIMARY KEY (`id`),
   KEY `agile_board_id` (`agile_board_id`),
   KEY `project_id` (`project_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `agile_board_sprint` (
   PRIMARY KEY (`id`),
   KEY `agile_board_id` (`agile_board_id`),
   KEY `user_created_id` (`user_created_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `agile_board_sprint_issue` (
   PRIMARY KEY (`id`),
   KEY `agile_board_sprint_id` (`agile_board_sprint_id`),
   KEY `issue_id` (`issue_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `cal_calendar` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `cal_calendar_default_reminder` (
   `cal_event_reminder_period_id` bigint(20) unsigned NOT NULL,
   `value` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -164,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `cal_calendar_share` (
   `user_id` bigint(20) unsigned NOT NULL,
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -191,7 +191,7 @@ CREATE TABLE IF NOT EXISTS `cal_event` (
   KEY `user_created_id` (`user_created_id`),
   KEY `cal_event_repeat_id` (`cal_event_repeat_id`),
   KEY `cal_event_link_id` (`cal_event_link_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -207,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `cal_event_reminder` (
   `value` int(10) unsigned NOT NULL,
   `fired_flag` tinyint(3) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -219,7 +219,7 @@ CREATE TABLE IF NOT EXISTS `cal_event_reminder_period` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -231,7 +231,7 @@ CREATE TABLE IF NOT EXISTS `cal_event_reminder_type` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -254,7 +254,7 @@ CREATE TABLE IF NOT EXISTS `cal_event_repeat` (
   `start_date` datetime NOT NULL,
   `end_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -266,7 +266,7 @@ CREATE TABLE IF NOT EXISTS `cal_event_repeat_cycle` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -280,7 +280,7 @@ CREATE TABLE IF NOT EXISTS `cal_event_share` (
   `user_id` bigint(20) unsigned NOT NULL,
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -292,7 +292,6 @@ CREATE TABLE IF NOT EXISTS `client` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `sys_country_id` bigint(20) unsigned DEFAULT NULL,
   `company_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `company_domain` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `base_url` varchar(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `address_1` varchar(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `address_2` varchar(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -306,9 +305,8 @@ CREATE TABLE IF NOT EXISTS `client` (
   `date_created` datetime NOT NULL,
   `date_last_login` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `company_domain` (`company_domain`),
   KEY `country_id` (`sys_country_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -323,7 +321,7 @@ CREATE TABLE IF NOT EXISTS `client_documentator_settings` (
   `anonymous_view_user_profile_flag` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -339,7 +337,7 @@ CREATE TABLE IF NOT EXISTS `client_product` (
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`),
   KEY `sys_product_id` (`sys_product_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -355,7 +353,7 @@ CREATE TABLE IF NOT EXISTS `client_settings` (
   `timezone` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `language` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -382,7 +380,7 @@ CREATE TABLE IF NOT EXISTS `client_smtp_settings` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -404,7 +402,7 @@ CREATE TABLE IF NOT EXISTS `client_yongo_settings` (
   `time_tracking_default_unit` varchar(1) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -428,7 +426,7 @@ CREATE TABLE IF NOT EXISTS `documentator_entity` (
   KEY `user_created_id` (`user_created_id`),
   KEY `page_parent_id` (`parent_entity_id`),
   KEY `documentator_entity_id` (`documentator_entity_type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -443,7 +441,7 @@ CREATE TABLE IF NOT EXISTS `documentator_entity_attachment` (
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `documentator_entity_id` (`documentator_entity_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -459,7 +457,7 @@ CREATE TABLE IF NOT EXISTS `documentator_entity_attachment_revision` (
   PRIMARY KEY (`id`),
   KEY `documentator_entity_attachment_id` (`documentator_entity_attachment_id`),
   KEY `user_created_id` (`user_created_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -478,7 +476,7 @@ CREATE TABLE IF NOT EXISTS `documentator_entity_comment` (
   KEY `documentator_entity_id` (`documentator_entity_id`),
   KEY `user_id` (`user_id`),
   KEY `parent_comment_id` (`parent_comment_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -493,7 +491,7 @@ CREATE TABLE IF NOT EXISTS `documentator_entity_file` (
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `documentator_entity_id` (`documentator_entity_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -509,7 +507,7 @@ CREATE TABLE IF NOT EXISTS `documentator_entity_file_revision` (
   PRIMARY KEY (`id`),
   KEY `documentator_entity_file_id` (`documentator_entity_file_id`),
   KEY `user_created_id` (`user_created_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -526,7 +524,7 @@ CREATE TABLE IF NOT EXISTS `documentator_entity_revision` (
   PRIMARY KEY (`id`),
   KEY `page_id` (`entity_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -543,7 +541,7 @@ CREATE TABLE IF NOT EXISTS `documentator_entity_snapshot` (
   PRIMARY KEY (`id`),
   KEY `documentator_entity_id` (`documentator_entity_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -557,7 +555,7 @@ CREATE TABLE IF NOT EXISTS `documentator_entity_type` (
   `name` varchar(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -578,7 +576,7 @@ CREATE TABLE IF NOT EXISTS `documentator_space` (
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`),
   KEY `home_page_id` (`home_entity_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -597,7 +595,7 @@ CREATE TABLE IF NOT EXISTS `documentator_space_permission` (
   KEY `space_id` (`space_id`),
   KEY `group_id` (`group_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -611,7 +609,7 @@ CREATE TABLE IF NOT EXISTS `documentator_space_permission_anonymous` (
   `all_view_flag` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `documentator_space_id` (`documentator_space_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -627,7 +625,7 @@ CREATE TABLE IF NOT EXISTS `documentator_user_entity_favourite` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `page_id` (`entity_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -643,7 +641,7 @@ CREATE TABLE IF NOT EXISTS `documentator_user_space_favourite` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `space_id` (`space_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -662,7 +660,7 @@ CREATE TABLE IF NOT EXISTS `general_group` (
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`),
   KEY `sys_product_id` (`sys_product_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -678,7 +676,7 @@ CREATE TABLE IF NOT EXISTS `general_group_data` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `group_id` (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -695,7 +693,7 @@ CREATE TABLE IF NOT EXISTS `general_log` (
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -714,7 +712,19 @@ CREATE TABLE IF NOT EXISTS `general_mail_queue` (
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `general_server_settings`
+--
+
+CREATE TABLE IF NOT EXISTS `general_server_settings` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `maintenance_server_message` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -729,7 +739,7 @@ CREATE TABLE IF NOT EXISTS `general_task_queue` (
   `date_created` datetime NOT NULL,
   `date_updated` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -759,7 +769,7 @@ CREATE TABLE IF NOT EXISTS `general_user` (
   `date_last_login` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -772,7 +782,7 @@ CREATE TABLE IF NOT EXISTS `help_customer` (
   `help_organization_id` bigint(20) unsigned NOT NULL,
   `user_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -791,7 +801,7 @@ CREATE TABLE IF NOT EXISTS `help_filter` (
   `date_created` datetime NOT NULL,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -808,7 +818,7 @@ CREATE TABLE IF NOT EXISTS `help_organization` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -821,7 +831,7 @@ CREATE TABLE IF NOT EXISTS `help_organization_user` (
   `help_organization_id` bigint(20) unsigned NOT NULL,
   `user_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -835,7 +845,7 @@ CREATE TABLE IF NOT EXISTS `help_reset_password` (
   `token` varchar(50) NOT NULL,
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -853,7 +863,7 @@ CREATE TABLE IF NOT EXISTS `help_sla` (
   `date_created` datetime NOT NULL,
   `date_updated` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -872,7 +882,7 @@ CREATE TABLE IF NOT EXISTS `help_sla_calendar` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `sys_timezone_id` (`sys_timezone_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -891,7 +901,7 @@ CREATE TABLE IF NOT EXISTS `help_sla_calendar_data` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `help_calendar_id` (`help_sla_calendar_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -908,20 +918,7 @@ CREATE TABLE IF NOT EXISTS `help_sla_goal` (
   `value` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `help_sla_calendar_id` (`help_sla_calendar_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `newsletter`
---
-
-CREATE TABLE IF NOT EXISTS `newsletter` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `email_address` varchar(200) NOT NULL,
-  `date_created` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -939,7 +936,7 @@ CREATE TABLE IF NOT EXISTS `qn_notebook` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -956,7 +953,7 @@ CREATE TABLE IF NOT EXISTS `qn_notebook_note` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `qn_notebook_id` (`qn_notebook_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -971,7 +968,7 @@ CREATE TABLE IF NOT EXISTS `qn_notebook_note_tag` (
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `qn_notebook_note_id` (`qn_notebook_note_id`,`qn_tag_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -987,19 +984,7 @@ CREATE TABLE IF NOT EXISTS `qn_tag` (
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `server_settings`
---
-
-CREATE TABLE IF NOT EXISTS `server_settings` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `maintenance_server_message` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1019,7 +1004,7 @@ CREATE TABLE IF NOT EXISTS `svn_repository` (
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`),
   KEY `user_created_id` (`user_created_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1039,7 +1024,7 @@ CREATE TABLE IF NOT EXISTS `svn_repository_user` (
   KEY `svn_repository_id` (`svn_repository_id`),
   KEY `user_id` (`user_id`),
   KEY `date_created` (`date_created`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1051,209 +1036,209 @@ CREATE TABLE IF NOT EXISTS `sys_country` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=197 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=197 ;
 
 --
 -- Dumping data for table `sys_country`
 --
 
 INSERT INTO `sys_country` (`id`, `name`) VALUES
-(1, 'Afghanistan'),
-(2, 'Albania'),
-(3, 'Algeria'),
-(4, 'Andorra'),
-(5, 'Angola'),
-(6, 'Antigua & Deps'),
-(7, 'Argentina'),
-(8, 'Armenia'),
-(9, 'Australia'),
-(10, 'Austria'),
-(11, 'Azerbaijan'),
-(12, 'Bahamas'),
-(13, 'Bahrain'),
-(14, 'Bangladesh'),
-(15, 'Barbados'),
-(16, 'Belarus'),
-(17, 'Belgium'),
-(18, 'Belize'),
-(19, 'Benin'),
-(20, 'Bhutan'),
-(21, 'Bolivia'),
-(22, 'Bosnia Herzegovina'),
-(23, 'Botswana'),
-(24, 'Brazil'),
-(25, 'Brunei'),
-(26, 'Bulgaria'),
-(27, 'Burkina'),
-(28, 'Burundi'),
-(29, 'Cambodia'),
-(30, 'Cameroon'),
-(31, 'Canada'),
-(32, 'Cape Verde'),
-(33, 'Central African Rep'),
-(34, 'Chad'),
-(35, 'Chile'),
-(36, 'China'),
-(37, 'Colombia'),
-(38, 'Comoros'),
-(39, 'Congo'),
-(40, 'Congo {Democratic Rep}'),
-(41, 'Costa Rica'),
-(42, 'Croatia'),
-(43, 'Cuba'),
-(44, 'Cyprus'),
-(45, 'Czech Republic'),
-(46, 'Denmark'),
-(47, 'Djibouti'),
-(48, 'Dominica'),
-(49, 'Dominican Republic'),
-(50, 'East Timor'),
-(51, 'Ecuador'),
-(52, 'Egypt'),
-(53, 'El Salvador'),
-(54, 'Equatorial Guinea'),
-(55, 'Eritrea'),
-(56, 'Estonia'),
-(57, 'Ethiopia'),
-(58, 'Fiji'),
-(59, 'Finland'),
-(60, 'France'),
-(61, 'Gabon'),
-(62, 'Gambia'),
-(63, 'Georgia'),
-(64, 'Germany'),
-(65, 'Ghana'),
-(66, 'Greece'),
-(67, 'Grenada'),
-(68, 'Guatemala'),
-(69, 'Guinea'),
-(70, 'Guinea-Bissau'),
-(71, 'Guyana'),
-(72, 'Haiti'),
-(73, 'Honduras'),
-(74, 'Hungary'),
-(75, 'Iceland'),
-(76, 'India'),
-(77, 'Indonesia'),
-(78, 'Iran'),
-(79, 'Iraq'),
-(80, 'Ireland {Republic}'),
-(81, 'Israel'),
-(82, 'Italy'),
-(83, 'Ivory Coast'),
-(84, 'Jamaica'),
-(85, 'Japan'),
-(86, 'Jordan'),
-(87, 'Kazakhstan'),
-(88, 'Kenya'),
-(89, 'Kiribati'),
-(90, 'Korea North'),
-(91, 'Korea South'),
-(92, 'Kosovo'),
-(93, 'Kuwait'),
-(94, 'Kyrgyzstan'),
-(95, 'Laos'),
-(96, 'Latvia'),
-(97, 'Lebanon'),
-(98, 'Lesotho'),
-(99, 'Liberia'),
-(100, 'Libya'),
-(101, 'Liechtenstein'),
-(102, 'Lithuania'),
-(103, 'Luxembourg'),
-(104, 'Macedonia'),
-(105, 'Madagascar'),
-(106, 'Malawi'),
-(107, 'Malaysia'),
-(108, 'Maldives'),
-(109, 'Mali'),
-(110, 'Malta'),
-(111, 'Marshall Islands'),
-(112, 'Mauritania'),
-(113, 'Mauritius'),
-(114, 'Mexico'),
-(115, 'Micronesia'),
-(116, 'Moldova'),
-(117, 'Monaco'),
-(118, 'Mongolia'),
-(119, 'Montenegro'),
-(120, 'Morocco'),
-(121, 'Mozambique'),
-(122, 'Myanmar, {Burma}'),
-(123, 'Namibia'),
-(124, 'Nauru'),
-(125, 'Nepal'),
-(126, 'Netherlands'),
-(127, 'New Zealand'),
-(128, 'Nicaragua'),
-(129, 'Niger'),
-(130, 'Nigeria'),
-(131, 'Norway'),
-(132, 'Oman'),
-(133, 'Pakistan'),
-(134, 'Palau'),
-(135, 'Panama'),
-(136, 'Papua New Guinea'),
-(137, 'Paraguay'),
-(138, 'Peru'),
-(139, 'Philippines'),
-(140, 'Poland'),
-(141, 'Portugal'),
-(142, 'Qatar'),
-(143, 'Romania'),
-(144, 'Russian Federation'),
-(145, 'Rwanda'),
-(146, 'St Kitts & Nevis'),
-(147, 'St Lucia'),
-(148, 'Saint Vincent & the Grenadines'),
-(149, 'Samoa'),
-(150, 'San Marino'),
-(151, 'Sao Tome & Principe'),
-(152, 'Saudi Arabia'),
-(153, 'Senegal'),
-(154, 'Serbia'),
-(155, 'Seychelles'),
-(156, 'Sierra Leone'),
-(157, 'Singapore'),
-(158, 'Slovakia'),
-(159, 'Slovenia'),
-(160, 'Solomon Islands'),
-(161, 'Somalia'),
-(162, 'South Africa'),
-(163, 'South Sudan'),
-(164, 'Spain'),
-(165, 'Sri Lanka'),
-(166, 'Sudan'),
-(167, 'Suriname'),
-(168, 'Swaziland'),
-(169, 'Sweden'),
-(170, 'Switzerland'),
-(171, 'Syria'),
-(172, 'Taiwan'),
-(173, 'Tajikistan'),
-(174, 'Tanzania'),
-(175, 'Thailand'),
-(176, 'Togo'),
-(177, 'Tonga'),
-(178, 'Trinidad & Tobago'),
-(179, 'Tunisia'),
-(180, 'Turkey'),
-(181, 'Turkmenistan'),
-(182, 'Tuvalu'),
-(183, 'Uganda'),
-(184, 'Ukraine'),
-(185, 'United Arab Emirates'),
-(186, 'United Kingdom'),
-(187, 'United States'),
-(188, 'Uruguay'),
-(189, 'Uzbekistan'),
-(190, 'Vanuatu'),
-(191, 'Vatican City'),
-(192, 'Venezuela'),
-(193, 'Vietnam'),
-(194, 'Yemen'),
-(195, 'Zambia'),
-(196, 'Zimbabwe');
+  (1, 'Afghanistan'),
+  (2, 'Albania'),
+  (3, 'Algeria'),
+  (4, 'Andorra'),
+  (5, 'Angola'),
+  (6, 'Antigua & Deps'),
+  (7, 'Argentina'),
+  (8, 'Armenia'),
+  (9, 'Australia'),
+  (10, 'Austria'),
+  (11, 'Azerbaijan'),
+  (12, 'Bahamas'),
+  (13, 'Bahrain'),
+  (14, 'Bangladesh'),
+  (15, 'Barbados'),
+  (16, 'Belarus'),
+  (17, 'Belgium'),
+  (18, 'Belize'),
+  (19, 'Benin'),
+  (20, 'Bhutan'),
+  (21, 'Bolivia'),
+  (22, 'Bosnia Herzegovina'),
+  (23, 'Botswana'),
+  (24, 'Brazil'),
+  (25, 'Brunei'),
+  (26, 'Bulgaria'),
+  (27, 'Burkina'),
+  (28, 'Burundi'),
+  (29, 'Cambodia'),
+  (30, 'Cameroon'),
+  (31, 'Canada'),
+  (32, 'Cape Verde'),
+  (33, 'Central African Rep'),
+  (34, 'Chad'),
+  (35, 'Chile'),
+  (36, 'China'),
+  (37, 'Colombia'),
+  (38, 'Comoros'),
+  (39, 'Congo'),
+  (40, 'Congo {Democratic Rep}'),
+  (41, 'Costa Rica'),
+  (42, 'Croatia'),
+  (43, 'Cuba'),
+  (44, 'Cyprus'),
+  (45, 'Czech Republic'),
+  (46, 'Denmark'),
+  (47, 'Djibouti'),
+  (48, 'Dominica'),
+  (49, 'Dominican Republic'),
+  (50, 'East Timor'),
+  (51, 'Ecuador'),
+  (52, 'Egypt'),
+  (53, 'El Salvador'),
+  (54, 'Equatorial Guinea'),
+  (55, 'Eritrea'),
+  (56, 'Estonia'),
+  (57, 'Ethiopia'),
+  (58, 'Fiji'),
+  (59, 'Finland'),
+  (60, 'France'),
+  (61, 'Gabon'),
+  (62, 'Gambia'),
+  (63, 'Georgia'),
+  (64, 'Germany'),
+  (65, 'Ghana'),
+  (66, 'Greece'),
+  (67, 'Grenada'),
+  (68, 'Guatemala'),
+  (69, 'Guinea'),
+  (70, 'Guinea-Bissau'),
+  (71, 'Guyana'),
+  (72, 'Haiti'),
+  (73, 'Honduras'),
+  (74, 'Hungary'),
+  (75, 'Iceland'),
+  (76, 'India'),
+  (77, 'Indonesia'),
+  (78, 'Iran'),
+  (79, 'Iraq'),
+  (80, 'Ireland {Republic}'),
+  (81, 'Israel'),
+  (82, 'Italy'),
+  (83, 'Ivory Coast'),
+  (84, 'Jamaica'),
+  (85, 'Japan'),
+  (86, 'Jordan'),
+  (87, 'Kazakhstan'),
+  (88, 'Kenya'),
+  (89, 'Kiribati'),
+  (90, 'Korea North'),
+  (91, 'Korea South'),
+  (92, 'Kosovo'),
+  (93, 'Kuwait'),
+  (94, 'Kyrgyzstan'),
+  (95, 'Laos'),
+  (96, 'Latvia'),
+  (97, 'Lebanon'),
+  (98, 'Lesotho'),
+  (99, 'Liberia'),
+  (100, 'Libya'),
+  (101, 'Liechtenstein'),
+  (102, 'Lithuania'),
+  (103, 'Luxembourg'),
+  (104, 'Macedonia'),
+  (105, 'Madagascar'),
+  (106, 'Malawi'),
+  (107, 'Malaysia'),
+  (108, 'Maldives'),
+  (109, 'Mali'),
+  (110, 'Malta'),
+  (111, 'Marshall Islands'),
+  (112, 'Mauritania'),
+  (113, 'Mauritius'),
+  (114, 'Mexico'),
+  (115, 'Micronesia'),
+  (116, 'Moldova'),
+  (117, 'Monaco'),
+  (118, 'Mongolia'),
+  (119, 'Montenegro'),
+  (120, 'Morocco'),
+  (121, 'Mozambique'),
+  (122, 'Myanmar, {Burma}'),
+  (123, 'Namibia'),
+  (124, 'Nauru'),
+  (125, 'Nepal'),
+  (126, 'Netherlands'),
+  (127, 'New Zealand'),
+  (128, 'Nicaragua'),
+  (129, 'Niger'),
+  (130, 'Nigeria'),
+  (131, 'Norway'),
+  (132, 'Oman'),
+  (133, 'Pakistan'),
+  (134, 'Palau'),
+  (135, 'Panama'),
+  (136, 'Papua New Guinea'),
+  (137, 'Paraguay'),
+  (138, 'Peru'),
+  (139, 'Philippines'),
+  (140, 'Poland'),
+  (141, 'Portugal'),
+  (142, 'Qatar'),
+  (143, 'Romania'),
+  (144, 'Russian Federation'),
+  (145, 'Rwanda'),
+  (146, 'St Kitts & Nevis'),
+  (147, 'St Lucia'),
+  (148, 'Saint Vincent & the Grenadines'),
+  (149, 'Samoa'),
+  (150, 'San Marino'),
+  (151, 'Sao Tome & Principe'),
+  (152, 'Saudi Arabia'),
+  (153, 'Senegal'),
+  (154, 'Serbia'),
+  (155, 'Seychelles'),
+  (156, 'Sierra Leone'),
+  (157, 'Singapore'),
+  (158, 'Slovakia'),
+  (159, 'Slovenia'),
+  (160, 'Solomon Islands'),
+  (161, 'Somalia'),
+  (162, 'South Africa'),
+  (163, 'South Sudan'),
+  (164, 'Spain'),
+  (165, 'Sri Lanka'),
+  (166, 'Sudan'),
+  (167, 'Suriname'),
+  (168, 'Swaziland'),
+  (169, 'Sweden'),
+  (170, 'Switzerland'),
+  (171, 'Syria'),
+  (172, 'Taiwan'),
+  (173, 'Tajikistan'),
+  (174, 'Tanzania'),
+  (175, 'Thailand'),
+  (176, 'Togo'),
+  (177, 'Tonga'),
+  (178, 'Trinidad & Tobago'),
+  (179, 'Tunisia'),
+  (180, 'Turkey'),
+  (181, 'Turkmenistan'),
+  (182, 'Tuvalu'),
+  (183, 'Uganda'),
+  (184, 'Ukraine'),
+  (185, 'United Arab Emirates'),
+  (186, 'United Kingdom'),
+  (187, 'United States'),
+  (188, 'Uruguay'),
+  (189, 'Uzbekistan'),
+  (190, 'Vanuatu'),
+  (191, 'Vatican City'),
+  (192, 'Venezuela'),
+  (193, 'Vietnam'),
+  (194, 'Yemen'),
+  (195, 'Zambia'),
+  (196, 'Zimbabwe');
 
 -- --------------------------------------------------------
 
@@ -1266,20 +1251,20 @@ CREATE TABLE IF NOT EXISTS `sys_product` (
   `name` varchar(50) NOT NULL,
   `description` varchar(250) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `sys_product`
 --
 
 INSERT INTO `sys_product` (`id`, `name`, `description`) VALUES
-(1, 'Yongo', 'Issue & Project Tracking Software'),
-(2, 'SVN Hosting', 'SVN Hosting for your projects'),
-(3, 'Cheetah', 'Agile Module'),
-(4, 'Documentator', 'Content Creation, Collaboration & Knowledge Sharing for Teams'),
-(5, 'Events', 'Events'),
-(6, 'Helpdesk', ''),
-(7, 'Quick Notes', '');
+  (1, 'Yongo', 'Issue & Project Tracking Software'),
+  (2, 'SVN Hosting', 'SVN Hosting for your projects'),
+  (3, 'Cheetah', 'Agile Module'),
+  (4, 'Documentator', 'Content Creation, Collaboration & Knowledge Sharing for Teams'),
+  (5, 'Events', 'Events'),
+  (6, 'Helpdesk', ''),
+  (7, 'Quick Notes', '');
 
 -- --------------------------------------------------------
 
@@ -1292,16 +1277,16 @@ CREATE TABLE IF NOT EXISTS `yongo_condition` (
   `name` varchar(50) NOT NULL,
   `description` varchar(250) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `yongo_condition`
 --
 
 INSERT INTO `yongo_condition` (`id`, `name`, `description`) VALUES
-(1, 'Only Assignee Condition', 'Condition to allow only the assignee to execute a transition. '),
-(2, 'Only Reporter Condition ', 'Condition to allow only the reporter to execute a transition. '),
-(3, 'Permission Condition ', 'Condition to allow only users with a certain permission to execute a transition. ');
+  (1, 'Only Assignee Condition', 'Condition to allow only the assignee to execute a transition. '),
+  (2, 'Only Reporter Condition ', 'Condition to allow only the reporter to execute a transition. '),
+  (3, 'Permission Condition ', 'Condition to allow only users with a certain permission to execute a transition. ');
 
 -- --------------------------------------------------------
 
@@ -1320,7 +1305,7 @@ CREATE TABLE IF NOT EXISTS `yongo_event` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1343,7 +1328,7 @@ CREATE TABLE IF NOT EXISTS `yongo_field` (
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`),
   KEY `sys_field_type_id` (`sys_field_type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1360,7 +1345,7 @@ CREATE TABLE IF NOT EXISTS `yongo_field_configuration` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1378,7 +1363,7 @@ CREATE TABLE IF NOT EXISTS `yongo_field_configuration_data` (
   PRIMARY KEY (`id`),
   KEY `field_configuration_id` (`field_configuration_id`),
   KEY `field_id` (`field_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1394,7 +1379,7 @@ CREATE TABLE IF NOT EXISTS `yongo_field_data` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `field_id` (`field_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1409,7 +1394,7 @@ CREATE TABLE IF NOT EXISTS `yongo_field_issue_type_data` (
   PRIMARY KEY (`id`),
   KEY `field_id` (`field_id`),
   KEY `issue_type_id` (`issue_type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1424,7 +1409,7 @@ CREATE TABLE IF NOT EXISTS `yongo_field_project_data` (
   PRIMARY KEY (`id`),
   KEY `field_id` (`field_id`),
   KEY `project_id` (`project_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1438,20 +1423,20 @@ CREATE TABLE IF NOT EXISTS `yongo_field_type` (
   `description` varchar(250) NOT NULL,
   `code` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `yongo_field_type`
 --
 
 INSERT INTO `yongo_field_type` (`id`, `name`, `description`, `code`) VALUES
-(1, 'Text Field (< 255 characters)', 'A basic single line text box custom field to allow simple text input.', 'small_text_field'),
-(2, 'Date Picker', 'A custom field that stores dates and uses a date picker to view them.', 'date_picker'),
-(3, 'Date Time', 'A custom field that stores dates with a time component', 'date_time'),
-(4, 'Free Text Field', 'A multiline text area custom field to allow input of longer text strings.', 'big_text_field'),
-(5, 'Number Field', 'A custom field that stores and validates numeric (floating point) input.', 'number'),
-(6, 'Select List (Single Choice)', 'A single select list with a configurable list of options', 'select_list_single'),
-(7, 'User Picker (Multiple User)', 'Choose multiple users from the user base.', 'user_picker_multiple_user');
+  (1, 'Text Field (< 255 characters)', 'A basic single line text box custom field to allow simple text input.', 'small_text_field'),
+  (2, 'Date Picker', 'A custom field that stores dates and uses a date picker to view them.', 'date_picker'),
+  (3, 'Date Time', 'A custom field that stores dates with a time component', 'date_time'),
+  (4, 'Free Text Field', 'A multiline text area custom field to allow input of longer text strings.', 'big_text_field'),
+  (5, 'Number Field', 'A custom field that stores and validates numeric (floating point) input.', 'number'),
+  (6, 'Select List (Single Choice)', 'A single select list with a configurable list of options', 'select_list_single'),
+  (7, 'User Picker (Multiple User)', 'Choose multiple users from the user base.', 'user_picker_multiple_user');
 
 -- --------------------------------------------------------
 
@@ -1469,7 +1454,7 @@ CREATE TABLE IF NOT EXISTS `yongo_filter` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1483,7 +1468,7 @@ CREATE TABLE IF NOT EXISTS `yongo_filter_favourite` (
   `user_id` bigint(20) unsigned NOT NULL,
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1502,7 +1487,7 @@ CREATE TABLE IF NOT EXISTS `yongo_filter_subscription` (
   `date_created` datetime NOT NULL,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1543,7 +1528,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue` (
   KEY `priority_id` (`priority_id`),
   KEY `parent_id` (`parent_id`),
   KEY `issue_security_scheme_level_id` (`security_scheme_level_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1561,7 +1546,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_attachment` (
   PRIMARY KEY (`id`),
   KEY `issue_id` (`issue_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1579,7 +1564,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_comment` (
   PRIMARY KEY (`id`),
   KEY `issue_id` (`issue_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1594,7 +1579,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_component` (
   PRIMARY KEY (`id`),
   KEY `project_component_id` (`project_component_id`),
   KEY `issue_id` (`issue_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1612,7 +1597,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_custom_field_data` (
   PRIMARY KEY (`id`),
   KEY `issue_id` (`issue_id`),
   KEY `field_id` (`field_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1633,7 +1618,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_history` (
   PRIMARY KEY (`id`),
   KEY `issue_id` (`issue_id`),
   KEY `by_user_id` (`by_user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1652,7 +1637,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_link` (
   KEY `parent_issue_id` (`parent_issue_id`),
   KEY `sys_issue_link_type_id` (`issue_link_type_id`),
   KEY `child_issue_id` (`child_issue_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1670,7 +1655,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_link_type` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1689,7 +1674,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_priority` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1706,7 +1691,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_resolution` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1722,7 +1707,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_security_scheme` (
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1740,7 +1725,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_security_scheme_level` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `issue_security_scheme_id` (`issue_security_scheme_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1763,7 +1748,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_security_scheme_level_data` (
   KEY `permission_role_id` (`permission_role_id`),
   KEY `group_id` (`group_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1784,7 +1769,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_sla` (
   PRIMARY KEY (`id`),
   KEY `yongo_issue_id` (`yongo_issue_id`),
   KEY `help_sla_id` (`help_sla_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1801,7 +1786,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_status` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1819,7 +1804,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_type` (
   `date_created` datetime NOT NULL,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1836,7 +1821,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_type_field_configuration` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1854,7 +1839,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_type_field_configuration_data` (
   KEY `issue_type_id` (`issue_type_id`),
   KEY `field_configuration_id` (`field_configuration_id`),
   KEY `issue_type_field_configuration_id` (`issue_type_field_configuration_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1871,7 +1856,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_type_scheme` (
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1887,7 +1872,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_type_scheme_data` (
   PRIMARY KEY (`id`),
   KEY `issue_type_scheme_id` (`issue_type_scheme_id`),
   KEY `issue_type_id` (`issue_type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1904,7 +1889,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_type_screen_scheme` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1922,7 +1907,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_type_screen_scheme_data` (
   KEY `client_id` (`issue_type_screen_scheme_id`),
   KEY `issue_type_id` (`issue_type_id`),
   KEY `screen_scheme_id` (`screen_scheme_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1938,7 +1923,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_version` (
   PRIMARY KEY (`id`),
   KEY `project_version_id` (`project_version_id`),
   KEY `issue_id` (`issue_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1954,7 +1939,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_watch` (
   PRIMARY KEY (`id`),
   KEY `yongo_issue_id` (`yongo_issue_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1973,7 +1958,7 @@ CREATE TABLE IF NOT EXISTS `yongo_issue_work_log` (
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `issue_id` (`issue_id`,`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1990,7 +1975,7 @@ CREATE TABLE IF NOT EXISTS `yongo_notification_scheme` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2020,7 +2005,7 @@ CREATE TABLE IF NOT EXISTS `yongo_notification_scheme_data` (
   KEY `user_id` (`user_id`),
   KEY `current_assignee` (`current_assignee`),
   KEY `event_id` (`event_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2032,16 +2017,16 @@ CREATE TABLE IF NOT EXISTS `yongo_operation` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `yongo_operation`
 --
 
 INSERT INTO `yongo_operation` (`id`, `name`) VALUES
-(1, 'create'),
-(2, 'edit'),
-(3, 'view');
+  (1, 'create'),
+  (2, 'edit'),
+  (3, 'view');
 
 -- --------------------------------------------------------
 
@@ -2056,41 +2041,41 @@ CREATE TABLE IF NOT EXISTS `yongo_permission` (
   `description` varchar(250) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `sys_permission_category_id` (`sys_permission_category_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=29 ;
 
 --
 -- Dumping data for table `yongo_permission`
 --
 
 INSERT INTO `yongo_permission` (`id`, `sys_permission_category_id`, `name`, `description`) VALUES
-(1, 1, 'Administer Projects', 'Ability to administer a project in Ubirimi.'),
-(2, 1, 'Browse Projects', 'Ability to browse projects and the issues within them.'),
-(3, 2, 'Create Issues', 'Ability to create issues.'),
-(4, 2, 'Edit Issues', 'Ability to edit issues.'),
-(5, 2, 'Assign Issues', 'Ability to assign issues to other people.'),
-(6, 2, 'Assignable User', 'Users with this permission may be assigned to issues.'),
-(7, 2, 'Resolve Issues', 'Ability to resolve and reopen issues. This includes the ability to set a fix version.'),
-(8, 2, 'Close Issues', 'Ability to close issues. Often useful where your developers resolve issues, and a QA department closes them.'),
-(9, 2, 'Modify Reporter', 'Ability to modify the reporter when creating or editing an issue.'),
-(10, 2, 'Delete Issues', 'Ability to delete issues.'),
-(11, 3, 'Add Comments', 'Ability to comment on issues.'),
-(12, 3, 'Edit All Comments', 'Ability to edit all comments made on issues.'),
-(13, 3, 'Edit Own Comments', 'Ability to edit own comments made on issues.'),
-(14, 3, 'Delete All Comments', 'Ability to delete all comments made on issues.'),
-(15, 3, 'Delete Own Comments', 'Ability to delete own comments made on issues.'),
-(16, 4, 'Create Attachments', 'Users with this permission may create attachments.'),
-(17, 4, 'Delete All Attachments', 'Users with this permission may delete all attachments.'),
-(18, 4, 'Delete Own Attachments', 'Users with this permission may delete own attachments.'),
-(19, 2, 'Set Issue Security', 'Ability to set the level of security on an issue so that only people in that security level can see the issue.'),
-(20, 2, 'Link Issues', 'Ability to link issues together and create linked issues. Only useful if issue linking is turned on.'),
-(21, 2, 'Move Issues', 'Ability to move issues between projects or between workflows of the same project (if applicable). Note the user can only move issues to a project he or she has the create permission for.'),
-(22, 5, 'Work On Issues', 'Ability to log work done against an issue. Only useful if Time Tracking is turned on.'),
-(23, 5, 'Edit Own Worklogs', 'Ability to edit own worklogs made on issues.'),
-(24, 5, 'Edit All Worklogs', 'Ability to edit all worklogs made on issues.'),
-(25, 5, 'Delete Own Worklogs', 'Ability to delete own worklogs made on issues.'),
-(26, 5, 'Delete All Worklogs', 'Ability to delete all worklogs made on issues.'),
-(27, 6, 'View Voters and Watchers', 'Ability to view the voters and watchers of an issue.'),
-(28, 6, 'Manage Watchers', 'Ability to manage the watchers of an issue.');
+  (1, 1, 'Administer Projects', 'Ability to administer a project in Ubirimi.'),
+  (2, 1, 'Browse Projects', 'Ability to browse projects and the issues within them.'),
+  (3, 2, 'Create Issues', 'Ability to create issues.'),
+  (4, 2, 'Edit Issues', 'Ability to edit issues.'),
+  (5, 2, 'Assign Issues', 'Ability to assign issues to other people.'),
+  (6, 2, 'Assignable User', 'Users with this permission may be assigned to issues.'),
+  (7, 2, 'Resolve Issues', 'Ability to resolve and reopen issues. This includes the ability to set a fix version.'),
+  (8, 2, 'Close Issues', 'Ability to close issues. Often useful where your developers resolve issues, and a QA department closes them.'),
+  (9, 2, 'Modify Reporter', 'Ability to modify the reporter when creating or editing an issue.'),
+  (10, 2, 'Delete Issues', 'Ability to delete issues.'),
+  (11, 3, 'Add Comments', 'Ability to comment on issues.'),
+  (12, 3, 'Edit All Comments', 'Ability to edit all comments made on issues.'),
+  (13, 3, 'Edit Own Comments', 'Ability to edit own comments made on issues.'),
+  (14, 3, 'Delete All Comments', 'Ability to delete all comments made on issues.'),
+  (15, 3, 'Delete Own Comments', 'Ability to delete own comments made on issues.'),
+  (16, 4, 'Create Attachments', 'Users with this permission may create attachments.'),
+  (17, 4, 'Delete All Attachments', 'Users with this permission may delete all attachments.'),
+  (18, 4, 'Delete Own Attachments', 'Users with this permission may delete own attachments.'),
+  (19, 2, 'Set Issue Security', 'Ability to set the level of security on an issue so that only people in that security level can see the issue.'),
+  (20, 2, 'Link Issues', 'Ability to link issues together and create linked issues. Only useful if issue linking is turned on.'),
+  (21, 2, 'Move Issues', 'Ability to move issues between projects or between workflows of the same project (if applicable). Note the user can only move issues to a project he or she has the create permission for.'),
+  (22, 5, 'Work On Issues', 'Ability to log work done against an issue. Only useful if Time Tracking is turned on.'),
+  (23, 5, 'Edit Own Worklogs', 'Ability to edit own worklogs made on issues.'),
+  (24, 5, 'Edit All Worklogs', 'Ability to edit all worklogs made on issues.'),
+  (25, 5, 'Delete Own Worklogs', 'Ability to delete own worklogs made on issues.'),
+  (26, 5, 'Delete All Worklogs', 'Ability to delete all worklogs made on issues.'),
+  (27, 6, 'View Voters and Watchers', 'Ability to view the voters and watchers of an issue.'),
+  (28, 6, 'Manage Watchers', 'Ability to manage the watchers of an issue.');
 
 -- --------------------------------------------------------
 
@@ -2102,19 +2087,19 @@ CREATE TABLE IF NOT EXISTS `yongo_permission_category` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `yongo_permission_category`
 --
 
 INSERT INTO `yongo_permission_category` (`id`, `name`) VALUES
-(1, 'Project Permissions'),
-(2, 'Issue Permissions'),
-(3, 'Comments Permissions'),
-(4, 'Attachments Permissions'),
-(5, 'Time Tracking Permissions'),
-(6, 'Voters & Watchers Permissions');
+  (1, 'Project Permissions'),
+  (2, 'Issue Permissions'),
+  (3, 'Comments Permissions'),
+  (4, 'Attachments Permissions'),
+  (5, 'Time Tracking Permissions'),
+  (6, 'Voters & Watchers Permissions');
 
 -- --------------------------------------------------------
 
@@ -2129,20 +2114,20 @@ CREATE TABLE IF NOT EXISTS `yongo_permission_global` (
   `description` mediumtext NOT NULL,
   PRIMARY KEY (`id`),
   KEY `sys_product_id` (`sys_product_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `yongo_permission_global`
 --
 
 INSERT INTO `yongo_permission_global` (`id`, `sys_product_id`, `name`, `description`) VALUES
-(1, 1, 'Yongo System Administrators', 'Permission to perform all Yongo administration functions.'),
-(2, 1, 'Yongo Administrators', 'Ability to perform most administration functions (excluding Import & Export, etc.). '),
-(3, 1, 'Yongo Users', 'Ability to log in to Yongo. They are a ''user''. Any new users created will automatically join these groups.'),
-(4, 1, 'Bulk Change', 'Ability to modify a collection of issues at once. For example, resolve multiple issues in one step.'),
-(5, 4, 'Documentator Administrator', 'Can administer the application but is disallowed from operations that may compromise system security.'),
-(6, 4, 'Documentator System Administrator', 'Has complete control and access to all administrative functions.'),
-(7, 4, 'Create Space', 'Able to add spaces to the site.');
+  (1, 1, 'Yongo System Administrators', 'Permission to perform all Yongo administration functions.'),
+  (2, 1, 'Yongo Administrators', 'Ability to perform most administration functions (excluding Import & Export, etc.). '),
+  (3, 1, 'Yongo Users', 'Ability to log in to Yongo. They are a ''user''. Any new users created will automatically join these groups.'),
+  (4, 1, 'Bulk Change', 'Ability to modify a collection of issues at once. For example, resolve multiple issues in one step.'),
+  (5, 4, 'Documentator Administrator', 'Can administer the application but is disallowed from operations that may compromise system security.'),
+  (6, 4, 'Documentator System Administrator', 'Has complete control and access to all administrative functions.'),
+  (7, 4, 'Create Space', 'Able to add spaces to the site.');
 
 -- --------------------------------------------------------
 
@@ -2162,7 +2147,7 @@ CREATE TABLE IF NOT EXISTS `yongo_permission_global_data` (
   KEY `sys_permission_global_id` (`sys_permission_global_id`),
   KEY `group_id` (`group_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2179,7 +2164,7 @@ CREATE TABLE IF NOT EXISTS `yongo_permission_role` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2197,7 +2182,7 @@ CREATE TABLE IF NOT EXISTS `yongo_permission_role_data` (
   KEY `user_id` (`default_user_id`),
   KEY `user_group_id` (`default_group_id`),
   KEY `permission_role_id` (`permission_role_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2214,7 +2199,7 @@ CREATE TABLE IF NOT EXISTS `yongo_permission_scheme` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2239,7 +2224,7 @@ CREATE TABLE IF NOT EXISTS `yongo_permission_scheme_data` (
   KEY `permission_role_id` (`permission_role_id`),
   KEY `group_id` (`group_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2277,7 +2262,7 @@ CREATE TABLE IF NOT EXISTS `yongo_project` (
   KEY `notification_scheme_id` (`notification_scheme_id`),
   KEY `issue_security_scheme_id` (`issue_security_scheme_id`),
   KEY `project_category_id` (`project_category_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2294,7 +2279,7 @@ CREATE TABLE IF NOT EXISTS `yongo_project_category` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2315,7 +2300,7 @@ CREATE TABLE IF NOT EXISTS `yongo_project_component` (
   KEY `product_id` (`project_id`),
   KEY `leader_id` (`leader_id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2333,7 +2318,7 @@ CREATE TABLE IF NOT EXISTS `yongo_project_role_data` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`permission_role_id`),
   KEY `project_id` (`project_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2350,7 +2335,7 @@ CREATE TABLE IF NOT EXISTS `yongo_project_version` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `project_id` (`project_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2367,7 +2352,7 @@ CREATE TABLE IF NOT EXISTS `yongo_screen` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `project_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2383,7 +2368,7 @@ CREATE TABLE IF NOT EXISTS `yongo_screen_data` (
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `project_workflow_screen_id` (`screen_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2400,7 +2385,7 @@ CREATE TABLE IF NOT EXISTS `yongo_screen_scheme` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2415,7 +2400,7 @@ CREATE TABLE IF NOT EXISTS `yongo_screen_scheme_data` (
   `screen_id` bigint(20) unsigned NOT NULL,
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2434,7 +2419,7 @@ CREATE TABLE IF NOT EXISTS `yongo_workflow` (
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`),
   KEY `issue_type_scheme_id` (`issue_type_scheme_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2448,7 +2433,7 @@ CREATE TABLE IF NOT EXISTS `yongo_workflow_condition_data` (
   `definition_data` varchar(200) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `workflow_data_id` (`workflow_data_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2468,7 +2453,7 @@ CREATE TABLE IF NOT EXISTS `yongo_workflow_data` (
   KEY `project_id` (`workflow_id`),
   KEY `issue_status_from_id` (`workflow_step_id_from`,`workflow_step_id_to`),
   KEY `screen_id` (`screen_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2484,7 +2469,7 @@ CREATE TABLE IF NOT EXISTS `yongo_workflow_position` (
   `left_position` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `project_workflow_id` (`workflow_id`,`workflow_step_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2500,18 +2485,18 @@ CREATE TABLE IF NOT EXISTS `yongo_workflow_post_function` (
   `user_editable_flag` tinyint(3) unsigned NOT NULL,
   `user_deletable_flag` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `yongo_workflow_post_function`
 --
 
 INSERT INTO `yongo_workflow_post_function` (`id`, `name`, `description`, `user_addable_flag`, `user_editable_flag`, `user_deletable_flag`) VALUES
-(1, 'Update Issue Field', 'Updates a simple issue field to a given value.', 1, 1, 1),
-(2, 'Set issue status to the linked status of the destination workflow step', 'Set issue status to the linked status of the destination workflow step. ', 0, 0, 0),
-(3, 'Update change history for the issue', 'Update change history for the issue', 0, 0, 0),
-(4, 'Create issue', 'Create the issue originally', 0, 0, 0),
-(5, 'Fire an event', 'Fire an event', 0, 1, 0);
+  (1, 'Update Issue Field', 'Updates a simple issue field to a given value.', 1, 1, 1),
+  (2, 'Set issue status to the linked status of the destination workflow step', 'Set issue status to the linked status of the destination workflow step. ', 0, 0, 0),
+  (3, 'Update change history for the issue', 'Update change history for the issue', 0, 0, 0),
+  (4, 'Create issue', 'Create the issue originally', 0, 0, 0),
+  (5, 'Fire an event', 'Fire an event', 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -2526,7 +2511,7 @@ CREATE TABLE IF NOT EXISTS `yongo_workflow_post_function_data` (
   `definition_data` varchar(250) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `project_workflow_data_id` (`workflow_data_id`,`sys_workflow_post_function_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2542,7 +2527,7 @@ CREATE TABLE IF NOT EXISTS `yongo_workflow_scheme` (
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2558,7 +2543,7 @@ CREATE TABLE IF NOT EXISTS `yongo_workflow_scheme_data` (
   PRIMARY KEY (`id`),
   KEY `workflow_scheme_id` (`workflow_scheme_id`),
   KEY `workflow_id` (`workflow_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2576,7 +2561,7 @@ CREATE TABLE IF NOT EXISTS `yongo_workflow_step` (
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `workflow_id` (`workflow_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -2588,14 +2573,14 @@ CREATE TABLE IF NOT EXISTS `yongo_workflow_step_property` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `yongo_workflow_step_property`
 --
 
 INSERT INTO `yongo_workflow_step_property` (`id`, `name`) VALUES
-(1, 'ubirimi.issue.editable');
+  (1, 'ubirimi.issue.editable');
 
 -- --------------------------------------------------------
 
@@ -2607,10 +2592,10 @@ CREATE TABLE IF NOT EXISTS `yongo_workflow_step_property_data` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `workflow_step_id` bigint(20) unsigned NOT NULL,
   `sys_workflow_step_property_id` bigint(20) unsigned NOT NULL,
-  `value` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `value` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `date_created` datetime NOT NULL,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `workflow_step_id` (`workflow_step_id`),
   KEY `sys_workflow_step_property_id` (`sys_workflow_step_property_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
