@@ -58,6 +58,9 @@ class ManageAppListController extends UbirimiController
             case 'svn':
                 $productId = SystemProduct::SYS_PRODUCT_SVN_HOSTING;
                 break;
+            case 'quick_notes':
+                $productId = SystemProduct::SYS_PRODUCT_QUICK_NOTES;
+                break;
         }
 
         if ($visible) {
