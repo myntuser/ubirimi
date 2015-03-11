@@ -24,7 +24,7 @@ use Ubirimi\Container\UbirimiContainer;
 class ServerSettings
 {
     public function updateMaintenanceMessage($message) {
-        $query = "update server_settings set maintenance_server_message = ?";
+        $query = "update general_server_settings set maintenance_server_message = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("s", $message);
@@ -33,7 +33,7 @@ class ServerSettings
     }
 
     public function get() {
-        $query = 'SELECT * from server_settings';
+        $query = 'SELECT * from general_server_settings';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
