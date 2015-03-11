@@ -34,7 +34,7 @@ if ($session->has('client/products')) {
             </td>
         <?php endif ?>
 
-        <?php if (Util::checkKeyAndValueInArray('sys_product_id', SystemProduct::SYS_PRODUCT_SVN_HOSTING, $productsArray)): ?>
+        <?php if ($loggedInUserId && Util::checkKeyAndValueInArray('sys_product_id', SystemProduct::SYS_PRODUCT_SVN_HOSTING, $productsArray)): ?>
             <?php ($session->get('selected_product_id') == SystemProduct::SYS_PRODUCT_SVN_HOSTING) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
             <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="140px" class="product-menu" align="center">
                 <div><a href="/svn-hosting/repositories"><?php echo SystemProduct::SYS_PRODUCT_SVN_HOSTING_NAME ?></a></div>
@@ -48,14 +48,14 @@ if ($session->has('client/products')) {
             </td>
         <?php endif ?>
 
-        <?php if (Util::checkKeyAndValueInArray('sys_product_id', SystemProduct::SYS_PRODUCT_CALENDAR, $productsArray)): ?>
+        <?php if ($loggedInUserId && Util::checkKeyAndValueInArray('sys_product_id', SystemProduct::SYS_PRODUCT_CALENDAR, $productsArray)): ?>
             <?php ($session->get('selected_product_id') == SystemProduct::SYS_PRODUCT_CALENDAR) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
             <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="110px" class="product-menu" align="center">
                 <div><a href="/calendar/calendars"><?php echo SystemProduct::SYS_PRODUCT_CALENDAR_NAME ?></a></div>
             </td>
         <?php endif ?>
 
-        <?php if (Util::checkKeyAndValueInArray('sys_product_id', SystemProduct::SYS_PRODUCT_QUICK_NOTES, $productsArray)): ?>
+        <?php if ($loggedInUserId && Util::checkKeyAndValueInArray('sys_product_id', SystemProduct::SYS_PRODUCT_QUICK_NOTES, $productsArray)): ?>
             <?php ($session->get('selected_product_id') == SystemProduct::SYS_PRODUCT_QUICK_NOTES) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
             <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="130px" class="product-menu" align="center">
                 <div><a href="/quick-notes/note/snippets/all"><?php echo SystemProduct::SYS_PRODUCT_QUICK_NOTES_NAME ?></a></div>

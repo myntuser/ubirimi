@@ -27,6 +27,7 @@ use Ubirimi\Repository\General\UbirimiClient;
 use Ubirimi\Repository\User\UbirimiUser;
 use Ubirimi\UbirimiController;
 use Ubirimi\Util;
+use Ubirimi\Yongo\Repository\Permission\Permission;
 
 class SigninController extends UbirimiController
 {
@@ -46,6 +47,20 @@ class SigninController extends UbirimiController
         }
 
         $context = $request->get('context');
+
+        $loginParameter = $request->get('login');
+        // check if this client has projects that can be browsed anonymously. if yes redirect to yongo dashboard
+
+        $projects = $this->getRepository(UbirimiClient::class)->getProjectsByPermission(
+            $clientId,
+            null,
+            Permission::PERM_BROWSE_PROJECTS,
+            'array'
+        );
+
+        if ($loginParameter !== 'true' && count($projects)) {
+            return new RedirectResponse($httpHOST . '/yongo/dashboard');
+        }
 
         if ($request->request->has('sign_in')) {
 

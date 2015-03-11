@@ -14,7 +14,7 @@
             <td>
                 <div>
                     <div class="align-left">
-                        <form name="f_login" method="post" class="standard-form" action="/<?php if (isset($context)) echo '?context=' . $context ?>">
+                        <form name="f_login" method="post" class="standard-form" action="/<?php if (isset($context)) echo '?context=' . $context; if (isset($loginParameter)) echo '?login=true' ?>">
                             <?php if ($isDemo): ?>
                             <p>Log in with demo/demo</p>
                             <?php endif ?>
