@@ -42,7 +42,7 @@ class SigninController extends UbirimiController
         $client = $this->getRepository(UbirimiClient::class)->getById($clientId);
 
         if ($session->has('user') && $httpHOST == $session->get('client/base_url')) {
-            return new RedirectResponse($httpHOST . '/yongo/my-dashboard');
+            return new RedirectResponse($httpHOST . '/yongo/dashboard');
         }
 
         $context = $request->get('context');
@@ -67,7 +67,7 @@ class SigninController extends UbirimiController
                     if ($context) {
                         return new RedirectResponse($httpHOST . $context);
                     } else {
-                        return new RedirectResponse($httpHOST . '/yongo/my-dashboard');
+                        return new RedirectResponse($httpHOST . '/yongo/dashboard');
                     }
 
                 } else {

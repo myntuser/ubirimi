@@ -2,7 +2,7 @@
     <tr>
         <td>
             <div>
-                <a class="linkSubMenu" href="/yongo/my-dashboard">My Dashboard</a>
+                <a class="linkSubMenu" href="/yongo/dashboard">Dashboard</a>
             </div>
         </td>
     </tr>

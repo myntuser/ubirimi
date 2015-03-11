@@ -58,7 +58,7 @@ $session->set('selected_product_id', SystemProduct::SYS_PRODUCT_YONGO);
                     </td>
                     <td style="height:44px; border-left: 1px #9c9c9c solid;" width="190px" class="product-menu" align="center" valign="middle">
                         <div>
-                            <a href="/yongo/my-dashboard">Exit Administration</a>
+                            <a href="/yongo/dashboard">Exit Administration</a>
                         </div>
                     </td>
                 </tr>

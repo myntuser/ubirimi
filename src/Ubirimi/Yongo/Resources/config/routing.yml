@@ -1,5 +1,5 @@
 dashboard:
-  path: /yongo/my-dashboard
+  path: /yongo/dashboard
   defaults: { _controller: '\Ubirimi\Yongo\Controller\IndexController' }
 
 ActivitySteam:

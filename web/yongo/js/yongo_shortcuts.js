@@ -89,7 +89,7 @@ $('document').ready(function () {
                     return;
                 }
 
-                window.location.href = '/yongo/my-dashboard';
+                window.location.href = '/yongo/dashboard';
             });
         }
     }

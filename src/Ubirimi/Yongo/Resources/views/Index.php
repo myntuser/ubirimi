@@ -10,7 +10,7 @@ $section = 'dashboard';
 
 <body>
     <?php require_once __DIR__ . '/_menu.php'; ?>
-    <?php Util::renderBreadCrumb('Home > My Dashboard') ?>
+    <?php Util::renderBreadCrumb('Home > Dashboard') ?>
 
     <div class="pageContent">
 

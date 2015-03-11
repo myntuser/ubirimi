@@ -30,7 +30,7 @@ if ($session->has('client/products')) {
             <?php ($session->get('selected_product_id') == SystemProduct::SYS_PRODUCT_YONGO) ? $style = 'background-color: #6A8EB2;' : $style = '' ?>
 
             <td style="<?php echo $style ?> border-right: 1px #9c9c9c solid;" width="100px" class="product-menu" align="center" valign="middle">
-                <div><a href="/yongo/my-dashboard"><?php echo SystemProduct::SYS_PRODUCT_YONGO_NAME ?></a></div>
+                <div><a href="/yongo/dashboard"><?php echo SystemProduct::SYS_PRODUCT_YONGO_NAME ?></a></div>
             </td>
         <?php endif ?>
 

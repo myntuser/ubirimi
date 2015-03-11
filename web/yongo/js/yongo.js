@@ -793,7 +793,7 @@ $('document').ready(function () {
                                 if (obj.go_to_search) {
                                     document.location.href = '/yongo/issue/search?' + obj.url; // search
                                 } else if (obj.go_to_dashboard) {
-                                    document.location.href = '/yongo/my-dashboard'; // search
+                                    document.location.href = '/yongo/dashboard'; // search
                                 }
                             }
                         });
