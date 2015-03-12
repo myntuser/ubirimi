@@ -79,20 +79,20 @@ Inside then newly created project, from the terminal run the following commands:
 You will be all set with a working project.
 
 Requirements on Host Machine:
-Virtual Box
-Vagrant
-Vagrant hostmanager plugin - https://github.com/mitchellh/vagrant/wiki/Available-Vagrant-Plugins
+- Virtual Box
+- Vagrant
+- Vagrant hostmanager plugin - https://github.com/mitchellh/vagrant/wiki/Available-Vagrant-Plugins
 
 Connecting to the Ubirimi Database on Virtualbox.
-SSH Host: 127.0.0.1
-SSH Port: 2222
-SSH User: vagrant
-SSH Password: vagrant
+- SSH Host: 127.0.0.1
+- SSH Port: 2222
+- SSH User: vagrant
+- SSH Password: vagrant
 
-MySQL Host: 127.0.0.1
-DB User: root
-DB Password: (leave blank)
-Port: 3306
+- MySQL Host: 127.0.0.1
+- DB User: root
+- DB Password: (leave blank)
+- Port: 3306
 
 
 Copyright and license
