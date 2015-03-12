@@ -32,7 +32,7 @@ class Setup {
         $adminUsername = $io->ask("Administrator Username: ");
         $adminPassword = $io->ask("Administrator Password: ");
         $adminEmail = $io->ask("Administrator Password (again): ");
-        $baseURL = $io->ask("Base URL (Ex: http://ubirimi.company.com): ");
+        $baseURL = "http://ubirimi.dev";
 
         $clientData = array('data' => json_encode(array(
             'adminFirstName' => $adminFirstName,
