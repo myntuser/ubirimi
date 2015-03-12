@@ -23,7 +23,6 @@
                                     <label for="sign-in-username">username</label>
                                     <input tabindex="1" id="sign-in-username" type="text" value="<?php if ($isDemo): ?>demo<?php endif ?>" name="username" style="width:240px; "/>
                                 </fieldset>
-
                                 <fieldset>
                                     <label for="sign-in-password">password</label>
                                     <input tabindex="2  " id="sign-in-password" type="password" value="<?php if ($isDemo): ?>demo<?php endif ?>" name="password" style="width:240px;"/>

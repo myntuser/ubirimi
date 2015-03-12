@@ -23,16 +23,20 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Ubirimi\UbirimiController;
+use Ubirimi\Util;
 
 class SignoutController extends UbirimiController
 {
     public function indexAction(Request $request, SessionInterface $session)
     {
-        $clientBaseURL = $session->get('client/base_url');
-
-        $this->getLogger()->addInfo('LOG OUT', $this->getLoggerContext());
-
-        $session->invalidate();
+        if ($session->has('client/id')) {
+            $clientBaseURL = $session->get('client/base_url');
+            $this->getLogger()->addInfo('LOG OUT', $this->getLoggerContext());
+            $session->invalidate();
+        } else {
+            // session not active anymore
+            $clientBaseURL = Util::getHttpHost() . '/?login=true';
+        }
 
         return new RedirectResponse($clientBaseURL);
     }
