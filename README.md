@@ -61,9 +61,9 @@ Upgrading
 Documentation
 -------------
 
-Common Errors:
-Error: PHP Fatal error:  Call to undefined method mysqli_stmt::get_result()
-Cause: mysqlnd not installed
+Common Errors:  
+Error: PHP Fatal error:  Call to undefined method mysqli_stmt::get_result()  
+Cause: mysqlnd not installed  
 
 Contributing
 ------------
@@ -79,11 +79,11 @@ Inside then newly created project, from the terminal run the following commands:
 You will be all set with a working project.
 
 Requirements on Host Machine:
-- Virtual Box
-- Vagrant
+- Virtual Box - https://www.virtualbox.org/
+- Vagrant - https://www.vagrantup.com/
 - Vagrant hostmanager plugin - https://github.com/mitchellh/vagrant/wiki/Available-Vagrant-Plugins
 
-Connecting to the Ubirimi Database on Virtualbox.
+Connecting to the Ubirimi Database on Virtualbox.  
 SSH Host: 127.0.0.1  
 SSH Port: 2222  
 SSH User: vagrant  
