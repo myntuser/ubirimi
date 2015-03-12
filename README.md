@@ -83,6 +83,18 @@ Virtual Box
 Vagrant
 Vagrant hostmanager plugin - https://github.com/mitchellh/vagrant/wiki/Available-Vagrant-Plugins
 
+Connecting to the Ubirimi Database on Virtualbox.
+SSH Host: 127.0.0.1
+SSH Port: 2222
+SSH User: vagrant
+SSH Password: vagrant
+
+MySQL Host: 127.0.0.1
+DB User: root
+DB Password: (leave blank)
+Port: 3306
+
+
 Copyright and license
 ---------------------
 
