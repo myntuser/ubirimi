@@ -43,7 +43,7 @@ class IssueSecurityScheme
     }
 
     public function save($currentDate) {
-        $query = "INSERT INTO issue_security_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO yongo_issue_security_scheme(client_id, name, description, date_created) VALUES (?, ?, ?, ?)";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
@@ -54,7 +54,7 @@ class IssueSecurityScheme
     }
 
     public function getByClientId($clientId) {
-        $query = "select * from issue_security_scheme where client_id = ?";
+        $query = "select * from yongo_issue_security_scheme where client_id = ?";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $clientId);
@@ -67,7 +67,7 @@ class IssueSecurityScheme
     }
 
     public function getMetaDataById($Id) {
-        $query = "select * from issue_security_scheme where id = ? limit 1";
+        $query = "select * from yongo_issue_security_scheme where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
@@ -80,7 +80,7 @@ class IssueSecurityScheme
     }
 
     public function updateMetaDataById($Id, $name, $description) {
-        $query = "update issue_security_scheme set name = ?, description = ? where id = ? limit 1";
+        $query = "update yongo_issue_security_scheme set name = ?, description = ? where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("ssi", $name, $description, $Id);
@@ -103,7 +103,7 @@ class IssueSecurityScheme
         $stmt->bind_param("i", $Id);
         $stmt->execute();
 
-        $query = "delete from issue_security_scheme where id = ? limit 1";
+        $query = "delete from yongo_issue_security_scheme where id = ? limit 1";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
         $stmt->bind_param("i", $Id);
