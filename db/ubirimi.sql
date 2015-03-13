@@ -555,7 +555,15 @@ CREATE TABLE IF NOT EXISTS `documentator_entity_type` (
   `name` varchar(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `documentator_entity_type`
+--
+
+INSERT INTO `documentator_entity_type` (`id`, `code`, `name`, `description`) VALUES
+  (1, 'blank_page', 'Blank Page', 'Start with a blank page.'),
+  (2, 'file_list', 'File List', 'Upload, preview and share files with your tem.');
 
 -- --------------------------------------------------------
 
