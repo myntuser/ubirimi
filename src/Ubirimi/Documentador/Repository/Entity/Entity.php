@@ -59,7 +59,7 @@ class Entity {
     public function getAllBySpaceId($spaceId, $inTrashFlag = null) {
         $query = "SELECT documentator_entity.documentator_space_id as space_id, documentator_entity.name, " .
                  "documentator_entity.id, documentator_entity.date_created, documentator_entity.content, " .
-                 "documentator_entity.parent_entity_id, " .
+                 "documentator_entity.parent_entity_id, documentator_entity.documentator_entity_type_id, " .
                  "general_user.id as user_id, general_user.first_name, general_user.last_name " .
             "FROM documentator_entity " .
             "left join general_user on general_user.id = documentator_entity.user_created_id " .

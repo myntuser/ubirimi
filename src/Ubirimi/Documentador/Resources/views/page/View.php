@@ -26,6 +26,9 @@ require_once __DIR__ . '/../_header.php';
     ?>
 
     <div class="doc-left-side">
+        <div><img src="/documentador/img/pages.png" /> <b>Pages</b></div>
+        <div><img src="/documentador/img/rss.png" /> <b>Blog</b></div>
+
         <div>
             <?php
                 $html = '';
@@ -33,7 +36,6 @@ require_once __DIR__ . '/../_header.php';
             ?>
         </div>
     </div>
-
 
     <div class="pageContent" style="overflow: hidden; margin-left: 285px">
         <?php if ($page): ?>

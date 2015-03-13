@@ -247,7 +247,7 @@ $('document').ready(function () {
                         }
 
                         var type = $("input[type='radio']:checked").val();
-                        if (type == 'blank_page') {
+                        if (type == 'blank_page' || type == 'blog') {
                             if (parentEntityId == -1) {
                                 window.location.href = '/documentador/spaces/add-page/' + spaceId;
                             } else {

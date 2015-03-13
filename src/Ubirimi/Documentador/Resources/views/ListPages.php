@@ -22,10 +22,13 @@ require_once __DIR__ . '/_header.php';
 
     <div class="doc-left-side">
         <div>
+            <div><img src="/documentador/img/pages.png" /> <b>Pages</b></div>
+            <div><img src="/documentador/img/rss.png" /> <b>Blog</b></div>
             <?php
                 $html = '';
                 echo UbirimiContainer::get()['repository']->get(Entity::class)->renderTreeNavigation($treeStructure, 0, 0, true);
             ?>
+
         </div>
     </div>
     <div class="pageContent" id="content" style="margin-left: 285px;">
