@@ -76,7 +76,14 @@ Inside then newly created project, from the terminal run the following commands:
 
 `vagrant up ubirimi`
 
+`php composer.phar setup`
+
+In the setup procedure when asked for the URL enter http://ubirimi.dev
+
 You will be all set with a working project.
+
+To test the working ubirimi environment enter in a browser the url: http://ubirimi.dev
+You should get a login screen into the platform. You can use the credentials provided during the setup procedure.
 
 Requirements on Host Machine:
 - Virtual Box - https://www.virtualbox.org/
