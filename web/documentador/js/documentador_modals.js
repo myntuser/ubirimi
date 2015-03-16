@@ -249,9 +249,9 @@ $('document').ready(function () {
                         var type = $("input[type='radio']:checked").val();
                         if (type == 'blank_page' || type == 'blog') {
                             if (parentEntityId == -1) {
-                                window.location.href = '/documentador/spaces/add-page/' + spaceId;
+                                window.location.href = '/documentador/spaces/add-page/' + spaceId + '?type=' + type;
                             } else {
-                                window.location.href = '/documentador/spaces/add-page/' + spaceId + '/' + parentEntityId;
+                                window.location.href = '/documentador/spaces/add-page/' + spaceId + '/' + parentEntityId + '?type=' + type;
                             }
                         } else if (type == 'file_list') {
                             // ask for name and description

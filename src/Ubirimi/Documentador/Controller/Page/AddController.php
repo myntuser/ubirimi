@@ -50,6 +50,8 @@ class AddController extends UbirimiController
         }
 
         $parentEntityId =  $request->get('entity_id');
+        $entityType = $request->get('type');
+
         if ($parentEntityId) {
             $parentEntityId = str_replace("/", "", $parentEntityId);
         }
@@ -71,7 +73,17 @@ class AddController extends UbirimiController
             $name = Util::cleanRegularInputField($request->request->get('name'));
             $content = $request->request->get('content');
 
-            $page = new Entity(EntityType::ENTITY_BLANK_PAGE, $spaceId, $loggedInUserId, $parentEntityId, $name, $content);
+            $entityTypeId = null;
+            switch ($entityType) {
+                case 'blog':
+                    $entityTypeId = EntityType::ENTITY_BLOG_POST;
+                    break;
+                case 'blank_page':
+                    $entityTypeId = EntityType::ENTITY_BLANK_PAGE;
+                    break;
+            }
+
+            $page = new Entity($entityTypeId, $spaceId, $loggedInUserId, $parentEntityId, $name, $content);
             $currentDate = Util::getServerCurrentDateTime();
             $pageId = $page->save($currentDate);
 

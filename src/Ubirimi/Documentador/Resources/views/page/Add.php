@@ -18,7 +18,7 @@
 
     <div class="pageContent">
 
-        <form name="add_page" action="/documentador/spaces/add-page/<?php echo $spaceId ?><?php if ($parentEntityId) echo '/' . $parentEntityId ?>" method="post">
+        <form name="add_page" action="/documentador/spaces/add-page/<?php echo $spaceId ?><?php if ($parentEntityId) echo '/' . $parentEntityId ?>?type=<?php echo $entityType ?>" method="post">
 
             <table width="100%" id="main_add_page">
                 <tr>

@@ -17,8 +17,9 @@ require_once __DIR__ . '/../_header.php';
             $breadCrumb = '<a href="/documentador/spaces" class="linkNoUnderline">Spaces</a> > ' . $page['space_name'] . ' > ' .
                 '<a class="linkNoUnderline" href="/documentador/pages/' . $spaceId . '">Pages</a> > ';
 
-            if ($parentPage)
+            if ($parentPage) {
                 $breadCrumb .= LinkHelper::getDocumentadorPageLink($parentPage['id'], $parentPage['name'], 'linkNoUnderline') . ' > ';
+            }
 
             $breadCrumb .= $page['name'];
             Util::renderBreadCrumb($breadCrumb);
@@ -26,14 +27,18 @@ require_once __DIR__ . '/../_header.php';
     ?>
 
     <div class="doc-left-side">
-        <div><img src="/documentador/img/pages.png" /> <b>Pages</b></div>
+        <div><a href="/documentador/pages/<?php echo $spaceId ?>"><img src="/documentador/img/pages.png" /> <b>Pages</b></a></div>
         <div><img src="/documentador/img/rss.png" /> <b>Blog</b></div>
 
         <div>
-            <?php
-                $html = '';
-                echo UbirimiContainer::get()['repository']->get(Entity::class)->renderTreeNavigation($treeStructure, 0, 0, true);
-            ?>
+            <?php if (EntityType::ENTITY_BLANK_PAGE == $page['documentator_entity_type_id']): ?>
+                <?php echo UbirimiContainer::get()['repository']->get(Entity::class)->renderTreeNavigation($treeStructure, 0, 0, true); ?>
+            <?php elseif (EntityType::ENTITY_BLOG_POST == $page['documentator_entity_type_id']): ?>
+                <?php
+                    $blogPages = UbirimiContainer::get()['repository']->get(Entity::class)->getBlogTreeNavigation($pagesInSpace);
+
+                ?>
+            <?php endif ?>
         </div>
     </div>
 

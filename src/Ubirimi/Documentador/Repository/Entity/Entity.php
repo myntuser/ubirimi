@@ -688,4 +688,52 @@ class Entity {
 
         return $html;
     }
+
+    public function getBlogTreeNavigation($pagesInSpace) {
+
+        $blogYearMonthStructure = array();
+
+        $html = '';
+        foreach ($pagesInSpace as $page) {
+
+            $year = substr($page['date_created'], 0, 4);
+            $month = substr($page['date_created'], 5, 2);
+            if (!isset($blogYearMonthStructure[$year][$month])) {
+                $blogYearMonthStructure[$year][$month] = array();
+            }
+            $blogYearMonthStructure[$year][$month][] = $page;
+
+//            foreach ($childData as $indexPosition => $data) {
+//                if (!$visible) {
+//                    $style = 'style="display: none; overflow: visible;"';
+//                } else {
+//                    $style = 'style="display: block; overflow: visible;"';
+//                }
+//                $html .= '<div ' . $style . ' id="tree_' . $parentPosition . '_' . $data['id'] . '">';
+//
+//                $smallIndent = '';
+//                $bigIndent = '';
+//                for ($i = 0; $i < $index * 2; $i++) {
+//                    $smallIndent .= '&nbsp;';
+//                }
+//                for ($i = 0; $i < $index * 3; $i++) {
+//                    $bigIndent .= '&nbsp;';
+//                }
+//                $html .= '';
+//                if (array_key_exists($data['id'], $treeStructure)) {
+//                    $html .= $smallIndent . '<a style="margin-top: -8px;" href="#" id="tree_show_content_' . $data['id'] . '_x">';
+//                    $html .= '<img style="vertical-align: middle;" src="/documentador/img/arrow_down.png" /></a> ' . LinkHelper::getDocumentadorPageLink($data['id'], $data['title']);
+//                } else {
+//                    $html .= $bigIndent . '&bullet; ' . LinkHelper::getDocumentadorPageLink($data['id'], $data['title']);
+//                }
+//
+//                $index++;
+//                $html .= UbirimiContainer::get()['repository']->get(Entity::class)->renderTreeNavigation($treeStructure, $data['id'], $index, $data['expanded']);
+//                $html .= '</div>';
+//                $index--;
+//            }
+        }
+
+        return $blogYearMonthStructure;
+    }
 }
