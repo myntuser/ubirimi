@@ -17,25 +17,35 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-namespace Ubirimi\Yongo\Controller\Administration\Workflow;
+namespace Ubirimi\Documentador\Controller\Page;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Ubirimi\Documentador\Repository\Entity\Entity;
+use Ubirimi\Documentador\Repository\Entity\EntityType;
+use Ubirimi\Documentador\Repository\Space\Space;
 use Ubirimi\SystemProduct;
 use Ubirimi\UbirimiController;
 use Ubirimi\Util;
-use Ubirimi\Yongo\Repository\Workflow\Workflow;
 
-class ListController extends UbirimiController
+class ListRecentBlogPostsController extends UbirimiController
 {
     public function indexAction(Request $request, SessionInterface $session)
     {
+        $source_application = 'documentator';
+        $menuSelectedCategory = 'documentator';
+
         Util::checkUserIsLoggedInAndRedirect();
-        $workflows = $this->getRepository(Workflow::class)->getByClientId($session->get('client/id'));
-        $menuSelectedCategory = 'issue';
 
-        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Workflows';
+        $clientId = $session->get('client/id');
+        $loggedInUserId = $session->get('user/id');
+        $spaceId = $request->get('space_id');
+        $space = $this->getRepository(Space::class)->getById($spaceId);
+        $pagesInSpace = $this->getRepository(Entity::class)->getBySpaceId($spaceId, null, EntityType::ENTITY_BLOG_POST);
+        $session->set('selected_product_id', SystemProduct::SYS_PRODUCT_DOCUMENTADOR);
 
-        return $this->render(__DIR__ . '/../../../Resources/views/administration/workflow/List.php', get_defined_vars());
+        $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_DOCUMENTADOR_NAME. ' / Recent Blog Posts';
+
+        return $this->render(__DIR__ . '/../../Resources/views/page/ListRecentBlogPosts.php', get_defined_vars());
     }
 }

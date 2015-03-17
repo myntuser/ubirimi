@@ -40,7 +40,7 @@ class EditController extends UbirimiController
 
         $menuSelectedCategory = 'doc_users';
 
-        $globalsPermissions = $this->getRepository(GlobalPermission::class)->getAllByProductId(SystemProduct::SYS_PRODUCT_DOCUMENTADOR);
+        $globalsPermissions = $this->getRepository(GlobalPermission::class)->getByProductId(SystemProduct::SYS_PRODUCT_DOCUMENTADOR);
 
         if ($request->request->has('update_configuration')) {
 

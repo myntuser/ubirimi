@@ -23,7 +23,7 @@ require_once __DIR__ . '/_header.php';
     <div class="doc-left-side">
         <div>
             <div><a href="/documentador/pages/<?php echo $spaceId ?>"><img src="/documentador/img/pages.png" /> <b>Pages</b></a></div>
-            <div><a href="/documentador/blog/<?php echo $spaceId ?>"><img src="/documentador/img/rss.png" /> <b>Blog</b></a></div>
+            <div><a href="/documentador/blog/recent/<?php echo $spaceId ?>"><img src="/documentador/img/rss.png" /> <b>Blog</b></a></div>
             <?php echo UbirimiContainer::get()['repository']->get(Entity::class)->renderTreeNavigation($treeStructure, 0, 0, true); ?>
         </div>
     </div>

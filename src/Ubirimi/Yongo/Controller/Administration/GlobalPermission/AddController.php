@@ -35,7 +35,7 @@ class AddController extends UbirimiController
         Util::checkUserIsLoggedInAndRedirect();
 
         $allGroups = $this->getRepository(UbirimiGroup::class)->getByClientIdAndProductId($session->get('client/id'), SystemProduct::SYS_PRODUCT_YONGO);
-        $globalPermissions = $this->getRepository(GlobalPermission::class)->getAllByProductId(SystemProduct::SYS_PRODUCT_YONGO);
+        $globalPermissions = $this->getRepository(GlobalPermission::class)->getByProductId(SystemProduct::SYS_PRODUCT_YONGO);
 
         if ($request->request->has('confirm_new_permission')) {
             $permissionId = $request->request->get('permission');

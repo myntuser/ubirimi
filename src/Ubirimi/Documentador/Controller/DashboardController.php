@@ -53,7 +53,7 @@ class DashboardController extends UbirimiController
 
         if ($type == 'spaces') {
             if (Util::checkUserIsLoggedIn()) {
-                $spaces = $this->getRepository(Space::class)->getByClientId($session->get('client/id'), 1);
+                $spaces = $this->getRepository(Space::class)->getByClientIdAndFavourite($session->get('client/id'), 1);
             } else {
                 $spaces = $this->getRepository(Space::class)->getByClientIdAndAnonymous($session->get('client/id'));
             }

@@ -9,10 +9,10 @@ use Ubirimi\Util;
 
 $styleSelectedMenu = 'style="background-color: #EEEEEE;';
 $session->set('selected_product_id', SystemProduct::SYS_PRODUCT_DOCUMENTADOR);
+$spacesWithAdministrationPermission = null;
 if (Util::checkUserIsLoggedIn()) {
-
     $hasAdministrationPermission = Util::userHasDocumentadorAdministrativePermission();
-    $spaces = UbirimiContainer::get()['repository']->get(Space::class)->getWithAdminPermissionByUserId($clientId, $loggedInUserId);
+    $spacesWithAdministrationPermission = UbirimiContainer::get()['repository']->get(Space::class)->getWithAdminPermissionByUserId($clientId, $loggedInUserId);
 }
 
 if (!isset($menuSelectedCategory)) {
@@ -20,7 +20,7 @@ if (!isset($menuSelectedCategory)) {
 }
 
 Util::renderMaintenanceMessage();
-$spaces = UbirimiContainer::get()['repository']->get(Space::class)->getByClientId($clientId);
+$spacesInMenu = UbirimiContainer::get()['repository']->get(Space::class)->getByClientId($clientId);
 ?>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#003466">
@@ -41,7 +41,7 @@ $spaces = UbirimiContainer::get()['repository']->get(Space::class)->getByClientI
                             <span class="arrow" style="top: 12px;"></span>
                             &nbsp;
                         </td>
-                        <?php if ($hasAdministrationPermission || $spaces): ?>
+                        <?php if ($hasAdministrationPermission || $spacesWithAdministrationPermission): ?>
                             <td style="height:44px; vertical-align: middle; border-left: 1px #9c9c9c solid;" width="170px" class="product-menu" align="center" valign="middle">
                                 <a href="/documentador/administration" title="Documentador Administration">
 
@@ -78,7 +78,7 @@ $spaces = UbirimiContainer::get()['repository']->get(Space::class)->getByClientI
                     <td>&nbsp;</td>
                     <td align="right">
                         <?php if (Util::checkUserIsLoggedIn()): ?>
-                            <?php if ($spaces): ?>
+                            <?php if ($spacesInMenu): ?>
                                 <input type="button" id="btnDocumentadorCreate" value="Create" />
                             <?php endif ?>
                             <input id="documentator_quick_search" type="text" style="height: 15px; font-style: italic;" value="Quick Search" name="search" />

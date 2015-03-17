@@ -31,7 +31,7 @@ class GlobalPermission
     const GLOBAL_PERMISSION_DOCUMENTADOR_SYSTEM_ADMINISTRATOR = 6;
     const GLOBAL_PERMISSION_DOCUMENTADOR_CREATE_SPACE = 7;
 
-    public function getAllByProductId($productId) {
+    public function getByProductId($productId) {
         $query = "SELECT * FROM yongo_permission_global where sys_product_id = ? order by name";
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);

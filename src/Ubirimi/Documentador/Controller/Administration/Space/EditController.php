@@ -39,7 +39,7 @@ class EditController extends UbirimiController
         $spaceId = $request->get('id');
         $backLink = isset($_GET['back']) ? $_GET['back'] : null;
         $space = $this->getRepository(Space::class)->getById($spaceId);
-        $pages = $this->getRepository(Entity::class)->getAllBySpaceId($spaceId);
+        $pages = $this->getRepository(Entity::class)->getBySpaceId($spaceId);
 
         if ($space['client_id'] != $clientId) {
             return new RedirectResponse('/general-settings/bad-link-access-denied');

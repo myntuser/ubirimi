@@ -54,7 +54,7 @@ class ListPagesController extends UbirimiController
         }
 
         $spaceHasAnonymousAccess = $this->getRepository(Space::class)->hasAnonymousAccess($spaceId);
-        $pages = $this->getRepository(Entity::class)->getAllBySpaceId($spaceId, 0);
+        $pages = $this->getRepository(Entity::class)->getBySpaceId($spaceId, 0);
         $homePage = $this->getRepository(Entity::class)->getById($space['home_entity_id']);
 
         if ($homePage['in_trash_flag']) {

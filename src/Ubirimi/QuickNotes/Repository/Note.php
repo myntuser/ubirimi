@@ -112,7 +112,7 @@ class Note
             return null;
     }
 
-    public function getAllByUserId($userId) {
+    public function getByUserId($userId) {
         $query = "select qn_notebook_note.* " .
             "from qn_notebook " .
             "left join qn_notebook_note on qn_notebook_note.qn_notebook_id = qn_notebook.id " .

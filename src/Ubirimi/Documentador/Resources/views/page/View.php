@@ -36,7 +36,15 @@ require_once __DIR__ . '/../_header.php';
             <?php elseif (EntityType::ENTITY_BLOG_POST == $page['documentator_entity_type_id']): ?>
                 <?php
                     $blogPages = UbirimiContainer::get()['repository']->get(Entity::class)->getBlogTreeNavigation($pagesInSpace);
-
+                    foreach ($blogPages as $year => $data) {
+                        echo '<img style="vertical-align: middle;" src="/documentador/img/arrow_down.png" />' . $year . '<br />';
+                        foreach ($data as $month => $pages) {
+                            echo '&nbsp;&nbsp;&nbsp;&nbsp; <img style="vertical-align: middle;" src="/documentador/img/arrow_down.png" /> ' . $month;
+                            foreach ($pages as $page) {
+                                echo '<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bullet; ' . LinkHelper::getDocumentadorPageLink($page['id'], $page['name']) . '</div>';
+                            }
+                        }
+                    }
                 ?>
             <?php endif ?>
         </div>

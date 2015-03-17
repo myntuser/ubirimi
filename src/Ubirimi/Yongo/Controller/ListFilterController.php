@@ -33,12 +33,12 @@ class ListFilterController extends UbirimiController
     {
         if (Util::checkUserIsLoggedIn()) {
             $clientSettings = $session->get('client/settings');
-            $filters = $this->getRepository(IssueFilter::class)->getAllByUser($session->get('user/id'));
+            $filters = $this->getRepository(IssueFilter::class)->getByUserId($session->get('user/id'));
         } else {
             $clientId = $this->getRepository(UbirimiClient::class)->getClientIdAnonymous();
             $loggedInUserId = null;
             $clientSettings = $this->getRepository(UbirimiClient::class)->getSettings($clientId);
-            $filters = $this->getRepository(IssueFilter::class)->getAllByClientId($clientId);
+            $filters = $this->getRepository(IssueFilter::class)->getByClientId($clientId);
         }
 
         $loggedInUserId = $session->get('user/id');

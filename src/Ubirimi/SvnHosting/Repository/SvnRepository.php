@@ -152,7 +152,7 @@ class SvnRepository
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function getAllByClientId($clientId, $resultType = null, $resultColumn = null) {
+    public function getByClientId($clientId, $resultType = null, $resultColumn = null) {
         $query = 'SELECT svn_repository.id, svn_repository.client_id, user_created_id, name, description, code,
                             svn_repository.date_created, general_user.first_name, general_user.last_name ' .
                     'FROM svn_repository ' .

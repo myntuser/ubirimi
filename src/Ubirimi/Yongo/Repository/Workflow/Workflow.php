@@ -36,7 +36,7 @@ class Workflow
         $stmt->execute();
     }
 
-    public function getAllByClientId($clientId) {
+    public function getByClientId($clientId) {
         $query = "select yongo_workflow.id, yongo_workflow.name, yongo_workflow.description, yongo_workflow_scheme.name as scheme_name, yongo_issue_type_scheme.name as issue_type_scheme_name " .
                  "from yongo_workflow " .
                  "left join yongo_workflow_scheme_data on yongo_workflow_scheme_data.workflow_id = yongo_workflow.id " .

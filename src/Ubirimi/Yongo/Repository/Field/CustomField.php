@@ -39,7 +39,7 @@ class CustomField {
             return null;
     }
 
-    public function getAllByClient($clientId) {
+    public function getByClientId($clientId) {
         $query = "SELECT yongo_field.id, yongo_field.name, yongo_field.description, yongo_field_type.id as type_id, yongo_field_type.name as type_name, " .
                  "yongo_field.all_issue_type_flag, yongo_field.all_project_flag, yongo_field_type.description as type_description " .
             "from yongo_field " .

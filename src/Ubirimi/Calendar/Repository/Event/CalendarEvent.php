@@ -521,7 +521,7 @@ class CalendarEvent
         }
     }
 
-    public function getAllByCalendarId($calendarId) {
+    public function getByCalendarId($calendarId) {
         $query = "select * " .
             "from cal_event " .
             "where cal_event.cal_calendar_id = ?";

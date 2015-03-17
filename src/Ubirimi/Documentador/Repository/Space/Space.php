@@ -84,15 +84,14 @@ class Space {
         }
     }
 
-    public function getAllByClientId($clientId, $resultType = null, $resultColumn = null, $filters = null) {
+    public function getByClientId($clientId, $resultType = null, $resultColumn = null, $filters = null) {
         $query = "SELECT * " .
             "FROM documentator_space " .
             "where documentator_space.client_id = ?";
 
         if (empty($filters['sort_by'])) {
             $query .= ' order by documentator_space.id';
-        }
-        else {
+        } else {
             $query .= " order by " . $filters['sort_by'] . ' ' . $filters['sort_order'];
         }
 
@@ -152,19 +151,20 @@ class Space {
         }
     }
 
-    public function getByClientId($clientId, $favouriteFlag = null) {
+    public function getByClientIdAndFavourite($clientId, $favouriteFlag = null) {
         $query = "SELECT documentator_space.id as space_id, documentator_space.name, documentator_space.code, documentator_space.description, " .
                  "documentator_space.date_created, documentator_space.user_created_id, documentator_space.home_entity_id, " .
                  "general_user.id as user_id, general_user.first_name, general_user.last_name " .
                  "FROM documentator_space " .
                  "left join general_user on general_user.id = documentator_space.user_created_id ";
-        if ($favouriteFlag)
+        if ($favouriteFlag) {
             $query .= 'left join documentator_user_space_favourite on documentator_user_space_favourite.space_id = documentator_space.id ';
-
+        }
         $query .= " where documentator_space.client_id = ?";
 
-        if ($favouriteFlag)
+        if ($favouriteFlag) {
             $query .= ' and documentator_user_space_favourite.id is not null';
+        }
 
         if ($stmt = UbirimiContainer::get()['db.connection']->prepare($query)) {
             $stmt->bind_param("i", $clientId);
@@ -239,7 +239,7 @@ class Space {
     }
 
     public function deleteById($spaceId) {
-        $spaceEntities = UbirimiContainer::get()['repository']->get(Entity::class)->getAllBySpaceId($spaceId);
+        $spaceEntities = UbirimiContainer::get()['repository']->get(Entity::class)->getBySpaceId($spaceId);
         if ($spaceEntities) {
             while ($spaceEntity = $spaceEntities->fetch_array(MYSQLI_ASSOC)) {
                 UbirimiContainer::get()['repository']->get(EntityComment::class)->deleteCommentsByEntityId($spaceEntity['id']);
@@ -325,7 +325,7 @@ class Space {
         }
     }
 
-    public function getAllBySpaceIdNoExistingParent($spaceId) {
+    public function getBySpaceIdNoExistingParent($spaceId) {
         $query = "SELECT documentator_entity.documentator_space_id as space_id, documentator_entity.name, documentator_entity.id, " .
             "documentator_entity.date_created, documentator_entity.content, documentator_entity.parent_entity_id, " .
             "general_user.id as user_id, general_user.first_name, general_user.last_name " .

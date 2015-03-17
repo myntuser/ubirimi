@@ -2,6 +2,7 @@
 use Ubirimi\Util;
 
 require_once __DIR__ . '/_header.php';
+
 ?>
 <body>
     <?php require_once __DIR__ . '/_menu.php'; ?>
@@ -34,11 +35,11 @@ require_once __DIR__ . '/_header.php';
                     </thead>
                     <tbody>
                         <?php while ($space = $spaces->fetch_array(MYSQLI_ASSOC)): ?>
-                        <tr>
-                            <td>
-                                <a href="/documentador/pages/<?php echo $space['space_id'] ?>"><?php echo $space['name'] ?></a>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    <a href="/documentador/pages/<?php echo $space['space_id'] ?>"><?php echo $space['name'] ?></a>
+                                </td>
+                            </tr>
                         <?php endwhile ?>
                     </tbody>
                 </table>

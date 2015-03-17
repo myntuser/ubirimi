@@ -122,7 +122,7 @@ class SearchController extends UbirimiController
         }
 
         $hasGlobalBulkPermission = $this->getRepository(UbirimiUser::class)->hasGlobalPermission($clientId, $loggedInUserId, GlobalPermission::GLOBAL_PERMISSION_YONGO_BULK_CHANGE);
-        $customFilters = $this->getRepository(IssueFilter::class)->getAllByUser($loggedInUserId);
+        $customFilters = $this->getRepository(IssueFilter::class)->getByUserId($loggedInUserId);
 
         if ($getFilter) {
             $menuSelectedCategory = 'filters';

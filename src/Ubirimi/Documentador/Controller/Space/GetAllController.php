@@ -34,7 +34,7 @@ class GetAllController extends UbirimiController
 
         $clientId = $session->get('client/id');
 
-        $spaces = $this->getRepository(Space::class)->getAllByClientId($clientId, 'array');
+        $spaces = $this->getRepository(Space::class)->getByClientId($clientId, 'array');
 
         return new JsonResponse(json_encode($spaces));
     }

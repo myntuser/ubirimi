@@ -1804,7 +1804,7 @@ class UbirimiClient
     }
 
     public function deleteSVNRepositories($clientId) {
-        $repositories = UbirimiContainer::get()['repository']->get(SvnRepository::class)->getAllByClientId($clientId);
+        $repositories = UbirimiContainer::get()['repository']->get(SvnRepository::class)->getByClientId($clientId);
         if ($repositories) {
             while ($repository = $repositories->fetch_array(MYSQLI_ASSOC)) {
                 UbirimiContainer::get()['repository']->get(SvnRepository::class)->deleteAllById($repository['id']);

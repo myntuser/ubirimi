@@ -90,7 +90,7 @@ class ViewController extends UbirimiController
                 return new RedirectResponse('/general-settings/bad-link-access-denied');
             }
 
-            $pagesInSpace = $this->getRepository(Entity::class)->getAllBySpaceId($spaceId);
+            $pagesInSpace = $this->getRepository(Entity::class)->getBySpaceId($spaceId);
             $treeStructure = $this->getRepository(Space::class)->generateTreeStructure($pagesInSpace, $entityId);
 
             $comments = $this->getRepository(EntityComment::class)->getComments($entityId, 'array');

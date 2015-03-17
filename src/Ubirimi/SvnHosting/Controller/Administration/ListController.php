@@ -35,7 +35,7 @@ class ListController extends UbirimiController
         $clientId = $session->get('client/id');
 
         $menuSelectedCategory = 'svn';
-        $svnRepos = $this->getRepository(SvnRepository::class)->getAllByClientId($clientId, 'array');
+        $svnRepos = $this->getRepository(SvnRepository::class)->getByClientId($clientId, 'array');
         $session->set('selected_product_id', SystemProduct::SYS_PRODUCT_SVN_HOSTING);
 
         return $this->render(__DIR__ . '/../../Resources/views/administration/List.php', get_defined_vars());

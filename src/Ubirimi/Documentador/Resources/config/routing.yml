@@ -6,6 +6,12 @@ docAllUserSpaces:
   path: /documentador/spaces
   defaults: { _controller: '\Ubirimi\Documentador\Controller\Space\UserSpacesController' }
 
+docBlogRecentPages:
+  path: /documentador/blog/recent/{space_id}
+  defaults: { _controller: '\Ubirimi\Documentador\Controller\Page\ListRecentBlogPostsController' }
+  requirements:
+    space_id:  \d+
+
 docPages:
   path: /documentador/pages/{space_id}
   defaults: { _controller: '\Ubirimi\Documentador\Controller\ListPagesController' }

@@ -23,7 +23,7 @@ if ($projectsMenu) {
     for ($i = 0; $i < count($projectsMenu); $i++)
         $projectsForBrowsing[$i] = $projectsMenu[$i]['id'];
 
-    $filters = UbirimiContainer::get()['repository']->get(IssueFilter::class)->getAllByUser($loggedInUserId);
+    $filters = UbirimiContainer::get()['repository']->get(IssueFilter::class)->getByUserId($loggedInUserId);
 
     if (null == $session->get('selected_project_id')) {
         if ($projectsMenu) {

@@ -42,7 +42,7 @@ class ConfigureController extends UbirimiController
             return new RedirectResponse('/general-settings/bad-link-access-denied');
         }
 
-        $allWorkflows = $this->getRepository(Workflow::class)->getAllByClientId($session->get('client/id'));
+        $allWorkflows = $this->getRepository(Workflow::class)->getByClientId($session->get('client/id'));
 
         $schemeWorkflows = $this->getRepository(WorkflowScheme::class)->getDataById($Id);
 

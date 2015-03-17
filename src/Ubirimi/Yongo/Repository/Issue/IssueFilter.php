@@ -56,12 +56,12 @@ class IssueFilter
         return UbirimiContainer::get()['db.connection']->insert_id;
     }
 
-    public function getAllByUser($loggedInUserId) {
+    public function getByUserId($userId) {
         $query = 'SELECT id, user_id, name, description, definition, date_created from yongo_filter where user_id = ? ';
 
         $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
 
-        $stmt->bind_param("i", $loggedInUserId);
+        $stmt->bind_param("i", $userId);
         $stmt->execute();
         $result = $stmt->get_result();
         if ($result->num_rows)
@@ -70,7 +70,7 @@ class IssueFilter
             return null;
     }
 
-    public function getAllByClientId($clientId) {
+    public function getByClientId($clientId) {
         $query = 'SELECT yongo_filter.id, user_id, yongo_filter.name, description, definition, yongo_filter.date_created ' .
                  'from yongo_filter ' .
                  'left join general_user on general_user.id = yongo_filter.user_id ' .

@@ -86,7 +86,7 @@ class Screen
         $stmt->execute();
     }
 
-    public function getAllBySchemeId($screenSchemeId) {
+    public function getBySchemeId($screenSchemeId) {
         $query = "select yongo_screen.id, yongo_screen.name, yongo_screen.description " .
             "from yongo_screen_scheme_data " .
             "left join yongo_screen on yongo_screen.id = yongo_screen_scheme_data.screen_id " .
