@@ -13,7 +13,7 @@ require_once __DIR__ . '/../_header.php';
 <body>
     <?php require_once __DIR__ . '/../_menu.php'; ?>
     <?php
-        if ($page) {
+        if (EntityType::ENTITY_BLANK_PAGE == $page['documentator_entity_type_id']) {
             $breadCrumb = '<a href="/documentador/spaces" class="linkNoUnderline">Spaces</a> > ' . $page['space_name'] . ' > ' .
                 '<a class="linkNoUnderline" href="/documentador/pages/' . $spaceId . '">Pages</a> > ';
 
@@ -22,8 +22,14 @@ require_once __DIR__ . '/../_header.php';
             }
 
             $breadCrumb .= $page['name'];
-            Util::renderBreadCrumb($breadCrumb);
+
+        } else if (EntityType::ENTITY_BLOG_POST == $page['documentator_entity_type_id']) {
+            $breadCrumb = '<a href="/documentador/blog/recent/' . $spaceId . '" class="linkNoUnderline">Blog</a> > ' . $pageYear . ' > ' .
+                '<a class="linkNoUnderline" href="/documentador/pages/' . $spaceId . '">' . $pageMonth . '</a> > ' . $pageDay . ' > ' . $page['name'];
+
         }
+
+        Util::renderBreadCrumb($breadCrumb);
     ?>
 
     <div class="doc-left-side">
@@ -36,15 +42,22 @@ require_once __DIR__ . '/../_header.php';
             <?php elseif (EntityType::ENTITY_BLOG_POST == $page['documentator_entity_type_id']): ?>
                 <?php
                     $blogPages = UbirimiContainer::get()['repository']->get(Entity::class)->getBlogTreeNavigation($pagesInSpace);
+                    echo '<div>';
+
                     foreach ($blogPages as $year => $data) {
-                        echo '<img style="vertical-align: middle;" src="/documentador/img/arrow_down.png" />' . $year . '<br />';
+                        echo '<div id="header_tree_' . $year . '">';
+                        echo '<a href="#"><img style="vertical-align: middle;" id="tree_show_content_year_' . $year . '" src="/documentador/img/arrow_down.png" /></a>' . $year . '<br />';
                         foreach ($data as $month => $pages) {
-                            echo '&nbsp;&nbsp;&nbsp;&nbsp; <img style="vertical-align: middle;" src="/documentador/img/arrow_down.png" /> ' . $month;
+                            $visibilityYear = ($pageYear == $year) ? 'display: block' : 'display: none';
+                            echo '<div style="' . $visibilityYear . '" id="tree_show_content_month_' . $year . '_' . $month . '">&nbsp;&nbsp;&nbsp;&nbsp; <a href="#"><img style="vertical-align: middle;" src="/documentador/img/arrow_down.png" /></a> ' . $month . '</div>';
                             foreach ($pages as $page) {
-                                echo '<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bullet; ' . LinkHelper::getDocumentadorPageLink($page['id'], $page['name']) . '</div>';
+                                $visibilityMonth = ($pageYear == $year && $pageMonth == $month) ? 'display: block' : 'display: none';
+                                echo '<div style="' . $visibilityMonth . '" id="tree_month_' . $year . '_' . $month . '_' . $page['id'] . '">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bullet; ' . LinkHelper::getDocumentadorPageLink($page['id'], $page['name']) . '</div>';
                             }
                         }
+                        echo '</div>';
                     }
+                    echo '</div>';
                 ?>
             <?php endif ?>
         </div>

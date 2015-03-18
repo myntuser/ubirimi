@@ -67,7 +67,7 @@ $spacesInMenu = UbirimiContainer::get()['repository']->get(Space::class)->getByC
         <td>
             <table border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
-                    <td width="118px"
+                    <td width="104px"
                         class="menuItemBasic <?php if ($menuSelectedCategory == 'documentator') echo 'menuItemSelected'; else echo 'menuItem' ?>"
                         id="menuDocumentador"
                         style="cursor: pointer;">

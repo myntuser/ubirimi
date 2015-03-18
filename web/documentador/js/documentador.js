@@ -185,14 +185,38 @@ $('document').ready(function () {
         });
     });
 
-    $("[id^='tree_show_content_']").click(function (event) {
+    $("[id^='pages_tree_show_content_']").click(function (event) {
 
-        var parentId = $(this).attr("id").replace('tree_show_content_', '').split('_')[0];
+        var parentId = $(this).attr("id").replace('pages_tree_show_content_', '').split('_')[0];
         if ($("[id^='tree_" + parentId + "']").css('display') == 'none') {
 
             $("[id^='tree_" + parentId + "']").css('display','block');
         } else {
             $("[id^='tree_" + parentId + "']").css('display','none');
+        }
+    });
+
+    $("[id^='tree_show_content_year_']").click(function (event) {
+
+        var parentId = $(this).attr("id").replace('tree_show_content_year_', '').split('_')[0];
+
+        if ($("[id^='tree_show_content_month_" + parentId + "']").css('display') == 'none') {
+            $("[id^='tree_show_content_month_" + parentId + "']").css('display','block');
+            //$("[id^='tree_month_" + parentId + "']").css('display','block');
+        } else {
+            $("[id^='tree_show_content_month_" + parentId + "']").css('display','none');
+            //$("[id^='tree_month_" + parentId + "']").css('display','none');
+        }
+    });
+
+    $("[id^='tree_show_content_month_']").click(function (event) {
+        var year = $(this).attr("id").replace('tree_show_content_month_', '').split('_')[0];
+        var month = $(this).attr("id").replace('tree_show_content_month_', '').split('_')[1];
+
+        if ($("[id^='tree_month_" + year + '_' + month + "']").css('display') == 'none') {
+            $("[id^='tree_month_" + year + '_' + month + "']").css('display','block');
+        } else {
+            $("[id^='tree_month_" + year + '_' + month + "']").css('display','none');
         }
     });
 

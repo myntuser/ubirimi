@@ -92,6 +92,10 @@ class ViewController extends UbirimiController
 
             $pagesInSpace = $this->getRepository(Entity::class)->getBySpaceId($spaceId);
             $treeStructure = $this->getRepository(Space::class)->generateTreeStructure($pagesInSpace, $entityId);
+            $pagesInSpace->data_seek(0);
+            $pageYear = substr($page['date_created'], 0, 4);
+            $pageMonth = substr($page['date_created'], 5, 2);
+            $pageDay = substr($page['date_created'], 8, 2);
 
             $comments = $this->getRepository(EntityComment::class)->getComments($entityId, 'array');
             $lastRevision = $this->getRepository(Entity::class)->getLastRevisionByPageId($entityId);

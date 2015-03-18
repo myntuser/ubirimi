@@ -676,7 +676,7 @@ class Entity {
                     }
                     $html .= '';
                     if (array_key_exists($data['id'], $treeStructure)) {
-                        $html .= $smallIndent . '<a style="margin-top: -8px;" href="#" id="tree_show_content_' . $data['id'] . '_x">';
+                        $html .= $smallIndent . '<a style="margin-top: -8px;" href="#" id="pages_tree_show_content_' . $data['id'] . '_x">';
                         $html .= '<img style="vertical-align: middle;" src="/documentador/img/arrow_down.png" /></a> ' . LinkHelper::getDocumentadorPageLink($data['id'], $data['title']);
                     } else {
                         $html .= $bigIndent . '&bullet; ' . LinkHelper::getDocumentadorPageLink($data['id'], $data['title']);
@@ -701,7 +701,9 @@ class Entity {
 
             $year = substr($page['date_created'], 0, 4);
             $month = substr($page['date_created'], 5, 2);
+
             if (EntityType::ENTITY_BLOG_POST == $page['documentator_entity_type_id']) {
+
                 if (!isset($blogYearMonthStructure[$year][$month])) {
                     $blogYearMonthStructure[$year][$month] = array();
                 }

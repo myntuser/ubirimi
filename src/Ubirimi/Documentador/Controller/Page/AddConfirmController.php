@@ -35,7 +35,7 @@ class AddConfirmController extends UbirimiController
         $clientId = $session->get('client/id');
         $spaceId = $request->get('space_id');
 
-        $spaces = $this->getRepository(Space::class)->getByClientId($clientId);
+        $spaces = $this->getRepository(Space::class)->getByClientIdAndFavourite($clientId);
 
         $entityTypes = $this->getRepository(Entity::class)->getTypes();
         $position = 1;
