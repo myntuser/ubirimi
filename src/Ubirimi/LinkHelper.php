@@ -121,11 +121,24 @@ class LinkHelper {
         return $link;
     }
 
-    public static function getDocumentadorPageLink($pageId, $pageTitle, $class = null) {
+    public static function getDocumentadorPageLink($pageId, $pageTitle, $class = null, $mode = null) {
         $linkClassHTML = '';
-        if ($class)
+        if ($class) {
             $linkClassHTML = 'class="' . $class . '"';
-        $link = '<a ' . $linkClassHTML . ' href="/documentador/page/view/' . $pageId . '">' . $pageTitle . '</a>';
+        }
+        if ($mode) {
+
+            switch ($mode) {
+                case 'view':
+                    $link = '<a ' . $linkClassHTML . ' href="/documentador/page/view/' . $pageId . '">' . $pageTitle . '</a>';
+                    break;
+                case 'edit':
+                    $link = '<a ' . $linkClassHTML . ' href="/documentador/page/edit/' . $pageId . '">' . $pageTitle . '</a>';
+                    break;
+            }
+        } else {
+            $link = '<a ' . $linkClassHTML . ' href="/documentador/page/view/' . $pageId . '">' . $pageTitle . '</a>';
+        }
 
         return $link;
     }

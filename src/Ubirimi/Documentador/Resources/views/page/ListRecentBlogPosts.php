@@ -45,7 +45,7 @@ require_once __DIR__ . '/../_header.php';
             <?php $pagesInSpace->data_seek(0); ?>
             <?php $index = 0; ?>
             <?php while ($page = $pagesInSpace->fetch_array(MYSQLI_ASSOC)): ?>
-                <div class="headerPageText"><?php echo $page['name'] ?></div>
+                <div class="headerPageText"><?php echo LinkHelper::getDocumentadorPageLink($page['id'], $page['name']) ?></div>
                 <div>
                     <?php
                         $date = date("F j, Y", strtotime($page['date_created']));
@@ -54,6 +54,9 @@ require_once __DIR__ . '/../_header.php';
                 </div>
                 <div>
                     <?php echo $page['content']; ?>
+                </div>
+                <div>
+                    <?php echo LinkHelper::getDocumentadorPageLink($page['id'], 'Edit', null, 'edit') ?>
                 </div>
                 <?php if ($pagesInSpace->num_rows - 1 != $index): ?>
                     <hr size="1" />
