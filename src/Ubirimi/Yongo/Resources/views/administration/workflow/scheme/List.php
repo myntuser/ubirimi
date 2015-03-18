@@ -14,7 +14,6 @@ require_once __DIR__ . '/../../_header.php';
     <?php endif ?>
     <div class="pageContent">
         <?php if (Util::userHasYongoAdministrativePermission()): ?>
-            <?php Util::renderBreadCrumb('Workflow Schemes') ?>
 
             <ul class="nav nav-tabs" style="padding: 0px;">
                 <li><a href="/yongo/administration/workflows">Workflows</a></li>
