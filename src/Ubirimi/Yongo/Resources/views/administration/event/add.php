@@ -23,7 +23,7 @@ require_once __DIR__ . '/../../_header.php';
 ?>
 <body>
 
-    <?php require_once __DIR__ . '/../../_menu.php'; ?>
+    <?php require_once __DIR__ . '/../_menu.php'; ?>
     <?php Util::renderBreadCrumb('<a class="linkNoUnderline" href="/yongo/administration/events">Events</a> > Create Event') ?>
     <div class="pageContent">
         <form name="add_event" action="/yongo/administration/add-event" method="post">
