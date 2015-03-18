@@ -52,6 +52,12 @@ exec { "/usr/sbin/a2enmod rewrite" :
   require => Package["apache2"]
 }
 
+exec { "/usr/sbin/a2enmod macro" :
+  unless => "/bin/readlink -e /etc/apache2/mods-enabled/macro.load",
+  notify => Service[apache2],
+  require => Package["apache2"]
+}
+
 package { ["git"]:
   ensure => installed
 }
