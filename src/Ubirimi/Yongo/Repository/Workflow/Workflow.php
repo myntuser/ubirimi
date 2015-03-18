@@ -748,18 +748,6 @@ class Workflow
             return null;
     }
 
-    public function getByClientId($clientId) {
-        $query = "select * from yongo_workflow where client_id = " . $clientId;
-
-        $stmt = UbirimiContainer::get()['db.connection']->prepare($query);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result->num_rows)
-            return $result;
-        else
-            return null;
-    }
-
     public function getByClientIdAndName($clientId, $name) {
         $query = "select * from yongo_workflow where client_id = ? and LOWER(name) = ? limit 1";
 
