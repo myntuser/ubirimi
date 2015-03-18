@@ -34,6 +34,8 @@ class AddController extends UbirimiController
     {
         Util::checkUserIsLoggedInAndRedirect();
 
+        $menuSelectedCategory = 'issue';
+
         $emptyName = false;
 
         if ($request->request->has('add_notification_scheme')) {
@@ -54,7 +56,7 @@ class AddController extends UbirimiController
             }
         }
         $sectionPageTitle = $session->get('client/settings/title_name') . ' / ' . SystemProduct::SYS_PRODUCT_YONGO_NAME . ' / Create Issue Notification Scheme';
-        $menuSelectedCategory = 'issue';
+
         return $this->render(__DIR__ . '/../../../Resources/views/administration/notification_scheme/Add.php', get_defined_vars());
     }
 }

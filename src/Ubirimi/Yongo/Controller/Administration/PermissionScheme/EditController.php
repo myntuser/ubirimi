@@ -34,6 +34,7 @@ class EditController extends UbirimiController
     public function indexAction(Request $request, SessionInterface $session)
     {
         Util::checkUserIsLoggedInAndRedirect();
+
         $Id = $request->get('id');
         $backLink = $request->get('back');
         $projectId = $request->get('project_id');

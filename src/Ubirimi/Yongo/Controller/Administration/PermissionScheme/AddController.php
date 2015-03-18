@@ -34,6 +34,8 @@ class AddController extends UbirimiController
     {
         Util::checkUserIsLoggedInAndRedirect();
 
+        $menuSelectedCategory = 'issue';
+
         $emptyName = false;
 
         if ($request->request->has('add_permission_scheme')) {
