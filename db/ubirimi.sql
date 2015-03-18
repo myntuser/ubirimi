@@ -563,7 +563,8 @@ CREATE TABLE IF NOT EXISTS `documentator_entity_type` (
 
 INSERT INTO `documentator_entity_type` (`id`, `code`, `name`, `description`) VALUES
   (1, 'blank_page', 'Blank Page', 'Start with a blank page.'),
-  (2, 'file_list', 'File List', 'Upload, preview and share files with your tem.');
+  (2, 'file_list', 'File List', 'Upload, preview and share files with your team.'),
+  (3, 'blog', 'Blog Post', 'Share news and announcements with your team.');
 
 -- --------------------------------------------------------
 
