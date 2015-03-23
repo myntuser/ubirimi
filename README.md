@@ -76,6 +76,12 @@ Inside then newly created project, from the terminal run the following commands:
 
 `vagrant up ubirimi`
 
+`vagrant ssh`
+
+Once inside the Guest server  
+
+`cd /var/www`
+
 `php composer.phar setup`
 
 In the setup procedure when asked for the URL enter http://ubirimi.dev
