@@ -20,6 +20,16 @@ exec { "apt-get update 2":
   require => Exec["add-apt-repository ppa:ondrej/php5"],
 }
 
+package { "curl":
+  ensure => present,
+  require => Exec["apt-get update"],
+}
+
+exec { 'install composer':
+  command => '/usr/bin/curl -sS https://getcomposer.org/installer | php && sudo mv composer.phar /usr/local/bin/composer',
+  require => Package['curl'],
+}
+
 package {"apache2":
   ensure => present,
   require => Exec["apt-get update 2"],
@@ -40,7 +50,7 @@ service { "mysql":
   require => Package["mysql-server"],
 }
 
-package { ["php5-common", "libapache2-mod-php5", "php5-cli", "php-apc", "php5-mysql", "php5-gd", "php5-mysqlnd"]:
+package { ["php5-common", "libapache2-mod-php5", "php5-cli", "php-apc", "php5-mysql", "php5-gd", "php5-mysqlnd", "php5-curl"]:
   ensure => installed,
   notify => Service["apache2"],
   require => [Exec["apt-get update 2"], Package["mysql-client"], Package["apache2"]],
