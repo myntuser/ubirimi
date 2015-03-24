@@ -53,7 +53,7 @@ Installation on Apache Server
 - in the config.properties file set: database credentials, cache and assets folders
 - restart web server
 
-Installation on nNginx
+Installation on nginx
 -----------------------------
 Coming Soon!  
 
