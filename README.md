@@ -22,11 +22,12 @@ Products available
 6. Events - Plan and keep track of people, projects and events. A complete calendar application.
 7. QuickNotes - A note application
 
-Installation
-------------
+Installation on Apache Server
+-----------------------------
 
 - download the source code
-- `php composer.phar install`
+- `composer install`
+- `composer setup`
 - import an empty database structure
 - set your Apache virtual host configuration. An example can be found below:
 
@@ -49,14 +50,18 @@ Installation
   </Directory>
 </VirtualHost>
 ```
-- in the config.properties file set: daabase credentials, cache and assets folders
+- in the config.properties file set: database credentials, cache and assets folders
 - restart web server
+
+Installation on nNginx
+-----------------------------
+Coming Soon!  
 
 Upgrading
 ------------
 - clear the cache
-- `php composer.phar update`
-- `php composer.phar dump-autoload`
+- `composer update`
+- `composer dump-autoload`
 
 Documentation
 -------------
@@ -65,8 +70,8 @@ Common Errors:
 Error: PHP Fatal error:  Call to undefined method mysqli_stmt::get_result()  
 Cause: mysqlnd not installed  
 
-Contributing
-------------
+Contributing using pre-made development server
+----------------------------------------------
 
 Ubirimi is an open source, community-driven project. If you would like to contribute just send pull requests. To get started clone the repository. 
 
@@ -82,7 +87,9 @@ Once inside the Guest server
 
 `cd /var/www`
 
-`php composer.phar setup`
+`composer install`
+
+`composer setup`
 
 In the setup procedure when asked for the URL enter http://ubirimi.dev
 
