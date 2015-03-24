@@ -85,8 +85,11 @@ class Space {
     }
 
     public function getByClientId($clientId, $resultType = null, $resultColumn = null, $filters = null) {
-        $query = "SELECT * " .
+        $query = "SELECT documentator_space.id as space_id, documentator_space.name, documentator_space.code, documentator_space.description, " .
+            "documentator_space.date_created, documentator_space.user_created_id, documentator_space.home_entity_id, " .
+            "general_user.id as user_id, general_user.first_name, general_user.last_name " .
             "FROM documentator_space " .
+            "left join general_user on general_user.id = documentator_space.user_created_id " .
             "where documentator_space.client_id = ?";
 
         if (empty($filters['sort_by'])) {
