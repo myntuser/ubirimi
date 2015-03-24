@@ -79,7 +79,7 @@ Inside then newly created project, from the terminal run the following commands:
 
 `vagrant plugin install vagrant-hostmanager`
 
-`vagrant up ubirimi`
+`vagrant up`
 
 `vagrant ssh`
 
